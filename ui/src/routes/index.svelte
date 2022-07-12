@@ -1,5 +1,5 @@
 <script lang="ts">
+  import News from '../lib/news/News.svelte';
 </script>
 
-<h1 class="bg-blue-600">Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<News />
