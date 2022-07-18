@@ -2,7 +2,7 @@
   import news from '../../stores/news';
   import Story from './Story.svelte';
   import { DateTime } from 'luxon';
-  import { onMount } from 'svelte';
+  import { onDestroy, onMount } from 'svelte';
   import { newsClass, bucketClass, bucketTitleClass, newsLoadingWrapperClass } from './News.styles';
   import type { Story as IStory } from '../../models/story';
   import type { News, NewsBucket } from '../../models/news';
@@ -10,11 +10,15 @@
   import { getNews } from '../../api/news';
 
   let newsPromise: Promise<News> | null = null;
-  $: storyBuckets = createStoryBuckets($news.stories);
+  $: storyBuckets = createStoryBuckets($news?.stories ?? []);
 
   onMount(async () => {
     newsPromise = getNews();
     news.setNews(await newsPromise);
+  });
+
+  onDestroy(() => {
+    news.setNews(null);
   });
 
   function createStoryBuckets(stories: Array<IStory>) {
