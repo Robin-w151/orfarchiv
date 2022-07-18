@@ -1,12 +1,12 @@
 <script lang="ts">
-  import stories from '../data/news.data';
-  import news from '../stores/news';
+  import stories from '../../data/news.data';
+  import news from '../../stores/news';
   import Story from './Story.svelte';
   import { DateTime } from 'luxon';
   import { onMount } from 'svelte';
   import { newsClass, bucketClass, bucketTitleClass } from './News.styles';
-  import type { Story as IStory } from '../models/story';
-  import type { NewsBucket } from '../models/news';
+  import type { Story as IStory } from '../../models/story';
+  import type { NewsBucket } from '../../models/news';
 
   $: storyBuckets = createStoryBuckets($news.stories);
 
