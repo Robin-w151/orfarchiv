@@ -8,7 +8,7 @@
 
 <div class={wrapperClass}>
   <header class={headerClass}>
-    <h1>ORF Archiv</h1>
+    <h1>ORF News Archiv</h1>
   </header>
   <main>
     <slot />

@@ -1,22 +1,25 @@
 <script lang="ts">
-  import stories from '../../data/news.data';
   import news from '../../stores/news';
   import Story from './Story.svelte';
   import { DateTime } from 'luxon';
   import { onMount } from 'svelte';
-  import { newsClass, bucketClass, bucketTitleClass } from './News.styles';
+  import { newsClass, bucketClass, bucketTitleClass, newsLoadingWrapperClass } from './News.styles';
   import type { Story as IStory } from '../../models/story';
-  import type { NewsBucket } from '../../models/news';
+  import type { News, NewsBucket } from '../../models/news';
+  import LoadingIndicator from '../ui/LoadingIndicator.svelte';
+  import { getNews } from '../../api/news';
 
+  let newsPromise: Promise<News> | null = null;
   $: storyBuckets = createStoryBuckets($news.stories);
 
-  onMount(() => {
-    setTimeout(() => news.setNews({ stories }), 1000);
+  onMount(async () => {
+    newsPromise = getNews();
+    news.setNews(await newsPromise);
   });
 
   function createStoryBuckets(stories: Array<IStory>) {
     // const now = DateTime.now(); // FIXME
-    const now = DateTime.fromISO('2022-07-14T00:05:00+02:00');
+    const now = DateTime.fromISO('2022-07-18T16:20:00+02:00');
     function isInBucket(bucket: NewsBucket, story: IStory) {
       const timestamp = DateTime.fromISO(story.timestamp);
       const ageInMin = now.diff(timestamp).as('minutes');
@@ -68,16 +71,22 @@
 </script>
 
 <div class={newsClass}>
-  {#each storyBuckets as bucket (bucket.name)}
-    {#if bucket.stories.length > 0}
-      <div class={bucketTitleClass}>{bucket.name}</div>
-      <ul class={bucketClass}>
-        {#each bucket.stories as story (story.id)}
-          <li>
-            <Story {...story} />
-          </li>
-        {/each}
-      </ul>
-    {/if}
-  {/each}
+  {#await newsPromise}
+    <div class={newsLoadingWrapperClass}>
+      <LoadingIndicator />
+    </div>
+  {:then _}
+    {#each storyBuckets as bucket (bucket.name)}
+      {#if bucket.stories.length > 0}
+        <div class={bucketTitleClass}>{bucket.name}</div>
+        <ul class={bucketClass}>
+          {#each bucket.stories as story (story.id)}
+            <li>
+              <Story {...story} />
+            </li>
+          {/each}
+        </ul>
+      {/if}
+    {/each}
+  {/await}
 </div>
