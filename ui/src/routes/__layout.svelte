@@ -2,7 +2,7 @@
   import '../app.css';
   import classNames from 'classnames';
 
-  const headerClass = classNames(['p-3', 'text-3xl', 'text-blue-900 bg-white', 'rounded-lg shadow-sm']);
+  const headerClass = classNames(['p-3', 'text-3xl', 'text-blue-900 bg-white', 'rounded-lg shadow-md']);
 </script>
 
 <header class={headerClass}>

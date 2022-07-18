@@ -28,7 +28,6 @@ module.exports = {
 		tsconfigRootDir: __dirname,
 		extraFileExtensions: ['.svelte'],
 	},
-	// overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
 	overrides: [
 		{
 			files: ['*.svelte'],
@@ -38,7 +37,4 @@ module.exports = {
 			},
 		},
 	],
-	// settings: {
-	// 	'svelte3/typescript': () => require('typescript')
-	// }
 };
