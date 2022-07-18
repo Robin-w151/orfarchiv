@@ -1,6 +1,12 @@
-import { writable } from 'svelte/store';
-import type { Readable } from 'svelte/store';
+import { type Readable, writable } from 'svelte/store';
 import type { News } from '../models/news';
+import type { Story } from '../models/story';
+
+interface NewsStore {
+  subscribe: Readable<News>['subscribe'];
+  setNews: (_: News) => void;
+  stories?: Array<Story>;
+}
 
 const initialState = { stories: [] };
 
@@ -10,7 +16,6 @@ function setNews(news: News): void {
   set(news);
 }
 
-type NewsStore = Readable<News> & Partial<News> & { setNews: (_: News) => void };
 const newsStore: NewsStore = { subscribe, setNews };
 
 export default newsStore;

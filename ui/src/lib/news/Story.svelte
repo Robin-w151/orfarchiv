@@ -2,11 +2,11 @@
   import { DateTime } from 'luxon';
   import { storyClass, storyTitleClass, storyDateClass } from './Story.styles';
 
-  export let title;
-  export let url;
-  export let timestamp;
+  export let title: string;
+  export let url: string;
+  export let timestamp: string;
 
-  function formatTimestamp(timestamp) {
+  function formatTimestamp(timestamp: string): string {
     return DateTime.fromISO(timestamp).toFormat('dd.MM.yyyy, HH:mm');
   }
 </script>

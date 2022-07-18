@@ -5,6 +5,8 @@
   import { DateTime } from 'luxon';
   import { onMount } from 'svelte';
   import { newsClass, bucketClass, bucketTitleClass } from './News.styles';
+  import type { Story as IStory } from '../models/story';
+  import type { NewsBucket } from '../models/news';
 
   $: storyBuckets = createStoryBuckets($news.stories);
 
@@ -12,17 +14,17 @@
     setTimeout(() => news.setNews({ stories }), 1000);
   });
 
-  function createStoryBuckets(stories) {
+  function createStoryBuckets(stories: Array<IStory>) {
     // const now = DateTime.now(); // FIXME
     const now = DateTime.fromISO('2022-07-14T00:05:00+02:00');
-    function isInBucket(bucket, story) {
+    function isInBucket(bucket: NewsBucket, story: IStory) {
       const timestamp = DateTime.fromISO(story.timestamp);
       const ageInMin = now.diff(timestamp).as('minutes');
       const { minAgeInMin, maxAgeInMin } = bucket;
       return minAgeInMin <= ageInMin && (!maxAgeInMin || maxAgeInMin > ageInMin);
     }
 
-    const buckets = [
+    const buckets: Array<NewsBucket> = [
       {
         name: 'Aktuell',
         minAgeInMin: 0,
