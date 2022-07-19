@@ -3,14 +3,19 @@
   import Story from './Story.svelte';
   import { DateTime } from 'luxon';
   import { onDestroy, onMount } from 'svelte';
-  import { newsClass, bucketClass, bucketTitleClass, newsLoadingWrapperClass } from './News.styles';
   import type { Story as IStory } from '../../models/story';
   import type { News, NewsBucket } from '../../models/news';
   import LoadingIndicator from '../ui/LoadingIndicator.svelte';
   import { getNews } from '../../api/news';
+  import Section from '../ui/Section.svelte';
+  import Content from '../ui/Content.svelte';
+  import SectionList from '../ui/SectionList.svelte';
+  import classNames from 'classnames';
 
   let newsPromise: Promise<News> | null = null;
   $: storyBuckets = createStoryBuckets($news?.stories ?? []);
+
+  const newsLoadingWrapperClass = classNames(['mt-12 w-24 h-24', 'text-blue-900']);
 
   onMount(async () => {
     newsPromise = getNews();
@@ -74,7 +79,7 @@
   }
 </script>
 
-<div class={newsClass}>
+<Content>
   {#await newsPromise}
     <div class={newsLoadingWrapperClass}>
       <LoadingIndicator />
@@ -82,15 +87,16 @@
   {:then _}
     {#each storyBuckets as bucket (bucket.name)}
       {#if bucket.stories.length > 0}
-        <div class={bucketTitleClass}>{bucket.name}</div>
-        <ul class={bucketClass}>
-          {#each bucket.stories as story (story.id)}
-            <li>
-              <Story {...story} />
-            </li>
-          {/each}
-        </ul>
+        <Section title={bucket.name}>
+          <SectionList>
+            {#each bucket.stories as story (story.id)}
+              <li>
+                <Story {...story} />
+              </li>
+            {/each}
+          </SectionList>
+        </Section>
       {/if}
     {/each}
   {/await}
-</div>
+</Content>
