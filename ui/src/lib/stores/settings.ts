@@ -6,9 +6,10 @@ import { identity } from 'svelte/internal';
 interface SettingsStore extends Partial<Settings> {
   subscribe: Writable<Settings>['subscribe'];
   setOpenLinksInNewTab: (_: boolean) => void;
+  setUseCategoryColorPalette: (_: boolean) => void;
 }
 
-const initialState = { openLinksInNewTab: true };
+const initialState = { openLinksInNewTab: true, useCategoryColorPalette: true };
 const storedState = fetchFromStorage();
 const { subscribe, update } = writable<Settings>(storedState ?? initialState);
 const storageKey = 'settings';
@@ -35,12 +36,16 @@ function updateAndPersist(updater: (_: Settings) => Settings): void {
   });
 }
 
-function setOpenLinksInNewTab(value: boolean): void {
-  updateAndPersist((settings) => ({ ...settings, openLinksInNewTab: value }));
+function setOpenLinksInNewTab(openLinksInNewTab: boolean): void {
+  updateAndPersist((settings) => ({ ...settings, openLinksInNewTab }));
+}
+
+function setUseCategoryColorPalette(useCategoryColorPalette: boolean): void {
+  updateAndPersist((settings) => ({ ...settings, useCategoryColorPalette }));
 }
 
 if (!storedState) {
   updateAndPersist(identity);
 }
 
-export default { subscribe, setOpenLinksInNewTab } as SettingsStore;
+export default { subscribe, setOpenLinksInNewTab, setUseCategoryColorPalette } as SettingsStore;
