@@ -28,7 +28,7 @@
 
   function createStoryBuckets(stories: Array<IStory>) {
     // const now = DateTime.now(); // FIXME
-    const now = DateTime.fromISO('2022-07-18T16:20:00+02:00');
+    const now = DateTime.fromISO('2022-07-19T15:00:00+02:00');
     function isInBucket(bucket: NewsBucket, story: IStory) {
       const timestamp = DateTime.fromISO(story.timestamp);
       const ageInMin = now.diff(timestamp).as('minutes');
