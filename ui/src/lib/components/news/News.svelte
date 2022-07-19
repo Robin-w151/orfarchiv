@@ -7,9 +7,9 @@
   import type { News, NewsBucket } from '../../models/news';
   import LoadingIndicator from '../ui/LoadingIndicator.svelte';
   import { getNews } from '../../api/news';
-  import Section from '../ui/Section.svelte';
-  import Content from '../ui/Content.svelte';
-  import SectionList from '../ui/SectionList.svelte';
+  import Section from '../ui/content/Section.svelte';
+  import Content from '../ui/content/Content.svelte';
+  import SectionList from '../ui/content/SectionList.svelte';
   import classNames from 'classnames';
 
   let newsPromise: Promise<News> | null = null;

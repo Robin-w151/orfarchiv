@@ -1,7 +1,7 @@
 <script lang="ts">
   import { DateTime } from 'luxon';
   import classNames from 'classnames';
-  import Item from '../ui/Item.svelte';
+  import Item from '../ui/content/Item.svelte';
 
   export let title: string;
   export let url: string;
