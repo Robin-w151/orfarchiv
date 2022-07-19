@@ -2,12 +2,15 @@
   import { DateTime } from 'luxon';
   import classNames from 'classnames';
   import Item from '../ui/content/Item.svelte';
+  import settings from '../../stores/settings';
 
   export let title: string;
   export let url: string;
   export let timestamp: string;
 
-  const titleClass = classNames(['text-gray-800']);
+  $: target = $settings.openLinksInNewTab ? '_blank' : null;
+
+  const titleClass = classNames();
   const dateClass = classNames(['text-sm', 'text-gray-600']);
 
   function formatTimestamp(timestamp: string): string {
@@ -15,7 +18,7 @@
   }
 </script>
 
-<Item href={url}>
+<Item href={url} {target}>
   <span class={titleClass}>{title}</span>
   <span class={dateClass}>{formatTimestamp(timestamp)}</span>
 </Item>

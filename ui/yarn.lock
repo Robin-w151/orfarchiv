@@ -137,6 +137,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sveltejs/adapter-static@npm:next":
+  version: 1.0.0-next.37
+  resolution: "@sveltejs/adapter-static@npm:1.0.0-next.37"
+  dependencies:
+    tiny-glob: ^0.2.9
+  checksum: 5f3d9efae32dc252a6ef97d742a8e1cd24ea09ec54806cdf14efe7d1a9fafc496771589eea9cc99da90fa0524a95ae4dadf7fee2f6dcaa7d5d0ff093bcd1ab7c
+  languageName: node
+  linkType: hard
+
 "@sveltejs/kit@npm:next":
   version: 1.0.0-next.368
   resolution: "@sveltejs/kit@npm:1.0.0-next.368"
@@ -2953,6 +2962,7 @@ __metadata:
   resolution: "ui@workspace:."
   dependencies:
     "@sveltejs/adapter-node": next
+    "@sveltejs/adapter-static": next
     "@sveltejs/kit": next
     "@types/luxon": ^2.3.2
     "@typescript-eslint/eslint-plugin": ^5.27.0

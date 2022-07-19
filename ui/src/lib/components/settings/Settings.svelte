@@ -4,13 +4,23 @@
   import SectionList from '../ui/content/SectionList.svelte';
   import Item from '../ui/content/Item.svelte';
   import Checkbox from '../ui/controls/Checkbox.svelte';
+  import settings from '../../stores/settings';
+
+  function handleOpenLinksInNewTabSelect({ detail: checked }) {
+    settings.setOpenLinksInNewTab(checked);
+  }
 </script>
 
 <Content>
   <Section title="Allgemein">
     <SectionList>
       <Item>
-        <Checkbox id="asdf" label="Links in neuem Tab öffnen" />
+        <Checkbox
+          id="open-links-in-new-tab"
+          label="Links in neuem Tab öffnen"
+          checked={$settings.openLinksInNewTab}
+          on:change={handleOpenLinksInNewTabSelect}
+        />
       </Item>
     </SectionList>
   </Section>
