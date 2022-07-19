@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite dev",
-		"build": "vite build",
+		"build": "clean-package && vite build && cpr package.json build/ && clean-package restore",
 		"package": "svelte-kit package",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync",
@@ -21,6 +21,8 @@
 		"@typescript-eslint/parser": "^5.27.0",
 		"autoprefixer": "^10.4.7",
 		"classnames": "^2.3.1",
+		"clean-package": "^2.1.1",
+		"cpr": "^3.0.1",
 		"eslint": "^8.16.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^4.2.1",
@@ -39,5 +41,13 @@
 		"vite": "^2.9.13"
 	},
 	"type": "module",
-	"packageManager": "yarn@3.2.1"
+	"packageManager": "yarn@3.2.1",
+	"clean-package": {
+		"remove": [
+			"scripts",
+			"devDependencies",
+			"packageManager",
+			"clean-package"
+		]
+	}
 }
