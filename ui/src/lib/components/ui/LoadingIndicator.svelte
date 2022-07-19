@@ -1,18 +1,22 @@
 <script lang="ts">
   import classNames from 'classnames';
 
+  export let large = false;
+
   const ringClass = classNames([
     'loading-ring',
     'flex justify-center items-center',
     'w-full h-full aspect-square',
-    'border-4 border-current border-x-transparent border-solid',
+    large ? 'border-8' : 'border-4',
+    'border-current border-x-transparent border-solid',
     'rounded-full',
   ]);
-
   const innerRingClass = classNames([
     'loading-inner-ring',
-    'w-5/6 aspect-square',
-    'border-4 border-current border-y-transparent border-solid',
+    large ? 'w-11/12' : 'w-5/6',
+    'aspect-square',
+    large ? 'border-8' : 'border-4',
+    'border-current border-y-transparent border-solid',
     'rounded-full',
   ]);
 </script>

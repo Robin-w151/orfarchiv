@@ -15,7 +15,7 @@
   let newsPromise: Promise<News> | null = null;
   $: storyBuckets = createStoryBuckets($news?.stories ?? []);
 
-  const newsLoadingWrapperClass = classNames(['mt-12 w-24 h-24', 'text-blue-900']);
+  const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
 
   onMount(async () => {
     newsPromise = getNews();
