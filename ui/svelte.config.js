@@ -16,6 +16,7 @@ const config = {
     prerender: {
       default: false,
     },
+    trailingSlash: 'always',
   },
 };
 
