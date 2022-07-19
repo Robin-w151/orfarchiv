@@ -15,7 +15,7 @@
   }
 </script>
 
-<Item href={url} target="_blank">
+<Item href={url}>
   <span class={titleClass}>{title}</span>
   <span class={dateClass}>{formatTimestamp(timestamp)}</span>
 </Item>
