@@ -4,7 +4,7 @@
   import { DateTime } from 'luxon';
   import { onDestroy, onMount } from 'svelte';
   import type { Story as IStory } from '../../models/story';
-  import type { News, NewsBucket } from '../../models/news';
+  import type { NewsBucket } from '../../models/news';
   import LoadingIndicator from '../ui/LoadingIndicator.svelte';
   import { getNews } from '../../api/news';
   import Section from '../ui/content/Section.svelte';
@@ -12,19 +12,32 @@
   import SectionList from '../ui/content/SectionList.svelte';
   import classNames from 'classnames';
 
-  let newsPromise: Promise<News> | null = null;
+  let isNewsLoading = true;
   $: storyBuckets = createStoryBuckets($news?.stories ?? []);
 
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
 
-  onMount(async () => {
-    newsPromise = getNews();
-    news.setNews(await newsPromise);
+  onMount(() => {
+    fetchNews();
   });
 
   onDestroy(() => {
-    news.setNews(null);
+    clearNews();
   });
+
+  async function fetchNews() {
+    isNewsLoading = true;
+    try {
+      news.setNews(await getNews());
+    } catch (error) {
+    } finally {
+      isNewsLoading = false;
+    }
+  }
+
+  function clearNews() {
+    news.setNews(null);
+  }
 
   function createStoryBuckets(stories: Array<IStory>) {
     // const now = DateTime.now(); // FIXME
@@ -80,11 +93,11 @@
 </script>
 
 <Content>
-  {#await newsPromise}
+  {#if isNewsLoading}
     <div class={newsLoadingWrapperClass}>
       <LoadingIndicator />
     </div>
-  {:then _}
+  {:else}
     {#each storyBuckets as bucket (bucket.name)}
       {#if bucket.stories.length > 0}
         <Section title={bucket.name}>
@@ -98,5 +111,5 @@
         </Section>
       {/if}
     {/each}
-  {/await}
+  {/if}
 </Content>
