@@ -2809,6 +2809,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"svelte-local-storage-store@npm:^0.2.6":
+  version: 0.2.6
+  resolution: "svelte-local-storage-store@npm:0.2.6"
+  peerDependencies:
+    svelte: ^3.44.1
+  checksum: d8e0328d88443ac66869961a62806d885fb3a06de38931ca77ac54b1dc44c5dcbbbd11286c0e8a6ad92ce13d3c9ac8741b04b45b28f4192377cfb02173a7f344
+  languageName: node
+  linkType: hard
+
 "svelte-preprocess@npm:^4.0.0, svelte-preprocess@npm:^4.10.6":
   version: 4.10.7
   resolution: "svelte-preprocess@npm:4.10.7"
@@ -3026,6 +3035,7 @@ __metadata:
     prettier-plugin-svelte: ^2.7.0
     svelte: ^3.44.0
     svelte-check: ^2.7.1
+    svelte-local-storage-store: ^0.2.6
     svelte-preprocess: ^4.10.6
     tailwindcss: ^3.1.6
     tslib: ^2.3.1
