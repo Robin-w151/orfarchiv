@@ -7,9 +7,10 @@
   import classNames from 'classnames';
   import NewsList from './NewsList.svelte';
   import { refreshNews } from '../../stores/newsEvents';
+  import { unsubscribeAll } from '../../utils/subscriptions';
 
   let isNewsLoading = true;
-  let refreshNewsUnsubscribe = null;
+  let subscriptions = [];
 
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
   const newsFallbackWrapperClass = classNames([
@@ -22,14 +23,12 @@
 
   onMount(() => {
     fetchNews();
-    refreshNewsUnsubscribe = refreshNews.onUpdate(() => {
-      fetchNews();
-    });
+    subscriptions.push(refreshNews.onUpdate(fetchNews));
   });
 
   onDestroy(() => {
     clearNews();
-    refreshNewsUnsubscribe?.();
+    unsubscribeAll(subscriptions);
   });
 
   async function fetchNews() {
