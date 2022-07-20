@@ -2,9 +2,9 @@
   import classNames from 'classnames';
   import type { CategoryColor } from '../../../models/categoryColor';
 
-  export let href: string;
+  export let href: string = undefined;
   export let target = '_blank';
-  export let categoryColor: CategoryColor;
+  export let categoryColor: CategoryColor = undefined;
 
   const itemClass = classNames([
     'flex flex-col',
