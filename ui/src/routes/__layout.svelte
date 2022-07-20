@@ -2,6 +2,9 @@
   import '../app.css';
   import classNames from 'classnames';
   import CogIcon from '../lib/components/ui/icons/outline/CogIcon.svelte';
+  import RefreshIcon from '../lib/components/ui/icons/outline/RefreshIcon.svelte';
+  import ButtonLink from '../lib/components/ui/controls/ButtonLink.svelte';
+  import { refreshNews } from '../lib/stores/newsEvents';
 
   const wrapperClass = classNames(['flex flex-col gap-4', 'p-4', 'w-screen max-w-screen-md']);
   const headerClass = classNames([
@@ -11,7 +14,12 @@
     'text-blue-900 bg-white',
     'rounded-lg shadow-md',
   ]);
+  const headerActionsClass = classNames(['flex gap-2']);
   const mainClass = classNames(['flex flex-col gap-4']);
+
+  function handleRefreshButtonClick() {
+    refreshNews.notify();
+  }
 </script>
 
 <div class={wrapperClass}>
@@ -19,10 +27,13 @@
     <h1>
       <a href="/">ORF News Archiv</a>
     </h1>
-    <div>
-      <a href="/settings">
+    <div class={headerActionsClass}>
+      <ButtonLink on:click={handleRefreshButtonClick}>
+        <RefreshIcon />
+      </ButtonLink>
+      <ButtonLink href="/settings">
         <CogIcon />
-      </a>
+      </ButtonLink>
     </div>
   </header>
   <main class={mainClass}>
