@@ -1,21 +1,22 @@
 <script lang="ts">
   import news from '../../stores/news';
-  import Story from './Story.svelte';
-  import { DateTime } from 'luxon';
   import { onDestroy, onMount } from 'svelte';
-  import type { Story as IStory } from '../../models/story';
-  import type { NewsBucket } from '../../models/news';
   import LoadingIndicator from '../ui/LoadingIndicator.svelte';
   import { getNews } from '../../api/news';
-  import Section from '../ui/content/Section.svelte';
   import Content from '../ui/content/Content.svelte';
-  import SectionList from '../ui/content/SectionList.svelte';
   import classNames from 'classnames';
+  import NewsList from './NewsList.svelte';
 
   let isNewsLoading = true;
-  $: storyBuckets = createStoryBuckets($news?.stories ?? []);
 
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
+  const newsFallbackWrapperClass = classNames([
+    'px-6 py-3',
+    'w-full',
+    'text-lg',
+    'text-gray-800 bg-white',
+    'rounded-lg',
+  ]);
 
   onMount(() => {
     fetchNews();
@@ -30,6 +31,8 @@
     try {
       news.setNews(await getNews());
     } catch (error) {
+      console.warn(error);
+      news.setNews(null);
     } finally {
       isNewsLoading = false;
     }
@@ -38,58 +41,6 @@
   function clearNews() {
     news.setNews(null);
   }
-
-  function createStoryBuckets(stories: Array<IStory>) {
-    // const now = DateTime.now(); // FIXME
-    const now = DateTime.fromISO('2022-07-19T15:00:00+02:00');
-    function isInBucket(bucket: NewsBucket, story: IStory) {
-      const timestamp = DateTime.fromISO(story.timestamp);
-      const ageInMin = now.diff(timestamp).as('minutes');
-      const { minAgeInMin, maxAgeInMin } = bucket;
-      return minAgeInMin <= ageInMin && (!maxAgeInMin || maxAgeInMin > ageInMin);
-    }
-
-    const buckets: Array<NewsBucket> = [
-      {
-        name: 'Aktuell',
-        minAgeInMin: 0,
-        maxAgeInMin: 60,
-        stories: [],
-      },
-      {
-        name: 'Letzte 24h',
-        minAgeInMin: 60,
-        maxAgeInMin: 1440,
-        stories: [],
-      },
-      {
-        name: 'Letzte 48h',
-        minAgeInMin: 1440,
-        maxAgeInMin: 2880,
-        stories: [],
-      },
-      {
-        name: 'Vor 7 Tagen',
-        minAgeInMin: 2880,
-        maxAgeInMin: 10080,
-        stories: [],
-      },
-      {
-        name: 'Archiv',
-        minAgeInMin: 10080,
-        stories: [],
-      },
-    ];
-    stories.forEach((story) => {
-      for (const bucket of buckets) {
-        if (isInBucket(bucket, story)) {
-          bucket.stories.push(story);
-          break;
-        }
-      }
-    });
-    return buckets;
-  }
 </script>
 
 <Content>
@@ -97,19 +48,11 @@
     <div class={newsLoadingWrapperClass}>
       <LoadingIndicator />
     </div>
+  {:else if $news}
+    <NewsList />
   {:else}
-    {#each storyBuckets as bucket (bucket.name)}
-      {#if bucket.stories.length > 0}
-        <Section title={bucket.name}>
-          <SectionList>
-            {#each bucket.stories as story (story.id)}
-              <li>
-                <Story {...story} />
-              </li>
-            {/each}
-          </SectionList>
-        </Section>
-      {/if}
-    {/each}
+    <div class={newsFallbackWrapperClass}>
+      <span>Keine News vorhanden. Versuchen Sie es später erneut.</span>
+    </div>
   {/if}
 </Content>

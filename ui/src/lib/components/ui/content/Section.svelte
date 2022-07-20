@@ -12,5 +12,7 @@
   ]);
 </script>
 
-<div class={titleClass}>{title}</div>
+{#if title}
+  <div class={titleClass}>{title}</div>
+{/if}
 <slot />
