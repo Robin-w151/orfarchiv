@@ -7,6 +7,7 @@
   import Checkbox from '../ui/controls/Checkbox.svelte';
   import settings from '../../stores/settings';
   import { goto } from '$app/navigation';
+  import Actions from '../ui/content/Actions.svelte';
 
   function handleOpenLinksInNewTabSelect({ detail: checked }) {
     settings.setOpenLinksInNewTab(checked);
@@ -42,5 +43,8 @@
       </Item>
     </SectionList>
   </Section>
-  <Button on:click={handleSaveButtonClick}>Speichern</Button>
 </Content>
+
+<Actions>
+  <Button on:click={handleSaveButtonClick}>Speichern</Button>
+</Actions>

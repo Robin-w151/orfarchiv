@@ -11,6 +11,7 @@
     'text-blue-900 bg-white',
     'rounded-lg shadow-md',
   ]);
+  const mainClass = classNames(['flex flex-col gap-4']);
 </script>
 
 <div class={wrapperClass}>
@@ -24,7 +25,7 @@
       </a>
     </div>
   </header>
-  <main>
+  <main class={mainClass}>
     <slot />
   </main>
 </div>

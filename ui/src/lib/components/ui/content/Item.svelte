@@ -1,15 +1,17 @@
 <script lang="ts">
   import classNames from 'classnames';
+  import type { CategoryColor } from '../../../models/categoryColor';
 
   export let href: string;
   export let target = '_blank';
+  export let categoryColor: CategoryColor;
 
   const itemClass = classNames([
     'flex flex-col',
     'px-6 py-3',
     'text-gray-800',
-    href && 'hover:bg-gray-100',
-    $$props.class,
+    categoryColor?.bgClass,
+    href && (categoryColor?.bgHoverClass ?? 'hover:bg-gray-100'),
   ]);
 </script>
 

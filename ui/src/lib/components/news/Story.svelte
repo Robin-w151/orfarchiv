@@ -10,7 +10,7 @@
   export let url: string;
   export let timestamp: string;
 
-  $: bgColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : null;
+  $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : null;
   $: target = $settings.openLinksInNewTab ? '_blank' : null;
 
   const titleClass = classNames();
@@ -21,7 +21,7 @@
   }
 </script>
 
-<Item class={bgColor} href={url} {target}>
+<Item href={url} {target} {categoryColor}>
   <span class={titleClass}>{title}</span>
   <span class={dateClass}>{category} - {formatTimestamp(timestamp)}</span>
 </Item>
