@@ -25,7 +25,9 @@
 <div class={wrapperClass}>
   <header class={headerClass}>
     <h1>
-      <a href="/">ORF News Archiv</a>
+      <a href="/">
+        <span class="hidden sm:inline">ORF&nbsp;</span><span>News Archiv</span>
+      </a>
     </h1>
     <div class={headerActionsClass}>
       <ButtonLink on:click={handleRefreshButtonClick}>

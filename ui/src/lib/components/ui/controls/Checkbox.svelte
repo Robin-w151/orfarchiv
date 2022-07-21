@@ -8,7 +8,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const wrapperClass = classNames(['inline-flex gap-3']);
+  const wrapperClass = classNames(['inline-flex items-center gap-3']);
   const labelClass = classNames(['flex-1']);
 
   function handleChange(event) {
