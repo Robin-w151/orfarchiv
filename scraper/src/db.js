@@ -1,10 +1,10 @@
 const { MongoClient } = require('mongodb');
 
-async function persistOrfNews(stories, url) {
+async function persistOrfNews(stories) {
   console.log('Persisting non existing stories...');
   const storyIds = stories.map((story) => story.id);
 
-  await withOrfArchivDb(url, async (newsCollection) => {
+  await withOrfArchivDb(async (newsCollection) => {
     const existingStoryIds = (await newsCollection.find({ id: { $in: storyIds } }, { id: 1 }).toArray()).map(
       (story) => story.id,
     );
@@ -24,8 +24,9 @@ async function persistOrfNews(stories, url) {
   });
 }
 
-async function withOrfArchivDb(url, handler) {
+async function withOrfArchivDb(handler) {
   console.log('Connecting to DB...');
+  const url = process.env.DB_URL || 'mongodb://localhost';
   let client;
   try {
     client = await MongoClient.connect(url);
