@@ -6,7 +6,7 @@ if [ -z "$dbUrlFile" ]; then
     exit 1
 fi
 
-DB_URL=$(cat "$dbUrlFile" 2> /dev/null)
-export DB_URL
+ORFARCHIV_DB_URL=$(cat "$dbUrlFile" 2> /dev/null)
+export ORFARCHIV_DB_URL
 
 yarn start

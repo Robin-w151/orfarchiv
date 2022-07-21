@@ -26,7 +26,7 @@ async function persistOrfNews(stories) {
 
 async function withOrfArchivDb(handler) {
   console.log('Connecting to DB...');
-  const url = process.env.DB_URL?.trim() || 'mongodb://localhost';
+  const url = process.env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
   let client;
   try {
     client = await MongoClient.connect(url);
