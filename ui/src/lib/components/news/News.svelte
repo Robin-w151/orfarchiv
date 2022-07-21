@@ -29,7 +29,6 @@
   });
 
   onDestroy(() => {
-    clearNews();
     unsubscribeAll(subscriptions);
   });
 
@@ -43,10 +42,6 @@
     } finally {
       isNewsLoading = false;
     }
-  }
-
-  function clearNews() {
-    news.setNews(null);
   }
 </script>
 

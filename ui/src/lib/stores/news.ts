@@ -13,7 +13,8 @@ const initialState = { stories: [] };
 const { subscribe, set } = writable<News>(initialState);
 
 function setNews(news: News): void {
-  set({ ...news, storyBuckets: createStoryBuckets(news?.stories ?? []) });
+  const storyBuckets = news ? createStoryBuckets(news.stories ?? []) : undefined;
+  set({ ...news, storyBuckets });
 }
 
 function createStoryBuckets(stories: Array<IStory>): Array<NewsBucket> {
