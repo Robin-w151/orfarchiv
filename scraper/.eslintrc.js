@@ -3,6 +3,7 @@ const prettier = require('./.prettierrc.json');
 module.exports = {
   root: true,
   rules: {
+    'no-unused-vars': 'off',
     'prettier/prettier': [
       'error',
       {
