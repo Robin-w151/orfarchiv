@@ -1,0 +1,17 @@
+{
+  "name": "scraper",
+  "version": "0.0.1",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "packageManager": "yarn@3.2.1",
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/eslint-parser": "^7.18.9",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-recommended": "^4.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.7.1"
+  }
+}
