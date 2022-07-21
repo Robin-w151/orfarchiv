@@ -49,12 +49,12 @@
 </script>
 
 <Content>
-  {#if isNewsLoading}
+  {#if $news}
+    <NewsList />
+  {:else if isNewsLoading}
     <div class={newsLoadingWrapperClass}>
       <LoadingIndicator />
     </div>
-  {:else if $news}
-    <NewsList />
   {:else}
     <div class={newsFallbackWrapperClass}>
       <span>Keine News vorhanden. Versuchen Sie es später erneut.</span>
