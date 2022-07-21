@@ -9,4 +9,4 @@ fi
 ORFARCHIV_DB_URL=$(cat "$dbUrlFile" 2> /dev/null)
 export ORFARCHIV_DB_URL
 
-yarn start
+timeout 60s yarn start
