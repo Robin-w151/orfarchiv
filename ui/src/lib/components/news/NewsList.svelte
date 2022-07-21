@@ -22,12 +22,12 @@
       {
         name: 'Aktuell',
         minAgeInMin: 0,
-        maxAgeInMin: 60,
+        maxAgeInMin: 120,
         stories: [],
       },
       {
         name: 'Letzte 24h',
-        minAgeInMin: 60,
+        minAgeInMin: 120,
         maxAgeInMin: 1440,
         stories: [],
       },
