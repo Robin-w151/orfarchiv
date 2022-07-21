@@ -1,8 +1,8 @@
-import news from '$lib/data/news.data';
+import { findNews } from '../../lib/db/news';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get() {
-  await wait(1500);
+  const news = await findNews(7 * 24 * 60);
   return {
     status: 200,
     headers: {
@@ -10,8 +10,4 @@ export async function get() {
     },
     body: news,
   };
-}
-
-function wait(timeout: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, timeout));
 }
