@@ -12,6 +12,8 @@
   let isNewsLoading = true;
   let subscriptions = [];
 
+  $: showNewsList = $news.storyBuckets?.reduce((count, bucket) => count + bucket.stories.length, 0) > 0;
+
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
   const newsFallbackWrapperClass = classNames([
     'px-6 py-3',
@@ -49,7 +51,7 @@
 </script>
 
 <Content>
-  {#if $news}
+  {#if showNewsList}
     <NewsList />
   {:else if isNewsLoading}
     <div class={newsLoadingWrapperClass}>
