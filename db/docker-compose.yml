@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  orfarchiv-db:
+    image: mongo
+    networks:
+      - orfarchiv-db-network
+    ports:
+      - '27017:27017'
+    restart: always
+  orfarchiv-db-ui:
+    image: mongo-express
+    networks:
+      - orfarchiv-db-network
+    ports:
+      - '3002:8081'
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=orfarchiv-db
+    restart: always
+networks:
+  orfarchiv-db-network:
