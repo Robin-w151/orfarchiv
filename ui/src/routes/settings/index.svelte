@@ -1,5 +1,7 @@
-<script lang="ts">
+<script lang="ts" context="module">
   import Settings from '../../lib/components/settings/Settings.svelte';
+
+  export const prerender = true;
 </script>
 
 <svelte:head>
