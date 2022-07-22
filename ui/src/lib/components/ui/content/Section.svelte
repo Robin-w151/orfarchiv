@@ -15,7 +15,7 @@
 
 <div class={sectionClass}>
   {#if title}
-    <div class={titleClass}>{title}</div>
+    <h2 class={titleClass}>{title}</h2>
   {/if}
   <slot />
 </div>
