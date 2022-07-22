@@ -5,7 +5,6 @@ import { DateTime } from 'luxon';
 
 export async function findNews(maxAgeInMin: number): Promise<News> {
   const earliestTimestamp = DateTime.now().minus({ minutes: maxAgeInMin }).toISO();
-  console.log('Earliest timestamp', earliestTimestamp);
   return withOrfArchivDb(async (newsCollection) => {
     const stories = await newsCollection
       .find({ timestamp: { $gte: new Date(earliestTimestamp) } })
