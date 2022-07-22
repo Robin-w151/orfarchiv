@@ -7,7 +7,7 @@ export async function get() {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'max-age=60, public',
+      'Cache-Control': 's-maxage=60, stale-while-revalidate=60',
     },
     body: news,
   };
