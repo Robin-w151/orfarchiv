@@ -1,11 +1,13 @@
 <script lang="ts">
-  import news from '../../stores/news';
   import Section from '../ui/content/Section.svelte';
   import SectionList from '../ui/content/SectionList.svelte';
   import Story from './Story.svelte';
+  import type { NewsBucket } from '../../models/news';
+
+  export let storyBuckets: Array<NewsBucket>;
 </script>
 
-{#each $news.storyBuckets as bucket (bucket.name)}
+{#each storyBuckets as bucket (bucket.name)}
   {#if bucket.stories.length > 0}
     <Section title={bucket.name}>
       <SectionList>

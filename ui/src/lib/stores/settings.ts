@@ -8,7 +8,7 @@ interface SettingsStore extends Partial<Settings> {
   setUseCategoryColorPalette: (_: boolean) => void;
 }
 
-const initialState = { openLinksInNewTab: true, useCategoryColorPalette: true };
+const initialState = { openLinksInNewTab: true, useCategoryColorPalette: false };
 const { subscribe, update } = writable<Settings>('settings', initialState);
 
 function setOpenLinksInNewTab(openLinksInNewTab: boolean): void {

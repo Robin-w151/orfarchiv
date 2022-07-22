@@ -24,7 +24,6 @@
   ]);
 
   onMount(() => {
-    fetchNews();
     subscriptions.push(refreshNews.onUpdate(fetchNews));
   });
 
@@ -35,7 +34,7 @@
   async function fetchNews() {
     isNewsLoading = true;
     try {
-      news.setNews(await getNews());
+      news.setNews(await getNews(fetch));
     } catch (error) {
       console.warn(error);
       news.setNews(null);
@@ -47,7 +46,7 @@
 
 <Content>
   {#if showNewsList}
-    <NewsList />
+    <NewsList storyBuckets={$news.storyBuckets} />
   {:else if isNewsLoading}
     <div class={newsLoadingWrapperClass}>
       <LoadingIndicator />

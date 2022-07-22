@@ -1,6 +1,8 @@
 import type { News } from '../models/news';
 
-export async function getNews(): Promise<News> {
+type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+
+export async function getNews(fetch: FetchFn): Promise<News> {
   const response = await fetch('/news');
   if (!response.ok) {
     throw new Error('Failed to fetch news!');
