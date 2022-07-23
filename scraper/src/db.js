@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 async function persistOrfNews(stories) {
-  console.log('Persisting non existing stories...');
+  console.log('Persisting stories...');
   const storyIds = stories.map((story) => story.id);
 
   await withOrfArchivDb(async (newsCollection) => {

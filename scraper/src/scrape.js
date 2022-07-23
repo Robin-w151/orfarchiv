@@ -1,10 +1,12 @@
 const { get } = require('axios');
 const { XMLParser } = require('fast-xml-parser');
 
-async function scrapeOrfNews(url, source) {
+const REGEXP_GUID = /.*\/stories\/(?<id>\d+)/;
+
+async function scrapeOrfNews(url, source, alternativeFormat = false) {
   console.log(`Scraping RSS feed: '${source}'`);
   const data = await fetchOrfNews(url);
-  return collectStories(data, source);
+  return collectStories(data, source, alternativeFormat);
 }
 
 async function fetchOrfNews(url) {
@@ -17,25 +19,46 @@ async function fetchOrfNews(url) {
   }
 }
 
-function collectStories(data, source) {
-  console.log('Parsing data...');
+function collectStories(data, source, alternativeFormat) {
+  console.log(`Parsing data${alternativeFormat ? ' (alternative format) ' : ''}...`);
   const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' });
   const document = parser.parse(data);
-  const items = document?.['rdf:RDF']?.item;
-  return items?.filter(filterStoryRdfItem).map(mapToStory.bind(null, source)) ?? [];
+  const items = alternativeFormat ? document?.rss?.channel?.item : document?.['rdf:RDF']?.item;
+  return (
+    items
+      ?.filter(filterStoryRdfItem)
+      .map(mapToStory.bind(null, source, alternativeFormat))
+      .filter((story) => !!story.id) ?? []
+  );
 }
 
 function filterStoryRdfItem(rdfItem) {
   return rdfItem && rdfItem.link?.includes('stories');
 }
 
-function mapToStory(source, rdfItem) {
+function mapToStory(source, alternativeFormat, item) {
+  return alternativeFormat ? mapSimpleToStory(source, item) : mapRdfToStory(source, item);
+}
+
+function mapRdfToStory(source, rdfItem) {
   return {
     id: rdfItem['orfon:usid'],
     title: rdfItem.title.trim(),
     category: rdfItem['dc:subject'],
     url: rdfItem.link,
     timestamp: rdfItem['dc:date'],
+    source,
+  };
+}
+
+function mapSimpleToStory(source, item) {
+  const id = REGEXP_GUID.exec(item.guid['#text'])?.groups.id;
+  return {
+    id: id ? `${source}:${id}` : undefined,
+    title: item.title.trim(),
+    category: item.category,
+    url: item.link,
+    timestamp: new Date(item.pubDate).toISOString(),
     source,
   };
 }
