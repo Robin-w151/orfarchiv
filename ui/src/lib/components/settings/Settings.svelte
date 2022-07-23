@@ -10,15 +10,15 @@
   import Actions from '../ui/content/Actions.svelte';
   import { sources } from '../../models/settings.js';
 
-  function handleOpenLinksInNewTabChange({ detail: checked }) {
+  function handleOpenLinksInNewTabChange({ detail: checked }: { detail: boolean }) {
     settings.setOpenLinksInNewTab(checked);
   }
 
-  function handleUseCategoryColorPaletteChange({ detail: checked }) {
+  function handleUseCategoryColorPaletteChange({ detail: checked }: { detail: boolean }) {
     settings.setUseCategoryColorPalette(checked);
   }
 
-  function handleSourceChange(source, { detail: checked }) {
+  function handleSourceChange(source: string, { detail: checked }: { detail: boolean }) {
     settings.setSource(source, checked);
   }
 

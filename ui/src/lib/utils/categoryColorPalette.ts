@@ -13,8 +13,8 @@ const categoryColorPalette: Map<string, CategoryColor> = new Map([
   ['Kultur', { bgClass: 'bg-fuchsia-100', bgHoverClass: 'hover:bg-fuchsia-50' }],
 ]);
 
-function getCategoryColorClass(category: string): CategoryColor | null {
-  return categoryColorPalette.get(category) ?? null;
+function getCategoryColorClass(category: string): CategoryColor | undefined {
+  return categoryColorPalette.get(category);
 }
 
 export default getCategoryColorClass;

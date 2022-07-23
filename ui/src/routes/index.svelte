@@ -3,7 +3,9 @@
   import news from '../lib/stores/news';
   import { getNews } from '../lib/api/news';
 
-  export async function load({ fetch }) {
+  type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
+
+  export async function load({ fetch }: { fetch: FetchFn }) {
     news.setNews(await getNews(fetch));
     return {
       props: {},

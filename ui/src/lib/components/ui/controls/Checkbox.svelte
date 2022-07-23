@@ -11,8 +11,8 @@
   const wrapperClass = classNames(['inline-flex items-center gap-3']);
   const labelClass = classNames(['flex-1']);
 
-  function handleChange(event) {
-    dispatch('change', event.target.checked);
+  function handleChange(event: Event) {
+    dispatch('change', (event.target as HTMLInputElement).checked);
   }
 </script>
 

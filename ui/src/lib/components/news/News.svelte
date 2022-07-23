@@ -9,11 +9,13 @@
   import { refreshNews } from '../../stores/newsEvents';
   import { unsubscribeAll } from '../../utils/subscriptions';
   import settings from '../../stores/settings';
+  import type { Unsubscriber } from 'svelte/store';
 
   let isNewsLoading = false;
-  let subscriptions = [];
+  let subscriptions: Array<Unsubscriber> = [];
 
-  $: showNewsList = $news.storyBuckets?.reduce((count, bucket) => count + bucket.stories.length, 0) > 0;
+  $: showNewsList =
+    $news.storyBuckets && $news.storyBuckets?.reduce((count, bucket) => count + bucket.stories.length, 0) > 0;
   $: anySourcesEnabled = !$settings.sources || $settings.sources?.length > 0;
 
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);

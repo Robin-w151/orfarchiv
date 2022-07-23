@@ -7,15 +7,15 @@ import settings from './settings';
 
 interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
-  setNews: (_: News) => void;
+  setNews: (_: News | null) => void;
 }
 
 const initialState = { stories: [] };
-const { subscribe, set } = writable<News>(initialState);
+const { subscribe, set } = writable<News | null>(initialState);
 
-function setNews(news: News): void {
+function setNews(news: News | null): void {
   const storyBuckets = news ? createStoryBuckets(news.stories ?? []) : undefined;
-  set({ ...news, storyBuckets });
+  set(news ? { ...news, storyBuckets } : null);
 }
 
 function createStoryBuckets(stories: Array<IStory>): Array<NewsBucket> {

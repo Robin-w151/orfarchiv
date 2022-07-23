@@ -12,8 +12,8 @@
   export let timestamp: string;
   export let source: string;
 
-  $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : null;
-  $: target = $settings.openLinksInNewTab ? '_blank' : null;
+  $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : undefined;
+  $: target = $settings.openLinksInNewTab ? '_blank' : undefined;
   $: sourceLabel = getSourceLabel(source);
 
   const titleClass = classNames();
@@ -23,7 +23,7 @@
     return DateTime.fromISO(timestamp).toFormat('dd.MM.yyyy, HH:mm');
   }
 
-  function getSourceLabel(source: string): string {
+  function getSourceLabel(source: string): string | undefined {
     if (!source || source === 'news') {
       return undefined;
     }

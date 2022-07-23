@@ -1,8 +1,8 @@
 <script lang="ts">
   import classNames from 'classnames';
 
-  export let href: string = undefined;
-  export let target: string = undefined;
+  export let href: string | undefined = undefined;
+  export let target: string | undefined = undefined;
 
   const buttonClass = classNames([
     'p-2',
