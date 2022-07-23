@@ -2,12 +2,13 @@ const { get } = require('axios');
 const { XMLParser } = require('fast-xml-parser');
 
 async function scrapeOrfNews(url, source) {
+  console.log(`Scraping RSS feed: '${source}'`);
   const data = await fetchOrfNews(url);
   return collectStories(data, source);
 }
 
 async function fetchOrfNews(url) {
-  console.log('Fetching ORF news data...');
+  console.log('Fetching data...');
   try {
     const response = await get(url);
     return response.data;
@@ -17,7 +18,7 @@ async function fetchOrfNews(url) {
 }
 
 function collectStories(data, source) {
-  console.log('Parsing ORF news data...');
+  console.log('Parsing data...');
   const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' });
   const document = parser.parse(data);
   const items = document?.['rdf:RDF']?.item;
