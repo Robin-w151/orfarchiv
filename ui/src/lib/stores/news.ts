@@ -1,26 +1,44 @@
 import { get, type Readable, writable } from 'svelte/store';
 import type { News } from '../models/news';
-import type { Story as IStory } from '../models/story';
+import type { Story } from '../models/story';
 import { DateTime } from 'luxon';
 import type { NewsBucket } from '../models/news';
 import settings from './settings';
 
 interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
-  setNews: (_: News | null) => void;
+  setNews: (_: News) => void;
+  setSearch: (_: string | undefined) => void;
 }
 
 const initialState = { stories: [] };
-const { subscribe, set } = writable<News | null>(initialState);
+const { subscribe, update } = writable<News>(initialState);
 
-function setNews(news: News | null): void {
-  const storyBuckets = news ? createStoryBuckets(news.stories ?? []) : undefined;
-  set(news ? { ...news, storyBuckets } : null);
+function setNews(news: News): void {
+  if (!news) {
+    return;
+  }
+  update((oldNews) => {
+    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: news.stories });
+    return { ...news, storyBuckets };
+  });
 }
 
-function createStoryBuckets(stories: Array<IStory>): Array<NewsBucket> {
+function setSearch(search?: string): void {
+  update((oldNews) => {
+    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, search });
+    return { ...oldNews, storyBuckets };
+  });
+}
+
+function createStoryBucketsAndFilter(news: News): Array<NewsBucket> | undefined {
+  if (!news) {
+    return undefined;
+  }
+  const stories = news.stories ?? [];
+
   const now = DateTime.now();
-  function isInBucket(bucket: NewsBucket, story: IStory) {
+  function isInBucket(bucket: NewsBucket, story: Story) {
     const timestamp = DateTime.fromISO(story.timestamp);
     const ageInMin = now.diff(timestamp).as('minutes');
     const { minAgeInMin, maxAgeInMin } = bucket;
@@ -62,6 +80,7 @@ function createStoryBuckets(stories: Array<IStory>): Array<NewsBucket> {
 
   stories
     .filter((story) => !enabledSources || enabledSources.includes(story.source))
+    .filter(filterStory.bind(null, news.search?.toLowerCase()))
     .forEach((story) => {
       for (const bucket of buckets) {
         if (isInBucket(bucket, story)) {
@@ -73,4 +92,18 @@ function createStoryBuckets(stories: Array<IStory>): Array<NewsBucket> {
   return buckets;
 }
 
-export default { subscribe, setNews } as NewsStore;
+function filterStory(search: string | undefined, story: Story): boolean {
+  if (!search) {
+    return true;
+  }
+
+  const normalizedCategory = story.category?.toLowerCase();
+  if (normalizedCategory?.includes(search)) {
+    return true;
+  }
+
+  const normalizedTitle = story.title?.toLowerCase();
+  return !!normalizedTitle?.includes(search);
+}
+
+export default { subscribe, setNews, setSearch } as NewsStore;

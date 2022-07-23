@@ -4,6 +4,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  [type='text'],
+  [type='number'] {
+    border: none;
+  }
+}
+
 body {
-    font-family: 'Roboto', sans-serif;
+  font-family: 'Roboto', sans-serif;
 }

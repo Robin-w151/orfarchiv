@@ -10,6 +10,7 @@
   import { unsubscribeAll } from '../../utils/subscriptions';
   import settings from '../../stores/settings';
   import type { Unsubscriber } from 'svelte/store';
+  import NewsFilter from './NewsFilter.svelte';
 
   let isNewsLoading = false;
   let subscriptions: Array<Unsubscriber> = [];
@@ -41,7 +42,7 @@
       news.setNews(await getNews(fetch));
     } catch (error) {
       console.warn(error);
-      news.setNews(null);
+      news.setNews({ stories: [] });
     } finally {
       isNewsLoading = false;
     }
@@ -49,6 +50,7 @@
 </script>
 
 <Content>
+  <NewsFilter />
   {#if !anySourcesEnabled}
     <div class={newsFallbackWrapperClass}>
       <span

@@ -8,7 +8,7 @@
 
   const wrapperClass = classNames(['flex flex-col gap-4', 'p-4', 'w-screen max-w-screen-md']);
   const headerClass = classNames([
-    'flex justify-between items-center',
+    'flex justify-between items-center gap-6',
     'px-6 py-3',
     'text-3xl',
     'text-blue-900 bg-white',
@@ -27,7 +27,7 @@
   <header class={headerClass}>
     <h1>
       <a class={headerTitleClass} href="/">
-        <span class="hidden sm:inline">ORF&nbsp;</span><span>News Archiv</span>
+        <span class="hidden sm:inline">ORF&nbsp;</span><span class="whitespace-nowrap">News Archiv</span>
       </a>
     </h1>
     <div class={headerActionsClass}>
