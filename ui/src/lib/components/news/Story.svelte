@@ -34,6 +34,6 @@
 <Item href={url} {target} {categoryColor}>
   <span class={titleClass}>{title}</span>
   <span class={metadataClass}
-    >{#if sourceLabel}<span>{sourceLabel} - </span>{/if}{category} - {formatTimestamp(timestamp)}</span
+    >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp)}</span
   >
 </Item>
