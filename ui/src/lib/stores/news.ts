@@ -18,16 +18,17 @@ function setNews(news: News): void {
   if (!news) {
     return;
   }
+  const stories = news.stories;
   update((oldNews) => {
-    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: news.stories });
-    return { ...news, storyBuckets };
+    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories });
+    return { ...oldNews, stories, storyBuckets };
   });
 }
 
 function setSearch(search?: string): void {
   update((oldNews) => {
     const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, search });
-    return { ...oldNews, storyBuckets };
+    return { ...oldNews, storyBuckets, search };
   });
 }
 

@@ -11,5 +11,5 @@
 </script>
 
 <div class={filterClass}>
-  <Input id="search-input" on:change={handleSearchChange} placeholder="Suche" />
+  <Input id="search-input" value={$news.search} on:change={handleSearchChange} placeholder="Suche" />
 </div>
