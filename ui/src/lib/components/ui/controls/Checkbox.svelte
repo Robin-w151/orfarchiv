@@ -9,7 +9,7 @@
   const dispatch = createEventDispatcher();
 
   const wrapperClass = classNames(['inline-flex items-center gap-3']);
-  const inputClass = classNames(['text-blue-800', 'rounded-md']);
+  const inputClass = classNames(['text-blue-800', 'focus:ring-blue-800', 'rounded-md']);
   const labelClass = classNames(['flex-1']);
 
   function handleChange(event: Event) {

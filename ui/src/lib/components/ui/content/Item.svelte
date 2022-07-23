@@ -3,7 +3,7 @@
   import type { CategoryColor } from '../../../models/categoryColor';
 
   export let href: string | undefined = undefined;
-  export let target: string | undefined = '_blank';
+  export let target: string | undefined | null = '_blank';
   export let categoryColor: CategoryColor | undefined = undefined;
 
   const itemClass = classNames([

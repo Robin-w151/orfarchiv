@@ -13,7 +13,7 @@
   export let source: string;
 
   $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : undefined;
-  $: target = $settings.openLinksInNewTab ? '_blank' : undefined;
+  $: target = $settings.openLinksInNewTab ? '_blank' : null;
   $: sourceLabel = getSourceLabel(source);
 
   const titleClass = classNames();
