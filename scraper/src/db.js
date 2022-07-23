@@ -5,11 +5,13 @@ async function persistOrfNews(stories) {
   const storyIds = stories.map((story) => story.id);
 
   await withOrfArchivDb(async (newsCollection) => {
-    const existingStoryIds = (await newsCollection.find({ id: { $in: storyIds } }, { id: 1 }).toArray()).map(
-      (story) => story.id,
+    const existingStories = new Map();
+    (await newsCollection.find({ id: { $in: storyIds } }, { id: 1 }).toArray()).forEach((story) =>
+      existingStories.set(story.id, story),
     );
+
     const storiesToInsert = stories
-      .filter((story) => !existingStoryIds.includes(story.id))
+      .filter((story) => !existingStories.has(story.id))
       .map((story) => ({ ...story, timestamp: new Date(story.timestamp) }));
 
     if (storiesToInsert.length > 0) {
@@ -20,6 +22,22 @@ async function persistOrfNews(stories) {
       );
     } else {
       console.log('Nothing to insert.');
+    }
+
+    const storiesToUpdate = stories
+      .filter((story) => existingStories.has(story.id))
+      .map((story) => ({ ...story, timestamp: new Date(story.timestamp) }))
+      .filter((story) => storyShouldUpdate(story, existingStories.get(story.id)));
+
+    if (storiesToUpdate.length > 0) {
+      const results = storiesToUpdate.map((story) => newsCollection.replaceOne({ id: story.id }, story));
+      await Promise.all(results);
+      console.log(
+        'Updated story IDs:',
+        storiesToUpdate.map((story) => story.id),
+      );
+    } else {
+      console.log('Nothing to update.');
     }
   });
 }
@@ -38,6 +56,15 @@ async function withOrfArchivDb(handler) {
   } finally {
     await client?.close();
   }
+}
+
+function storyShouldUpdate(newStory, oldStory) {
+  return (
+    newStory.title !== oldStory.title ||
+    newStory.category !== oldStory.category ||
+    newStory.url !== oldStory.url ||
+    newStory.timestamp.toISOString() !== oldStory.timestamp.toISOString()
+  );
 }
 
 module.exports = {
