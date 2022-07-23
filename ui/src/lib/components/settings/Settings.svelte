@@ -65,5 +65,5 @@
 </Content>
 
 <Actions>
-  <Button on:click={handleSaveButtonClick}>Speichern</Button>
+  <Button on:click={handleSaveButtonClick}>Fertig</Button>
 </Actions>

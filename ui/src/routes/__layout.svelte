@@ -14,6 +14,7 @@
     'text-blue-900 bg-white',
     'rounded-lg shadow-md',
   ]);
+  const headerTitleClass = classNames(['outline-none hover:underline focus:underline decoration-2 underline-offset-4']);
   const headerActionsClass = classNames(['flex gap-2']);
   const mainClass = classNames(['flex flex-col gap-4']);
 
@@ -25,7 +26,7 @@
 <div class={wrapperClass}>
   <header class={headerClass}>
     <h1>
-      <a href="/">
+      <a class={headerTitleClass} href="/">
         <span class="hidden sm:inline">ORF&nbsp;</span><span>News Archiv</span>
       </a>
     </h1>
