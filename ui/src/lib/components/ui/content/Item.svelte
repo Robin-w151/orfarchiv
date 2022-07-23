@@ -11,7 +11,7 @@
     'px-6 py-3',
     'text-gray-800',
     categoryColor?.bgClass,
-    href && (categoryColor?.bgHoverClass ?? 'hover:bg-gray-100'),
+    href && (categoryColor?.bgHoverClass ?? 'hover:bg-gray-100 focus:bg-gray-100 outline-none'),
   ]);
 </script>
 
