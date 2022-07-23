@@ -8,13 +8,18 @@
   import settings from '../../stores/settings';
   import { goto } from '$app/navigation';
   import Actions from '../ui/content/Actions.svelte';
+  import { sources } from '../../models/settings.js';
 
-  function handleOpenLinksInNewTabSelect({ detail: checked }) {
+  function handleOpenLinksInNewTabChange({ detail: checked }) {
     settings.setOpenLinksInNewTab(checked);
   }
 
-  function handleUseCategoryColorPalette({ detail: checked }) {
+  function handleUseCategoryColorPaletteChange({ detail: checked }) {
     settings.setUseCategoryColorPalette(checked);
+  }
+
+  function handleSourceChange(source, { detail: checked }) {
+    settings.setSource(source, checked);
   }
 
   function handleSaveButtonClick() {
@@ -30,7 +35,7 @@
           id="open-links-in-new-tab"
           label="Links in neuem Tab öffnen"
           checked={$settings.openLinksInNewTab}
-          on:change={handleOpenLinksInNewTabSelect}
+          on:change={handleOpenLinksInNewTabChange}
         />
       </Item>
       <Item>
@@ -38,9 +43,23 @@
           id="use-category-color-palette"
           label="Kategoriefarben für Stories verwenden"
           checked={$settings.useCategoryColorPalette}
-          on:change={handleUseCategoryColorPalette}
+          on:change={handleUseCategoryColorPaletteChange}
         />
       </Item>
+    </SectionList>
+  </Section>
+  <Section title="Quellen">
+    <SectionList>
+      {#each sources as { label, key } (key)}
+        <Item>
+          <Checkbox
+            id={`source-${key}`}
+            {label}
+            checked={$settings.sources?.includes(key)}
+            on:change={handleSourceChange.bind(null, key)}
+          />
+        </Item>
+      {/each}
     </SectionList>
   </Section>
 </Content>
