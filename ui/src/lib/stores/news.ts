@@ -47,7 +47,7 @@ function createStoryBuckets(stories: Array<IStory>): Array<NewsBucket> {
       stories: [],
     },
     {
-      name: 'Vor 7 Tagen',
+      name: 'Letzte 7 Tage',
       minAgeInMin: 2880,
       maxAgeInMin: 10080,
       stories: [],
