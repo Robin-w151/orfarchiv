@@ -36,5 +36,6 @@ function mapToStory(entry: WithId<any>): Story {
     category: entry.category,
     url: entry.url,
     timestamp: entry.timestamp.toISOString(),
+    source: entry.source,
   };
 }

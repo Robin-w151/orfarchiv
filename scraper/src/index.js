@@ -7,7 +7,7 @@ main();
 
 async function main() {
   try {
-    const stories = await scrapeOrfNews(rssOrfUrl);
+    const stories = await scrapeOrfNews(rssOrfUrl, 'news');
     await persistOrfNews(stories);
   } catch (error) {
     console.log(error.message);

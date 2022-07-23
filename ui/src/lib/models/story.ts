@@ -4,4 +4,5 @@ export interface Story {
   category: string;
   url: string;
   timestamp: string;
+  source: string;
 }
