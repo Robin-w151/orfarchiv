@@ -1,8 +1,9 @@
-import { type Readable, writable } from 'svelte/store';
+import { get, type Readable, writable } from 'svelte/store';
 import type { News } from '../models/news';
 import type { Story as IStory } from '../models/story';
 import { DateTime } from 'luxon';
 import type { NewsBucket } from '../models/news';
+import settings from './settings';
 
 interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
@@ -57,14 +58,18 @@ function createStoryBuckets(stories: Array<IStory>): Array<NewsBucket> {
       stories: [],
     },
   ];
-  stories.forEach((story) => {
-    for (const bucket of buckets) {
-      if (isInBucket(bucket, story)) {
-        bucket.stories.push(story);
-        break;
+  const enabledSources = get(settings).sources;
+
+  stories
+    .filter((story) => !enabledSources || enabledSources.includes(story.source))
+    .forEach((story) => {
+      for (const bucket of buckets) {
+        if (isInBucket(bucket, story)) {
+          bucket.stories.push(story);
+          break;
+        }
       }
-    }
-  });
+    });
   return buckets;
 }
 

@@ -8,11 +8,13 @@
   import NewsList from './NewsList.svelte';
   import { refreshNews } from '../../stores/newsEvents';
   import { unsubscribeAll } from '../../utils/subscriptions';
+  import settings from '../../stores/settings';
 
-  let isNewsLoading = true;
+  let isNewsLoading = false;
   let subscriptions = [];
 
   $: showNewsList = $news.storyBuckets?.reduce((count, bucket) => count + bucket.stories.length, 0) > 0;
+  $: anySourcesEnabled = !$settings.sources || $settings.sources?.length > 0;
 
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
   const newsFallbackWrapperClass = classNames([
@@ -45,7 +47,14 @@
 </script>
 
 <Content>
-  {#if showNewsList}
+  {#if !anySourcesEnabled}
+    <div class={newsFallbackWrapperClass}>
+      <span
+        >Aktuell sind alle Quellen deaktiviert. Gehen Sie zu den Einstellungen und aktivieren Sie mindestens eine Quelle
+        um Nachrichten zu sehen.</span
+      >
+    </div>
+  {:else if showNewsList}
     <NewsList storyBuckets={$news.storyBuckets} />
   {:else if isNewsLoading}
     <div class={newsLoadingWrapperClass}>
