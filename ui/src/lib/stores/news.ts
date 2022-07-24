@@ -98,6 +98,11 @@ function filterStory(search: string | undefined, story: Story): boolean {
     return true;
   }
 
+  const normalizedSource = story.source?.toLowerCase();
+  if (normalizedSource?.includes(search)) {
+    return true;
+  }
+
   const normalizedCategory = story.category?.toLowerCase();
   if (normalizedCategory?.includes(search)) {
     return true;
