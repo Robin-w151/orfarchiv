@@ -14,7 +14,7 @@
     'text-blue-900 bg-white',
     'rounded-lg shadow-md',
   ]);
-  const headerTitleClass = classNames(['outline-none hover:underline focus:underline decoration-2 underline-offset-4']);
+  const headerTitleClass = classNames(['outline-none']);
   const headerActionsClass = classNames(['flex gap-2']);
   const mainClass = classNames(['flex flex-col gap-4']);
 
