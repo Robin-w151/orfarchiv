@@ -31,7 +31,7 @@
       </a>
     </h1>
     <div class={headerActionsClass}>
-      <ButtonLink on:click={handleRefreshButtonClick}>
+      <ButtonLink href="/" on:click={handleRefreshButtonClick} preventDefault>
         <RefreshIcon />
       </ButtonLink>
       <ButtonLink href="/settings">
