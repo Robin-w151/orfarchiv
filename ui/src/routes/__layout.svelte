@@ -6,7 +6,7 @@
   import ButtonLink from '../lib/components/ui/controls/ButtonLink.svelte';
   import { refreshNews } from '../lib/stores/newsEvents';
 
-  const wrapperClass = classNames(['flex flex-col gap-4', 'p-4', 'w-screen max-w-screen-md']);
+  const wrapperClass = classNames(['flex flex-col gap-4', 'p-4', 'w-screen max-w-screen-lg']);
   const headerClass = classNames([
     'flex justify-between items-center gap-6',
     'px-6 py-3',
