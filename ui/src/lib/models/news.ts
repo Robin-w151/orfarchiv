@@ -4,6 +4,7 @@ export interface News {
   stories: Array<Story>;
   storyBuckets?: Array<NewsBucket>;
   search?: string;
+  nextKey?: NextKey | null;
 }
 
 export interface NewsBucket {
@@ -11,4 +12,9 @@ export interface NewsBucket {
   minAgeInMin: number;
   maxAgeInMin?: number;
   stories: Array<Story>;
+}
+
+export interface NextKey {
+  id: string;
+  timestamp: any;
 }

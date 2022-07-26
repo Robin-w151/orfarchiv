@@ -5,9 +5,10 @@ import { DateTime } from 'luxon';
 import type { NewsBucket } from '../models/news';
 import settings from './settings';
 
-interface NewsStore extends Partial<News> {
+export interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
   setNews: (_: News) => void;
+  addNews: (_: News) => void;
   setSearch: (_: string | undefined) => void;
 }
 
@@ -18,10 +19,22 @@ function setNews(news: News): void {
   if (!news) {
     return;
   }
-  const stories = news.stories;
+  const { stories, nextKey } = news;
   update((oldNews) => {
     const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories });
-    return { ...oldNews, stories, storyBuckets };
+    return { ...oldNews, stories, storyBuckets, nextKey };
+  });
+}
+
+function addNews(news: News): void {
+  if (!news) {
+    return;
+  }
+  const { stories, nextKey } = news;
+  update((oldNews) => {
+    const newStories = (oldNews.stories ?? []).concat(stories);
+    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: newStories });
+    return { ...oldNews, stories: newStories, storyBuckets, nextKey };
   });
 }
 
@@ -112,4 +125,4 @@ function filterStory(search: string | undefined, story: Story): boolean {
   return !!normalizedTitle?.includes(search);
 }
 
-export default { subscribe, setNews, setSearch } as NewsStore;
+export default { subscribe, setNews, addNews, setSearch } as NewsStore;

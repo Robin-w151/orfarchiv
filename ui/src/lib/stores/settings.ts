@@ -3,7 +3,7 @@ import type { Settings } from '../models/settings';
 import { writable } from 'svelte-local-storage-store';
 import { sources } from '../models/settings';
 
-interface SettingsStore extends Partial<Settings> {
+export interface SettingsStore extends Partial<Settings> {
   subscribe: Writable<Settings>['subscribe'];
   setOpenLinksInNewTab: (_: boolean) => void;
   setUseCategoryColorPalette: (_: boolean) => void;

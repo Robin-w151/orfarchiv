@@ -2,6 +2,8 @@ import { writable } from 'svelte/store';
 
 export const refreshNews = createEventStore();
 
+export const loadMoreNews = createEventStore();
+
 function createEventStore() {
   const { subscribe, update } = writable<number>(0);
 

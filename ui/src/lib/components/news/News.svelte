@@ -1,23 +1,25 @@
 <script lang="ts">
-  import news from '../../stores/news';
+  import news, { type NewsStore } from '../../stores/news';
   import { onDestroy, onMount } from 'svelte';
   import LoadingIndicator from '../ui/LoadingIndicator.svelte';
   import { getNews } from '../../api/news';
   import Content from '../ui/content/Content.svelte';
   import classNames from 'classnames';
   import NewsList from './NewsList.svelte';
-  import { refreshNews } from '../../stores/newsEvents';
+  import { loadMoreNews, refreshNews } from '../../stores/newsEvents';
   import { unsubscribeAll } from '../../utils/subscriptions';
-  import settings from '../../stores/settings';
+  import settings, { type SettingsStore } from '../../stores/settings';
   import type { Unsubscriber } from 'svelte/store';
   import NewsFilter from './NewsFilter.svelte';
+  import { get } from 'svelte/store';
+  import Button from '../ui/controls/Button.svelte';
 
   let isNewsLoading = false;
   let subscriptions: Array<Unsubscriber> = [];
 
-  $: showNewsList =
-    $news.storyBuckets && $news.storyBuckets?.reduce((count, bucket) => count + bucket.stories.length, 0) > 0;
-  $: anySourcesEnabled = !$settings.sources || $settings.sources?.length > 0;
+  $: showNewsList = hasNews($news);
+  $: anySourcesEnabled = hasAnySourcesEnabled($settings);
+  $: loadMoreButtonDisabled = $news.nextKey === null;
 
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
   const newsFallbackWrapperClass = classNames([
@@ -30,22 +32,49 @@
 
   onMount(() => {
     subscriptions.push(refreshNews.onUpdate(fetchNews));
+    subscriptions.push(loadMoreNews.onUpdate(fetchNews.bind(null, true)));
   });
 
   onDestroy(() => {
     unsubscribeAll(subscriptions);
   });
 
-  async function fetchNews() {
+  async function fetchNews(more = false) {
+    if (isNewsLoading) {
+      return;
+    }
     isNewsLoading = true;
+
     try {
-      news.setNews(await getNews(fetch));
+      const nextKey = get(news).nextKey;
+      if (more && nextKey === null) {
+        return;
+      }
+      const newNews = await getNews(fetch, more && nextKey);
+      if (more) {
+        news.addNews(newNews);
+      } else {
+        news.setNews(newNews);
+      }
     } catch (error) {
       console.warn(error);
-      news.setNews({ stories: [] });
     } finally {
       isNewsLoading = false;
     }
+  }
+
+  function hasNews(newsStore?: NewsStore): boolean {
+    return (
+      newsStore.storyBuckets && newsStore.storyBuckets?.reduce((count, bucket) => count + bucket.stories.length, 0) > 0
+    );
+  }
+
+  function hasAnySourcesEnabled(settingsStore?: SettingsStore): boolean {
+    return !settingsStore.sources || settingsStore.sources?.length > 0;
+  }
+
+  function handleLoadMoreClick(): void {
+    loadMoreNews.notify();
   }
 </script>
 
@@ -69,4 +98,5 @@
       <span>Keine News vorhanden. Versuchen Sie es später erneut.</span>
     </div>
   {/if}
+  <Button disabled={loadMoreButtonDisabled} on:click={handleLoadMoreClick}>Weitere laden</Button>
 </Content>
