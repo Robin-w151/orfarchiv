@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { DateTime } from 'luxon';
   import classNames from 'classnames';
   import Item from '../ui/content/Item.svelte';
   import settings from '../../stores/settings';
   import getCategoryColorClass from '../../utils/categoryColorPalette';
   import { sources } from '../../models/settings';
+  import { browser } from '$app/env';
+  import { formatTimestamp } from '../../utils/datetime.js';
 
   export let title: string;
   export let category: string;
@@ -19,10 +20,6 @@
   const titleClass = classNames();
   const metadataClass = classNames(['text-sm', 'text-gray-600']);
 
-  function formatTimestamp(timestamp: string): string {
-    return DateTime.fromISO(timestamp).toFormat('dd.MM.yyyy, HH:mm');
-  }
-
   function getSourceLabel(source: string): string | undefined {
     if (!source || source === 'news') {
       return undefined;
@@ -34,6 +31,6 @@
 <Item href={url} {target} {categoryColor}>
   <span class={titleClass}>{title}</span>
   <span class={metadataClass}
-    >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp)}</span
+    >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp, browser)}</span
   >
 </Item>
