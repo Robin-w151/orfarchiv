@@ -6,7 +6,7 @@ export async function get() {
   return {
     status: 200,
     headers: {
-      'Cache-Control': 'max-age=0, s-maxage=60, stale-while-revalidate',
+      'Cache-Control': 'max-age=0, s-maxage=60',
     },
     body: news,
   };
