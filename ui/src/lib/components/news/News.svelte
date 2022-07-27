@@ -31,31 +31,44 @@
   ]);
 
   onMount(() => {
-    subscriptions.push(refreshNews.onUpdate(fetchNews));
-    subscriptions.push(loadMoreNews.onUpdate(fetchNews.bind(null, true)));
+    subscriptions.push(refreshNews.onUpdate(fetchNewNews));
+    subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
   });
 
   onDestroy(() => {
     unsubscribeAll(subscriptions);
   });
 
-  async function fetchNews(more = false) {
+  async function fetchNewNews() {
+    await withLoadingIndication(async () => {
+      const prevKey = get(news).prevKey;
+      if (!prevKey) {
+        return;
+      }
+      const newNews = await getNews(fetch, prevKey);
+      news.addNews(newNews, false);
+    });
+  }
+
+  async function fetchMoreNews() {
+    await withLoadingIndication(async () => {
+      const nextKey = get(news).nextKey;
+      if (nextKey === null) {
+        return;
+      }
+      const newNews = await getNews(fetch, nextKey);
+      news.addNews(newNews);
+    });
+  }
+
+  async function withLoadingIndication(handler: () => void | Promise<void>) {
     if (isNewsLoading) {
       return;
     }
     isNewsLoading = true;
 
     try {
-      const nextKey = get(news).nextKey;
-      if (more && nextKey === null) {
-        return;
-      }
-      const newNews = await getNews(fetch, more && nextKey);
-      if (more) {
-        news.addNews(newNews);
-      } else {
-        news.setNews(newNews);
-      }
+      await handler();
     } catch (error) {
       console.warn(error);
     } finally {

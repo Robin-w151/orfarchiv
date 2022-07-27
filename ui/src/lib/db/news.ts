@@ -1,24 +1,28 @@
 import { Collection, MongoClient, type Sort, type WithId } from 'mongodb';
-import type { News, NextKey } from '../models/news';
+import type { News, PageKey } from '../models/news';
 import type { Story } from '../models/story';
+
+type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
 interface PaginationQuery {
   paginatedQuery: any;
   sort: Sort;
-  nextKeyFn: (stories: Array<Story>) => NextKey | null;
+  prevKeyFn: PageKeyFn;
+  nextKeyFn: PageKeyFn;
 }
 
-export async function findNews(nextKey?: NextKey): Promise<News> {
+export async function findNews(pageKey?: PageKey): Promise<News> {
   const query = {};
   return withOrfArchivDb(async (newsCollection) => {
-    const { paginatedQuery, sort, nextKeyFn } = generatePaginationQuery(query, nextKey);
+    const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
     const stories = (await newsCollection
       .find(paginatedQuery)
       .limit(250)
       .sort(sort)
       .toArray()) as unknown as Array<Story>;
+    const newPrevKey = prevKeyFn(stories);
     const newNextKey = nextKeyFn(stories);
-    return { stories: stories.map(mapToStory), nextKey: newNextKey };
+    return { stories: stories.map(mapToStory), prevKey: newPrevKey, nextKey: newNextKey };
   });
 }
 
@@ -37,31 +41,41 @@ async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<
   }
 }
 
-function generatePaginationQuery(query: any, nextKey?: NextKey): PaginationQuery {
-  const sort: Sort = { timestamp: -1, id: -1 };
+function generatePaginationQuery(query: any, pageKey?: PageKey): PaginationQuery {
+  const next = !pageKey || pageKey?.type === 'next';
+  const sort: Sort = next ? { timestamp: -1, id: -1 } : { timestamp: 1, id: 1 };
 
-  function nextKeyFn(stories: Array<Story>): NextKey | null {
+  function prevKeyFn(stories: Array<Story>): PageKey | null {
+    if (stories.length === 0) {
+      return null;
+    }
+
+    const story = stories[0];
+    return { id: story.id, timestamp: story.timestamp, type: 'prev' };
+  }
+
+  function nextKeyFn(stories: Array<Story>): PageKey | null {
     if (stories.length === 0) {
       return null;
     }
 
     const story = stories[stories.length - 1];
-    return { id: story.id, timestamp: story.timestamp };
+    return { id: story.id, timestamp: story.timestamp, type: 'next' };
   }
 
-  if (!nextKey) {
-    return { paginatedQuery: query, sort, nextKeyFn };
+  if (!pageKey) {
+    return { paginatedQuery: query, sort, prevKeyFn, nextKeyFn };
   }
 
   let paginatedQuery = query;
 
   const sortField = 'timestamp';
-  const sortOperator = '$lt';
+  const sortOperator = next ? '$lt' : '$gt';
 
   const paginationQuery = [
-    { [sortField]: { [sortOperator]: nextKey[sortField] } },
+    { [sortField]: { [sortOperator]: pageKey[sortField] } },
     {
-      $and: [{ [sortField]: nextKey[sortField] }, { id: { [sortOperator]: nextKey.id } }],
+      $and: [{ [sortField]: pageKey[sortField] }, { id: { [sortOperator]: pageKey.id } }],
     },
   ];
 
@@ -71,7 +85,7 @@ function generatePaginationQuery(query: any, nextKey?: NextKey): PaginationQuery
     paginatedQuery = { $and: [query, { $or: paginationQuery }] };
   }
 
-  return { paginatedQuery, sort, nextKeyFn };
+  return { paginatedQuery, sort, prevKeyFn, nextKeyFn };
 }
 
 function mapToStory(entry: WithId<any>): Story {

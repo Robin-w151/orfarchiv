@@ -8,7 +8,7 @@ import settings from './settings';
 export interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
   setNews: (_: News) => void;
-  addNews: (_: News) => void;
+  addNews: (_: News, append?: boolean) => void;
   setSearch: (_: string | undefined) => void;
 }
 
@@ -19,22 +19,30 @@ function setNews(news: News): void {
   if (!news) {
     return;
   }
-  const { stories, nextKey } = news;
+  const { stories, prevKey, nextKey } = news;
   update((oldNews) => {
     const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories });
-    return { ...oldNews, stories, storyBuckets, nextKey };
+    return { ...oldNews, stories, storyBuckets, prevKey, nextKey };
   });
 }
 
-function addNews(news: News): void {
+function addNews(news: News, append = true): void {
   if (!news) {
     return;
   }
-  const { stories, nextKey } = news;
+  const { stories, prevKey, nextKey } = news;
   update((oldNews) => {
-    const newStories = (oldNews.stories ?? []).concat(stories);
+    const newStories = append
+      ? (oldNews.stories ?? []).concat(stories)
+      : (stories.reverse() ?? []).concat(oldNews.stories);
     const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: newStories });
-    return { ...oldNews, stories: newStories, storyBuckets, nextKey };
+    const newNews = { ...oldNews, stories: newStories, storyBuckets };
+    if (append) {
+      newNews.nextKey = nextKey;
+    } else if (prevKey) {
+      newNews.prevKey = prevKey;
+    }
+    return newNews;
   });
 }
 

@@ -4,7 +4,8 @@ export interface News {
   stories: Array<Story>;
   storyBuckets?: Array<NewsBucket>;
   search?: string;
-  nextKey?: NextKey | null;
+  prevKey?: PageKey | null;
+  nextKey?: PageKey | null;
 }
 
 export interface NewsBucket {
@@ -14,7 +15,8 @@ export interface NewsBucket {
   stories: Array<Story>;
 }
 
-export interface NextKey {
+export interface PageKey {
   id: string;
   timestamp: any;
+  type: 'prev' | 'next';
 }
