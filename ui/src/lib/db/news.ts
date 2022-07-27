@@ -15,15 +15,10 @@ export async function findNews(pageKey?: PageKey): Promise<News> {
   const query = {};
   return withOrfArchivDb(async (newsCollection) => {
     const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
-    const stories = (await newsCollection
-      .find(paginatedQuery)
-      .limit(250)
-      .sort(sort)
-      .toArray()) as unknown as Array<Story>;
-    const sortedStories = pageKey?.type === 'prev' ? stories.reverse() : stories;
-    const newPrevKey = !pageKey || pageKey?.type === 'prev' ? prevKeyFn(sortedStories) : undefined;
-    const newNextKey = !pageKey || pageKey?.type === 'next' ? nextKeyFn(sortedStories) : undefined;
-    return { stories: sortedStories.map(mapToStory), prevKey: newPrevKey, nextKey: newNextKey };
+    const stories = await executeQuery(newsCollection, paginatedQuery, sort);
+    const orderedStories = correctOrder(stories, pageKey);
+    const { prevKey, nextKey } = getPageKeys(orderedStories, prevKeyFn, nextKeyFn, pageKey);
+    return { stories: orderedStories.map(mapToStory), prevKey, nextKey };
   });
 }
 
@@ -87,6 +82,25 @@ function generatePaginationQuery(query: any, pageKey?: PageKey): PaginationQuery
   }
 
   return { paginatedQuery, sort, prevKeyFn, nextKeyFn };
+}
+
+function executeQuery(newsCollection: Collection, query: any, sort: Sort): Promise<Array<Story>> {
+  return newsCollection.find(query).limit(250).sort(sort).toArray() as unknown as Promise<Array<Story>>;
+}
+
+function correctOrder(stories: Array<Story>, pageKey?: PageKey): Array<Story> {
+  return pageKey?.type === 'prev' ? stories.reverse() : stories;
+}
+
+function getPageKeys(
+  stories: Array<Story>,
+  prevKeyFn: PageKeyFn,
+  nextKeyFn: PageKeyFn,
+  pageKey?: PageKey,
+): { prevKey?: PageKey | null; nextKey?: PageKey | null } {
+  const prevKey = !pageKey || pageKey?.type === 'prev' ? prevKeyFn(stories) : undefined;
+  const nextKey = !pageKey || pageKey?.type === 'next' ? nextKeyFn(stories) : undefined;
+  return { prevKey, nextKey };
 }
 
 function mapToStory(entry: WithId<any>): Story {
