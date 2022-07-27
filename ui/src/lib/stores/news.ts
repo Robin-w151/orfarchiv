@@ -32,9 +32,7 @@ function addNews(news: News, append = true): void {
   }
   const { stories, prevKey, nextKey } = news;
   update((oldNews) => {
-    const newStories = append
-      ? (oldNews.stories ?? []).concat(stories)
-      : (stories.reverse() ?? []).concat(oldNews.stories);
+    const newStories = append ? (oldNews.stories ?? []).concat(stories) : (stories ?? []).concat(oldNews.stories);
     const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: newStories });
     const newNews = { ...oldNews, stories: newStories, storyBuckets };
     if (append) {
