@@ -20,9 +20,10 @@ export async function findNews(pageKey?: PageKey): Promise<News> {
       .limit(250)
       .sort(sort)
       .toArray()) as unknown as Array<Story>;
-    const newPrevKey = !pageKey || pageKey?.type === 'prev' ? prevKeyFn(stories) : undefined;
-    const newNextKey = !pageKey || pageKey?.type === 'next' ? nextKeyFn(stories) : undefined;
-    return { stories: stories.map(mapToStory), prevKey: newPrevKey, nextKey: newNextKey };
+    const sortedStories = pageKey?.type === 'prev' ? stories.reverse() : stories;
+    const newPrevKey = !pageKey || pageKey?.type === 'prev' ? prevKeyFn(sortedStories) : undefined;
+    const newNextKey = !pageKey || pageKey?.type === 'next' ? nextKeyFn(sortedStories) : undefined;
+    return { stories: sortedStories.map(mapToStory), prevKey: newPrevKey, nextKey: newNextKey };
   });
 }
 
