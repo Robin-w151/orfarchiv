@@ -3518,6 +3518,7 @@ __metadata:
     tslib: ^2.4.0
     typescript: ^4.7.4
     vite: ^3.0.3
+    web-vitals: ^2.1.4
   languageName: unknown
   linkType: soft
 
@@ -3605,6 +3606,13 @@ __metadata:
   bin:
     vite: bin/vite.js
   checksum: 0b15d6bb062ab56dd8a0d47262344dcb48423d658c153c88a8a41f9301a70f32dd0fa2c037fa39a0a7888be1005cb763aad94235f82439441a13cef5103c29c4
+  languageName: node
+  linkType: hard
+
+"web-vitals@npm:^2.1.4":
+  version: 2.1.4
+  resolution: "web-vitals@npm:2.1.4"
+  checksum: 03d3f47dbf55c3dce07beb0ff5de8ddd52e2d0a53a8df5c84e7a16dda93543341d67231fa79b1d9772b091419af4ec0fd395b8bcf451a0e26846e3f76b3d0efc
   languageName: node
   linkType: hard
 

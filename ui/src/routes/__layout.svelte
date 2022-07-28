@@ -5,6 +5,19 @@
   import RefreshIcon from '../lib/components/ui/icons/outline/RefreshIcon.svelte';
   import ButtonLink from '../lib/components/ui/controls/ButtonLink.svelte';
   import { refreshNews } from '../lib/stores/newsEvents';
+  import { webVitals } from '../lib/utils/vitals';
+  import { browser } from '$app/env';
+  import { page } from '$app/stores';
+
+  const analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
+  $: if (browser && analyticsId) {
+    console.log('Sending vitals...');
+    webVitals({
+      path: $page.url.pathname,
+      params: $page.params,
+      analyticsId,
+    });
+  }
 
   const wrapperClass = classNames(['flex flex-col gap-3 sm:gap-4', 'p-2 sm:p-4', 'w-screen max-w-screen-lg']);
   const headerClass = classNames([
@@ -43,6 +56,3 @@
     <slot />
   </main>
 </div>
-
-<style>
-</style>
