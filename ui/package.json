@@ -12,8 +12,6 @@
   },
   "devDependencies": {
     "@fontsource/roboto": "^4.5.7",
-    "@sveltejs/adapter-node": "next",
-    "@sveltejs/adapter-static": "next",
     "@sveltejs/adapter-vercel": "next",
     "@sveltejs/kit": "next",
     "@tailwindcss/forms": "^0.5.2",
@@ -22,8 +20,6 @@
     "@typescript-eslint/parser": "^5.31.0",
     "autoprefixer": "^10.4.7",
     "classnames": "^2.3.1",
-    "clean-package": "^2.1.1",
-    "cpr": "^3.0.1",
     "dotenv-flow": "^3.2.0",
     "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
@@ -45,13 +41,5 @@
     "vite": "^3.0.3"
   },
   "type": "module",
-  "packageManager": "yarn@3.2.1",
-  "clean-package": {
-    "remove": [
-      "scripts",
-      "devDependencies",
-      "packageManager",
-      "clean-package"
-    ]
-  }
+  "packageManager": "yarn@3.2.1"
 }
