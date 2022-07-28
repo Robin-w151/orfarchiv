@@ -5,7 +5,6 @@ node_modules
 /package
 .env.local
 .env.*.local
-!.env.example
 
 .yarn/*
 !.yarn/releases

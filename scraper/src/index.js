@@ -1,5 +1,6 @@
 const { scrapeOrfNews } = require('./scrape');
 const { persistOrfNews } = require('./db');
+require('dotenv-flow').config();
 
 const sources = [
   {

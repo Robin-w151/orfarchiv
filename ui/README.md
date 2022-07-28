@@ -1,38 +1,21 @@
-# create-svelte
+# ORF Archiv UI
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+ORF Archiv UI is a web application powered by [SvelteKit](https://kit.svelte.dev/docs/introduction).
+It serves links to ORF news stories from multiple sources, which are persisted in a MongoDB document store.
+This app includes both frontend and backend ([Endpoints](https://kit.svelte.dev/docs/routing#endpoints)) code,
+so no separate backend application is required.
 
-## Creating a project
+## Local Development
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Prerequisites
 
-```bash
-# create a new project in the current directory
-npm init svelte
+1. Start and configure a local *MongoDB* document store (more [info](../db/README.md))
+2. Install *NodeJS* and *yarn*, e.g. with [Volta](https://volta.sh/)
 
-# create a new project in my-app
-npm init svelte my-app
-```
+### Run DEV server
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+1. *Optionally*: create *.env.local* (copy from *.env* file) and configure **ORFARCHIV_DB_URL** env variable if
+   your MongoDB is not running on **mongodb://localhost:27017**
+2. `yarn install`
+3. `yarn run dev`
+4. Visit http://localhost:3001
