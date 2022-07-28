@@ -35,6 +35,10 @@ export const sources: Array<Source> = [
     key: 'fm4',
   },
   {
+    label: 'Österreich',
+    key: 'oesterreich',
+  },
+  {
     label: 'Burgenland',
     key: 'burgenland',
   },

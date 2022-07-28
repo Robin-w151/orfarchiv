@@ -30,6 +30,11 @@ const sources = [
     rssUrl: 'https://rss.orf.at/fm4.xml',
   },
   {
+    source: 'oesterreich',
+    rssUrl: 'https://rss.orf.at/oesterreich.xml',
+    alternativeFormat: true,
+  },
+  {
     source: 'burgenland',
     rssUrl: 'https://rss.orf.at/burgenland.xml',
     alternativeFormat: true,

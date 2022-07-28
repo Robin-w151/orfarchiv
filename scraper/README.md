@@ -11,6 +11,7 @@ ORF Archiv Scraper is a *NodeJS* application, which fetches and persists ORF New
 * [Science](https://rss.orf.at/science.xml)
 * [OE3](https://rss.orf.at/oe3.xml)
 * [FM4](https://rss.orf.at/fm4.xml)
+* [Österreich](https://rss.orf.at/oesterreich.xml)
 * [Burgenland](https://rss.orf.at/burgenland.xml)
 * [Wien](https://rss.orf.at/wien.xml)
 * [Niederösterreich](https://rss.orf.at/noe.xml)
