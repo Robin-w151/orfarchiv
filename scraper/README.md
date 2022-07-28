@@ -1,6 +1,25 @@
 # ORF Archiv Scraper
 
-ORF Archiv Scraper is a *NodeJS* application, which fetches and persists ORF News Stories from multiple RSS feeds.
+ORF Archiv Scraper is a *NodeJS* application, which fetches and persists ORF News Stories from multiple
+[RSS feeds](https://rss.orf.at).
+
+## RSS feeds
+
+* [News](https://rss.orf.at/news.xml)
+* [Sport](https://rss.orf.at/sport.xml)
+* [Help](https://rss.orf.at/help.xml)
+* [Science](https://rss.orf.at/science.xml)
+* [OE3](https://rss.orf.at/oe3.xml)
+* [FM4](https://rss.orf.at/fm4.xml)
+* [Burgenland](https://rss.orf.at/burgenland.xml)
+* [Wien](https://rss.orf.at/wien.xml)
+* [Niederösterreich](https://rss.orf.at/noe.xml)
+* [Oberösterreich](https://rss.orf.at/ooe.xml)
+* [Salzburg](https://rss.orf.at/salzburg.xml)
+* [Steiermark](https://rss.orf.at/steiermark.xml)
+* [Kärnten](https://rss.orf.at/kaernten.xml)
+* [Tirol](https://rss.orf.at/tirol.xml)
+* [Vorarlberg](https://rss.orf.at/vorarlberg.xml)
 
 ## Local Development
 
