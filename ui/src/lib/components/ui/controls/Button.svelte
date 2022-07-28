@@ -2,7 +2,7 @@
   import classNames from 'classnames';
 
   export let type: 'button' | 'reset' | 'submit' = 'button';
-  export let disabled: boolean = undefined;
+  export let disabled: boolean | undefined = undefined;
 
   const buttonClass = classNames([
     'px-3 py-2',

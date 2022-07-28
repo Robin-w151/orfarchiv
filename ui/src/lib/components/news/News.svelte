@@ -78,12 +78,13 @@
 
   function hasNews(newsStore?: NewsStore): boolean {
     return (
-      newsStore.storyBuckets && newsStore.storyBuckets?.reduce((count, bucket) => count + bucket.stories.length, 0) > 0
+      !!newsStore?.storyBuckets &&
+      newsStore.storyBuckets.reduce((count, bucket) => count + bucket.stories.length, 0) > 0
     );
   }
 
   function hasAnySourcesEnabled(settingsStore?: SettingsStore): boolean {
-    return !settingsStore.sources || settingsStore.sources?.length > 0;
+    return !settingsStore || !settingsStore.sources || settingsStore.sources.length > 0;
   }
 
   function handleLoadMoreClick(): void {
