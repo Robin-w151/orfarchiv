@@ -11,7 +11,6 @@
 
   const analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
   $: if (browser && analyticsId) {
-    console.log('Sending vitals...');
     webVitals({
       path: $page.url.pathname,
       params: $page.params,
