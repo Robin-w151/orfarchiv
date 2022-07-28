@@ -1,7 +1,7 @@
 <script lang="ts" context="module">
-  import News from '../lib/components/news/News.svelte';
-  import news from '../lib/stores/news';
-  import { getNews } from '../lib/api/news';
+  import News from '$lib/components/news/News.svelte';
+  import news from '$lib/stores/news';
+  import { getNews } from '$lib/api/news';
   import { get } from 'svelte/store';
 
   type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;

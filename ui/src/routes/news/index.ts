@@ -1,6 +1,6 @@
-import { findNews } from '../../lib/db/news';
+import { findNews } from '$lib/db/news';
 import type { RequestEvent } from '@sveltejs/kit';
-import type { PageKey } from '../../lib/models/news';
+import type { PageKey } from '$lib/models/news';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event: RequestEvent) {

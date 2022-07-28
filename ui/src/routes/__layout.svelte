@@ -1,11 +1,11 @@
 <script lang="ts">
   import '../app.css';
   import classNames from 'classnames';
-  import CogIcon from '../lib/components/ui/icons/outline/CogIcon.svelte';
-  import RefreshIcon from '../lib/components/ui/icons/outline/RefreshIcon.svelte';
-  import ButtonLink from '../lib/components/ui/controls/ButtonLink.svelte';
-  import { refreshNews } from '../lib/stores/newsEvents';
-  import { webVitals } from '../lib/utils/vitals';
+  import CogIcon from '$lib/components/ui/icons/outline/CogIcon.svelte';
+  import RefreshIcon from '$lib/components/ui/icons/outline/RefreshIcon.svelte';
+  import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
+  import { refreshNews } from '$lib/stores/newsEvents';
+  import { webVitals } from '$lib/utils/vitals';
   import { browser } from '$app/env';
   import { page } from '$app/stores';
 
