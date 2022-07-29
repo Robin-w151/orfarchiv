@@ -16,25 +16,17 @@ export async function get(event: RequestEvent) {
   const data = await response.text();
   const document = new JSDOM(data, { url });
   const article = new Readability(document.window.document).parse();
-  const mainContent = extractMainContent(article?.textContent);
+  if (!article) {
+    return {
+      status: 404,
+    };
+  }
 
   return {
     status: 200,
     headers: {
       'Cache-Control': 'max-age=0, s-maxage=86400',
     },
-    body: mainContent,
+    body: article.content,
   };
-}
-
-function extractMainContent(text?: string): string | undefined {
-  if (!text) {
-    return;
-  }
-
-  return text
-    .replaceAll(/[ \r\t]{2,}/g, '')
-    .replaceAll(/(\n){2,}/g, '\n')
-    .split('\n')
-    .reduce((largestSection, section) => (section.length > largestSection.length ? section : largestSection), '');
 }

@@ -7,6 +7,7 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-unused-vars': 'warn',
     'no-unused-vars': 'off',
+    'svelte/no-at-html-tags': 'off',
     'prettier/prettier': [
       'error',
       {
