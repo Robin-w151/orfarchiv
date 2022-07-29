@@ -48,12 +48,23 @@
     }
   }
 
-  function handleToggleContentClick(): void {
+  function toggleShowContent(): void {
     showContent = !showContent;
+  }
+
+  function handleItemClick(): void {
+    toggleShowContent();
+  }
+
+  function handleItemKeydown(event: Event): void {
+    const code = (event as any).code;
+    if (code === 'Enter' || code === 'Space') {
+      toggleShowContent();
+    }
   }
 </script>
 
-<Item class={storyClass} {categoryColor} on:click={handleToggleContentClick} bind:this={itemRef}>
+<Item class={storyClass} {categoryColor} on:click={handleItemClick} on:keydown={handleItemKeydown} bind:this={itemRef}>
   <div class={headerClass}>
     <ButtonLink href={url} target="_blank">
       <ExternalLink />

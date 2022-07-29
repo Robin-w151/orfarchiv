@@ -32,6 +32,6 @@
   }
 </script>
 
-<div class={itemClass} on:click bind:this={itemRef}>
+<div class={itemClass} on:click on:keydown bind:this={itemRef} tabindex="0">
   <slot />
 </div>
