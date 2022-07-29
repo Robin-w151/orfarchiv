@@ -7,9 +7,8 @@
   import { browser } from '$app/env';
   import { formatTimestamp } from '../../utils/datetime.js';
   import ButtonLink from '../ui/controls/ButtonLink.svelte';
-  import ChevronUp from '../ui/icons/outline/ChevronUp.svelte';
-  import ChevronDown from '../ui/icons/outline/ChevronDown.svelte';
   import StoryContent from './StoryContent.svelte';
+  import ExternalLink from '../ui/icons/outline/ExternalLink.svelte';
 
   export let id: string;
   export let title: string;
@@ -21,9 +20,9 @@
   let showContent = false;
 
   $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : undefined;
-  $: target = $settings.openLinksInNewTab ? '_blank' : null;
   $: sourceLabel = getSourceLabel(source);
 
+  const storyClass = classNames('cursor-pointer');
   const headerClass = classNames('flex flex-row items-center gap-3');
   const infoClass = classNames('flex flex-col');
   const titleClass = classNames();
@@ -41,14 +40,10 @@
   }
 </script>
 
-<Item href={url} {target} {categoryColor}>
+<Item class={storyClass} {categoryColor} on:click={handleToggleContentClick}>
   <div class={headerClass}>
-    <ButtonLink on:click={handleToggleContentClick} preventDefault>
-      {#if showContent}
-        <ChevronUp />
-      {:else}
-        <ChevronDown />
-      {/if}
+    <ButtonLink href={url} target="_blank">
+      <ExternalLink />
     </ButtonLink>
     <div class={infoClass}>
       <span class={titleClass}>{title}</span>
