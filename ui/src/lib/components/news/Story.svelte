@@ -17,10 +17,13 @@
   export let timestamp: string;
   export let source: string;
 
+  let itemRef;
+  let showContentInitial = false;
   let showContent = false;
 
   $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : undefined;
   $: sourceLabel = getSourceLabel(source);
+  $: scrollStoryIntoView(showContent);
 
   const storyClass = classNames('cursor-pointer');
   const headerClass = classNames('flex flex-row items-center gap-3');
@@ -35,12 +38,22 @@
     return sources.find((s) => s.key === source)?.label;
   }
 
-  function handleToggleContentClick() {
+  function scrollStoryIntoView(showContent: boolean): void {
+    if (showContentInitial && !showContent) {
+      itemRef.scrollIntoView();
+    }
+
+    if (!showContentInitial) {
+      showContentInitial = true;
+    }
+  }
+
+  function handleToggleContentClick(): void {
     showContent = !showContent;
   }
 </script>
 
-<Item class={storyClass} {categoryColor} on:click={handleToggleContentClick}>
+<Item class={storyClass} {categoryColor} on:click={handleToggleContentClick} bind:this={itemRef}>
   <div class={headerClass}>
     <ButtonLink href={url} target="_blank">
       <ExternalLink />

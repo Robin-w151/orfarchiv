@@ -881,6 +881,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"compute-scroll-into-view@npm:^1.0.17":
+  version: 1.0.17
+  resolution: "compute-scroll-into-view@npm:1.0.17"
+  checksum: b20c05a10c37813c5a6e4bf053c00f65c88d23afed7a6bd7a2a69e05e2ffc2df3483ecfe407d36bf16b8cec8be21ae1966c9c523093a03117e567156cd79a51e
+  languageName: node
+  linkType: hard
+
 "concat-map@npm:0.0.1":
   version: 0.0.1
   resolution: "concat-map@npm:0.0.1"
@@ -3349,6 +3356,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"scroll-into-view-if-needed@npm:^2.2.29":
+  version: 2.2.29
+  resolution: "scroll-into-view-if-needed@npm:2.2.29"
+  dependencies:
+    compute-scroll-into-view: ^1.0.17
+  checksum: 6b888404ccf68fe2f2f1da8977e1a8a0a64a7139352e02e98621a0e8be3b3db393519ee3dcfb7c32aff3c4790a36829f1be1cccc0cfb2b90a60a61caa669eee2
+  languageName: node
+  linkType: hard
+
 "semver@npm:^6.0.0":
   version: 6.3.0
   resolution: "semver@npm:6.3.0"
@@ -3851,6 +3867,7 @@ __metadata:
     postcss: ^8.4.14
     prettier: ^2.7.1
     prettier-plugin-svelte: ^2.7.0
+    scroll-into-view-if-needed: ^2.2.29
     svelte: ^3.49.0
     svelte-check: ^2.8.0
     svelte-local-storage-store: ^0.2.6
