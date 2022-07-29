@@ -22,11 +22,17 @@ export async function get(event: RequestEvent) {
     };
   }
 
+  const articleDocument = new JSDOM(article.content, { url });
+  articleDocument.window.document.querySelectorAll('a').forEach((anchor) => {
+    anchor.target = '_blank';
+  });
+  const articleContent = articleDocument.window.document.body.innerHTML;
+
   return {
     status: 200,
     headers: {
       'Cache-Control': 'max-age=0, s-maxage=86400',
     },
-    body: article.content,
+    body: articleContent,
   };
 }
