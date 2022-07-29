@@ -18,7 +18,7 @@
   ]);
 
   export function scrollIntoView(): void {
-    scrollIntoViewIfNeeded(itemRef, { scrollMode: 'if-needed', block: 'start', inline: 'start' });
+    scrollIntoViewIfNeeded(itemRef, { scrollMode: 'if-needed', block: 'center' });
   }
 </script>
 
