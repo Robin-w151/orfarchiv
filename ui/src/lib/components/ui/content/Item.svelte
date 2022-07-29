@@ -7,8 +7,8 @@
   export let categoryColor: CategoryColor | undefined = undefined;
 
   const itemClass = classNames([
-    'flex flex-col',
-    'px-6 py-3',
+    'flex flex-col gap-3',
+    'px-3 sm:px-6 py-3',
     'text-gray-800',
     categoryColor?.bgClass,
     href && (categoryColor?.bgHoverClass ?? 'hover:bg-gray-100 focus:bg-gray-100 outline-none'),

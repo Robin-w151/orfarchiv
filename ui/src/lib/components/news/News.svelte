@@ -23,7 +23,7 @@
 
   const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
   const newsFallbackWrapperClass = classNames([
-    'px-6 py-3',
+    'px-3 sm:px-6 py-3',
     'w-full',
     'text-lg',
     'text-gray-800 bg-white',

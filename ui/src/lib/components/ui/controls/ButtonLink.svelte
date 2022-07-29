@@ -10,7 +10,7 @@
 
   const buttonClass = classNames([
     'p-2',
-    'text-blue-800 hover:text-blue-600 hover:bg-gray-100',
+    'text-blue-800 hover:text-blue-600 hover:bg-blue-100',
     'outline-hidden focus:outline outline-2 outline-blue-800',
     'rounded-md hover:shadow-lg',
   ]);

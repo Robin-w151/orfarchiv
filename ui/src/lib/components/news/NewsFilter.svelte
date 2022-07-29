@@ -3,7 +3,7 @@
   import Input from '../ui/controls/Input.svelte';
   import classNames from 'classnames';
 
-  const filterClass = classNames(['px-6 py-3', 'w-full', 'bg-white', 'rounded-lg shadow-md']);
+  const filterClass = classNames(['px-3 sm:px-6 py-3', 'w-full', 'bg-white', 'rounded-lg shadow-md']);
 
   function handleSearchChange({ detail: search }: { detail: string }) {
     news.setSearch(search);

@@ -21,7 +21,7 @@
   const wrapperClass = classNames(['flex flex-col gap-3 sm:gap-4', 'p-2 sm:p-4', 'w-screen max-w-screen-lg']);
   const headerClass = classNames([
     'flex justify-between items-center gap-6',
-    'px-6 py-3',
+    'px-3 sm:px-6 py-3',
     'text-3xl',
     'text-blue-900 bg-white',
     'rounded-lg shadow-md',
