@@ -4,35 +4,66 @@ import { JSDOM } from 'jsdom';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event: RequestEvent) {
-  const searchParams = new URL(event.request.url).searchParams;
-  const url = searchParams.get('url');
+  const url = getUrlSearchParam(event);
   if (!url) {
     return {
       status: 400,
     };
   }
 
-  const response = await fetch(url);
-  const data = await response.text();
-  const document = new JSDOM(data, { url });
-  const article = new Readability(document.window.document).parse();
-  if (!article) {
+  try {
+    const data = await fetchSiteText(url);
+
+    const document = new JSDOM(data, { url }).window.document;
+    removePrintWarnings(document);
+
+    const article = new Readability(document).parse();
+    if (!article) {
+      return {
+        status: 404,
+      };
+    }
+
+    const articleDocument = new JSDOM(article.content, { url }).window.document;
+    adjustAnchorTarget(articleDocument);
+    const articleContent = articleDocument.body.innerHTML;
+
     return {
-      status: 404,
+      status: 200,
+      headers: {
+        'Cache-Control': 'max-age=0, s-maxage=86400',
+      },
+      body: articleContent,
+    };
+  } catch (error: any) {
+    console.warn(`Error: ${error.message}`);
+    return {
+      status: 500,
     };
   }
+}
 
-  const articleDocument = new JSDOM(article.content, { url });
-  articleDocument.window.document.querySelectorAll('a').forEach((anchor) => {
+function getUrlSearchParam(event: RequestEvent): string | null {
+  const searchParams = new URL(event.request.url).searchParams;
+  return searchParams.get('url');
+}
+
+async function fetchSiteText(url: string): Promise<string> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Failed to fetch site text!');
+  }
+  return await response.text();
+}
+
+function removePrintWarnings(document: Document): void {
+  document.querySelectorAll('.print-warning').forEach((element) => {
+    element.parentElement?.removeChild(element);
+  });
+}
+
+function adjustAnchorTarget(document: Document): void {
+  document.querySelectorAll('a').forEach((anchor) => {
     anchor.target = '_blank';
   });
-  const articleContent = articleDocument.window.document.body.innerHTML;
-
-  return {
-    status: 200,
-    headers: {
-      'Cache-Control': 'max-age=0, s-maxage=86400',
-    },
-    body: articleContent,
-  };
 }
