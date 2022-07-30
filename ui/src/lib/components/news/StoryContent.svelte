@@ -11,6 +11,8 @@
   let content;
 
   const contentClass = classNames('cursor-auto');
+  const loadingIndicatorClass = classNames(['flex flex-col items-start gap-2', 'w-full']);
+  const loadingIndicatorBarClass = classNames(['h-4', 'bg-gray-300', 'rounded-sm animate-pulse']);
   const collapseContentClass = classNames([
     'flex justify-center',
     'hover:text-blue-800 focus:text-blue-800',
@@ -46,12 +48,18 @@
   <div class={contentClass} on:click|stopPropagation>
     {@html content}
   </div>
-  <div
-    class={collapseContentClass}
-    on:click={handleCollapseFieldClick}
-    on:keydown={handleCollapseFieldKeydown}
-    tabindex="0"
-  >
-    <ChevronUp />
+{:else}
+  <div class={loadingIndicatorClass}>
+    <span class={loadingIndicatorBarClass} style:width="85%" />
+    <span class={loadingIndicatorBarClass} style:width="95%" />
+    <span class={loadingIndicatorBarClass} style:width="90%" />
   </div>
 {/if}
+<div
+  class={collapseContentClass}
+  on:click={handleCollapseFieldClick}
+  on:keydown={handleCollapseFieldKeydown}
+  tabindex="0"
+>
+  <ChevronUp />
+</div>
