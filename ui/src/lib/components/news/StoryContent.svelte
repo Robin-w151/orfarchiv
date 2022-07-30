@@ -21,15 +21,19 @@
 
   onMount(async () => {
     try {
-      const response = await fetch(`/news/${id}?url=${encodeURIComponent(url)}`);
-      if (!response.ok) {
-        throw new Error('Failed to load story content!');
-      }
-      content = await response.text();
+      content = await fetchContent(url);
     } catch (error) {
       console.warn(`Error: ${error.message}`);
     }
   });
+
+  async function fetchContent(url: string): Promise<string> {
+    const response = await fetch(`/news/${id}?url=${encodeURIComponent(url)}`);
+    if (!response.ok) {
+      throw new Error('Failed to load story content!');
+    }
+    return await response.text();
+  }
 
   function handleCollapseFieldClick(): void {
     dispatch('collapse');
