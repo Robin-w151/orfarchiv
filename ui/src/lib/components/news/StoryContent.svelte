@@ -8,11 +8,13 @@
 
   const dispatch = createEventDispatcher();
 
+  let isLoading = true;
   let content;
 
   const contentClass = classNames('cursor-auto');
   const loadingIndicatorClass = classNames(['flex flex-col items-start gap-2', 'w-full']);
   const loadingIndicatorBarClass = classNames(['h-4', 'bg-gray-300', 'rounded-sm animate-pulse']);
+  const errorLinkClass = classNames(['text-blue-800']);
   const collapseContentClass = classNames([
     'flex justify-center',
     'hover:text-blue-800 focus:text-blue-800',
@@ -24,6 +26,8 @@
       content = await fetchContent(url);
     } catch (error) {
       console.warn(`Error: ${error.message}`);
+    } finally {
+      isLoading = false;
     }
   });
 
@@ -48,17 +52,22 @@
   }
 </script>
 
-{#if content}
-  <div class={contentClass}>
-    {@html content}
-  </div>
-{:else}
+{#if isLoading}
   <div class={loadingIndicatorClass}>
     <span class={loadingIndicatorBarClass} style:width="40%" style:margin-bottom="0.5rem" />
     <span class={loadingIndicatorBarClass} style:width="95%" />
     <span class={loadingIndicatorBarClass} style:width="85%" />
     <span class={loadingIndicatorBarClass} style:width="90%" />
   </div>
+{:else if content}
+  <div class={contentClass}>
+    {@html content}
+  </div>
+{:else}
+  <p>
+    Inhalt kann nicht angezeigt werden. Klicken Sie <a class={errorLinkClass} href={url} target="_blank">hier</a> um zur
+    Story zu gelangen.
+  </p>
 {/if}
 <div
   class={collapseContentClass}
