@@ -1,6 +1,6 @@
 <script lang="ts">
   import news from '$lib/stores/news';
-  import Input from '../ui/controls/Input.svelte';
+  import Input from '$lib/components/ui/controls/Input.svelte';
   import classNames from 'classnames';
 
   const filterClass = classNames(['px-3 sm:px-6 py-3', 'w-full', 'bg-white', 'rounded-lg shadow-md']);

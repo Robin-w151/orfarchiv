@@ -1,14 +1,14 @@
 <script lang="ts">
   import classNames from 'classnames';
-  import Item from '../ui/content/Item.svelte';
-  import settings from '../../stores/settings';
-  import getCategoryColorClass from '../../utils/categoryColorPalette';
-  import { sources } from '../../models/settings';
+  import Item from '$lib/components/ui/content/Item.svelte';
+  import settings from '$lib/stores/settings';
+  import getCategoryColorClass from '$lib/utils/categoryColorPalette';
+  import { sources } from '$lib/models/settings';
   import { browser } from '$app/env';
-  import { formatTimestamp } from '../../utils/datetime.js';
-  import ButtonLink from '../ui/controls/ButtonLink.svelte';
+  import { formatTimestamp } from '$lib/utils/datetime.js';
+  import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
   import StoryContent from './StoryContent.svelte';
-  import ExternalLink from '../ui/icons/outline/ExternalLink.svelte';
+  import ExternalLink from '$lib/components/ui/icons/outline/ExternalLink.svelte';
 
   export let id: string;
   export let title: string;

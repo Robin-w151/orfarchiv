@@ -1,14 +1,14 @@
 <script lang="ts">
-  import Content from '../ui/content/Content.svelte';
-  import Section from '../ui/content/Section.svelte';
-  import SectionList from '../ui/content/SectionList.svelte';
-  import Item from '../ui/content/Item.svelte';
-  import Button from '../ui/controls/Button.svelte';
-  import Checkbox from '../ui/controls/Checkbox.svelte';
-  import settings from '../../stores/settings';
+  import Content from '$lib/components/ui/content/Content.svelte';
+  import Section from '$lib/components/ui/content/Section.svelte';
+  import SectionList from '$lib/components/ui/content/SectionList.svelte';
+  import Item from '$lib/components/ui/content/Item.svelte';
+  import Button from '$lib/components/ui/controls/Button.svelte';
+  import Checkbox from '$lib/components/ui/controls/Checkbox.svelte';
+  import settings from '$lib/stores/settings';
   import { goto } from '$app/navigation';
-  import Actions from '../ui/content/Actions.svelte';
-  import { sources } from '../../models/settings.js';
+  import Actions from '$lib/components/ui/content/Actions.svelte';
+  import { sources } from '$lib/models/settings.js';
 
   function handleOpenLinksInNewTabChange({ detail: checked }: { detail: boolean }) {
     settings.setOpenLinksInNewTab(checked);

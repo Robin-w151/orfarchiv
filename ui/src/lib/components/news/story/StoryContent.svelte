@@ -1,7 +1,8 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
-  import ChevronUp from '../ui/icons/outline/ChevronUp.svelte';
+  import ChevronUp from '$lib/components/ui/icons/outline/ChevronUp.svelte';
   import classNames from 'classnames';
+  import StoryContentSkeleton from './StoryContentSkeleton.svelte';
 
   export let id: string;
   export let url: string;
@@ -12,8 +13,6 @@
   let content;
 
   const contentClass = classNames('cursor-auto');
-  const loadingIndicatorClass = classNames(['flex flex-col items-start gap-2', 'w-full']);
-  const loadingIndicatorBarClass = classNames(['h-4', 'bg-gray-300', 'rounded-sm animate-pulse']);
   const errorLinkClass = classNames(['text-blue-800']);
   const collapseContentClass = classNames([
     'flex justify-center',
@@ -53,20 +52,15 @@
 </script>
 
 {#if isLoading}
-  <div class={loadingIndicatorClass}>
-    <span class={loadingIndicatorBarClass} style:width="40%" style:margin-bottom="0.5rem" />
-    <span class={loadingIndicatorBarClass} style:width="95%" />
-    <span class={loadingIndicatorBarClass} style:width="85%" />
-    <span class={loadingIndicatorBarClass} style:width="90%" />
-  </div>
+  <StoryContentSkeleton />
 {:else if content}
   <div class={contentClass}>
     {@html content}
   </div>
 {:else}
   <p>
-    Inhalt kann nicht angezeigt werden. Klicken Sie <a class={errorLinkClass} href={url} target="_blank">hier</a> um zur
-    Story zu gelangen.
+    Inhalt kann nicht angezeigt werden. Klicken Sie <a class={errorLinkClass} href={url} target="_blank">hier</a> um zum
+    Artikel zu gelangen.
   </p>
 {/if}
 <div

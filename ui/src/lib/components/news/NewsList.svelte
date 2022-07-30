@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Section from '../ui/content/Section.svelte';
-  import SectionList from '../ui/content/SectionList.svelte';
-  import Story from './Story.svelte';
-  import type { NewsBucket } from '../../models/news';
+  import Section from '$lib/components/ui/content/Section.svelte';
+  import SectionList from '$lib/components/ui/content/SectionList.svelte';
+  import Story from './story/Story.svelte';
+  import type { NewsBucket } from '$lib/models/news';
 
   export let storyBuckets: Array<NewsBucket> | undefined = undefined;
 </script>

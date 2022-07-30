@@ -1,18 +1,18 @@
 <script lang="ts">
-  import news, { type NewsStore } from '../../stores/news';
+  import news, { type NewsStore } from '$lib/stores/news';
   import { onDestroy, onMount } from 'svelte';
-  import LoadingIndicator from '../ui/LoadingIndicator.svelte';
-  import { getNews } from '../../api/news';
-  import Content from '../ui/content/Content.svelte';
+  import LoadingIndicator from '$lib/components/ui/LoadingIndicator.svelte';
+  import { getNews } from '$lib/api/news';
+  import Content from '$lib/components/ui/content/Content.svelte';
   import classNames from 'classnames';
   import NewsList from './NewsList.svelte';
-  import { loadMoreNews, refreshNews } from '../../stores/newsEvents';
-  import { unsubscribeAll } from '../../utils/subscriptions';
-  import settings, { type SettingsStore } from '../../stores/settings';
+  import { loadMoreNews, refreshNews } from '$lib/stores/newsEvents';
+  import { unsubscribeAll } from '$lib/utils/subscriptions';
+  import settings, { type SettingsStore } from '$lib/stores/settings';
   import type { Unsubscriber } from 'svelte/store';
   import NewsFilter from './NewsFilter.svelte';
   import { get } from 'svelte/store';
-  import Button from '../ui/controls/Button.svelte';
+  import Button from '$lib/components/ui/controls/Button.svelte';
 
   let isNewsLoading = false;
   let subscriptions: Array<Unsubscriber> = [];

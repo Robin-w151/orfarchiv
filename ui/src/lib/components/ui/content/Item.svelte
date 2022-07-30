@@ -1,6 +1,6 @@
 <script lang="ts">
   import classNames from 'classnames';
-  import type { CategoryColor } from '../../../models/categoryColor';
+  import type { CategoryColor } from '$lib/models/categoryColor';
   import computeScrollIntoView from 'compute-scroll-into-view';
 
   export let categoryColor: CategoryColor | undefined = undefined;
