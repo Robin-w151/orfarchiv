@@ -226,6 +226,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/dompurify@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "@types/dompurify@npm:2.3.3"
+  dependencies:
+    "@types/trusted-types": "*"
+  checksum: 427e2dc60d94d13d7860a293b926b376727cb2f545a3334a3f2e7de695a2bb23058dd15108e49e0651378229b443ee8ae0028034b6f2df9a9008c04fb7ad6f8f
+  languageName: node
+  linkType: hard
+
 "@types/jsdom@npm:^20.0.0":
   version: 20.0.0
   resolution: "@types/jsdom@npm:20.0.0"
@@ -278,6 +287,13 @@ __metadata:
   version: 4.0.2
   resolution: "@types/tough-cookie@npm:4.0.2"
   checksum: e055556ffdaa39ad85ede0af192c93f93f986f4bd9e9426efdc2948e3e2632db3a4a584d4937dbf6d7620527419bc99e6182d3daf2b08685e710f2eda5291905
+  languageName: node
+  linkType: hard
+
+"@types/trusted-types@npm:*":
+  version: 2.0.2
+  resolution: "@types/trusted-types@npm:2.0.2"
+  checksum: 3371eef5f1c50e1c3c07a127c1207b262ba65b83dd167a1c460fc1b135a3fb0c97b9f508efebd383f239cc5dd5b7169093686a692a501fde9c3f7208657d9b0d
   languageName: node
   linkType: hard
 
@@ -1089,6 +1105,13 @@ __metadata:
   dependencies:
     webidl-conversions: ^7.0.0
   checksum: ddbc1268edf33a8ba02ccc596735ede80375ee0cf124b30d2f05df5b464ba78ef4f49889b6391df4a04954e63d42d5631c7fcf8b1c4f12bc531252977a5f13d5
+  languageName: node
+  linkType: hard
+
+"dompurify@npm:^2.3.10":
+  version: 2.3.10
+  resolution: "dompurify@npm:2.3.10"
+  checksum: ee343876b4c065e82d194818c66af76a6d2290264c7db583ad71761c11781fd626f0245f9f4670175d5707c4b8fcfb89adae80bed0418a9426a47ee7f36b0ffc
   languageName: node
   linkType: hard
 
@@ -3840,6 +3863,7 @@ __metadata:
     "@sveltejs/adapter-vercel": next
     "@sveltejs/kit": next
     "@tailwindcss/forms": ^0.5.2
+    "@types/dompurify": ^2.3.3
     "@types/jsdom": ^20.0.0
     "@types/luxon": ^3.0.0
     "@typescript-eslint/eslint-plugin": ^5.31.0
@@ -3847,6 +3871,7 @@ __metadata:
     autoprefixer: ^10.4.7
     classnames: ^2.3.1
     compute-scroll-into-view: ^1.0.17
+    dompurify: ^2.3.10
     dotenv-flow: ^3.2.0
     eslint: ^8.20.0
     eslint-config-prettier: ^8.5.0

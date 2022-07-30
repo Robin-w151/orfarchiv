@@ -1,6 +1,7 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import { Readability } from '@mozilla/readability';
 import { JSDOM } from 'jsdom';
+import createDOMPurify from 'dompurify';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function get(event: RequestEvent) {
@@ -26,14 +27,15 @@ export async function get(event: RequestEvent) {
 
     const articleDocument = new JSDOM(article.content, { url }).window.document;
     adjustAnchorTarget(articleDocument);
-    const articleContent = articleDocument.body.innerHTML;
+
+    const sanitizedArticleContent = sanitizeContent(articleDocument.body.innerHTML);
 
     return {
       status: 200,
       headers: {
         'Cache-Control': 'max-age=0, s-maxage=86400',
       },
-      body: articleContent,
+      body: sanitizedArticleContent,
     };
   } catch (error: any) {
     console.warn(`Error: ${error.message}`);
@@ -65,5 +67,12 @@ function removePrintWarnings(document: Document): void {
 function adjustAnchorTarget(document: Document): void {
   document.querySelectorAll('a').forEach((anchor) => {
     anchor.target = '_blank';
+  });
+}
+
+function sanitizeContent(html: string): string {
+  const DOMPurify = createDOMPurify(new JSDOM('').window as any);
+  return DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
   });
 }
