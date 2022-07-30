@@ -54,8 +54,9 @@
   </div>
 {:else}
   <div class={loadingIndicatorClass}>
-    <span class={loadingIndicatorBarClass} style:width="85%" />
+    <span class={loadingIndicatorBarClass} style:width="40%" style:margin-bottom="0.5rem" />
     <span class={loadingIndicatorBarClass} style:width="95%" />
+    <span class={loadingIndicatorBarClass} style:width="85%" />
     <span class={loadingIndicatorBarClass} style:width="90%" />
   </div>
 {/if}
