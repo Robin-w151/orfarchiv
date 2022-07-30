@@ -24,7 +24,7 @@
 </script>
 
 {#if href}
-  <a class={buttonClass} {href} {target}>
+  <a class={buttonClass} {href} {target} on:click={handleClick}>
     <slot />
   </a>
 {:else}

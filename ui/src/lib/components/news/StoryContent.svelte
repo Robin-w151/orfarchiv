@@ -49,7 +49,7 @@
 </script>
 
 {#if content}
-  <div class={contentClass} on:click|stopPropagation>
+  <div class={contentClass}>
     {@html content}
   </div>
 {:else}
