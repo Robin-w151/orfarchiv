@@ -23,11 +23,15 @@
 
   $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : undefined;
   $: sourceLabel = getSourceLabel(source);
-  $: scrollStoryIntoView(showContent);
+  $: handleContentViewCollapse(showContent);
 
-  const storyClass = classNames('cursor-pointer');
-  const headerClass = classNames('flex flex-row items-center gap-3');
-  const infoClass = classNames('flex flex-col');
+  const storyClass = classNames();
+  const headerClass = classNames(['flex flex-row items-center gap-3']);
+  const infoClass = classNames([
+    'flex flex-col flex-1',
+    'hover:text-blue-800 focus:text-blue-800',
+    'outline-none cursor-default',
+  ]);
   const titleClass = classNames();
   const metadataClass = classNames(['text-sm', 'text-gray-600']);
 
@@ -38,7 +42,11 @@
     return sources.find((s) => s.key === source)?.label;
   }
 
-  function scrollStoryIntoView(showContent: boolean): void {
+  function toggleShowContent(): void {
+    showContent = !showContent;
+  }
+
+  function handleContentViewCollapse(showContent: boolean): void {
     if (showContentInitial && !showContent) {
       itemRef.scrollIntoView();
     }
@@ -48,8 +56,8 @@
     }
   }
 
-  function toggleShowContent(): void {
-    showContent = !showContent;
+  function handleStoryContentCollapse(): void {
+    toggleShowContent();
   }
 
   function handleItemClick(): void {
@@ -59,17 +67,18 @@
   function handleItemKeydown(event: Event): void {
     const code = (event as any).code;
     if (code === 'Enter' || code === 'Space') {
+      event.preventDefault();
       toggleShowContent();
     }
   }
 </script>
 
-<Item class={storyClass} {categoryColor} on:click={handleItemClick} on:keydown={handleItemKeydown} bind:this={itemRef}>
+<Item class={storyClass} {categoryColor} bind:this={itemRef}>
   <div class={headerClass}>
     <ButtonLink href={url} target="_blank">
       <ExternalLink />
     </ButtonLink>
-    <div class={infoClass}>
+    <div class={infoClass} on:click={handleItemClick} on:keydown={handleItemKeydown} tabindex="0">
       <span class={titleClass}>{title}</span>
       <span class={metadataClass}
         >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(
@@ -80,6 +89,6 @@
     </div>
   </div>
   {#if showContent}
-    <StoryContent {id} {url} />
+    <StoryContent {id} {url} on:collapse={handleStoryContentCollapse} />
   {/if}
 </Item>

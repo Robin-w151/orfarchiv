@@ -24,7 +24,7 @@
 </script>
 
 {#if href}
-  <a class={buttonClass} {href} {target} on:click|stopPropagation={handleClick}>
+  <a class={buttonClass} {href} {target}>
     <slot />
   </a>
 {:else}

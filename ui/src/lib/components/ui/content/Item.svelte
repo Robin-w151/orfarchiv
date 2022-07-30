@@ -13,7 +13,6 @@
     'text-gray-800',
     'outline-none',
     categoryColor?.bgClass,
-    categoryColor?.bgHoverClass ?? 'hover:bg-gray-100 focus:bg-gray-100',
     $$props['class'],
   ]);
 
@@ -32,6 +31,6 @@
   }
 </script>
 
-<div class={itemClass} on:click on:keydown bind:this={itemRef} tabindex="0">
+<div class={itemClass} on:click on:keydown bind:this={itemRef}>
   <slot />
 </div>
