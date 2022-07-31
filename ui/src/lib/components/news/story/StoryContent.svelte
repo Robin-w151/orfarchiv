@@ -54,11 +54,11 @@
 {#if isLoading}
   <StoryContentSkeleton />
 {:else if content}
-  <div class={contentClass}>
+  <div class={contentClass} data-testid="story-content">
     {@html content}
   </div>
 {:else}
-  <p>
+  <p data-testid="story-content-error">
     Inhalt kann nicht angezeigt werden. Klicken Sie <a class={errorLinkClass} href={url} target="_blank">hier</a> um zum
     Artikel zu gelangen.
   </p>

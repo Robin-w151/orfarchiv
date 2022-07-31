@@ -5,7 +5,7 @@
   const loadingIndicatorBarClass = classNames(['h-4', 'bg-gray-300', 'rounded-sm animate-pulse']);
 </script>
 
-<div class={loadingIndicatorClass}>
+<div class={loadingIndicatorClass} data-testid="story-content-skeleton">
   <span class={loadingIndicatorBarClass} style:width="40%" style:margin-bottom="0.5rem" />
   <span class={loadingIndicatorBarClass} style:width="95%" />
   <span class={loadingIndicatorBarClass} style:width="85%" />
