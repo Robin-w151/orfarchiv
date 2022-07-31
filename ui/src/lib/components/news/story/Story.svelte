@@ -9,6 +9,7 @@
   import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
   import StoryContent from './StoryContent.svelte';
   import ExternalLink from '$lib/components/ui/icons/outline/ExternalLink.svelte';
+  import { fade } from 'svelte/transition';
 
   export let id: string;
   export let title: string;
@@ -89,6 +90,8 @@
     </div>
   </div>
   {#if showContent}
-    <StoryContent {id} {url} on:collapse={handleStoryContentCollapse} />
+    <div in:fade={{ duration: 200 }}>
+      <StoryContent {id} {url} on:collapse={handleStoryContentCollapse} />
+    </div>
   {/if}
 </Item>
