@@ -12,6 +12,7 @@
   let isLoading = true;
   let content;
 
+  const wrapperClass = classNames('flex flex-col gap-3');
   const contentClass = classNames('cursor-auto');
   const errorLinkClass = classNames(['text-blue-800']);
   const collapseContentClass = classNames([
@@ -51,23 +52,25 @@
   }
 </script>
 
-{#if isLoading}
-  <StoryContentSkeleton />
-{:else if content}
-  <div class={contentClass} data-testid="story-content">
-    {@html content}
+<div class={wrapperClass}>
+  {#if isLoading}
+    <StoryContentSkeleton />
+  {:else if content}
+    <div class={contentClass} data-testid="story-content">
+      {@html content}
+    </div>
+  {:else}
+    <p data-testid="story-content-error">
+      Inhalt kann nicht angezeigt werden. Klicken Sie <a class={errorLinkClass} href={url} target="_blank">hier</a> um zum
+      Artikel zu gelangen.
+    </p>
+  {/if}
+  <div
+    class={collapseContentClass}
+    on:click={handleCollapseFieldClick}
+    on:keydown={handleCollapseFieldKeydown}
+    tabindex="0"
+  >
+    <ChevronUp />
   </div>
-{:else}
-  <p data-testid="story-content-error">
-    Inhalt kann nicht angezeigt werden. Klicken Sie <a class={errorLinkClass} href={url} target="_blank">hier</a> um zum
-    Artikel zu gelangen.
-  </p>
-{/if}
-<div
-  class={collapseContentClass}
-  on:click={handleCollapseFieldClick}
-  on:keydown={handleCollapseFieldKeydown}
-  tabindex="0"
->
-  <ChevronUp />
 </div>
