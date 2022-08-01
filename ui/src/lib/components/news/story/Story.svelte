@@ -29,7 +29,7 @@
   const storyClass = classNames();
   const headerClass = classNames(['flex flex-row items-center gap-3']);
   const infoClass = classNames([
-    'flex flex-col flex-1',
+    'flex flex-col flex-1 items-start',
     'hover:text-blue-800 focus:text-blue-800',
     'outline-none cursor-default',
   ]);

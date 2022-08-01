@@ -1,5 +1,5 @@
 import { render, type RenderResult } from '@testing-library/svelte';
-import StoryContent from './StoryContent.svelte';
+import StoryContent from '../StoryContent.svelte';
 import fetchMock from 'jest-fetch-mock';
 
 describe('StoryComponent', () => {

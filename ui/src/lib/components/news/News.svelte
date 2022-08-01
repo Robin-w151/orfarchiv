@@ -1,7 +1,6 @@
 <script lang="ts">
   import news, { type NewsStore } from '$lib/stores/news';
   import { onDestroy, onMount } from 'svelte';
-  import LoadingIndicator from '$lib/components/ui/LoadingIndicator.svelte';
   import { getNews } from '$lib/api/news';
   import Content from '$lib/components/ui/content/Content.svelte';
   import classNames from 'classnames';
@@ -13,15 +12,16 @@
   import NewsFilter from './NewsFilter.svelte';
   import { get } from 'svelte/store';
   import Button from '$lib/components/ui/controls/Button.svelte';
+  import NewsListSkeleton from './NewsListSkeleton.svelte';
 
-  let isNewsLoading = false;
+  let isNewsLoading = true;
+  let firstLoadStarted = false;
   let subscriptions: Array<Unsubscriber> = [];
 
   $: showNewsList = hasNews($news);
   $: anySourcesEnabled = hasAnySourcesEnabled($settings);
   $: loadMoreButtonDisabled = $news.nextKey === null;
 
-  const newsLoadingWrapperClass = classNames(['mt-12 w-24 aspect-square', 'text-blue-900']);
   const newsFallbackWrapperClass = classNames([
     'px-3 sm:px-6 py-3',
     'w-full',
@@ -31,7 +31,7 @@
   ]);
 
   onMount(() => {
-    fetchNewNews();
+    fetchNews();
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
   });
@@ -39,6 +39,12 @@
   onDestroy(() => {
     unsubscribeAll(subscriptions);
   });
+
+  async function fetchNews() {
+    await withLoadingIndication(async () => {
+      news.setNews(await getNews(fetch));
+    });
+  }
 
   async function fetchNewNews() {
     await withLoadingIndication(async () => {
@@ -63,8 +69,11 @@
   }
 
   async function withLoadingIndication(handler: () => void | Promise<void>) {
-    if (isNewsLoading) {
+    if (firstLoadStarted && isNewsLoading) {
       return;
+    }
+    if (!firstLoadStarted) {
+      firstLoadStarted = true;
     }
     isNewsLoading = true;
 
@@ -105,13 +114,13 @@
   {:else if showNewsList}
     <NewsList storyBuckets={$news.storyBuckets} />
   {:else if isNewsLoading}
-    <div class={newsLoadingWrapperClass}>
-      <LoadingIndicator />
-    </div>
+    <NewsListSkeleton />
   {:else}
     <div class={newsFallbackWrapperClass}>
       <span>Keine News vorhanden. Versuchen Sie es später erneut.</span>
     </div>
   {/if}
-  <Button disabled={loadMoreButtonDisabled} on:click={handleLoadMoreClick}>Weitere laden</Button>
+  {#if showNewsList || !isNewsLoading}
+    <Button disabled={loadMoreButtonDisabled} on:click={handleLoadMoreClick}>Weitere laden</Button>
+  {/if}
 </Content>
