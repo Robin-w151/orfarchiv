@@ -31,6 +31,7 @@
   ]);
 
   onMount(() => {
+    fetchNewNews();
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
   });
