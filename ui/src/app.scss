@@ -1,0 +1,42 @@
+@import '@fontsource/roboto';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  [type='text'],
+  [type='number'] {
+    border: none;
+  }
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+@layer components {
+  #readability-page-1.page {
+    @apply flex flex-col;
+
+    h2 {
+      @apply mt-1 mb-2 font-bold text-lg;
+    }
+
+    p {
+      @apply mb-2;
+    }
+
+    a {
+      @apply text-blue-800;
+    }
+
+    img {
+      @apply my-1;
+    }
+
+    figcaption {
+      @apply mb-1 italic;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import '../app.css';
+  import '../app.scss';
   import classNames from 'classnames';
   import CogIcon from '$lib/components/ui/icons/outline/CogIcon.svelte';
   import RefreshIcon from '$lib/components/ui/icons/outline/RefreshIcon.svelte';
