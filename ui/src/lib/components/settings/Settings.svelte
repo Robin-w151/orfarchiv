@@ -62,8 +62,7 @@
       {/each}
     </SectionList>
   </Section>
+  <Actions>
+    <Button on:click={handleSaveButtonClick}>Fertig</Button>
+  </Actions>
 </Content>
-
-<Actions>
-  <Button on:click={handleSaveButtonClick}>Fertig</Button>
-</Actions>
