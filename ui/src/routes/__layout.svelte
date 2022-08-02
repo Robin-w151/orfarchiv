@@ -38,15 +38,15 @@
 <div class={wrapperClass}>
   <header class={headerClass}>
     <h1>
-      <a class={headerTitleClass} href="/">
+      <a class={headerTitleClass} href="/" title="Startseite">
         <span class="hidden sm:inline">ORF&nbsp;</span><span class="whitespace-nowrap">News Archiv</span>
       </a>
     </h1>
     <div class={headerActionsClass}>
-      <ButtonLink href="/" on:click={handleRefreshButtonClick} preventDefault>
+      <ButtonLink href="/" title="Nach Updates suchen" on:click={handleRefreshButtonClick} preventDefault>
         <RefreshIcon />
       </ButtonLink>
-      <ButtonLink href="/settings">
+      <ButtonLink href="/settings" title="Einstellungen">
         <CogIcon />
       </ButtonLink>
     </div>

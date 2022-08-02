@@ -76,7 +76,7 @@
 
 <Item class={storyClass} {categoryColor} bind:this={itemRef}>
   <div class={headerClass}>
-    <ButtonLink href={url} target="_blank">
+    <ButtonLink href={url} target="_blank" title="Link zum Artikel">
       <ExternalLink />
     </ButtonLink>
     <div class={infoClass} on:click={handleItemClick} on:keydown={handleItemKeydown} tabindex="0">

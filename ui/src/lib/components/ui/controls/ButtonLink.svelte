@@ -3,6 +3,7 @@
   import { createEventDispatcher } from 'svelte';
 
   export let href: string | undefined = undefined;
+  export let title: string | undefined = undefined;
   export let target: string | undefined = undefined;
   export let preventDefault = false;
 
@@ -24,7 +25,7 @@
 </script>
 
 {#if href}
-  <a class={buttonClass} {href} {target} on:click={handleClick}>
+  <a class={buttonClass} {href} {target} {title} on:click={handleClick}>
     <slot />
   </a>
 {:else}
