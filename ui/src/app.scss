@@ -19,24 +19,40 @@ body {
   #readability-page-1.page {
     @apply flex flex-col;
 
+    h1 {
+      @apply mt-4 mb-3 font-bold text-xl;
+    }
+
     h2 {
       @apply mt-3 mb-2 font-bold text-lg;
     }
 
+    h3 {
+      @apply my-2 font-bold;
+    }
+
     p {
-      @apply mb-2;
+      @apply my-2;
     }
 
     a {
-      @apply text-blue-800;
+      @apply text-blue-800 hover:bg-blue-100 focus:bg-blue-100 outline-none;
     }
 
     img {
-      @apply my-1;
+      @apply my-2;
+    }
+
+    video {
+      @apply my-2;
+    }
+
+    figure {
+      @apply my-2
     }
 
     figcaption {
-      @apply mb-1 italic;
+      @apply my-3 italic;
     }
   }
 }

@@ -12,13 +12,15 @@
   let isLoading = true;
   let content;
 
-  const wrapperClass = classNames('flex flex-col gap-3');
+  const wrapperClass = classNames('flex flex-col items-center gap-3');
   const contentClass = classNames('cursor-auto');
   const errorLinkClass = classNames(['text-blue-800']);
   const collapseContentClass = classNames([
     'flex justify-center',
-    'hover:text-blue-800 focus:text-blue-800',
+    'w-48 max-w-full',
+    'hover:text-blue-600 focus:text-blue-600 hover:bg-blue-100 focus:bg-blue-100',
     'outline-none',
+    'rounded-lg',
   ]);
 
   onMount(async () => {

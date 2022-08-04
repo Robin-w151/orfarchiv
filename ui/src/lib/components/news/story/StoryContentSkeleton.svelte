@@ -1,13 +1,8 @@
 <script lang="ts">
   import classNames from 'classnames';
 
-  const contentSkeletonClass = classNames([
-    'content-skeleton',
-    'flex flex-col items-start gap-2',
-    'mt-1 mb-2',
-    'w-full',
-  ]);
-  const contentSkeletonBarClass = classNames(['h-4', 'bg-gray-300', 'rounded-md animate-pulse']);
+  const contentSkeletonClass = classNames(['content-skeleton', 'flex flex-col items-start', 'w-full']);
+  const contentSkeletonBarClass = classNames(['bg-gray-300', 'rounded-md animate-pulse']);
 </script>
 
 <div class={contentSkeletonClass} data-testid="story-content-skeleton">
@@ -19,8 +14,13 @@
 
 <style lang="scss">
   .content-skeleton {
+    span {
+      height: 16px;
+      margin: 4px 0;
+    }
+
     span:nth-child(1) {
-      margin-bottom: 0.75rem;
+      margin: calc(4px + 0.5rem) 0;
       width: 40%;
     }
     span:nth-child(2) {
@@ -30,6 +30,7 @@
       width: 85%;
     }
     span:nth-child(4) {
+      margin-bottom: calc(4px + 0.5rem);
       width: 90%;
     }
   }
