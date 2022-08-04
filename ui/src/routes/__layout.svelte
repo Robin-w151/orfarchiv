@@ -38,7 +38,7 @@
 <div class={wrapperClass}>
   <header class={headerClass}>
     <h1>
-      <a class={headerTitleClass} href="/" title="Startseite">
+      <a class={headerTitleClass} href="/" title="Startseite" sveltekit:prefetch>
         <span class="hidden sm:inline">ORF&nbsp;</span><span class="whitespace-nowrap">News Archiv</span>
       </a>
     </h1>
@@ -46,7 +46,7 @@
       <ButtonLink href="/" title="Nach Updates suchen" on:click={handleRefreshButtonClick} preventDefault>
         <RefreshIcon />
       </ButtonLink>
-      <ButtonLink href="/settings" title="Einstellungen">
+      <ButtonLink href="/settings" title="Einstellungen" prefetch>
         <CogIcon />
       </ButtonLink>
     </div>
