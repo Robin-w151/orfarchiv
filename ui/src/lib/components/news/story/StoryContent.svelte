@@ -3,6 +3,7 @@
   import ChevronUp from '$lib/components/ui/icons/outline/ChevronUp.svelte';
   import classNames from 'classnames';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
+  import Button from '$lib/components/ui/controls/Button.svelte';
 
   export let id: string;
   export let url: string;
@@ -15,13 +16,7 @@
   const wrapperClass = classNames('flex flex-col items-center gap-3');
   const contentClass = classNames('cursor-auto');
   const errorLinkClass = classNames(['text-blue-800']);
-  const collapseContentClass = classNames([
-    'flex justify-center',
-    'w-48 max-w-full',
-    'hover:text-blue-600 focus:text-blue-600 hover:bg-blue-100 focus:bg-blue-100',
-    'outline-none',
-    'rounded-lg',
-  ]);
+  const collapseContentClass = classNames(['w-48 max-w-full']);
 
   onMount(async () => {
     try {
@@ -67,12 +62,13 @@
       Artikel zu gelangen.
     </p>
   {/if}
-  <div
+  <Button
     class={collapseContentClass}
+    btnType="link"
+    iconOnly
     on:click={handleCollapseFieldClick}
     on:keydown={handleCollapseFieldKeydown}
-    tabindex="0"
   >
     <ChevronUp />
-  </div>
+  </Button>
 </div>
