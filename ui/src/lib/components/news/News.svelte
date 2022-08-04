@@ -30,8 +30,9 @@
     'rounded-lg',
   ]);
 
-  onMount(() => {
-    fetchNews();
+  onMount(async () => {
+    await fetchNews();
+    await fetchNewNews();
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
   });
