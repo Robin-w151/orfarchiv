@@ -8,9 +8,18 @@ const config = {
   preprocess: preprocess({
     postcss: true,
   }),
-
   kit: {
     adapter: adapter(),
+    csp: {
+      directives: {
+        'default-src': ['none'],
+        'connect-src': ['self', 'https://vitals.vercel-insights.com'],
+        'font-src': ['self'],
+        'img-src': ['*'],
+        'script-src': ['self'],
+        'style-src': ['self', 'unsafe-inline'],
+      },
+    },
   },
 };
 
