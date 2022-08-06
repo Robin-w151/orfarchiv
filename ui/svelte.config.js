@@ -14,8 +14,8 @@ const config = {
       directives: {
         'default-src': ['none'],
         'connect-src': ['self', 'https://vitals.vercel-analytics.com'],
-        'font-src': ['self'],
-        'img-src': ['*'],
+        'font-src': ['self', 'data:'],
+        'img-src': ['*', 'data:'],
         'script-src': ['self'],
         'style-src': ['self', 'unsafe-inline'],
       },
