@@ -13,7 +13,7 @@ const config = {
     csp: {
       directives: {
         'default-src': ['none'],
-        'connect-src': ['self', 'https://vitals.vercel-insights.com'],
+        'connect-src': ['self', 'https://vitals.vercel-analytics.com'],
         'font-src': ['self'],
         'img-src': ['*'],
         'script-src': ['self'],
