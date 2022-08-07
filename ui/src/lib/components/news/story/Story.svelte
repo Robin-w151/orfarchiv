@@ -29,7 +29,7 @@
 
   $: storyClass = classNames(['gap-0', 'px-0 sm:px-0 py-0']);
   $: headerClass = classNames([
-    'header flex flex-row items-center gap-3',
+    'flex flex-row items-center gap-3',
     defaultPadding,
     showContent && 'sticky border-solid border-b-2 bg-white',
   ]);
@@ -40,7 +40,7 @@
   ]);
   $: titleClass = classNames();
   $: metadataClass = classNames(['text-sm', 'text-gray-600']);
-  $: contentClass = classNames(['content', defaultPadding]);
+  $: contentClass = classNames([defaultPadding]);
 
   function getSourceLabel(source: string): string | undefined {
     if (!source || source === 'news') {
@@ -81,7 +81,7 @@
 </script>
 
 <Item class={storyClass} {categoryColor} bind:this={itemRef}>
-  <div class={headerClass}>
+  <div class="header {headerClass}">
     <ButtonLink href={url} target="_blank" title="Link zum Artikel">
       <ExternalLink />
     </ButtonLink>
@@ -96,7 +96,7 @@
     </div>
   </div>
   {#if showContent}
-    <div class={contentClass} in:fade={{ duration: 200 }}>
+    <div class="content {contentClass}" in:fade={{ duration: 200 }}>
       <StoryContent {id} {url} on:collapse={handleStoryContentCollapse} />
     </div>
   {/if}

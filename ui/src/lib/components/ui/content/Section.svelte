@@ -4,19 +4,18 @@
 
   export let title: string;
 
-  const sectionClass = classNames(['flex flex-col items-center', 'w-full']);
+  const sectionClass = classNames(['flex flex-col items-center', 'w-full', 'rounded-lg overflow-clip']);
   const titleClass = classNames([
     'flex justify-center sticky top-0 z-10',
     defaultPadding,
     'w-full text-lg',
     'text-blue-900 bg-white',
     'border-solid border-b-2',
-    'rounded-t-lg',
   ]);
   const contentClass = classNames(['w-full']);
 </script>
 
-<div class={sectionClass}>
+<div class="section {sectionClass}">
   {#if title}
     <h2 class={titleClass}>{title}</h2>
   {/if}
@@ -24,3 +23,8 @@
     <slot />
   </div>
 </div>
+
+<style lang="scss">
+  .section {
+  }
+</style>
