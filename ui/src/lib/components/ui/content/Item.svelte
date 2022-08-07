@@ -2,6 +2,7 @@
   import classNames from 'classnames';
   import type { CategoryColor } from '$lib/models/categoryColor';
   import computeScrollIntoView from 'compute-scroll-into-view';
+  import { defaultPadding } from '$lib/utils/styles';
 
   export let categoryColor: CategoryColor | undefined = undefined;
 
@@ -9,7 +10,7 @@
 
   const itemClass = classNames([
     'flex flex-col gap-3',
-    'px-3 sm:px-6 py-3',
+    defaultPadding,
     'text-gray-800',
     'outline-none',
     categoryColor?.bgClass,

@@ -13,6 +13,7 @@
   import { get } from 'svelte/store';
   import Button from '$lib/components/ui/controls/Button.svelte';
   import NewsListSkeleton from './NewsListSkeleton.svelte';
+  import { defaultPadding } from '$lib/utils/styles';
 
   let isNewsLoading = true;
   let firstLoadStarted = false;
@@ -23,7 +24,7 @@
   $: loadMoreButtonDisabled = $news.nextKey === null;
 
   const newsFallbackWrapperClass = classNames([
-    'px-3 sm:px-6 py-3',
+    defaultPadding,
     'w-full',
     'text-lg',
     'text-gray-800 bg-white',

@@ -10,6 +10,7 @@
   import StoryContent from './StoryContent.svelte';
   import ExternalLink from '$lib/components/ui/icons/outline/ExternalLink.svelte';
   import { fade } from 'svelte/transition';
+  import { defaultPadding } from '$lib/utils/styles';
 
   export let id: string;
   export let title: string;
@@ -26,15 +27,20 @@
   $: sourceLabel = getSourceLabel(source);
   $: handleContentViewCollapse(showContent);
 
-  const storyClass = classNames();
-  const headerClass = classNames(['flex flex-row items-center gap-3']);
-  const infoClass = classNames([
+  $: storyClass = classNames(['gap-0', 'px-0 sm:px-0 py-0']);
+  $: headerClass = classNames([
+    'header flex flex-row items-center gap-3',
+    defaultPadding,
+    showContent && 'sticky border-solid border-b-2 bg-white',
+  ]);
+  $: infoClass = classNames([
     'flex flex-col flex-1 items-start',
     'hover:text-blue-800 focus:text-blue-800',
     'outline-none cursor-default',
   ]);
-  const titleClass = classNames();
-  const metadataClass = classNames(['text-sm', 'text-gray-600']);
+  $: titleClass = classNames();
+  $: metadataClass = classNames(['text-sm', 'text-gray-600']);
+  $: contentClass = classNames(['content', defaultPadding]);
 
   function getSourceLabel(source: string): string | undefined {
     if (!source || source === 'news') {
@@ -90,8 +96,22 @@
     </div>
   </div>
   {#if showContent}
-    <div in:fade={{ duration: 200 }}>
+    <div class={contentClass} in:fade={{ duration: 200 }}>
       <StoryContent {id} {url} on:collapse={handleStoryContentCollapse} />
     </div>
   {/if}
 </Item>
+
+<style lang="scss">
+  .header {
+    top: 54px;
+
+    &.sticky {
+      margin-bottom: -2px;
+    }
+  }
+
+  .content {
+    margin-top: 2px;
+  }
+</style>
