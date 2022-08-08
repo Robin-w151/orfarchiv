@@ -31,7 +31,7 @@
   $: headerClass = classNames([
     'flex flex-row items-center gap-3',
     defaultPadding,
-    showContent && 'sticky border-solid border-b-2 bg-white',
+    showContent && 'sticky z-10 border-solid border-b-2 bg-white',
   ]);
   $: infoClass = classNames([
     'flex flex-col flex-1 items-start',

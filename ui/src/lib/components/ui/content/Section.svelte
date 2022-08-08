@@ -6,7 +6,7 @@
 
   const sectionClass = classNames(['flex flex-col items-center', 'w-full', 'rounded-lg overflow-clip']);
   const titleClass = classNames([
-    'flex justify-center sticky top-0 z-10',
+    'flex justify-center sticky top-0 z-20',
     defaultPadding,
     'w-full text-lg',
     'text-blue-900 bg-white',
