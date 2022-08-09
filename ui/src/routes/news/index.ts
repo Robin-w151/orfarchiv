@@ -3,7 +3,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import type { PageKey } from '$lib/models/news';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get(event: RequestEvent) {
+export async function GET(event: RequestEvent) {
   const url = event.request.url;
   const prevKey = getPrevKey(url);
   const nextKey = getNextKey(url);

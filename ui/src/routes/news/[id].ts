@@ -4,7 +4,7 @@ import { JSDOM } from 'jsdom';
 import createDOMPurify from 'dompurify';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
-export async function get(event: RequestEvent) {
+export async function GET(event: RequestEvent) {
   const url = getUrlSearchParam(event);
   if (!url) {
     return {
