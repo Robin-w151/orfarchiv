@@ -5,12 +5,15 @@
   import { defaultPadding } from '$lib/utils/styles';
 
   export let categoryColor: CategoryColor | undefined = undefined;
+  export let noGap = false;
+  export let noPadding = false;
 
   let itemRef;
 
   const itemClass = classNames([
-    'flex flex-col gap-3',
-    defaultPadding,
+    'flex flex-col',
+    !noGap && 'gap-3',
+    !noPadding && defaultPadding,
     'text-gray-800',
     'outline-none',
     categoryColor?.bgClass,

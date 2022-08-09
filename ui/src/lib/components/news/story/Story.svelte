@@ -27,7 +27,7 @@
   $: sourceLabel = getSourceLabel(source);
   $: handleContentViewCollapse(showContent);
 
-  $: storyClass = classNames(['gap-0', 'px-0 sm:px-0 py-0']);
+  $: storyClass = classNames();
   $: headerClass = classNames([
     'flex flex-row items-center gap-3',
     defaultPadding,
@@ -80,7 +80,7 @@
   }
 </script>
 
-<Item class={storyClass} {categoryColor} bind:this={itemRef}>
+<Item class={storyClass} {categoryColor} bind:this={itemRef} noGap noPadding>
   <div class="header {headerClass}">
     <ButtonLink href={url} target="_blank" title="Link zum Artikel">
       <ExternalLink />
@@ -104,7 +104,11 @@
 
 <style lang="scss">
   .header {
-    top: 54px;
+    top: 46px;
+
+    @screen sm {
+      top: 54px;
+    }
 
     &.sticky {
       margin-bottom: -2px;
