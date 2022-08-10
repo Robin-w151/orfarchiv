@@ -48,11 +48,15 @@ body {
     }
 
     figure {
-      @apply my-2
+      @apply my-2;
     }
 
     figcaption {
       @apply my-3 italic;
+    }
+
+    blockquote {
+      @apply m-4 mr-0 text-gray-600;
     }
   }
 }
