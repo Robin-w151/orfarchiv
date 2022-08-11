@@ -19,6 +19,22 @@ body {
   #readability-page-1.page {
     @apply flex flex-col;
 
+    a {
+      @apply text-blue-800 hover:bg-blue-100 focus:bg-blue-100 outline-none;
+    }
+
+    blockquote {
+      @apply m-4 mr-0 text-gray-600;
+    }
+
+    figcaption {
+      @apply my-3 italic;
+    }
+
+    figure {
+      @apply my-2;
+    }
+
     h1 {
       @apply mt-4 mb-3 font-bold text-xl;
     }
@@ -31,32 +47,40 @@ body {
       @apply my-2 font-bold;
     }
 
-    p {
-      @apply my-2;
-    }
-
-    a {
-      @apply text-blue-800 hover:bg-blue-100 focus:bg-blue-100 outline-none;
-    }
-
     img {
       @apply my-2;
     }
 
+    p {
+      @apply my-2;
+    }
+
+    ul {
+      @apply pl-8 list-disc;
+
+      & > li {
+        @apply pl-2;
+      }
+    }
+
+    table {
+      @apply mx-auto my-4 w-full max-w-xl border border-solid;
+
+      & > tbody {
+        @apply flex flex-col divide-y;
+
+        & > tr {
+          @apply flex divide-x;
+
+          & > td {
+            @apply flex-1 p-1;
+          }
+        }
+      }
+    }
+
     video {
       @apply my-2;
-    }
-
-    figure {
-      @apply my-2;
-    }
-
-    figcaption {
-      @apply my-3 italic;
-    }
-
-    blockquote {
-      @apply m-4 mr-0 text-gray-600;
     }
   }
 }
