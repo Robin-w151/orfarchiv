@@ -66,15 +66,19 @@ body {
     table {
       @apply mx-auto my-4 w-full max-w-xl border border-solid;
 
+      & > thead {
+        @apply border border-solid;
+      }
+
       & > tbody {
         @apply flex flex-col divide-y;
+      }
 
-        & > tr {
-          @apply flex divide-x;
+      & tr {
+        @apply flex divide-x;
 
-          & > td {
-            @apply flex-1 p-1;
-          }
+        & > td, & > th {
+          @apply flex-1 p-1;
         }
       }
     }
