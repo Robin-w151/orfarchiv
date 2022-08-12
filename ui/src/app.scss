@@ -78,7 +78,7 @@ body {
         @apply flex divide-x;
 
         & > td, & > th {
-          @apply flex-1 p-1;
+          @apply flex-1 p-1 break-all;
         }
       }
     }
