@@ -125,7 +125,7 @@
       <span>Keine News vorhanden. Versuchen Sie es später erneut.</span>
     </div>
   {/if}
-  {#if showNewsList || !isNewsLoading}
+  {#if showNewsList}
     <Button disabled={loadMoreButtonDisabled} on:click={handleLoadMoreClick}>Weitere laden</Button>
   {/if}
 </Content>
