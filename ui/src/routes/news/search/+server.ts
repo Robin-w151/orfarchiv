@@ -1,3 +1,4 @@
+import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { searchNews } from '$lib/db/news';
 
@@ -6,11 +7,9 @@ export async function POST(event: RequestEvent) {
   const searchRequest = await event.request.json();
   const news = await searchNews(searchRequest);
 
-  return {
-    status: 200,
+  return json(news, {
     headers: {
       'Cache-Control': 'no-cache',
     },
-    body: news,
-  };
+  });
 }

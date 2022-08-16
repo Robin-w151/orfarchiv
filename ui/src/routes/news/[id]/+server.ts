@@ -1,3 +1,4 @@
+import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { Readability } from '@mozilla/readability';
 import { JSDOM } from 'jsdom';
@@ -7,9 +8,7 @@ import createDOMPurify from 'dompurify';
 export async function GET(event: RequestEvent) {
   const url = getUrlSearchParam(event);
   if (!url) {
-    return {
-      status: 400,
-    };
+    return new Response(undefined, { status: 400 });
   }
 
   try {
@@ -20,9 +19,7 @@ export async function GET(event: RequestEvent) {
 
     const article = new Readability(document).parse();
     if (!article) {
-      return {
-        status: 404,
-      };
+      return new Response(undefined, { status: 404 });
     }
 
     const articleDocument = new JSDOM(article.content, { url }).window.document;
@@ -30,18 +27,14 @@ export async function GET(event: RequestEvent) {
 
     const sanitizedArticleContent = sanitizeContent(articleDocument.body.innerHTML);
 
-    return {
-      status: 200,
+    return json(sanitizedArticleContent, {
       headers: {
         'Cache-Control': 'max-age=0, s-maxage=86400',
       },
-      body: sanitizedArticleContent,
-    };
+    });
   } catch (error: any) {
     console.warn(`Error: ${error.message}`);
-    return {
-      status: 500,
-    };
+    return new Response(undefined, { status: 500 });
   }
 }
 
