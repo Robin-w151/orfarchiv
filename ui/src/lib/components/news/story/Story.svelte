@@ -8,7 +8,7 @@
   import { formatTimestamp } from '$lib/utils/datetime.js';
   import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
   import StoryContent from './StoryContent.svelte';
-  import ExternalLink from '$lib/components/ui/icons/outline/ExternalLink.svelte';
+  import ExternalLinkIcon from '../../ui/icons/outline/ExternalLinkIcon.svelte';
   import { fade } from 'svelte/transition';
   import { defaultPadding } from '$lib/utils/styles';
 
@@ -83,7 +83,7 @@
 <Item class={storyClass} {categoryColor} bind:this={itemRef} noGap noPadding>
   <div class="header {headerClass}">
     <ButtonLink href={url} target="_blank" title="Link zum Artikel">
-      <ExternalLink />
+      <ExternalLinkIcon />
     </ButtonLink>
     <div class={infoClass} on:click={handleItemClick} on:keydown={handleItemKeydown} tabindex="0">
       <span class={titleClass}>{title}</span>
