@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { Readability } from '@mozilla/readability';
 import { JSDOM } from 'jsdom';
@@ -27,7 +26,7 @@ export async function GET(event: RequestEvent) {
 
     const sanitizedArticleContent = sanitizeContent(articleDocument.body.innerHTML);
 
-    return json(sanitizedArticleContent, {
+    return new Response(sanitizedArticleContent, {
       headers: {
         'Cache-Control': 'max-age=0, s-maxage=86400',
       },
