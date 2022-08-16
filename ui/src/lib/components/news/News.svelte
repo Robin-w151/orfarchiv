@@ -1,7 +1,7 @@
 <script lang="ts">
   import news, { type NewsStore } from '$lib/stores/news';
   import { onDestroy, onMount } from 'svelte';
-  import { getNews } from '$lib/api/news';
+  import { searchNews } from '$lib/api/news';
   import Content from '$lib/components/ui/content/Content.svelte';
   import classNames from 'classnames';
   import NewsList from './NewsList.svelte';
@@ -14,6 +14,8 @@
   import Button from '$lib/components/ui/controls/Button.svelte';
   import NewsListSkeleton from './NewsListSkeleton.svelte';
   import { defaultPadding } from '$lib/utils/styles';
+  import searchRequestParameters from '$lib/stores/searchRequestParameters';
+  import type { SearchRequestParameters } from '$lib/models/news';
 
   let isNewsLoading = true;
   let firstLoadStarted = false;
@@ -32,40 +34,41 @@
   ]);
 
   onMount(async () => {
-    await fetchNews();
-    await fetchNewNews();
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
+    subscriptions.push(searchRequestParameters.subscribe(fetchNews));
   });
 
   onDestroy(() => {
     unsubscribeAll(subscriptions);
   });
 
-  async function fetchNews() {
+  async function fetchNews(searchRequestParameters: SearchRequestParameters) {
     await withLoadingIndication(async () => {
-      news.setNews(await getNews(fetch));
+      news.setNews(await searchNews(fetch, searchRequestParameters));
     });
   }
 
   async function fetchNewNews() {
     await withLoadingIndication(async () => {
+      const currSearchRequestParameters = get(searchRequestParameters);
       const prevKey = get(news).prevKey;
       if (!prevKey) {
         return;
       }
-      const newNews = await getNews(fetch, prevKey);
+      const newNews = await searchNews(fetch, currSearchRequestParameters, prevKey);
       news.addNews(newNews, false);
     });
   }
 
   async function fetchMoreNews() {
     await withLoadingIndication(async () => {
+      const currSearchRequestParameters = get(searchRequestParameters);
       const nextKey = get(news).nextKey;
       if (nextKey === null) {
         return;
       }
-      const newNews = await getNews(fetch, nextKey);
+      const newNews = await searchNews(fetch, currSearchRequestParameters, nextKey);
       news.addNews(newNews);
     });
   }

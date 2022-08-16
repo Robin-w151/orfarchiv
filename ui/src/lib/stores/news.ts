@@ -1,9 +1,8 @@
-import { get, type Readable, writable } from 'svelte/store';
-import type { News } from '../models/news';
-import type { Story } from '../models/story';
+import { type Readable, writable } from 'svelte/store';
+import type { News } from '$lib/models/news';
+import type { Story } from '$lib/models/story';
 import { DateTime } from 'luxon';
-import type { NewsBucket } from '../models/news';
-import settings from './settings';
+import type { NewsBucket } from '$lib/models/news';
 
 export interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
@@ -96,39 +95,16 @@ function createStoryBucketsAndFilter(news: News): Array<NewsBucket> | undefined 
       stories: [],
     },
   ];
-  const enabledSources = get(settings).sources;
 
-  stories
-    .filter((story) => !enabledSources || enabledSources.includes(story.source))
-    .filter(filterStory.bind(null, news.search?.toLowerCase()))
-    .forEach((story) => {
-      for (const bucket of buckets) {
-        if (isInBucket(bucket, story)) {
-          bucket.stories.push(story);
-          break;
-        }
+  stories.forEach((story) => {
+    for (const bucket of buckets) {
+      if (isInBucket(bucket, story)) {
+        bucket.stories.push(story);
+        break;
       }
-    });
+    }
+  });
   return buckets;
-}
-
-function filterStory(search: string | undefined, story: Story): boolean {
-  if (!search) {
-    return true;
-  }
-
-  const normalizedSource = story.source?.toLowerCase();
-  if (normalizedSource?.includes(search)) {
-    return true;
-  }
-
-  const normalizedCategory = story.category?.toLowerCase();
-  if (normalizedCategory?.includes(search)) {
-    return true;
-  }
-
-  const normalizedTitle = story.title?.toLowerCase();
-  return !!normalizedTitle?.includes(search);
 }
 
 export default { subscribe, setNews, addNews, setSearch } as NewsStore;

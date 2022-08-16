@@ -1,23 +1,33 @@
 import { Collection, MongoClient, type Sort, type WithId } from 'mongodb';
-import type { News, PageKey } from '../models/news';
-import type { Story } from '../models/story';
+import type { News, PageKey, SearchRequest } from '$lib/models/news';
+import type { Story } from '$lib/models/story';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
-interface PaginationQuery {
+interface PaginatedQuery {
   paginatedQuery: any;
   sort: Sort;
   prevKeyFn: PageKeyFn;
   nextKeyFn: PageKeyFn;
 }
 
-export async function findNews(pageKey?: PageKey): Promise<News> {
-  const query = {};
+export async function searchNews(searchRequest: SearchRequest): Promise<News> {
+  const { searchRequestParameters, pageKey } = searchRequest;
+  const { textFilter, sources } = searchRequestParameters;
+
+  const textFilterRe = new RegExp(`${textFilter}`, 'i');
+  const titleQuery = textFilter
+    ? { $or: ['title', 'category', 'source'].map((key) => ({ [key]: { $in: [textFilterRe] } })) }
+    : {};
+  const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
+  const query = { $and: [titleQuery, sourceQuery] };
+
   return withOrfArchivDb(async (newsCollection) => {
     const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
-    const stories = await executeQuery(newsCollection, paginatedQuery, sort);
+    const limit = pageKey?.type === 'prev' ? 0 : 100;
+    const stories = await executeQuery(newsCollection, paginatedQuery, sort, limit);
     const orderedStories = correctOrder(stories, pageKey);
-    const { prevKey, nextKey } = getPageKeys(orderedStories, prevKeyFn, nextKeyFn, pageKey);
+    const { prevKey, nextKey } = getPageKeys(stories, prevKeyFn, nextKeyFn, pageKey);
     return { stories: orderedStories.map(mapToStory), prevKey, nextKey };
   });
 }
@@ -31,13 +41,13 @@ async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<
     const newsCollection = db.collection('news');
     return await handler(newsCollection);
   } catch (error: any) {
-    throw new Error(`DB error. Cause ${error.message}`);
+    throw new Error(`DB error. Cause: ${error.message}`);
   } finally {
     await client?.close();
   }
 }
 
-function generatePaginationQuery(query: any, pageKey?: PageKey): PaginationQuery {
+function generatePaginationQuery(query: any, pageKey?: PageKey): PaginatedQuery {
   const next = !pageKey || pageKey?.type === 'next';
   const sort: Sort = next ? { timestamp: -1, id: -1 } : { timestamp: 1, id: 1 };
 
@@ -66,12 +76,13 @@ function generatePaginationQuery(query: any, pageKey?: PageKey): PaginationQuery
   let paginatedQuery = query;
 
   const sortField = 'timestamp';
+  const sortFieldValue = new Date(pageKey[sortField]);
   const sortOperator = next ? '$lt' : '$gt';
 
   const paginationQuery = [
-    { [sortField]: { [sortOperator]: pageKey[sortField] } },
+    { [sortField]: { [sortOperator]: sortFieldValue } },
     {
-      $and: [{ [sortField]: pageKey[sortField] }, { id: { [sortOperator]: pageKey.id } }],
+      $and: [{ [sortField]: sortFieldValue }, { id: { [sortOperator]: pageKey.id } }],
     },
   ];
 
@@ -84,8 +95,8 @@ function generatePaginationQuery(query: any, pageKey?: PageKey): PaginationQuery
   return { paginatedQuery, sort, prevKeyFn, nextKeyFn };
 }
 
-function executeQuery(newsCollection: Collection, query: any, sort: Sort): Promise<Array<Story>> {
-  return newsCollection.find(query).limit(250).sort(sort).toArray() as unknown as Promise<Array<Story>>;
+function executeQuery(newsCollection: Collection, query: any, sort: Sort, limit: number): Promise<Array<Story>> {
+  return newsCollection.find(query).limit(limit).sort(sort).toArray() as unknown as Promise<Array<Story>>;
 }
 
 function correctOrder(stories: Array<Story>, pageKey?: PageKey): Array<Story> {
