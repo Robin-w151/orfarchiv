@@ -77,7 +77,8 @@ body {
       & tr {
         @apply flex divide-x;
 
-        & > td, & > th {
+        & > td,
+        & > th {
           @apply flex-1 p-1 break-all;
         }
       }
