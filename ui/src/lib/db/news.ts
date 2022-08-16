@@ -14,13 +14,7 @@ interface PaginatedQuery {
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   const { searchRequestParameters, pageKey } = searchRequest;
   const { textFilter, sources } = searchRequestParameters;
-
-  const textFilterRe = new RegExp(`${textFilter}`, 'i');
-  const titleQuery = textFilter
-    ? { $or: ['title', 'category', 'source'].map((key) => ({ [key]: { $in: [textFilterRe] } })) }
-    : {};
-  const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
-  const query = { $and: [titleQuery, sourceQuery] };
+  const query = buildQuery(textFilter, sources);
 
   return withOrfArchivDb(async (newsCollection) => {
     const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
@@ -30,6 +24,25 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
     const { prevKey, nextKey } = getPageKeys(stories, prevKeyFn, nextKeyFn, pageKey);
     return { stories: orderedStories.map(mapToStory), prevKey, nextKey };
   });
+}
+
+function buildQuery(textFilter?: string, sources?: Array<string>) {
+  const textFilters = textFilter
+    ?.split(/\s+/)
+    .filter((text) => !!text)
+    .map((text) => new RegExp(`${text}`, 'i'));
+
+  const textQuery =
+    textFilters && textFilters.length > 0
+      ? {
+          $or: ['title', 'category', 'source'].map((key) => ({
+            $and: textFilters?.map((filter) => ({ [key]: { $in: [filter] } })),
+          })),
+        }
+      : {};
+
+  const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
+  return { $and: [textQuery, sourceQuery] };
 }
 
 async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<News>) {
