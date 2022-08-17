@@ -9,6 +9,8 @@
 
   const dispatch = createEventDispatcher();
 
+  let inputRef;
+
   $: dispatch('change', value);
   $: showClearButton = !!value;
 
@@ -31,11 +33,12 @@
   function handleClearButtonClick() {
     value = '';
     dispatch('clear');
+    inputRef.focus();
   }
 </script>
 
 <div class={wrapperClass}>
-  <input class={inputClass} {id} type="text" bind:value {placeholder} maxlength="256" />
+  <input class={inputClass} {id} type="text" bind:value bind:this={inputRef} {placeholder} maxlength="256" />
   {#if showClearButton}
     <button class={clearButtonClass} on:click={handleClearButtonClick}>
       <XIcon />
