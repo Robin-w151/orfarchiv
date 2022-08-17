@@ -20,16 +20,3 @@ export interface PageKey {
   timestamp: string;
   type: 'prev' | 'next';
 }
-
-export interface SearchTextFilter {
-  textFilter?: string;
-}
-
-export interface SearchRequestParameters extends SearchTextFilter {
-  sources?: Array<string>;
-}
-
-export interface SearchRequest {
-  searchRequestParameters: SearchRequestParameters;
-  pageKey?: PageKey;
-}

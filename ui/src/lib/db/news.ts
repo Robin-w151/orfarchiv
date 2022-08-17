@@ -1,6 +1,7 @@
 import { Collection, MongoClient, type Sort, type WithId } from 'mongodb';
-import type { News, PageKey, SearchRequest } from '$lib/models/news';
+import type { News, PageKey } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
+import type { SearchRequest } from '$lib/models/searchRequest';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 

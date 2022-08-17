@@ -1,4 +1,5 @@
-import type { News, PageKey, SearchRequestParameters } from '$lib/models/news';
+import type { News, PageKey } from '$lib/models/news';
+import type { SearchRequestParameters } from '$lib/models/searchRequest';
 
 type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 

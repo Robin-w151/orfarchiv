@@ -15,7 +15,7 @@
   import NewsListSkeleton from './NewsListSkeleton.svelte';
   import { defaultPadding } from '$lib/utils/styles';
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
-  import type { SearchRequestParameters } from '$lib/models/news';
+  import type { SearchRequestParameters } from '$lib/models/searchRequest';
 
   let isNewsLoading = true;
   let firstLoadStarted = false;

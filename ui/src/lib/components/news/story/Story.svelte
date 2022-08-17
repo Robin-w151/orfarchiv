@@ -8,7 +8,7 @@
   import { formatTimestamp } from '$lib/utils/datetime.js';
   import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
   import StoryContent from './StoryContent.svelte';
-  import ExternalLinkIcon from '../../ui/icons/outline/ExternalLinkIcon.svelte';
+  import ExternalLinkIcon from '$lib/components/ui/icons/outline/ExternalLinkIcon.svelte';
   import { fade } from 'svelte/transition';
   import { defaultPadding } from '$lib/utils/styles';
 

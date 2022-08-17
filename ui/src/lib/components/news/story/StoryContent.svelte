@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from 'svelte';
-  import ChevronUpIcon from '../../ui/icons/outline/ChevronUpIcon.svelte';
+  import ChevronUpIcon from '$lib/components/ui/icons/outline/ChevronUpIcon.svelte';
   import classNames from 'classnames';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';

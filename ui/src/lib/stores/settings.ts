@@ -1,7 +1,7 @@
 import type { Writable } from 'svelte/store';
-import type { Settings } from '../models/settings';
+import type { Settings } from '$lib/models/settings';
 import { writable } from 'svelte-local-storage-store';
-import { sources } from '../models/settings';
+import { sources } from '$lib/models/settings';
 
 export interface SettingsStore extends Partial<Settings> {
   subscribe: Writable<Settings>['subscribe'];

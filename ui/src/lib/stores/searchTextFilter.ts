@@ -1,4 +1,4 @@
-import type { SearchTextFilter } from '$lib/models/news';
+import type { SearchTextFilter } from '$lib/models/searchRequest';
 import { type Writable, writable } from 'svelte/store';
 import debounce from 'lodash.debounce';
 

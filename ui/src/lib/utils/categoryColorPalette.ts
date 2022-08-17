@@ -1,4 +1,4 @@
-import type { CategoryColor } from '../models/categoryColor';
+import type { CategoryColor } from '$lib/models/categoryColor';
 
 const categoryColorPalette: Map<string, CategoryColor> = new Map([
   ['Inland', { bgClass: 'bg-blue-100', bgHoverClass: 'hover:bg-blue-50' }],
