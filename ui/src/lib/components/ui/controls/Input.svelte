@@ -14,7 +14,7 @@
 
   const wrapperClass = classNames(['flex items-center relative']);
   const inputClass = classNames([
-    'w-full',
+    'pr-12 w-full',
     'text-gray-900 bg-gray-100 focus:bg-white',
     'focus:ring-0',
     'outline-hidden focus:outline outline-2 focus:outline-offset-0 focus:outline-blue-800',
@@ -35,7 +35,7 @@
 </script>
 
 <div class={wrapperClass}>
-  <input class={inputClass} {id} type="text" bind:value {placeholder} />
+  <input class={inputClass} {id} type="text" bind:value {placeholder} maxlength="256" />
   {#if showClearButton}
     <button class={clearButtonClass} on:click={handleClearButtonClick}>
       <XIcon />
