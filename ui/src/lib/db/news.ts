@@ -12,18 +12,21 @@ interface PaginatedQuery {
   nextKeyFn: PageKeyFn;
 }
 
+const PAGE_LIMIT = 100;
+
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   const { searchRequestParameters, pageKey } = searchRequest;
   const { textFilter, sources } = searchRequestParameters;
+
   const query = buildQuery(textFilter, sources);
+  const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
+  const limit = pageKey?.type === 'prev' ? 0 : PAGE_LIMIT + 1;
 
   return withOrfArchivDb(async (newsCollection) => {
-    const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
-    const limit = pageKey?.type === 'prev' ? 0 : 100;
     const stories = await executeQuery(newsCollection, paginatedQuery, sort, limit);
     const orderedStories = correctOrder(stories, pageKey);
     const { prevKey, nextKey } = getPageKeys(stories, prevKeyFn, nextKeyFn, pageKey);
-    return { stories: orderedStories.map(mapToStory), prevKey, nextKey };
+    return { stories: orderedStories.filter((_, index) => index < PAGE_LIMIT).map(mapToStory), prevKey, nextKey };
   });
 }
 
@@ -75,11 +78,11 @@ function generatePaginationQuery(query: any, pageKey?: PageKey): PaginatedQuery 
   }
 
   function nextKeyFn(stories: Array<Story>): PageKey | null {
-    if (stories.length === 0) {
+    if (stories.length < PAGE_LIMIT + 1) {
       return null;
     }
 
-    const story = stories[stories.length - 1];
+    const story = stories[stories.length - 2];
     return { id: story.id, timestamp: story.timestamp, type: 'next' };
   }
 
