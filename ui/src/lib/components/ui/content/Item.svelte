@@ -1,10 +1,8 @@
 <script lang="ts">
   import classNames from 'classnames';
-  import type { CategoryColor } from '$lib/models/categoryColor';
   import computeScrollIntoView from 'compute-scroll-into-view';
   import { defaultPadding } from '$lib/utils/styles';
 
-  export let categoryColor: CategoryColor | undefined = undefined;
   export let noGap = false;
   export let noPadding = false;
 
@@ -16,7 +14,6 @@
     !noPadding && defaultPadding,
     'text-gray-800',
     'outline-none',
-    categoryColor?.bgClass,
     $$props['class'],
   ]);
 

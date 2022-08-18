@@ -6,23 +6,17 @@ import { sources } from '$lib/models/settings';
 export interface SettingsStore extends Partial<Settings> {
   subscribe: Writable<Settings>['subscribe'];
   setOpenLinksInNewTab: (_: boolean) => void;
-  setUseCategoryColorPalette: (_: boolean) => void;
   setSource: (_source: string, _included: boolean) => void;
 }
 
 const initialState = {
   openLinksInNewTab: true,
-  useCategoryColorPalette: false,
   sources: sources.map((source) => source.key),
 };
 const { subscribe, update } = writable<Settings>('settings', initialState);
 
 function setOpenLinksInNewTab(openLinksInNewTab: boolean): void {
   update((settings) => ({ ...settings, openLinksInNewTab }));
-}
-
-function setUseCategoryColorPalette(useCategoryColorPalette: boolean): void {
-  update((settings) => ({ ...settings, useCategoryColorPalette }));
 }
 
 function setSource(source: string, included: boolean): void {
@@ -39,4 +33,4 @@ function setSource(source: string, included: boolean): void {
   });
 }
 
-export default { subscribe, setOpenLinksInNewTab, setUseCategoryColorPalette, setSource } as SettingsStore;
+export default { subscribe, setOpenLinksInNewTab, setSource } as SettingsStore;

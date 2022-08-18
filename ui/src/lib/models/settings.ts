@@ -1,6 +1,5 @@
 export interface Settings {
   openLinksInNewTab: boolean;
-  useCategoryColorPalette: boolean;
   sources: Array<string>;
 }
 

@@ -14,10 +14,6 @@
     settings.setOpenLinksInNewTab(checked);
   }
 
-  function handleUseCategoryColorPaletteChange({ detail: checked }: { detail: boolean }) {
-    settings.setUseCategoryColorPalette(checked);
-  }
-
   function handleSourceChange(source: string, { detail: checked }: { detail: boolean }) {
     settings.setSource(source, checked);
   }
@@ -36,14 +32,6 @@
           label="Links in neuem Tab öffnen"
           checked={$settings.openLinksInNewTab}
           on:change={handleOpenLinksInNewTabChange}
-        />
-      </Item>
-      <Item>
-        <Checkbox
-          id="use-category-color-palette"
-          label="Kategoriefarben für Stories verwenden"
-          checked={$settings.useCategoryColorPalette}
-          on:change={handleUseCategoryColorPaletteChange}
         />
       </Item>
     </SectionList>

@@ -1,8 +1,6 @@
 <script lang="ts">
   import classNames from 'classnames';
   import Item from '$lib/components/ui/content/Item.svelte';
-  import settings from '$lib/stores/settings';
-  import getCategoryColorClass from '$lib/utils/categoryColorPalette';
   import { sources } from '$lib/models/settings';
   import { browser } from '$app/env';
   import { formatTimestamp } from '$lib/utils/datetime.js';
@@ -23,7 +21,6 @@
   let showContentInitial = false;
   let showContent = false;
 
-  $: categoryColor = $settings.useCategoryColorPalette ? getCategoryColorClass(category) : undefined;
   $: sourceLabel = getSourceLabel(source);
   $: handleContentViewCollapse(showContent);
 
@@ -80,7 +77,7 @@
   }
 </script>
 
-<Item class={storyClass} {categoryColor} bind:this={itemRef} noGap noPadding>
+<Item class={storyClass} bind:this={itemRef} noGap noPadding>
   <div class="header {headerClass}">
     <ButtonLink href={url} target="_blank" title="Link zum Artikel">
       <ExternalLinkIcon />
