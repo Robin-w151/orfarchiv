@@ -13,18 +13,19 @@ export async function GET(event: RequestEvent) {
   try {
     const data = await fetchSiteText(url);
 
-    const document = new JSDOM(data, { url }).window.document;
+    const document = createDom(data, url);
     removePrintWarnings(document);
 
-    const article = new Readability(document).parse();
-    if (!article) {
+    const optimizedContent = new Readability(document).parse();
+    if (!optimizedContent) {
       return new Response(undefined, { status: 404 });
     }
 
-    const articleDocument = new JSDOM(article.content, { url }).window.document;
-    adjustAnchorTarget(articleDocument);
+    const optimizedDocument = createDom(optimizedContent.content, url);
+    adjustAnchorTarget(optimizedDocument);
+    injectSlideShowPictures(optimizedDocument, createDom(data, url));
 
-    const sanitizedArticleContent = sanitizeContent(articleDocument.body.innerHTML);
+    const sanitizedArticleContent = sanitizeContent(optimizedDocument.body.innerHTML);
 
     return new Response(sanitizedArticleContent, {
       headers: {
@@ -50,10 +51,41 @@ async function fetchSiteText(url: string): Promise<string> {
   return await response.text();
 }
 
+function createDom(data: string, url: string): Document {
+  return new JSDOM(data, { url }).window.document;
+}
+
 function removePrintWarnings(document: Document): void {
   document.querySelectorAll('.print-warning').forEach((element) => {
     element.parentElement?.removeChild(element);
   });
+}
+
+function injectSlideShowPictures(optimizedDocument: Document, originalDocument: Document): void {
+  const images = [...originalDocument.querySelectorAll('.oon-slideshow img')] as Array<HTMLImageElement>;
+  if (images.length === 0) {
+    return;
+  }
+
+  const slideShowRegexp = /^fotostrecke mit/i;
+  const slideShowHeadline = [...optimizedDocument.querySelectorAll('h3')]
+    .filter((element) => slideShowRegexp.test(element.textContent ?? ''))
+    .reduce((e1, e2) => e2);
+
+  if (!slideShowHeadline) {
+    return;
+  }
+
+  const imagesWrapper = optimizedDocument.createElement('div');
+  images
+    .map((image) => {
+      image.src = image.getAttribute('data-src') ?? '';
+      image.removeAttribute('class');
+      image.setAttribute('loading', 'lazy');
+      return image;
+    })
+    .forEach((image) => imagesWrapper.appendChild(image));
+  slideShowHeadline.replaceWith(imagesWrapper);
 }
 
 function adjustAnchorTarget(document: Document): void {
