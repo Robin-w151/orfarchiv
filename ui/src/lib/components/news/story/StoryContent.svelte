@@ -4,6 +4,9 @@
   import classNames from 'classnames';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
+  import { wait } from '$lib/utils/wait';
+
+  const MAX_RETRIES = 5;
 
   export let id: string;
   export let url: string;
@@ -12,6 +15,7 @@
 
   let isLoading = true;
   let content;
+  let retry = 0;
 
   const wrapperClass = classNames('flex flex-col items-center gap-3');
   const contentClass = classNames('cursor-auto');
@@ -20,13 +24,27 @@
 
   onMount(async () => {
     try {
-      content = await fetchContent(url);
+      content = await fetchContentWithRetry(url);
     } catch (error) {
       console.warn(`Error: ${error.message}`);
     } finally {
       isLoading = false;
     }
   });
+
+  async function fetchContentWithRetry(url: string): Promise<string> {
+    if (retry < MAX_RETRIES) {
+      retry++;
+      try {
+        return await fetchContent(url);
+      } catch (error) {
+        await wait(500 * 1.5 ** retry);
+        return fetchContentWithRetry(url);
+      }
+    } else {
+      throw new Error(`Failed to load story content after ${MAX_RETRIES} retries!`);
+    }
+  }
 
   async function fetchContent(url: string): Promise<string> {
     const response = await fetch(`/news/${id}?url=${encodeURIComponent(url)}`);
