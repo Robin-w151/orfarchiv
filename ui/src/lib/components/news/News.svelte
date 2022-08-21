@@ -17,8 +17,6 @@
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import type { SearchRequestParameters } from '$lib/models/searchRequest';
 
-  let isNewsLoading = true;
-  let firstLoadStarted = false;
   let subscriptions: Array<Unsubscriber> = [];
 
   $: showNewsList = hasNews($news);
@@ -44,13 +42,13 @@
   });
 
   async function fetchNews(searchRequestParameters: SearchRequestParameters) {
-    await withLoadingIndication(async () => {
+    await withLogging(async () => {
       news.setNews(await searchNews(fetch, searchRequestParameters));
     });
   }
 
   async function fetchNewNews() {
-    await withLoadingIndication(async () => {
+    await withLogging(async () => {
       const currSearchRequestParameters = get(searchRequestParameters);
       const prevKey = get(news).prevKey;
       if (!prevKey) {
@@ -62,7 +60,7 @@
   }
 
   async function fetchMoreNews() {
-    await withLoadingIndication(async () => {
+    await withLogging(async () => {
       const currSearchRequestParameters = get(searchRequestParameters);
       const nextKey = get(news).nextKey;
       if (nextKey === null) {
@@ -73,21 +71,14 @@
     });
   }
 
-  async function withLoadingIndication(handler: () => void | Promise<void>) {
-    if (firstLoadStarted && isNewsLoading) {
-      return;
-    }
-    if (!firstLoadStarted) {
-      firstLoadStarted = true;
-    }
-    isNewsLoading = true;
-
+  async function withLogging(handler: () => void | Promise<void>) {
     try {
       await handler();
     } catch (error) {
+      if (error.name === 'AbortError') {
+        return;
+      }
       console.warn(error);
-    } finally {
-      isNewsLoading = false;
     }
   }
 
@@ -118,7 +109,7 @@
     </div>
   {:else if showNewsList}
     <NewsList storyBuckets={$news.storyBuckets} />
-  {:else if isNewsLoading}
+  {:else if $news.isLoading}
     <NewsListSkeleton />
   {:else}
     <div class={newsFallbackWrapperClass}>

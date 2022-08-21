@@ -8,9 +8,10 @@ export interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
   setNews: (_: News) => void;
   addNews: (_: News, append?: boolean) => void;
+  setIsLoading: (_: boolean) => void;
 }
 
-const initialState = { stories: [] };
+const initialState = { stories: [], isLoading: true };
 const { subscribe, update } = writable<News>(initialState);
 
 function setNews(news: News): void {
@@ -40,6 +41,10 @@ function addNews(news: News, append = true): void {
     }
     return newNews;
   });
+}
+
+function setIsLoading(isLoading: boolean): void {
+  update((oldNews) => ({ ...oldNews, isLoading }));
 }
 
 function createStoryBucketsAndFilter(news: News): Array<NewsBucket> | undefined {
@@ -99,4 +104,4 @@ function createStoryBucketsAndFilter(news: News): Array<NewsBucket> | undefined 
   return buckets;
 }
 
-export default { subscribe, setNews, addNews } as NewsStore;
+export default { subscribe, setNews, addNews, setIsLoading } as NewsStore;
