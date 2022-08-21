@@ -38,7 +38,7 @@
       try {
         return await fetchContent(url);
       } catch (error) {
-        await wait(500 * 1.5 ** retry);
+        await wait(500 * 2 ** retry);
         return fetchContentWithRetry(url);
       }
     } else {
