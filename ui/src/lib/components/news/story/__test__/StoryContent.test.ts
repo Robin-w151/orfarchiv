@@ -3,6 +3,8 @@ import StoryContent from '../StoryContent.svelte';
 import fetchMock from 'jest-fetch-mock';
 
 describe('StoryComponent', () => {
+  jest.setTimeout(60000);
+
   beforeAll(() => {
     fetchMock.enableMocks();
   });
@@ -16,11 +18,11 @@ describe('StoryComponent', () => {
     fetchMock.mockResponseOnce('<div>Beispiel Inhalt</div>');
 
     // when
-    const { getByTestId } = renderStoryComponent();
-    await flushPromises();
+    const { findByTestId } = renderStoryComponent();
 
     // then
-    expect(getByTestId('story-content').textContent).toBe('Beispiel Inhalt');
+    const content = await findByTestId('story-content');
+    expect(content.textContent).toBe('Beispiel Inhalt');
   });
 
   it('show loading indicator', () => {
@@ -36,11 +38,18 @@ describe('StoryComponent', () => {
     fetchMock.mockReturnValue(Promise.resolve(new Response(null, { status: 500 })));
 
     // when
-    const { getByTestId } = renderStoryComponent();
-    await flushPromises();
+    const { findByTestId } = renderStoryComponent();
 
     // then
-    const textContent = normalizeText(getByTestId('story-content-error').textContent);
+    const content = await findByTestId(
+      'story-content-error',
+      {},
+      {
+        timeout: 60000,
+        interval: 1000,
+      },
+    );
+    const textContent = normalizeText(content.textContent);
     expect(textContent).toBe('Inhalt kann nicht angezeigt werden. Klicken Sie hier um zum Artikel zu gelangen.');
   });
 });
@@ -49,10 +58,6 @@ function renderStoryComponent(): RenderResult {
   return render(StoryContent, {
     props: { id: 'news:1234567', url: 'https://orf.at/stories/1234567' },
   });
-}
-
-function flushPromises(): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, 0));
 }
 
 function normalizeText(text?: string | null): string | null {
