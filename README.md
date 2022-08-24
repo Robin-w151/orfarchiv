@@ -1,4 +1,5 @@
 # ORF Archiv
+![Vercel](https://vercelbadge.vercel.app/api/Robin-w151/orfarchiv) ![Checkly](https://api.checklyhq.com/v1/badges/checks/73f3605f-2955-4560-bee9-36116ce4b3b9?style=flat&theme=default) ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 
 Web application for browsing ORF News. Stories are sorted chronologically and included sources can be configured.
 
