@@ -1,7 +1,8 @@
 const { get } = require('axios');
 const { XMLParser } = require('fast-xml-parser');
+const RE2 = require('re2');
 
-const REGEXP_GUID = /.*\/stories\/(?<id>\d+)/;
+const GUID_RE2 = new RE2('/stories/(?<id>[0-9]+)');
 
 async function scrapeOrfNews(url, source, alternativeFormat = false) {
   console.log(`Scraping RSS feed: '${source}'`);
@@ -52,7 +53,7 @@ function mapRdfToStory(source, rdfItem) {
 }
 
 function mapSimpleToStory(source, item) {
-  const id = REGEXP_GUID.exec(item.guid['#text'])?.groups.id;
+  const id = GUID_RE2.match(item.guid['#text'])?.groups.id;
   return {
     id: id ? `${source}:${id}` : undefined,
     title: item.title.trim(),
