@@ -15,7 +15,7 @@
   const contentClass = classNames(['w-full']);
 </script>
 
-<div class="section {sectionClass}">
+<div class={sectionClass}>
   {#if title}
     <h2 class={titleClass}>{title}</h2>
   {/if}
@@ -23,8 +23,3 @@
     <slot />
   </div>
 </div>
-
-<style lang="scss">
-  .section {
-  }
-</style>
