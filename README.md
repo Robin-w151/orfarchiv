@@ -2,6 +2,7 @@
 [![Website](https://img.shields.io/website?down_color=red&down_message=offline&up_color=brightgreen&up_message=online&url=https%3A%2F%2Forfarchiv.news)](https://orfarchiv.news)
 [![Vercel](https://vercelbadge.vercel.app/api/Robin-w151/orfarchiv)](https://vercel.com)
 [![Checkly](https://api.checklyhq.com/v1/badges/checks/73f3605f-2955-4560-bee9-36116ce4b3b9?style=flat&theme=default)](https://www.checklyhq.com/)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=Robin-w151_orfarchiv&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Robin-w151_orfarchiv)
 [![License](https://img.shields.io/github/license/Robin-w151/orfarchiv?color=blue)](https://github.com/Robin-w151/orfarchiv/blob/main/LICENSE)
 
 Web application for browsing ORF News. Stories are sorted chronologically and included sources can be configured.
