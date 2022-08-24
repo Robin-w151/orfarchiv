@@ -76,8 +76,12 @@
     </div>
   {:else}
     <p data-testid="story-content-error">
-      Inhalt kann nicht angezeigt werden. Klicken Sie <a class={errorLinkClass} href={url} target="_blank">hier</a> um zum
-      Artikel zu gelangen.
+      Inhalt kann nicht angezeigt werden. Klicken Sie <a
+        class={errorLinkClass}
+        href={url}
+        target="_blank"
+        rel="noopener">hier</a
+      > um zum Artikel zu gelangen.
     </p>
   {/if}
   <Button

@@ -22,7 +22,7 @@ export async function GET(event: RequestEvent) {
     }
 
     const optimizedDocument = createDom(optimizedContent.content, url);
-    adjustAnchorTarget(optimizedDocument);
+    adjustAnchorTags(optimizedDocument);
     injectSlideShowPictures(optimizedDocument, createDom(data, url));
 
     const sanitizedArticleContent = sanitizeContent(optimizedDocument.body.innerHTML);
@@ -88,9 +88,10 @@ function injectSlideShowPictures(optimizedDocument: Document, originalDocument: 
   slideShowHeadline.replaceWith(imagesWrapper);
 }
 
-function adjustAnchorTarget(document: Document): void {
+function adjustAnchorTags(document: Document): void {
   document.querySelectorAll('a').forEach((anchor) => {
     anchor.target = '_blank';
+    anchor.rel = 'noopener';
   });
 }
 
