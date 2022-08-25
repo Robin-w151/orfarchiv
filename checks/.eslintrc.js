@@ -12,7 +12,6 @@ module.exports = {
     ],
   },
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
-  plugins: ['prettier'],
   env: {
     commonjs: true,
     es2022: true,

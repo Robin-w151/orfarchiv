@@ -11,13 +11,14 @@ module.exports = {
       },
     ],
   },
+  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   env: {
     commonjs: true,
-    es2021: true,
+    es2022: true,
     node: true,
   },
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  overrides: [],
 };
