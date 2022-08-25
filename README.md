@@ -1,4 +1,4 @@
-# [ORF Archiv](https://orfarchiv.news/)
+# [ORF Archiv](https://orfarchiv.news)
 
 [![Website](https://img.shields.io/website?down_color=red&down_message=offline&up_color=brightgreen&up_message=online&url=https%3A%2F%2Forfarchiv.news)](https://orfarchiv.news)
 [![Vercel](https://vercelbadge.vercel.app/api/Robin-w151/orfarchiv)](https://vercel.com)
