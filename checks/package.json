@@ -1,7 +1,9 @@
 {
   "name": "checks",
   "version": "1.0.0",
-  "packageManager": "yarn@3.2.3",
+  "scripts": {
+    "test": "playwright test"
+  },
   "dependencies": {
     "@playwright/test": "^1.25.1",
     "playwright": "^1.25.1"
@@ -12,5 +14,6 @@
     "eslint-config-recommended": "^4.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1"
-  }
+  },
+  "packageManager": "yarn@3.2.3"
 }
