@@ -12,7 +12,7 @@ class NewsPage {
   }
 
   async takeScreenshot() {
-    await this.page.screenshot({ path: `screenshots/orfarchiv-news-${this.screenshotCount++}.jpg` })
+    await this.page.screenshot({ path: `screenshot-orfarchiv-news-${this.screenshotCount++}.jpg` })
   }
 
   waitForContent() {
