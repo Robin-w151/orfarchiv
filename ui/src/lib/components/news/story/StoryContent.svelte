@@ -19,6 +19,7 @@
 
   const wrapperClass = classNames('flex flex-col items-center gap-3');
   const contentClass = classNames('cursor-auto');
+  const contentSourceClass = classNames('text-sm text-gray-600');
   const errorLinkClass = classNames(['text-blue-800']);
   const collapseContentClass = classNames(['py-1.5 w-48 max-w-full']);
 
@@ -71,8 +72,9 @@
   {#if isLoading}
     <StoryContentSkeleton />
   {:else if content}
-    <div class={contentClass} data-testid="story-content">
+    <div class="story-content {contentClass}" data-testid="story-content">
       {@html content}
+      <div class={contentSourceClass}>Quelle: <a href="https://orf.at" target="_blank" rel="noopener">orf.at</a></div>
     </div>
   {:else}
     <p data-testid="story-content-error">

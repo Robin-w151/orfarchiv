@@ -16,7 +16,7 @@ body {
 }
 
 @layer components {
-  #readability-page-1.page {
+  .story-content {
     @apply flex flex-col;
 
     a {
