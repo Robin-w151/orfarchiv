@@ -1,0 +1,9 @@
+{
+  "name": "checks",
+  "version": "1.0.0",
+  "packageManager": "yarn@3.2.3",
+  "dependencies": {
+    "@playwright/test": "^1.25.1",
+    "playwright": "^1.25.1"
+  }
+}
