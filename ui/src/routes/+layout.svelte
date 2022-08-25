@@ -19,7 +19,7 @@
     });
   }
 
-  const wrapperClass = classNames(['flex flex-col gap-3 sm:gap-4', 'p-2 pb-4 sm:p-4', 'w-screen max-w-screen-lg']);
+  const wrapperClass = classNames(['flex flex-col gap-3', 'p-2 pb-4 sm:p-4', 'w-screen max-w-screen-lg']);
   const headerClass = classNames([
     'flex justify-between items-center gap-6',
     defaultPadding,
@@ -29,7 +29,7 @@
   ]);
   const headerTitleClass = classNames(['outline-none']);
   const headerActionsClass = classNames(['flex gap-2']);
-  const mainClass = classNames(['flex flex-col gap-4']);
+  const mainClass = classNames(['flex flex-col gap-3']);
 
   function handleRefreshButtonClick() {
     refreshNews.notify();
