@@ -12,7 +12,7 @@ class NewsPage {
   }
 
   async takeScreenshot() {
-    await this.page.screenshot({ path: `screenshot-${this.screenshotCount++}.jpg` })
+    await this.page.screenshot({ path: `screenshots/news-${this.screenshotCount++}.jpg` })
   }
 
   waitForContent() {
