@@ -25,7 +25,6 @@
     defaultPadding,
     'text-3xl',
     'text-blue-900 bg-white',
-    'rounded-lg shadow-md',
   ]);
   const headerTitleClass = classNames(['outline-none']);
   const headerActionsClass = classNames(['flex gap-2']);

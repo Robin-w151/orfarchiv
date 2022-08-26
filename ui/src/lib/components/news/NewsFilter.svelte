@@ -4,7 +4,7 @@
   import classNames from 'classnames';
   import { defaultPadding } from '$lib/utils/styles';
 
-  const filterClass = classNames([defaultPadding, 'w-full', 'bg-white', 'rounded-lg shadow-md']);
+  const filterClass = classNames([defaultPadding, 'w-full', 'bg-white']);
 
   function handleSearchChange({ detail: search }: { detail: string }) {
     searchTextFilter.setSearchTextFilter(search);
