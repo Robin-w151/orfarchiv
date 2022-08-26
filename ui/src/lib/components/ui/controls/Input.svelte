@@ -30,6 +30,10 @@
     'rounded-full',
   ]);
 
+  export function focus() {
+    inputRef.focus();
+  }
+
   function handleClearButtonClick() {
     value = '';
     dispatch('clear');

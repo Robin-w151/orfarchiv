@@ -4,6 +4,8 @@ export const refreshNews = createEventStore();
 
 export const loadMoreNews = createEventStore();
 
+export const startSearch = createEventStore();
+
 function createEventStore() {
   const { subscribe, update } = writable<number>(0);
 
