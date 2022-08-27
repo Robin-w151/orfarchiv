@@ -19,7 +19,7 @@ export async function GET(event: RequestEvent) {
     return new Response(data, {
       headers: {
         'Content-Type': response.headers.get('Content-Type') ?? '',
-        'Cache-Control': 'max-age=3600, s-maxage=86400',
+        'Cache-Control': 'max-age=604800, s-maxage=604800',
       },
     });
   } catch (error) {
