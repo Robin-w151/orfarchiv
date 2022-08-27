@@ -39,10 +39,26 @@
     dispatch('clear');
     inputRef.focus();
   }
+
+  function handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      inputRef.blur();
+    }
+  }
 </script>
 
 <div class={wrapperClass}>
-  <input class={inputClass} {id} type="text" bind:value bind:this={inputRef} {placeholder} maxlength="256" />
+  <input
+    class={inputClass}
+    type="text"
+    {id}
+    on:keydown={handleKeydown}
+    bind:value
+    bind:this={inputRef}
+    {placeholder}
+    maxlength="256"
+  />
   {#if showClearButton}
     <button class={clearButtonClass} on:click={handleClearButtonClick}>
       <XIcon />
