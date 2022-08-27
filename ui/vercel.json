@@ -25,5 +25,11 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/vitals",
+      "destination": "https://vitals.vercel-analytics.com/v1/vitals"
+    }
   ]
 }

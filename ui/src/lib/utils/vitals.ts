@@ -1,6 +1,6 @@
 import { getCLS, getFCP, getFID, getLCP, getTTFB, type Metric } from 'web-vitals';
 
-const vitalsUrl = 'https://vitals.vercel-analytics.com/v1/vitals';
+const vitalsUrl = '/api/vitals';
 
 function getConnectionSpeed() {
   return 'connection' in navigator && navigator.connection && 'effectiveType' in navigator.connection
