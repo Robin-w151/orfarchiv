@@ -10,7 +10,6 @@
   import { fade } from 'svelte/transition';
   import { defaultPadding } from '$lib/utils/styles';
 
-  export let id: string;
   export let title: string;
   export let category: string;
   export let url: string;
@@ -94,7 +93,7 @@
   </div>
   {#if showContent}
     <div class="content {contentClass}" in:fade={{ duration: 200 }}>
-      <StoryContent {id} {url} on:collapse={handleStoryContentCollapse} />
+      <StoryContent {url} on:collapse={handleStoryContentCollapse} />
     </div>
   {/if}
 </Item>

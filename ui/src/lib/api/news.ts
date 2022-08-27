@@ -34,8 +34,8 @@ export async function searchNews(searchRequestParameters: SearchRequestParameter
   }
 }
 
-export async function fetchContent(id: string, url: string): Promise<string> {
-  const response = await fetch(`/api/news/${id}?url=${encodeURIComponent(url)}`);
+export async function fetchContent(url: string): Promise<string> {
+  const response = await fetch(`/api/news/content?url=${encodeURIComponent(url)}`);
   if (!response.ok) {
     throw new Error('Failed to load story content!');
   }

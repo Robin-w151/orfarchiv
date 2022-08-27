@@ -9,7 +9,6 @@
 
   const MAX_RETRIES = 5;
 
-  export let id: string;
   export let url: string;
 
   const dispatch = createEventDispatcher();
@@ -38,7 +37,7 @@
     if (retry < MAX_RETRIES) {
       retry++;
       try {
-        return await fetchContent(id, url);
+        return await fetchContent(url);
       } catch (error) {
         await wait(500 * 2 ** retry);
         return fetchContentWithRetry(url);

@@ -2,6 +2,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { Readability } from '@mozilla/readability';
 import { JSDOM } from 'jsdom';
 import createDOMPurify from 'dompurify';
+import { getUrlSearchParam } from '../../utils';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
 export async function GET(event: RequestEvent) {
@@ -22,8 +23,9 @@ export async function GET(event: RequestEvent) {
     }
 
     const optimizedDocument = createDom(optimizedContent.content, url);
+    injectSlideShowImages(optimizedDocument, createDom(data, url));
     adjustAnchorTags(optimizedDocument);
-    injectSlideShowPictures(optimizedDocument, createDom(data, url));
+    adjustImageSrc(optimizedDocument, event.url.origin);
 
     const sanitizedArticleContent = sanitizeContent(optimizedDocument.body.innerHTML);
 
@@ -36,11 +38,6 @@ export async function GET(event: RequestEvent) {
     console.warn(`Error: ${error.message}`);
     return new Response(undefined, { status: 500 });
   }
-}
-
-function getUrlSearchParam(event: RequestEvent): string | null {
-  const searchParams = new URL(event.request.url).searchParams;
-  return searchParams.get('url');
 }
 
 async function fetchSiteText(url: string): Promise<string> {
@@ -61,7 +58,7 @@ function removePrintWarnings(document: Document): void {
   });
 }
 
-function injectSlideShowPictures(optimizedDocument: Document, originalDocument: Document): void {
+function injectSlideShowImages(optimizedDocument: Document, originalDocument: Document): void {
   const images = [...originalDocument.querySelectorAll('.oon-slideshow img')] as Array<HTMLImageElement>;
   if (images.length === 0) {
     return;
@@ -92,6 +89,12 @@ function adjustAnchorTags(document: Document): void {
   document.querySelectorAll('a').forEach((anchor) => {
     anchor.target = '_blank';
     anchor.rel = 'noopener';
+  });
+}
+
+function adjustImageSrc(document: Document, baseUrl: string): void {
+  [...document.querySelectorAll('img')].forEach((image) => {
+    image.src = `${baseUrl}/api/news/images?url=${encodeURIComponent(image.src)}`;
   });
 }
 
