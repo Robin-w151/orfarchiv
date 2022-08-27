@@ -43,7 +43,7 @@
 
   async function fetchNews(searchRequestParameters: SearchRequestParameters) {
     await withLogging(async () => {
-      news.setNews(await searchNews(fetch, searchRequestParameters));
+      news.setNews(await searchNews(searchRequestParameters));
     });
   }
 
@@ -54,7 +54,7 @@
       if (!prevKey) {
         return;
       }
-      const newNews = await searchNews(fetch, currSearchRequestParameters, prevKey);
+      const newNews = await searchNews(currSearchRequestParameters, prevKey);
       news.addNews(newNews, false);
     });
   }
@@ -66,7 +66,7 @@
       if (nextKey === null) {
         return;
       }
-      const newNews = await searchNews(fetch, currSearchRequestParameters, nextKey);
+      const newNews = await searchNews(currSearchRequestParameters, nextKey);
       news.addNews(newNews);
     });
   }

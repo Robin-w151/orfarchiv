@@ -3,15 +3,9 @@ import type { SearchRequestParameters } from '$lib/models/searchRequest';
 import { toSearchParams } from '$lib/utils/searchRequest';
 import news from '$lib/stores/news';
 
-type FetchFn = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
-
 let abortController: AbortController | null = null;
 
-export async function searchNews(
-  fetch: FetchFn,
-  searchRequestParameters: SearchRequestParameters,
-  pageKey?: PageKey,
-): Promise<News> {
+export async function searchNews(searchRequestParameters: SearchRequestParameters, pageKey?: PageKey): Promise<News> {
   news.setIsLoading(true);
 
   const searchRequest = { searchRequestParameters, pageKey };
@@ -21,7 +15,7 @@ export async function searchNews(
   abortController = new AbortController();
 
   try {
-    const response = await fetch(`/news/search?${searchParams}`, {
+    const response = await fetch(`/api/news/search?${searchParams}`, {
       signal: abortController.signal,
     });
 
@@ -38,4 +32,12 @@ export async function searchNews(
     }
     throw error;
   }
+}
+
+export async function fetchContent(id: string, url: string): Promise<string> {
+  const response = await fetch(`/api/news/${id}?url=${encodeURIComponent(url)}`);
+  if (!response.ok) {
+    throw new Error('Failed to load story content!');
+  }
+  return await response.text();
 }

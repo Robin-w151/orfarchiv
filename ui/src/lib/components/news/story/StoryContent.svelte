@@ -5,6 +5,7 @@
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
   import { wait } from '$lib/utils/wait';
+  import { fetchContent } from '../../../api/news';
 
   const MAX_RETRIES = 5;
 
@@ -37,7 +38,7 @@
     if (retry < MAX_RETRIES) {
       retry++;
       try {
-        return await fetchContent(url);
+        return await fetchContent(id, url);
       } catch (error) {
         await wait(500 * 2 ** retry);
         return fetchContentWithRetry(url);
@@ -45,14 +46,6 @@
     } else {
       throw new Error(`Failed to load story content after ${MAX_RETRIES} retries!`);
     }
-  }
-
-  async function fetchContent(url: string): Promise<string> {
-    const response = await fetch(`/news/${id}?url=${encodeURIComponent(url)}`);
-    if (!response.ok) {
-      throw new Error('Failed to load story content!');
-    }
-    return await response.text();
   }
 
   function handleCollapseFieldClick(): void {
