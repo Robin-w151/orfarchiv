@@ -9,7 +9,6 @@
   "devDependencies": {
     "@babel/core": "^7.18.9",
     "@babel/eslint-parser": "^7.18.9",
-    "dotenv-flow": "^3.2.0",
     "eslint": "^8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-recommended": "^4.1.0",
@@ -18,8 +17,10 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "dotenv-flow": "^3.2.0",
     "fast-xml-parser": "^4.0.9",
     "mongodb": "^4.8.0",
-    "re2": "^1.17.7"
+    "re2": "^1.17.7",
+    "winston": "^3.8.1"
   }
 }

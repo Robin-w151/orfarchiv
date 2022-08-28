@@ -1,17 +1,18 @@
 const { get } = require('axios');
 const { XMLParser } = require('fast-xml-parser');
 const RE2 = require('re2');
+const logger = require('./logger');
 
 const GUID_RE2 = new RE2('/stories/(?<id>[0-9]+)');
 
 async function scrapeOrfNews(url, source, alternativeFormat = false) {
-  console.log(`Scraping RSS feed: '${source}'`);
+  logger.info(`Scraping RSS feed: '${source}'`);
   const data = await fetchOrfNews(url);
   return collectStories(data, source, alternativeFormat);
 }
 
 async function fetchOrfNews(url) {
-  console.log('Fetching data...');
+  logger.info('Fetching data...');
   try {
     const response = await get(url);
     return response.data;
@@ -21,7 +22,7 @@ async function fetchOrfNews(url) {
 }
 
 function collectStories(data, source, alternativeFormat) {
-  console.log(`Parsing data${alternativeFormat ? ' (alternative format) ' : ''}...`);
+  logger.info(`Parsing data${alternativeFormat ? ' (alternative format) ' : ''}...`);
   const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' });
   const document = parser.parse(data);
   const items = alternativeFormat ? document?.rss?.channel?.item : document?.['rdf:RDF']?.item;

@@ -1,7 +1,8 @@
 const { MongoClient } = require('mongodb');
+const logger = require('./logger');
 
 async function persistOrfNews(stories) {
-  console.log('Persisting stories...');
+  logger.info('Persisting stories...');
   const storyIds = stories.map((story) => story.id);
 
   await withOrfArchivDb(async (newsCollection) => {
@@ -16,12 +17,12 @@ async function persistOrfNews(stories) {
 
     if (storiesToInsert.length > 0) {
       await newsCollection.insertMany(storiesToInsert);
-      console.log(
+      logger.info(
         'Inserted story IDs:',
         storiesToInsert.map((story) => story.id),
       );
     } else {
-      console.log('Nothing to insert.');
+      logger.info('Nothing to insert.');
     }
 
     const storiesToUpdate = stories
@@ -32,18 +33,18 @@ async function persistOrfNews(stories) {
     if (storiesToUpdate.length > 0) {
       const results = storiesToUpdate.map((story) => newsCollection.replaceOne({ id: story.id }, story));
       await Promise.all(results);
-      console.log(
+      logger.info(
         'Updated story IDs:',
         storiesToUpdate.map((story) => story.id),
       );
     } else {
-      console.log('Nothing to update.');
+      logger.info('Nothing to update.');
     }
   });
 }
 
 async function withOrfArchivDb(handler) {
-  console.log('Connecting to DB...');
+  logger.info('Connecting to DB...');
   const url = process.env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
   let client;
   try {
