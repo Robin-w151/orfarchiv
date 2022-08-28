@@ -25,7 +25,6 @@ export async function GET(event: RequestEvent) {
     const optimizedDocument = createDom(optimizedContent.content, url);
     injectSlideShowImages(optimizedDocument, createDom(data, url));
     adjustAnchorTags(optimizedDocument);
-    adjustImageSrc(optimizedDocument, event.url.origin);
 
     const sanitizedArticleContent = sanitizeContent(optimizedDocument.body.innerHTML);
 
@@ -89,12 +88,6 @@ function adjustAnchorTags(document: Document): void {
   document.querySelectorAll('a').forEach((anchor) => {
     anchor.target = '_blank';
     anchor.rel = 'noopener';
-  });
-}
-
-function adjustImageSrc(document: Document, baseUrl: string): void {
-  [...document.querySelectorAll('img')].forEach((image) => {
-    image.src = `${baseUrl}/api/news/images?url=${encodeURIComponent(image.src)}`;
   });
 }
 
