@@ -4,11 +4,12 @@
   import { sources } from '$lib/models/settings';
   import { browser } from '$app/env';
   import { formatTimestamp } from '$lib/utils/datetime.js';
-  import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
-  import StoryContent from './StoryContent.svelte';
-  import ExternalLinkIcon from '$lib/components/ui/icons/outline/ExternalLinkIcon.svelte';
   import { fade } from 'svelte/transition';
   import { defaultPadding } from '$lib/utils/styles';
+  import StoryContent from '$lib/components/news/story/StoryContent.svelte';
+  import Dropdown from '$lib/components/ui/controls/Dropdown.svelte';
+  import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
+  import StoryMenu from '$lib/components/news/story/StoryMenu.svelte';
 
   export let title: string;
   export let category: string;
@@ -78,9 +79,6 @@
 
 <Item class={storyClass} bind:this={itemRef} noGap noPadding>
   <div class="header {headerClass}">
-    <ButtonLink href={url} target="_blank" title="Link zum Artikel">
-      <ExternalLinkIcon />
-    </ButtonLink>
     <div class={infoClass} on:click={handleItemClick} on:keydown={handleItemKeydown} tabindex="0">
       <span class={titleClass}>{title}</span>
       <span class={metadataClass}
@@ -90,6 +88,10 @@
         )}</span
       >
     </div>
+    <Dropdown btnType="secondary" iconOnly let:onClose>
+      <EllipsisVerticalIcon slot="button" />
+      <StoryMenu {url} {onClose} slot="content" />
+    </Dropdown>
   </div>
   {#if showContent}
     <div class="content {contentClass}" in:fade={{ duration: 200 }}>
