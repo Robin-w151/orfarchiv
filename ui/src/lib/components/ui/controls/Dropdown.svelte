@@ -2,6 +2,7 @@
   import { Popover, PopoverButton, PopoverPanel, Portal } from '@rgossiaux/svelte-headlessui';
   import { createPopperActions } from 'svelte-popperjs';
   import { type BtnType, buttonClassFn } from './button.styles';
+  import classNames from 'classnames';
 
   export let btnType: BtnType = 'primary';
   export let iconOnly = false;
@@ -15,6 +16,7 @@
   };
 
   const dropdownButtonClass = buttonClassFn({ btnType, iconOnly });
+  const dropdownContentClass = classNames(['z-40']);
 </script>
 
 <Popover let:open>
@@ -23,7 +25,7 @@
   </PopoverButton>
   {#if open}
     <Portal>
-      <PopoverPanel use={[[popperContent, popperOptions]]} let:close>
+      <PopoverPanel class={dropdownContentClass} use={[[popperContent, popperOptions]]} let:close>
         <slot name="content" onClose={close} />
       </PopoverPanel>
     </Portal>
