@@ -88,7 +88,7 @@
         )}</span
       >
     </div>
-    <Dropdown btnType="secondary" iconOnly let:onClose>
+    <Dropdown btnType="secondary" iconOnly placement="bottom-end" let:onClose>
       <EllipsisVerticalIcon slot="button" />
       <StoryMenu {url} {onClose} slot="content" />
     </Dropdown>

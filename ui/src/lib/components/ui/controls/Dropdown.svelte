@@ -3,14 +3,16 @@
   import { createPopperActions } from 'svelte-popperjs';
   import { type BtnType, buttonClassFn } from './button.styles';
   import classNames from 'classnames';
+  import type { PopperOptions } from 'svelte-popperjs';
 
   export let btnType: BtnType = 'primary';
   export let iconOnly = false;
   export let disabled: boolean | undefined = undefined;
+  export let placement = 'bottom';
 
   const [popperRef, popperContent] = createPopperActions();
-  const popperOptions = {
-    placement: 'bottom-end',
+  const popperOptions: PopperOptions = {
+    placement,
     strategy: 'absolute',
     modifiers: [{ name: 'offset', options: { offset: [0, 8] } }],
   };
