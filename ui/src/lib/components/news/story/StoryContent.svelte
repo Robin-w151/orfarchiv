@@ -80,7 +80,7 @@
   {/if}
   <Button
     class={collapseContentClass}
-    btnType="link"
+    btnType="secondary"
     iconOnly
     on:click={handleCollapseFieldClick}
     on:keydown={handleCollapseFieldKeydown}
