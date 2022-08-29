@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ExternalLinkIcon from '$lib/components/ui/icons/outline/ExternalLinkIcon.svelte';
   import classNames from 'classnames';
   import ShareIcon from '$lib/components/ui/icons/outline/ShareIcon.svelte';
+  import NewspaperIcon from '$lib/components/ui/icons/outline/NewspaperIcon.svelte';
 
   export let url: string;
   export let onClose: any;
@@ -29,7 +29,7 @@
 
 <div class={menuClass}>
   <a class={menuItemClass} href={url} target="_blank" rel="noopener" on:click={handleOpenArticleClick}>
-    <ExternalLinkIcon />
+    <NewspaperIcon />
     <span>Link zum Artikel</span>
   </a>
   <button class={menuItemClass} on:click={handleShareArticleClick}>
