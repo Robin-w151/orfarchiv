@@ -4,13 +4,14 @@
 
   export let title: string;
 
-  const sectionClass = classNames(['flex flex-col items-center', 'w-full', 'overflow-clip']);
+  const sectionClass = classNames(['flex flex-col items-center', 'w-full', 'bg-white', 'overflow-clip']);
   const titleClass = classNames([
     'flex justify-center sticky top-0 z-20',
     defaultPadding,
     'w-full text-lg',
-    'text-blue-900 bg-white',
+    'text-blue-900 bg-white/80',
     'border-solid border-b-2',
+    'backdrop-blur-sm',
   ]);
   const contentClass = classNames(['w-full']);
 </script>
