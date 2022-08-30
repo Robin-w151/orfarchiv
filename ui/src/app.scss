@@ -56,7 +56,7 @@ body {
     }
 
     ul {
-      @apply pl-8 list-disc;
+      @apply my-2 pl-8 list-disc;
 
       & > li {
         @apply pl-2;
