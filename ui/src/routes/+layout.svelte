@@ -43,10 +43,10 @@
       </a>
     </h1>
     <div class={headerActionsClass}>
-      <ButtonLink href="/" title="Nach Updates suchen" on:click={handleRefreshButtonClick} preventDefault>
+      <ButtonLink href="/" title="Nach Updates suchen" iconOnly on:click={handleRefreshButtonClick} preventDefault>
         <RefreshIcon />
       </ButtonLink>
-      <ButtonLink href="/settings" title="Einstellungen" prefetch>
+      <ButtonLink href="/settings" title="Einstellungen" iconOnly prefetch>
         <CogIcon />
       </ButtonLink>
     </div>

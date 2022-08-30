@@ -1,22 +1,18 @@
 <script lang="ts">
-  import classNames from 'classnames';
   import { createEventDispatcher } from 'svelte';
   import { prefetch as sveltePrefetch } from '$app/navigation';
+  import { buttonClassFn } from './button.styles';
 
   export let href: string;
   export let title: string;
   export let target: string | undefined = undefined;
+  export let iconOnly = false;
   export let preventDefault = false;
   export let prefetch = false;
 
   const dispatch = createEventDispatcher();
 
-  const buttonClass = classNames([
-    'p-2',
-    'text-blue-800 hover:text-blue-600 hover:bg-blue-100',
-    'outline-hidden focus:outline outline-2 outline-blue-800',
-    'rounded-md hover:shadow-lg',
-  ]);
+  const buttonClass = buttonClassFn({ btnType: 'secondary', iconOnly });
 
   function triggerPrefetchRoute(): void {
     if (prefetch) {

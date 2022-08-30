@@ -10,7 +10,8 @@
   const menuItemClass = classNames([
     'flex gap-2',
     'p-2',
-    'text-blue-800 hover:text-blue-600 hover:bg-blue-100',
+    'text-blue-800 hover:text-blue-600 hover:bg-blue-100 focus:bg-blue-100',
+    'focus:outline-none',
     'rounded-lg cursor-pointer',
   ]);
 
