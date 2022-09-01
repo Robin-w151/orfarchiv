@@ -12,7 +12,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const buttonClass = buttonClassFn({ btnType: 'secondary', iconOnly });
+  const buttonClass = buttonClassFn({ btnType: 'secondary', iconOnly, disabled: false });
 
   function triggerPrefetchRoute(): void {
     if (prefetch) {

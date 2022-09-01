@@ -27,7 +27,7 @@
     showContent && 'sticky z-10 border-solid border-b-2 bg-white',
     'outline-none cursor-pointer',
   ]);
-  $: contentClass = classNames([defaultPadding]);
+  $: contentClass = classNames([defaultPadding, 'cursor-auto']);
 
   function toggleShowContent(): void {
     showContent = !showContent;
