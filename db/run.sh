@@ -15,4 +15,4 @@ if [ -n "$backupDirFile" ]; then
 fi
 
 cd "$scriptDir"
-timeout 60s yarn start
+timeout 60s yarn backup
