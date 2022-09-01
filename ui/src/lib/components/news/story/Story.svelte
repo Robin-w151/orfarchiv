@@ -1,15 +1,10 @@
 <script lang="ts">
   import classNames from 'classnames';
   import Item from '$lib/components/ui/content/Item.svelte';
-  import { sources } from '$lib/models/settings';
-  import { browser } from '$app/env';
-  import { formatTimestamp } from '$lib/utils/datetime.js';
   import { fade } from 'svelte/transition';
   import { defaultPadding } from '$lib/utils/styles';
-  import StoryContent from '$lib/components/news/story/StoryContent.svelte';
-  import Dropdown from '$lib/components/ui/controls/Dropdown.svelte';
-  import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
-  import StoryMenu from '$lib/components/news/story/StoryMenu.svelte';
+  import StoryHeader from '$lib/components/news/story/header/StoryHeader.svelte';
+  import StoryContent from '$lib/components/news/story/content/StoryContent.svelte';
 
   export let title: string;
   export let category: string;
@@ -18,41 +13,34 @@
   export let source: string;
 
   let itemRef;
+  let headerRef;
   let showContentInitial = false;
   let showContent = false;
 
-  $: sourceLabel = getSourceLabel(source);
   $: handleContentViewCollapse(showContent);
 
   $: storyClass = classNames();
   $: headerClass = classNames([
     'flex flex-row items-center gap-3',
     defaultPadding,
-    showContent && 'sticky z-10 border-solid border-b-2 bg-white',
-  ]);
-  $: infoClass = classNames([
-    'flex flex-col flex-1 items-start',
     'hover:text-blue-800 focus:text-blue-800',
-    'outline-none cursor-default',
+    showContent && 'sticky z-10 border-solid border-b-2 bg-white',
+    'outline-none cursor-pointer',
   ]);
-  $: titleClass = classNames();
-  $: metadataClass = classNames(['text-sm', 'text-gray-600']);
   $: contentClass = classNames([defaultPadding]);
-
-  function getSourceLabel(source: string): string | undefined {
-    if (!source || source === 'news') {
-      return undefined;
-    }
-    return sources.find((s) => s.key === source)?.label;
-  }
 
   function toggleShowContent(): void {
     showContent = !showContent;
   }
 
+  function handleStoryContentCollapse(): void {
+    toggleShowContent();
+  }
+
   function handleContentViewCollapse(showContent: boolean): void {
     if (showContentInitial && !showContent) {
       itemRef.scrollIntoView();
+      headerRef.focus();
     }
 
     if (!showContentInitial) {
@@ -60,11 +48,13 @@
     }
   }
 
-  function handleStoryContentCollapse(): void {
-    toggleShowContent();
+  function handleHeaderWrapperClick(event: MouseEvent): void {
+    if (event.target === event.currentTarget) {
+      toggleShowContent();
+    }
   }
 
-  function handleItemClick(): void {
+  function handleHeaderClick(): void {
     toggleShowContent();
   }
 
@@ -78,20 +68,14 @@
 </script>
 
 <Item class={storyClass} bind:this={itemRef} noGap noPadding>
-  <div class="header {headerClass}">
-    <div class={infoClass} on:click={handleItemClick} on:keydown={handleItemKeydown} tabindex="0">
-      <span class={titleClass}>{title}</span>
-      <span class={metadataClass}
-        >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(
-          timestamp,
-          browser,
-        )}</span
-      >
-    </div>
-    <Dropdown btnType="secondary" iconOnly placement="bottom-end" let:onClose>
-      <EllipsisVerticalIcon slot="button" />
-      <StoryMenu {url} {onClose} slot="content" />
-    </Dropdown>
+  <div
+    class="header {headerClass}"
+    on:click={handleHeaderWrapperClick}
+    on:keydown={handleItemKeydown}
+    bind:this={headerRef}
+    tabindex="0"
+  >
+    <StoryHeader {title} {category} {url} {timestamp} {source} on:click={handleHeaderClick} />
   </div>
   {#if showContent}
     <div class="content {contentClass}" in:fade={{ duration: 200 }}>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import classNames from 'classnames';
-  import ShareIcon from '$lib/components/ui/icons/outline/ShareIcon.svelte';
-  import NewspaperIcon from '$lib/components/ui/icons/outline/NewspaperIcon.svelte';
+  import ShareIcon from '../../../ui/icons/outline/ShareIcon.svelte';
+  import NewspaperIcon from '../../../ui/icons/outline/NewspaperIcon.svelte';
 
   export let url: string;
   export let onClose: any;
