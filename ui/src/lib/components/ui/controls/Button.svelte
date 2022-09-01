@@ -6,7 +6,7 @@
   export let iconOnly = false;
   export let disabled: boolean | undefined = undefined;
 
-  const buttonClass = buttonClassFn({ btnType, iconOnly, clazz: $$props['class'] });
+  $: buttonClass = buttonClassFn({ btnType, iconOnly, disabled, clazz: $$props['class'] });
 </script>
 
 <button class={buttonClass} {type} {disabled} on:click on:keydown>

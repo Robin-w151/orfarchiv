@@ -14,7 +14,17 @@ const secondaryClass = classNames([
   'hover:shadow-lg',
 ]);
 
-export const buttonClassFn = ({ btnType, iconOnly, clazz }: { btnType: BtnType; iconOnly: boolean; clazz?: string }) =>
+export const buttonClassFn = ({
+  btnType,
+  iconOnly,
+  disabled,
+  clazz,
+}: {
+  btnType: BtnType;
+  iconOnly: boolean;
+  disabled: boolean;
+  clazz?: string;
+}) =>
   classNames([
     'flex justify-center',
     iconOnly ? 'p-2' : 'px-3 py-2',
@@ -22,5 +32,6 @@ export const buttonClassFn = ({ btnType, iconOnly, clazz }: { btnType: BtnType; 
     btnType === 'primary' && primaryClass,
     btnType === 'secondary' && secondaryClass,
     'rounded-md',
+    disabled && 'cursor-not-allowed',
     clazz,
   ]);
