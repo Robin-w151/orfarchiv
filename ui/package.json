@@ -34,7 +34,7 @@
     "compute-scroll-into-view": "^1.0.17",
     "dompurify": "^2.3.12",
     "dotenv-flow": "^3.2.0",
-    "eslint": "^8.22.0",
+    "eslint": "8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-svelte": "^2.6.0",
