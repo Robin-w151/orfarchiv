@@ -68,18 +68,16 @@
 </script>
 
 <Item bind:this={itemRef} noGap noPadding>
-  <div class="relative">
-    <div class="header {headerClass}" on:click={handleHeaderWrapperClick} bind:this={headerRef}>
-      <StoryHeader
-        {title}
-        {category}
-        {url}
-        {timestamp}
-        {source}
-        on:click={handleHeaderClick}
-        on:keydown={handleHeaderKeydown}
-      />
-    </div>
+  <div class="header {headerClass}" on:click={handleHeaderWrapperClick} bind:this={headerRef}>
+    <StoryHeader
+      {title}
+      {category}
+      {url}
+      {timestamp}
+      {source}
+      on:click={handleHeaderClick}
+      on:keydown={handleHeaderKeydown}
+    />
   </div>
   {#if showContent}
     <div class="content {contentClass}" in:fade={{ duration: 200 }}>
