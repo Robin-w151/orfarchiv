@@ -15,8 +15,7 @@
 
   $: sourceLabel = getSourceLabel(source);
 
-  const infoClass = classNames(['flex flex-col flex-1 items-start']);
-  const titleClass = classNames();
+  const infoClass = classNames(['flex flex-col flex-1 items-start', 'focus:text-blue-800', 'outline-none']);
   const metadataClass = classNames(['text-sm', 'text-gray-600']);
 
   function getSourceLabel(source: string): string | undefined {
@@ -27,8 +26,8 @@
   }
 </script>
 
-<div class={infoClass} on:click>
-  <span class={titleClass}>{title}</span>
+<div class={infoClass} on:click on:keydown tabindex="0">
+  <span>{title}</span>
   <span class={metadataClass}
     >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp, browser)}</span
   >
