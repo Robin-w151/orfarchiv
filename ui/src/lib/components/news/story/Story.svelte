@@ -26,6 +26,7 @@
     'hover:text-blue-800 focus:text-blue-800',
     showContent && 'sticky z-10 border-solid border-b-2 bg-white',
     'outline-none cursor-pointer',
+    'transition',
   ]);
   $: contentClass = classNames([defaultPadding, 'cursor-auto']);
 
