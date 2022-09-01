@@ -13,6 +13,6 @@ async function main() {
       await persistOrfNews(stories);
     }
   } catch (error) {
-    logger.info(error.message);
+    logger.error(error.message);
   }
 }
