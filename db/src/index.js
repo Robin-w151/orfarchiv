@@ -17,7 +17,7 @@ async function main() {
 async function exportNews() {
   const news = await withOrfArchivDb(async (newsCollection) => {
     logger.info('Fetching data...');
-    return await newsCollection.find().toArray();
+    return await newsCollection.find().sort({ timestamp: -1 }).toArray();
   });
 
   logger.info('Persisting data to backup file...');
