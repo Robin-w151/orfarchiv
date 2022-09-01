@@ -2,6 +2,10 @@
   "name": "db",
   "version": "1.0.0",
   "license": "MIT",
+  "main": "src/index.js",
+  "scripts": {
+    "backup": "node src"
+  },
   "dependencies": {
     "dotenv-flow": "^3.2.0",
     "mongodb": "^4.8.0",
@@ -10,7 +14,7 @@
   "devDependencies": {
     "@babel/core": "^7.18.9",
     "@babel/eslint-parser": "^7.18.9",
-    "eslint": "^8.22.0",
+    "eslint": "8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-recommended": "^4.1.0",
     "eslint-plugin-prettier": "^4.2.1",
