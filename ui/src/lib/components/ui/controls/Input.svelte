@@ -21,7 +21,7 @@
     'focus:ring-0',
     'focus:outline-none focus:ring-2 focus:ring-blue-800',
     'rounded-md',
-    'transition',
+    'transition-colors',
   ]);
   const clearButtonClass = classNames([
     'absolute right-2',
@@ -29,7 +29,7 @@
     'text-gray-700 hover:bg-gray-200',
     'focus:outline-none focus:ring-2 ring-blue-800',
     'rounded-full',
-    'transition',
+    'transition-colors',
   ]);
 
   export function focus() {

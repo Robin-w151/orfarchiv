@@ -32,7 +32,7 @@ export const buttonClassFn = ({
     btnType === 'primary' && primaryClass,
     btnType === 'secondary' && secondaryClass,
     'rounded-md',
-    'transition',
+    'transition-colors',
     disabled && 'cursor-not-allowed',
     clazz,
   ]);
