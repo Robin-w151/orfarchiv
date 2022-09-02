@@ -6,7 +6,7 @@
   import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
   import { refreshNews } from '$lib/stores/newsEvents';
   import { webVitals } from '$lib/utils/vitals';
-  import { browser } from '$app/env';
+  import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { defaultPadding } from '$lib/utils/styles';
 

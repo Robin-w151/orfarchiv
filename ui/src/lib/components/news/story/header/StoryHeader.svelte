@@ -2,7 +2,6 @@
   import Dropdown from '$lib/components/ui/controls/Dropdown.svelte';
   import classNames from 'classnames';
   import { formatTimestamp } from '$lib/utils/datetime.js';
-  import { browser } from '$app/env';
   import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
   import StoryMenu from '$lib/components/news/story/header/StoryMenu.svelte';
   import { sources } from '$lib/models/settings';
@@ -29,7 +28,7 @@
 <div class={infoClass} on:click on:keydown tabindex="0">
   <span>{title}</span>
   <span class={metadataClass}
-    >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp, browser)}</span
+    >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp)}</span
   >
 </div>
 <Dropdown btnType="secondary" iconOnly placement="bottom-end" let:onClose>
