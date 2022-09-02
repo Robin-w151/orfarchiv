@@ -36,7 +36,7 @@ async function withOrfArchivDb(handler) {
     client = await MongoClient.connect(url);
     const db = client.db('orfarchiv');
     const newsCollection = db.collection('news');
-    return await handler(newsCollection);
+    return handler(newsCollection);
   } catch (error) {
     throw new Error(`DB error. Cause ${error.message}`);
   } finally {

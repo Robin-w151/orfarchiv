@@ -19,13 +19,12 @@
 
   $: handleContentViewCollapse(showContent);
 
-  $: storyClass = classNames();
   $: headerClass = classNames([
     'flex flex-row items-center gap-3',
     defaultPadding,
-    'hover:text-blue-800 focus:text-blue-800',
+    'hover:text-blue-800',
     showContent && 'sticky z-10 border-solid border-b-2 bg-white',
-    'outline-none cursor-pointer',
+    'cursor-pointer',
     'transition',
   ]);
   $: contentClass = classNames([defaultPadding, 'cursor-auto']);
@@ -59,7 +58,7 @@
     toggleShowContent();
   }
 
-  function handleItemKeydown(event: Event): void {
+  function handleHeaderKeydown(event: Event): void {
     const code = (event as any).code;
     if (code === 'Enter' || code === 'Space') {
       event.preventDefault();
@@ -68,15 +67,17 @@
   }
 </script>
 
-<Item class={storyClass} bind:this={itemRef} noGap noPadding>
-  <div
-    class="header {headerClass}"
-    on:click={handleHeaderWrapperClick}
-    on:keydown={handleItemKeydown}
-    bind:this={headerRef}
-    tabindex="0"
-  >
-    <StoryHeader {title} {category} {url} {timestamp} {source} on:click={handleHeaderClick} />
+<Item bind:this={itemRef} noGap noPadding>
+  <div class="header {headerClass}" on:click={handleHeaderWrapperClick} bind:this={headerRef}>
+    <StoryHeader
+      {title}
+      {category}
+      {url}
+      {timestamp}
+      {source}
+      on:click={handleHeaderClick}
+      on:keydown={handleHeaderKeydown}
+    />
   </div>
   {#if showContent}
     <div class="content {contentClass}" in:fade={{ duration: 200 }}>
