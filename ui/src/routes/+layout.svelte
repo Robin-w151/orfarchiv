@@ -38,7 +38,7 @@
 <div class={wrapperClass}>
   <header class={headerClass}>
     <h1>
-      <a class={headerTitleClass} href="/" title="Startseite" sveltekit:prefetch>
+      <a class={headerTitleClass} href="/" title="Startseite" data-sveltekit-prefetch>
         <span class="hidden sm:inline">ORF&nbsp;</span><span class="whitespace-nowrap">News Archiv</span>
       </a>
     </h1>
