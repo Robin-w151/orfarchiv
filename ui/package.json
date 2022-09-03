@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev --host",
@@ -30,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.36.1",
     "autoprefixer": "^10.4.8",
+    "canvas": "^2.9.3",
     "classnames": "^2.3.1",
     "compute-scroll-into-view": "^1.0.17",
     "dompurify": "^2.4.0",
