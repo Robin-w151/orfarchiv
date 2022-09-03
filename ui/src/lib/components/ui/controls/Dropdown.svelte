@@ -3,6 +3,7 @@
   import { createPopperActions } from 'svelte-popperjs';
   import { type BtnType, buttonClassFn } from './button.styles';
   import classNames from 'classnames';
+  import Fade from '$lib/components/ui/transitions/Fade.svelte';
 
   export let btnType: BtnType = 'primary';
   export let iconOnly = false;
@@ -26,9 +27,11 @@
   </PopoverButton>
   {#if open}
     <Portal>
-      <PopoverPanel class={dropdownContentClass} use={[[popperContent, popperOptions]]} let:close>
-        <slot name="content" onClose={close} />
-      </PopoverPanel>
+      <Fade>
+        <PopoverPanel class={dropdownContentClass} use={[[popperContent, popperOptions]]} let:close>
+          <slot name="content" onClose={close} />
+        </PopoverPanel>
+      </Fade>
     </Portal>
   {/if}
 </Popover>

@@ -1,10 +1,10 @@
 <script lang="ts">
   import classNames from 'classnames';
   import Item from '$lib/components/ui/content/Item.svelte';
-  import { fade } from 'svelte/transition';
   import { defaultPadding } from '$lib/utils/styles';
   import StoryHeader from '$lib/components/news/story/header/StoryHeader.svelte';
   import StoryContent from '$lib/components/news/story/content/StoryContent.svelte';
+  import Fade from '$lib/components/ui/transitions/Fade.svelte';
 
   export let title: string;
   export let category: string;
@@ -80,9 +80,9 @@
     />
   </div>
   {#if showContent}
-    <div class="content {contentClass}" in:fade={{ duration: 200 }}>
+    <Fade class="content {contentClass}">
       <StoryContent {url} on:collapse={handleStoryContentCollapse} />
-    </div>
+    </Fade>
   {/if}
 </Item>
 
