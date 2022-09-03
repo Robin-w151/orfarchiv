@@ -30,7 +30,6 @@
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.36.1",
     "autoprefixer": "^10.4.8",
-    "canvas": "^2.9.3",
     "classnames": "^2.3.1",
     "compute-scroll-into-view": "^1.0.17",
     "dompurify": "^2.4.0",
