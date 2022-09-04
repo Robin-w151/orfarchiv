@@ -58,30 +58,33 @@ function removePrintWarnings(document: Document): void {
 }
 
 function injectSlideShowImages(optimizedDocument: Document, originalDocument: Document): void {
-  const images = [...originalDocument.querySelectorAll('.oon-slideshow img')] as Array<HTMLImageElement>;
-  if (images.length === 0) {
-    return;
-  }
-
   const slideShowRegexp = /^fotostrecke mit/i;
-  const slideShowHeadline = [...optimizedDocument.querySelectorAll('h3')]
-    .filter((element) => slideShowRegexp.test(element.textContent ?? ''))
-    .reduce((e1, e2) => e2);
+  const slideShowElements = [...originalDocument.querySelectorAll('.oon-slideshow')] as Array<HTMLElement>;
+  const slideShowHeaders = [...optimizedDocument.querySelectorAll('h3')].filter((header) =>
+    slideShowRegexp.test(header.textContent ?? ''),
+  );
 
-  if (!slideShowHeadline) {
+  if (slideShowElements.length !== slideShowHeaders.length) {
     return;
   }
 
-  const imagesWrapper = optimizedDocument.createElement('div');
-  images
-    .map((image) => {
-      image.src = image.getAttribute('data-src') ?? '';
-      image.removeAttribute('class');
-      image.setAttribute('loading', 'lazy');
-      return image;
-    })
-    .forEach((image) => imagesWrapper.appendChild(image));
-  slideShowHeadline.replaceWith(imagesWrapper);
+  for (let i = 0; i < slideShowElements.length; i++) {
+    const slideShowElement = slideShowElements[i];
+    const slideShowHeader = slideShowHeaders[i];
+
+    const imagesWrapper = optimizedDocument.createElement('div');
+    const images = [...slideShowElement.querySelectorAll('img')];
+    images
+      .map((image) => {
+        image.src = image.getAttribute('data-src') ?? '';
+        image.removeAttribute('class');
+        image.setAttribute('loading', 'lazy');
+        return image;
+      })
+      .forEach((image) => imagesWrapper.appendChild(image));
+
+    slideShowHeader.replaceWith(imagesWrapper);
+  }
 }
 
 function adjustAnchorTags(document: Document): void {
