@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
   import ChevronUpIcon from '../../../ui/icons/outline/ChevronUpIcon.svelte';
   import classNames from 'classnames';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
@@ -15,7 +15,7 @@
 
   let isLoading = true;
   let content;
-  let retry = 0;
+  let isClosed = false;
 
   const wrapperClass = classNames('flex flex-col items-center gap-3');
   const contentClass = classNames('cursor-auto');
@@ -33,18 +33,22 @@
     }
   });
 
+  onDestroy(() => {
+    isClosed = true;
+  });
+
   async function fetchContentWithRetry(url: string): Promise<string> {
-    if (retry < MAX_RETRIES) {
-      retry++;
+    for (let retry = 0; retry < MAX_RETRIES && !isClosed; retry++) {
       try {
         return await fetchContent(url);
       } catch (error) {
-        await wait(500 * 2 ** retry);
-        return fetchContentWithRetry(url);
+        if (retry < MAX_RETRIES - 1) {
+          await wait(1000 * 2 ** retry);
+        }
       }
-    } else {
-      throw new Error(`Failed to load story content after ${MAX_RETRIES} retries!`);
     }
+
+    throw new Error(`Failed to load story content after ${MAX_RETRIES} retries!`);
   }
 
   function handleCollapseFieldClick(): void {
