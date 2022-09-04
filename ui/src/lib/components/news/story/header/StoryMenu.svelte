@@ -14,7 +14,7 @@
     'text-blue-800 hover:text-blue-600 hover:bg-blue-100 focus:bg-blue-100',
     'focus:outline-none',
     'rounded-lg cursor-pointer',
-    'transition-colors',
+    'transition',
   ]);
 
   $: shareData = url ? { text: url } : undefined;
