@@ -23,13 +23,7 @@
   $: anySourcesEnabled = hasAnySourcesEnabled($settings);
   $: loadMoreButtonDisabled = $news.nextKey === null;
 
-  const newsFallbackWrapperClass = classNames([
-    defaultPadding,
-    'w-full',
-    'text-lg',
-    'text-gray-800 bg-white',
-    'rounded-lg',
-  ]);
+  const newsFallbackWrapperClass = classNames([defaultPadding, 'w-full', 'text-lg', 'text-gray-800 bg-white']);
 
   onMount(async () => {
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
