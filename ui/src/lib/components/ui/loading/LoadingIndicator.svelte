@@ -4,7 +4,6 @@
   export let large = false;
 
   const ringClass = classNames([
-    'loading-ring',
     'flex justify-center items-center',
     'w-full h-full aspect-square',
     large ? 'border-8' : 'border-4',
@@ -12,7 +11,6 @@
     'rounded-full',
   ]);
   const innerRingClass = classNames([
-    'loading-inner-ring',
     large ? 'w-11/12' : 'w-5/6',
     'aspect-square',
     large ? 'border-8' : 'border-4',
@@ -21,8 +19,8 @@
   ]);
 </script>
 
-<div class={ringClass}>
-  <div class={innerRingClass} />
+<div class="loading-ring {ringClass}">
+  <div class="loading-inner-ring {innerRingClass}" />
 </div>
 
 <style>
