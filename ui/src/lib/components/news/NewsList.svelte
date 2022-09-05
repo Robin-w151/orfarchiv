@@ -6,6 +6,7 @@
   import Story from '$lib/components/news/story/Story.svelte';
 
   export let storyBuckets: Array<NewsBucket> | undefined = undefined;
+  export let isLoading: boolean;
 
   const listClass = classNames(['cursor-pointer']);
 </script>
@@ -13,7 +14,7 @@
 {#if storyBuckets}
   {#each storyBuckets as bucket (bucket.name)}
     {#if bucket.stories.length > 0}
-      <Section title={bucket.name}>
+      <Section title={bucket.name} {isLoading}>
         <SectionList class={listClass}>
           {#each bucket.stories as story (story.id)}
             <li>

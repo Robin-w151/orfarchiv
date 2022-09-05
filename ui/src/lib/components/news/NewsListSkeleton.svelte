@@ -4,7 +4,7 @@
   import StorySkeleton from './story/StorySkeleton.svelte';
 </script>
 
-<Section title="Aktuell">
+<Section title="Aktuell" isLoading>
   <SectionList>
     <li>
       <StorySkeleton />
