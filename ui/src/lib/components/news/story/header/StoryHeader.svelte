@@ -15,13 +15,7 @@
   const infoClass = classNames(['flex flex-col flex-1 items-start', 'focus:text-blue-800', 'outline-none']);
   const metadataClass = classNames(['text-sm', 'text-gray-600']);
 
-  let infoRef;
-
   $: sourceLabel = getSourceLabel(source);
-
-  export function focus(): void {
-    infoRef.focus();
-  }
 
   function getSourceLabel(source: string): string | undefined {
     if (!source || source === 'news') {
@@ -31,7 +25,7 @@
   }
 </script>
 
-<div class={infoClass} on:click on:keydown bind:this={infoRef} tabindex="0">
+<div class={infoClass} on:click on:keydown tabindex="0">
   <span>{title}</span>
   <span class={metadataClass}
     >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp)}</span

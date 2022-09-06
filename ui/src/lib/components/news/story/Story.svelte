@@ -13,7 +13,6 @@
   export let source: string;
 
   let itemRef;
-  let headerRef;
   let showContentInitial = false;
   let showContent = false;
 
@@ -40,7 +39,6 @@
   function handleContentViewCollapse(showContent: boolean): void {
     if (showContentInitial && !showContent) {
       itemRef.scrollIntoView();
-      headerRef.focus();
     }
 
     if (!showContentInitial) {
@@ -77,7 +75,6 @@
       {source}
       on:click={handleHeaderClick}
       on:keydown={handleHeaderKeydown}
-      bind:this={headerRef}
     />
   </div>
   {#if showContent}
