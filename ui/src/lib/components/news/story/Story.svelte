@@ -68,7 +68,7 @@
 </script>
 
 <Item bind:this={itemRef} noGap noPadding>
-  <div class="header {headerClass}" on:click={handleHeaderWrapperClick} bind:this={headerRef}>
+  <div class="header {headerClass}" on:click={handleHeaderWrapperClick}>
     <StoryHeader
       {title}
       {category}
@@ -77,6 +77,7 @@
       {source}
       on:click={handleHeaderClick}
       on:keydown={handleHeaderKeydown}
+      bind:this={headerRef}
     />
   </div>
   {#if showContent}
