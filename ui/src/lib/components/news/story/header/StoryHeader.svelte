@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Dropdown from '$lib/components/ui/controls/Dropdown.svelte';
   import classNames from 'classnames';
   import { formatTimestamp } from '$lib/utils/datetime.js';
   import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
   import StoryMenu from '$lib/components/news/story/header/StoryMenu.svelte';
   import { sources } from '$lib/models/settings';
+  import Popover from '$lib/components/ui/controls/Popover.svelte';
 
   export let title;
   export let category;
@@ -31,7 +31,7 @@
     >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp)}</span
   >
 </div>
-<Dropdown btnType="secondary" iconOnly placement="bottom-end" let:onClose>
-  <EllipsisVerticalIcon slot="button" />
+<Popover btnType="secondary" iconOnly placement="bottom-end" let:onClose>
+  <EllipsisVerticalIcon slot="button-content" />
   <StoryMenu {url} {onClose} slot="content" />
-</Dropdown>
+</Popover>
