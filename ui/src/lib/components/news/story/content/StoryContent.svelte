@@ -18,7 +18,7 @@
   let isClosed = false;
 
   const wrapperClass = classNames('flex flex-col items-center gap-3');
-  const contentClass = classNames('cursor-auto');
+  const contentClass = classNames('cursor-auto w-full');
   const contentSourceClass = classNames('text-sm text-gray-600');
   const errorLinkClass = classNames(['text-blue-800']);
   const collapseContentClass = classNames(['py-1.5 w-48 max-w-full']);
