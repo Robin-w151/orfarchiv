@@ -268,6 +268,7 @@ test.describe('NewsPage', () => {
       await newsPage.mockSearchNewsApi(newsMock);
       await newsPage.clearTextFilter();
 
+      await expect(newsPage.searchInput).toHaveValue('');
       const expectedCount = newsMock.stories.length;
       await expect(newsPage.newsListItems).toHaveCount(expectedCount);
     });
