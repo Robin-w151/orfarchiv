@@ -397,7 +397,7 @@ async function cleanupNewsPage(page, testInfo) {
 }
 
 function screenshotPath(testInfo) {
-  const [_, ...paths] = testInfo.titlePath;
+  const [, ...paths] = testInfo.titlePath;
   const path = paths.join('-').replace(/\s/g, '-') + '.png';
   return join(screenshotsPath, path);
 }
