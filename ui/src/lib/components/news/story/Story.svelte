@@ -38,7 +38,7 @@
 
   function handleContentViewCollapse(showContent: boolean): void {
     if (showContentInitial && !showContent) {
-      itemRef.scrollIntoView();
+      setTimeout(() => itemRef.scrollIntoView());
     }
 
     if (!showContentInitial) {
