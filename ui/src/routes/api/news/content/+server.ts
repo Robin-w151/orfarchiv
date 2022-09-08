@@ -69,21 +69,33 @@ function injectSlideShowImages(optimizedDocument: Document, originalDocument: Do
   }
 
   for (let i = 0; i < slideShowElements.length; i++) {
-    const slideShowElement = slideShowElements[i];
+    const slideShowSection = slideShowElements[i];
     const slideShowHeader = slideShowHeaders[i];
 
-    const imagesWrapper = optimizedDocument.createElement('div');
-    const images = [...slideShowElement.querySelectorAll('img')];
-    images
-      .map((image) => {
-        image.src = image.getAttribute('data-src') ?? '';
-        image.removeAttribute('class');
-        image.setAttribute('loading', 'lazy');
-        return image;
-      })
-      .forEach((image) => imagesWrapper.appendChild(image));
+    if (slideShowHeader.parentElement?.querySelector('h3 + div')) {
+      continue;
+    }
 
-    slideShowHeader.replaceWith(imagesWrapper);
+    const slideShowList = slideShowSection.querySelector('.oon-slideshow-list');
+    slideShowList?.removeAttribute('class');
+
+    const footers = [...slideShowSection.querySelectorAll('figure > footer')];
+    footers.forEach((footer) => {
+      footer.parentElement?.removeChild(footer);
+    });
+
+    const images = [...slideShowSection.querySelectorAll('img')];
+    images.forEach((image) => {
+      image.src = image.getAttribute('data-src') ?? '';
+      image.srcset = image.getAttribute('data-srcset') ?? '';
+      image.removeAttribute('class');
+      image.setAttribute('loading', 'lazy');
+      return image;
+    });
+
+    if (slideShowList) {
+      slideShowHeader.after(slideShowList);
+    }
   }
 }
 
