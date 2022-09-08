@@ -25,12 +25,12 @@
   }
 </script>
 
-<div class={infoClass} on:click on:keydown tabindex="0">
-  <span>{title}</span>
+<header class={infoClass} on:click on:keydown tabindex="0">
+  <h3>{title}</h3>
   <span class={metadataClass}
     >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp)}</span
   >
-</div>
+</header>
 <Popover btnType="secondary" iconOnly placement="bottom-end" let:onClose>
   <EllipsisVerticalIcon slot="button-content" />
   <StoryMenu {url} {onClose} slot="content" />

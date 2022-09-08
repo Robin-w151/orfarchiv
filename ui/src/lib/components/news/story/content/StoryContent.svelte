@@ -68,10 +68,10 @@
   {#if isLoading}
     <StoryContentSkeleton />
   {:else if content}
-    <div class="story-content {contentClass}" data-testid="story-content">
+    <article class="story-content {contentClass}" data-testid="story-content">
       {@html content}
       <div class={contentSourceClass}>Quelle: <a href="https://orf.at" target="_blank" rel="noopener">orf.at</a></div>
-    </div>
+    </article>
   {:else}
     <p data-testid="story-content-error">
       Inhalt kann nicht angezeigt werden. Klicken Sie <a

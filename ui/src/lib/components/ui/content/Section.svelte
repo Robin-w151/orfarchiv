@@ -18,17 +18,17 @@
   const contentClass = classNames(['w-full']);
 </script>
 
-<div class={sectionClass}>
+<section class={sectionClass}>
   {#if title}
-    <div class={titleClass}>
+    <header class={titleClass}>
       {#if isLoading}
         <ThreeDotsLoadingIndicator class="h-7" />
       {:else}
         <h2>{title}</h2>
       {/if}
-    </div>
+    </header>
   {/if}
   <div class={contentClass}>
     <slot />
   </div>
-</div>
+</section>
