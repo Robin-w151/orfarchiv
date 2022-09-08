@@ -5,6 +5,7 @@
   import StoryHeader from '$lib/components/news/story/header/StoryHeader.svelte';
   import StoryContent from '$lib/components/news/story/content/StoryContent.svelte';
   import Fade from '$lib/components/ui/transitions/Fade.svelte';
+  import { tick } from 'svelte';
 
   export let title: string;
   export let category: string;
@@ -38,7 +39,7 @@
 
   function handleContentViewCollapse(showContent: boolean): void {
     if (showContentInitial && !showContent) {
-      setTimeout(() => itemRef.scrollIntoView());
+      tick().then(() => itemRef.scrollIntoView());
     }
 
     if (!showContentInitial) {
