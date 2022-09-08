@@ -215,6 +215,10 @@ test.describe('NewsPage', () => {
     await cleanupNewsPage(page, testInfo);
   });
 
+  test.afterAll(async ({ browser }) => {
+    await browser.close();
+  });
+
   test.describe('Search', () => {
     let newsPage;
 
