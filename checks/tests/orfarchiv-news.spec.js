@@ -121,6 +121,7 @@ class NewsPage {
     this.loadUpdateLink = page.locator("header a[title='Nach Updates suchen']");
     this.loadMoreButton = page.locator('main > div > button');
     this.searchInput = page.locator('main input');
+    this.clearSearchButton = page.locator('main input + button');
     this.newsListItems = page.locator('main ul > li');
     this.newsListSections = page.locator('main section');
     this.newsNoContentInfo = page.locator('text=Keine News vorhanden');
@@ -192,6 +193,12 @@ class NewsPage {
     await search;
   }
 
+  async clearTextFilter() {
+    const search = this.waitForSearch();
+    await this.clearSearchButton.click();
+    await search;
+  }
+
   async searchNewsUpdates() {
     const search = this.waitForSearch();
     await this.loadUpdateLink.click();
@@ -227,25 +234,42 @@ test.describe('NewsPage', () => {
     });
 
     test('fetch news', async () => {
-      await expect(newsPage.newsListItems).toHaveCount(5);
+      const expectedCount = newsMock.stories.length;
+      await expect(newsPage.newsListItems).toHaveCount(expectedCount);
     });
 
     test('fetch news updates', async () => {
       await newsPage.mockSearchNewsApi(newsMockUpdate);
       await newsPage.searchNewsUpdates();
-      await expect(newsPage.newsListItems).toHaveCount(6);
+
+      const expectedCount = newsMock.stories.length + newsMockUpdate.stories.length;
+      await expect(newsPage.newsListItems).toHaveCount(expectedCount);
     });
 
     test('enter filter', async () => {
       await newsPage.mockSearchNewsApi(newsMockWithFilter, 'bei');
       await newsPage.searchNews('bei');
-      await expect(newsPage.newsListItems).toHaveCount(2);
+
+      const expectedCount = newsMockWithFilter.stories.length;
+      await expect(newsPage.newsListItems).toHaveCount(expectedCount);
     });
 
     test('enter filter without findings', async () => {
       await newsPage.mockSearchNewsApi(newsMockNoContent, 'suche ohne ergebnis');
       await newsPage.searchNews('suche ohne ergebnis');
+
       await expect(newsPage.newsNoContentInfo).toBeVisible();
+    });
+
+    test('clear filter', async () => {
+      await newsPage.mockSearchNewsApi(newsMockNoContent, 'suche ohne ergebnis');
+      await newsPage.searchNews('suche ohne ergebnis');
+
+      await newsPage.mockSearchNewsApi(newsMock);
+      await newsPage.clearTextFilter();
+
+      const expectedCount = newsMock.stories.length;
+      await expect(newsPage.newsListItems).toHaveCount(expectedCount);
     });
   });
 
@@ -258,10 +282,10 @@ test.describe('NewsPage', () => {
       const [s1, s2, s3, s4, s5] = newsMockWithAdjustedTimestamps.stories;
 
       s1.timestamp = nowMinusHours(0);
-      s2.timestamp = nowMinusHours(1);
-      s3.timestamp = nowMinusHours(2);
-      s4.timestamp = nowMinusHours(24);
-      s5.timestamp = nowMinusHours(48);
+      s2.timestamp = nowMinusHours(2);
+      s3.timestamp = nowMinusHours(24);
+      s4.timestamp = nowMinusHours(48);
+      s5.timestamp = nowMinusHours(168);
     });
 
     test.beforeEach(async ({ page }) => {
@@ -271,7 +295,7 @@ test.describe('NewsPage', () => {
     test('Aktuell', async () => {
       const sectionAktuell = newsPage.getNewsListSection(0);
       await expect(sectionAktuell.locator('h2')).toHaveText('Aktuell');
-      await expect(sectionAktuell.locator('li')).toHaveCount(2);
+      await expect(sectionAktuell.locator('li')).toHaveCount(1);
     });
 
     test('Letzte 24h', async () => {
@@ -289,6 +313,12 @@ test.describe('NewsPage', () => {
     test('Letzte 7 Tage', async () => {
       const sectionAktuell = newsPage.getNewsListSection(3);
       await expect(sectionAktuell.locator('h2')).toHaveText('Letzte 7 Tage');
+      await expect(sectionAktuell.locator('li')).toHaveCount(1);
+    });
+
+    test('Archiv', async () => {
+      const sectionAktuell = newsPage.getNewsListSection(4);
+      await expect(sectionAktuell.locator('h2')).toHaveText('Archiv');
       await expect(sectionAktuell.locator('li')).toHaveCount(1);
     });
   });
