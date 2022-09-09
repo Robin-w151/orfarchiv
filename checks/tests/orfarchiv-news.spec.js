@@ -118,6 +118,7 @@ const contentMock = `<div><p>${contentMockText}</p></div>`;
 class NewsPage {
   constructor(page) {
     this.page = page;
+    this.titleLink = page.locator('header > h1 > a');
     this.loadUpdateLink = page.locator("header a[title='Nach Updates suchen']");
     this.loadMoreButton = page.locator('main > div > button');
     this.searchInput = page.locator('main input');
@@ -231,6 +232,11 @@ test.describe('NewsPage', () => {
 
     test.beforeEach(async ({ page }) => {
       newsPage = await setupNewsPage(page, newsMock);
+    });
+
+    test('title', async () => {
+      await expect(newsPage.titleLink).toHaveAttribute('href', '/');
+      await expect(newsPage.titleLink).toHaveText('ORF Archiv');
     });
 
     test('fetch news', async () => {

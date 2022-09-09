@@ -1,6 +1,6 @@
 {
   "name": "checks",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "scripts": {
     "test": "playwright test",
     "test:debug": "playwright test --debug"
