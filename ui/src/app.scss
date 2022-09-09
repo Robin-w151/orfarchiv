@@ -11,11 +11,11 @@
   }
 }
 
-body {
-  font-family: 'Roboto', sans-serif;
-}
-
 @layer components {
+  body {
+    @apply font-sans;
+  }
+
   .story-content {
     @apply flex flex-col;
 

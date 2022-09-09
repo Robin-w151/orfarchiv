@@ -2,13 +2,13 @@
   import classNames from 'classnames';
 
   const loadingIndicatorClass = classNames(['flex justify-center items-center gap-2', $$props['class']]);
-  const dotClass = classNames(['w-2 h-2', 'bg-blue-800', 'rounded-full']);
+  const dotClass = classNames(['w-2 h-2', 'rounded-full']);
 </script>
 
 <div class="loading-indicator {loadingIndicatorClass}">
-  <div class="dot-1 {dotClass}" />
-  <div class="dot-2 {dotClass}" />
-  <div class="dot-3 {dotClass}" />
+  <div class="dot-1 bg-fuchsia-500 {dotClass}" />
+  <div class="dot-2 bg-violet-600 {dotClass}" />
+  <div class="dot-3 bg-blue-700 {dotClass}" />
 </div>
 
 <style lang="scss">

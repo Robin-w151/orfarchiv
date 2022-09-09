@@ -11,7 +11,7 @@
     'flex gap-2 justify-center items-center sticky top-0 z-20',
     defaultPadding,
     'w-full text-lg',
-    'text-blue-900 bg-white/80',
+    'text-blue-700 bg-white/80',
     'border-solid border-b-2',
     'backdrop-blur-sm',
   ]);

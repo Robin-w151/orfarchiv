@@ -1,6 +1,5 @@
 <script lang="ts">
   import '../app.scss';
-  import classNames from 'classnames';
   import CogIcon from '$lib/components/ui/icons/outline/CogIcon.svelte';
   import RefreshIcon from '$lib/components/ui/icons/outline/RefreshIcon.svelte';
   import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
@@ -19,16 +18,21 @@
     });
   }
 
-  const wrapperClass = classNames(['flex flex-col gap-2 sm:gap-3', 'p-2 pb-4 sm:p-4', 'w-screen max-w-screen-lg']);
-  const headerClass = classNames([
-    'flex justify-between items-center gap-6',
-    defaultPadding,
-    'text-3xl',
-    'text-blue-900 bg-white',
-  ]);
-  const headerTitleClass = classNames(['outline-none']);
-  const headerActionsClass = classNames(['flex gap-2']);
-  const mainClass = classNames(['flex flex-col gap-2 sm:gap-3']);
+  const wrapperClass = `
+    flex flex-col gap-2 sm:gap-3
+    p-2 pb-4 sm:p-4
+    w-screen max-w-screen-lg
+  `;
+  const headerClass = `
+    flex justify-between items-center gap-6
+    ${defaultPadding}
+    text-3xl
+    text-blue-700 bg-white
+  `;
+  const headerTitleClass = 'outline-none';
+  const headerTitleTextClass = 'text-transparent bg-gradient-to-l from-blue-700 to-fuchsia-600 bg-clip-text';
+  const headerActionsClass = 'flex gap-2';
+  const mainClass = 'flex flex-col gap-2 sm:gap-3';
 
   function handleRefreshButtonClick() {
     refreshNews.notify();
@@ -39,7 +43,7 @@
   <header class={headerClass}>
     <h1>
       <a class={headerTitleClass} href="/" title="Startseite" data-sveltekit-prefetch>
-        <span class="hidden sm:inline">ORF&nbsp;</span><span class="whitespace-nowrap">News Archiv</span>
+        <span class={headerTitleTextClass}>ORF Archiv</span>
       </a>
     </h1>
     <div class={headerActionsClass}>

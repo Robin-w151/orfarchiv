@@ -12,7 +12,7 @@
   export let timestamp;
   export let source;
 
-  const infoClass = classNames(['flex flex-col flex-1 items-start', 'focus:text-blue-800', 'outline-none']);
+  const infoClass = classNames(['flex flex-col flex-1 items-start', 'focus:text-blue-700', 'outline-none']);
   const metadataClass = classNames(['text-sm', 'text-gray-600']);
 
   $: sourceLabel = getSourceLabel(source);

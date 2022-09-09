@@ -22,7 +22,7 @@
   $: headerClass = classNames([
     'flex flex-row items-center gap-3',
     defaultPadding,
-    'hover:text-blue-800',
+    'hover:text-blue-700',
     showContent && 'sticky z-10 border-solid border-b-2 bg-white',
     'cursor-pointer',
     'transition',
