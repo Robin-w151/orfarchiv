@@ -11,7 +11,7 @@ const primaryClass = (focus: boolean) =>
 
 const secondaryClass = (focus: boolean) =>
   classNames([
-    'text-blue-700 hover:text-fuchsia-600 hover:bg-blue-100',
+    'text-blue-700 hover:text-fuchsia-600 hover:bg-gray-100',
     focus && 'focus:outline-none focus:ring-2 ring-blue-700',
     'hover:shadow-lg',
   ]);
