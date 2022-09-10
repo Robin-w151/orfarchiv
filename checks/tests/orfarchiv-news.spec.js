@@ -358,7 +358,7 @@ test.describe('NewsPage', () => {
       const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
       await storyMenu.click();
 
-      const articleLink = newsPage.popover.locator('a');
+      const articleLink = newsPage.popover.locator('a').nth(0);
       await articleLink.hover();
       await expect(articleLink).toBeVisible();
 
@@ -374,6 +374,19 @@ test.describe('NewsPage', () => {
       const shareButton = newsPage.popover.locator('button');
       await shareButton.hover();
       await expect(shareButton).toBeVisible();
+    });
+
+    test('support link', async () => {
+      const storyIndex = 4;
+      const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
+      await storyMenu.click();
+
+      const articleLink = newsPage.popover.locator('a').nth(1);
+      await articleLink.hover();
+      await expect(articleLink).toBeVisible();
+
+      const expectedHref = 'https://der.orf.at/kontakt/orf-online-angebote100.html';
+      await expect(articleLink).toHaveAttribute('href', expectedHref);
     });
   });
 
