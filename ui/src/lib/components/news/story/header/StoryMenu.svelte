@@ -1,21 +1,26 @@
 <script lang="ts">
-  import classNames from 'classnames';
   import ShareIcon from '$lib/components/ui/icons/outline/ShareIcon.svelte';
   import NewspaperIcon from '$lib/components/ui/icons/outline/NewspaperIcon.svelte';
   import ClipboardDocumentIcon from '$lib/components/ui/icons/outline/ClipboardDocumentIcon.svelte';
+  import QuestionMarkCircleIcon from '$lib/components/ui/icons/outline/QuestionMarkCircleIcon.svelte';
 
   export let url: string;
   export let onClose: any;
 
-  const menuClass = classNames(['flex flex-col gap-2', 'p-2', 'bg-white', 'rounded-lg shadow-md']);
-  const menuButtonClass = classNames([
-    'flex gap-2',
-    'p-2',
-    'text-blue-700 hover:text-blue-600 hover:bg-blue-100 focus:bg-blue-100',
-    'focus:outline-none',
-    'rounded-lg cursor-pointer',
-    'transition',
-  ]);
+  const menuClass = `
+    flex flex-col gap-2
+    p-2
+    bg-white
+    rounded-lg shadow-md
+  `;
+  const menuButtonClass = `
+    flex gap-2
+    p-2
+    text-blue-700 hover:text-blue-600 hover:bg-blue-100 focus:bg-blue-100
+    focus:outline-none
+    rounded-lg cursor-pointer
+    transition
+  `;
 
   $: shareData = url ? { text: url } : undefined;
   $: showShareButton = isWebShareAvailable(shareData);
@@ -42,6 +47,10 @@
     navigator.clipboard.writeText(url);
     onClose();
   }
+
+  function handleOpenSupportClick() {
+    onClose();
+  }
 </script>
 
 <div class={menuClass}>
@@ -52,7 +61,7 @@
   {#if showShareButton}
     <button class={menuButtonClass} on:click={handleShareArticleClick}>
       <ShareIcon />
-      <span>Teilen</span>
+      <span>Artikel teilen</span>
     </button>
   {:else if showCopyToClipboardButton}
     <button class={menuButtonClass} on:click={handleCopyToClipboardClick}>
@@ -60,4 +69,14 @@
       <span>In Zwischenablage kopieren</span>
     </button>
   {/if}
+  <a
+    class={menuButtonClass}
+    href="https://der.orf.at/kontakt/orf-online-angebote100.html"
+    target="_blank"
+    rel="noopener"
+    on:click={handleOpenSupportClick}
+  >
+    <QuestionMarkCircleIcon />
+    <span>Kundendienst</span>
+  </a>
 </div>
