@@ -35,7 +35,7 @@ export const buttonClassFn = ({
     btnType === 'primary' && primaryClass(focusEnabled),
     btnType === 'secondary' && secondaryClass(focusEnabled),
     'rounded-md',
-    'transition delay-75',
+    'transition delay-50',
     'disabled:cursor-not-allowed',
     clazz,
   ]);
