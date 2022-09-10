@@ -29,7 +29,7 @@
     text-3xl
     text-blue-700 bg-white
   `;
-  const headerTitleClass = 'outline-none';
+  const headerTitleClass = 'focus:bg-blue-100 outline-none rounded-md';
   const headerTitleTextClass = 'text-transparent bg-gradient-to-l from-blue-700 to-fuchsia-600 bg-clip-text';
   const headerActionsClass = 'flex gap-2';
   const mainClass = 'flex flex-col gap-2 sm:gap-3';

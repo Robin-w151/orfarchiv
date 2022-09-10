@@ -16,7 +16,7 @@
   const menuItemClass = `
     flex gap-2
     p-2
-    text-blue-700 hover:text-fuchsia-600 hover:bg-gray-100 focus:bg-gray-100
+    text-blue-700 hover:text-fuchsia-600 focus:text-fuchsia-600 hover:bg-gray-100 focus:bg-gray-100
     focus:outline-none
     rounded-lg cursor-pointer
     transition

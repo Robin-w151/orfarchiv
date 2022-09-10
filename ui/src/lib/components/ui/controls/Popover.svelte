@@ -16,7 +16,7 @@
     modifiers: [{ name: 'offset', options: { offset: [0, 8] } }],
   };
 
-  $: dropdownButtonClass = buttonClassFn({ btnType, iconOnly, disabled });
+  $: dropdownButtonClass = buttonClassFn({ btnType, iconOnly });
   const dropdownContentClass = classNames(['z-40']);
 </script>
 

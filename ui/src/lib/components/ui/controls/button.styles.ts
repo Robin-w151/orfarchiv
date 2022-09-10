@@ -2,43 +2,41 @@ import classNames from 'classnames';
 
 export type BtnType = 'primary' | 'secondary';
 
-const primaryClass = (focus: boolean) =>
+const primaryClass = (focusEnabled: boolean) =>
   classNames([
     'text-white bg-blue-700 hover:bg-blue-600 disabled:bg-gray-600',
-    focus && 'focus:outline-none focus:ring-2 ring-offset-2 ring-blue-700 disabled:ring-gray-600',
+    focusEnabled && 'focus:outline-none focus:ring-2 ring-offset-2 ring-blue-700 disabled:ring-gray-600',
     'shadow-lg',
   ]);
 
-const secondaryClass = (focus: boolean) =>
+const secondaryClass = (focusEnabled: boolean) =>
   classNames([
     'text-blue-700 hover:text-fuchsia-600 hover:bg-gray-100',
-    focus && 'focus:outline-none focus:ring-2 ring-blue-700',
+    focusEnabled && 'focus:text-fuchsia-600 focus:outline-none focus:ring-2 ring-blue-700',
     'hover:shadow-lg',
   ]);
 
 export const buttonClassFn = ({
   btnType,
   iconOnly,
-  noFocus,
-  disabled,
+  focusDisabled,
   clazz,
 }: {
   btnType: BtnType;
   iconOnly: boolean;
-  noFocus?: boolean;
-  disabled: boolean;
+  focusDisabled?: boolean;
   clazz?: string;
 }) => {
-  const focus = noFocus === undefined ? true : !noFocus;
+  const focusEnabled = focusDisabled === undefined ? true : !focusDisabled;
   return classNames([
     'flex justify-center',
     iconOnly ? 'p-2' : 'px-3 py-2',
     !iconOnly && 'w-28 min-w-fit',
-    btnType === 'primary' && primaryClass(focus),
-    btnType === 'secondary' && secondaryClass(focus),
+    btnType === 'primary' && primaryClass(focusEnabled),
+    btnType === 'secondary' && secondaryClass(focusEnabled),
     'rounded-md',
-    'transition',
-    disabled && 'cursor-not-allowed',
+    'transition delay-75',
+    'disabled:cursor-not-allowed',
     clazz,
   ]);
 };
