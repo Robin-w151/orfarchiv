@@ -13,10 +13,10 @@
     bg-white
     rounded-lg shadow-md
   `;
-  const menuButtonClass = `
+  const menuItemClass = `
     flex gap-2
     p-2
-    text-blue-700 hover:text-blue-600 hover:bg-blue-100 focus:bg-blue-100
+    text-blue-700 hover:text-fuchsia-600 hover:bg-blue-100 focus:bg-blue-100
     focus:outline-none
     rounded-lg cursor-pointer
     transition
@@ -54,23 +54,23 @@
 </script>
 
 <div class={menuClass}>
-  <a class={menuButtonClass} href={url} target="_blank" rel="noopener" on:click={handleOpenArticleClick}>
+  <a class={menuItemClass} href={url} target="_blank" rel="noopener" on:click={handleOpenArticleClick}>
     <NewspaperIcon />
     <span>Link zum Artikel</span>
   </a>
   {#if showShareButton}
-    <button class={menuButtonClass} on:click={handleShareArticleClick}>
+    <button class={menuItemClass} on:click={handleShareArticleClick}>
       <ShareIcon />
       <span>Artikel teilen</span>
     </button>
   {:else if showCopyToClipboardButton}
-    <button class={menuButtonClass} on:click={handleCopyToClipboardClick}>
+    <button class={menuItemClass} on:click={handleCopyToClipboardClick}>
       <ClipboardDocumentIcon />
       <span>In Zwischenablage kopieren</span>
     </button>
   {/if}
   <a
-    class={menuButtonClass}
+    class={menuItemClass}
     href="https://der.orf.at/kontakt/orf-online-angebote100.html"
     target="_blank"
     rel="noopener"
