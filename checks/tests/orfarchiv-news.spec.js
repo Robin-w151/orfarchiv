@@ -59,6 +59,23 @@ const newsMock = {
     type: 'next',
   },
 };
+const newsMockMore = {
+  stories: [
+    {
+      id: 'noe:3172657',
+      title: 'E-Bike-Lenker fuhr gegen Lkw und starb',
+      category: 'Chronik',
+      url: 'https://noe.orf.at/stories/3172657/',
+      timestamp: '2022-09-07T16:33:49.000Z',
+      source: 'noe',
+    },
+  ],
+  nextKey: {
+    id: 'noe:3172657',
+    timestamp: '2022-09-07T16:33:49.000Z',
+    type: 'next',
+  },
+};
 const newsMockUpdate = {
   stories: [
     {
@@ -194,15 +211,21 @@ class NewsPage {
     await search;
   }
 
-  async clearTextFilter() {
-    const search = this.waitForSearch();
-    await this.clearSearchButton.click();
-    await search;
-  }
-
   async searchNewsUpdates() {
     const search = this.waitForSearch();
     await this.loadUpdateLink.click();
+    await search;
+  }
+
+  async searchMoreNews() {
+    const search = this.waitForSearch();
+    await this.loadMoreButton.click();
+    await search;
+  }
+
+  async clearTextFilter() {
+    const search = this.waitForSearch();
+    await this.clearSearchButton.click();
     await search;
   }
 
@@ -219,6 +242,27 @@ class NewsPage {
 }
 
 test.describe('NewsPage', () => {
+  let log;
+
+  test.beforeEach(async ({ page }) => {
+    log = [];
+    const logCall = (message) => log.push(message);
+    await page.exposeFunction('logCall', logCall);
+    await page.addInitScript(() => {
+      // eslint-disable-next-line no-undef
+      const navigator = window.navigator;
+
+      navigator.canShare = (data) => {
+        logCall(`canShare: ${data?.text}`);
+        return true;
+      };
+
+      navigator.share = (data) => {
+        logCall(`share: ${data?.text}`);
+      };
+    });
+  });
+
   test.afterEach(async ({ page }, testInfo) => {
     await cleanupNewsPage(page, testInfo);
   });
@@ -227,7 +271,7 @@ test.describe('NewsPage', () => {
     await browser.close();
   });
 
-  test.describe('Search', () => {
+  test.describe('Site', () => {
     let newsPage;
 
     test.beforeEach(async ({ page }) => {
@@ -238,17 +282,33 @@ test.describe('NewsPage', () => {
       await expect(newsPage.titleLink).toHaveAttribute('href', '/');
       await expect(newsPage.titleLink).toHaveText('ORF Archiv');
     });
+  });
 
-    test('fetch news', async () => {
+  test.describe('Search', () => {
+    let newsPage;
+
+    test.beforeEach(async ({ page }) => {
+      newsPage = await setupNewsPage(page, newsMock);
+    });
+
+    test('search news', async () => {
       const expectedCount = newsMock.stories.length;
       await expect(newsPage.newsListItems).toHaveCount(expectedCount);
     });
 
-    test('fetch news updates', async () => {
+    test('search news updates', async () => {
       await newsPage.mockSearchNewsApi(newsMockUpdate);
       await newsPage.searchNewsUpdates();
 
       const expectedCount = newsMock.stories.length + newsMockUpdate.stories.length;
+      await expect(newsPage.newsListItems).toHaveCount(expectedCount);
+    });
+
+    test('search more news', async () => {
+      await newsPage.mockSearchNewsApi(newsMockMore);
+      await newsPage.searchMoreNews();
+
+      const expectedCount = newsMock.stories.length + newsMockMore.stories.length;
       await expect(newsPage.newsListItems).toHaveCount(expectedCount);
     });
 
@@ -353,7 +413,7 @@ test.describe('NewsPage', () => {
       await expect(storyInfo).toHaveText(expectedStoryInfo);
     });
 
-    test('article link', async () => {
+    test('article link', async ({ page }) => {
       const storyIndex = 2;
       const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
       await storyMenu.click();
@@ -364,6 +424,9 @@ test.describe('NewsPage', () => {
 
       const expectedHref = newsMock.stories[storyIndex].url;
       await expect(articleLink).toHaveAttribute('href', expectedHref);
+
+      const newTab = await openLinkInNewTab(page, articleLink);
+      await expect(newTab).toHaveURL(expectedHref);
     });
 
     test('share button', async () => {
@@ -374,19 +437,27 @@ test.describe('NewsPage', () => {
       const shareButton = newsPage.popover.locator('button');
       await shareButton.hover();
       await expect(shareButton).toBeVisible();
+
+      await shareButton.click();
+
+      const expectedClipboardText = newsMock.stories[storyIndex].url;
+      await expect(log).toEqual([`canShare: ${expectedClipboardText}`, `share: ${expectedClipboardText}`]);
     });
 
-    test('support link', async () => {
+    test('support link', async ({ page }) => {
       const storyIndex = 4;
       const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
       await storyMenu.click();
 
-      const articleLink = newsPage.popover.locator('a').nth(1);
-      await articleLink.hover();
-      await expect(articleLink).toBeVisible();
+      const supportLink = newsPage.popover.locator('a').nth(1);
+      await supportLink.hover();
+      await expect(supportLink).toBeVisible();
 
       const expectedHref = 'https://der.orf.at/kontakt/orf-online-angebote100.html';
-      await expect(articleLink).toHaveAttribute('href', expectedHref);
+      await expect(supportLink).toHaveAttribute('href', expectedHref);
+
+      const newTab = await openLinkInNewTab(page, supportLink);
+      await expect(newTab).toHaveURL(expectedHref);
     });
   });
 
@@ -450,4 +521,10 @@ function screenshotPath(testInfo) {
   const [, ...paths] = testInfo.titlePath;
   const path = paths.join('-').replace(/\s/g, '-') + '.png';
   return join(screenshotsPath, path);
+}
+
+async function openLinkInNewTab(page, locator) {
+  const newTab$ = page.waitForEvent('popup');
+  await locator.click();
+  return newTab$;
 }

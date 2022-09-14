@@ -3,7 +3,7 @@ require('dotenv-flow').config({ silent: true });
 module.exports = {
   timeout: 10000,
   globalTimeout: 600000,
-  retries: 2,
+  retries: 0,
   use: {
     headless: true,
     browserName: 'chromium',
