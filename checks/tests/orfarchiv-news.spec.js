@@ -413,7 +413,7 @@ test.describe('NewsPage', () => {
       await expect(storyInfo).toHaveText(expectedStoryInfo);
     });
 
-    test('article link', async ({ page }) => {
+    test('article link', async () => {
       const storyIndex = 2;
       const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
       await storyMenu.click();
@@ -423,10 +423,7 @@ test.describe('NewsPage', () => {
       await expect(articleLink).toBeVisible();
 
       const expectedHref = newsMock.stories[storyIndex].url;
-      await expect(articleLink).toHaveAttribute('href', expectedHref);
-
-      const newTab = await openLinkInNewTab(page, articleLink);
-      await expect(newTab).toHaveURL(expectedHref);
+      await expectExternalLink(articleLink, expectedHref);
     });
 
     test('share button', async () => {
@@ -444,7 +441,7 @@ test.describe('NewsPage', () => {
       await expect(log).toEqual([`canShare: ${expectedClipboardText}`, `share: ${expectedClipboardText}`]);
     });
 
-    test('support link', async ({ page }) => {
+    test('support link', async () => {
       const storyIndex = 4;
       const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
       await storyMenu.click();
@@ -454,10 +451,7 @@ test.describe('NewsPage', () => {
       await expect(supportLink).toBeVisible();
 
       const expectedHref = 'https://der.orf.at/kontakt/orf-online-angebote100.html';
-      await expect(supportLink).toHaveAttribute('href', expectedHref);
-
-      const newTab = await openLinkInNewTab(page, supportLink);
-      await expect(newTab).toHaveURL(expectedHref);
+      await expectExternalLink(supportLink, expectedHref);
     });
   });
 
@@ -523,8 +517,7 @@ function screenshotPath(testInfo) {
   return join(screenshotsPath, path);
 }
 
-async function openLinkInNewTab(page, locator) {
-  const newTab$ = page.waitForEvent('popup');
-  await locator.click();
-  return newTab$;
+async function expectExternalLink(locator, expectedHref) {
+  await expect(locator).toHaveAttribute('href', expectedHref);
+  await expect(locator).toHaveAttribute('target', '_blank');
 }
