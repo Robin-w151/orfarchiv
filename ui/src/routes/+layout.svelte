@@ -8,6 +8,7 @@
   import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import { defaultPadding } from '$lib/utils/styles';
+  import TextGradient from '$lib/components/ui/content/TextGradient.svelte';
 
   const analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
   $: if (browser && analyticsId) {
@@ -30,7 +31,6 @@
     text-blue-700 bg-white
   `;
   const headerTitleClass = 'focus:bg-blue-100 outline-none rounded-md';
-  const headerTitleTextClass = 'text-transparent bg-gradient-to-l from-blue-700 to-fuchsia-600 bg-clip-text';
   const headerActionsClass = 'flex gap-2';
   const mainClass = 'flex flex-col gap-2 sm:gap-3';
 
@@ -43,7 +43,7 @@
   <header class={headerClass}>
     <h1>
       <a class={headerTitleClass} href="/" title="Startseite" data-sveltekit-prefetch>
-        <span class={headerTitleTextClass}>ORF Archiv</span>
+        <TextGradient>ORF Archiv</TextGradient>
       </a>
     </h1>
     <div class={headerActionsClass}>

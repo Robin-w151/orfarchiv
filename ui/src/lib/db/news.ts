@@ -16,9 +16,9 @@ const PAGE_LIMIT = 100;
 
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   const { searchRequestParameters, pageKey } = searchRequest;
-  const { textFilter, sources } = searchRequestParameters;
+  const { textFilter, from, to, sources } = searchRequestParameters;
 
-  const query = buildQuery(textFilter, sources);
+  const query = buildQuery(textFilter, from, to, sources);
   const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
   const limit = pageKey?.type === 'prev' ? 0 : PAGE_LIMIT + 1;
 
@@ -30,7 +30,7 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   });
 }
 
-function buildQuery(textFilter?: string, sources?: Array<string>) {
+function buildQuery(textFilter?: string, from?: string, to?: string, sources?: Array<string>) {
   const textFilters = textFilter
     ?.split(/\s+/)
     .filter((text) => !!text)
@@ -45,11 +45,17 @@ function buildQuery(textFilter?: string, sources?: Array<string>) {
         }
       : {};
 
+  const fromDate = getDate(from);
+  const fromQuery = fromDate ? { timestamp: { $gte: fromDate } } : {};
+
+  const toDate = getDate(to);
+  const toQuery = toDate ? { timestamp: { $lte: toDate } } : {};
+
   const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
-  return { $and: [textQuery, sourceQuery] };
+  return { $and: [textQuery, fromQuery, toQuery, sourceQuery] };
 }
 
-async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<News>) {
+async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<any>) {
   const url = process.env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
   let client;
   try {
@@ -129,6 +135,18 @@ function getPageKeys(
   const prevKey = !pageKey || pageKey?.type === 'prev' ? prevKeyFn(stories) : undefined;
   const nextKey = !pageKey || pageKey?.type === 'next' ? nextKeyFn(stories) : undefined;
   return { prevKey, nextKey };
+}
+
+function getDate(date?: string): Date | undefined {
+  if (!date) {
+    return;
+  }
+
+  try {
+    return new Date(date);
+  } catch (_) {
+    return;
+  }
 }
 
 function mapToStory(entry: WithId<any>): Story {

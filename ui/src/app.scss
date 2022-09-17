@@ -10,7 +10,8 @@
 
 @layer base {
   [type='text'],
-  [type='number'] {
+  [type='number'],
+  [type='date'] {
     border: none;
   }
 }

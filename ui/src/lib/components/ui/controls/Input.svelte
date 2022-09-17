@@ -9,12 +9,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let inputRef;
-
-  $: dispatch('change', value);
-  $: showClearButton = !!value;
-
-  const wrapperClass = classNames(['flex items-center relative']);
+  const wrapperClass = classNames(['flex flex-1 items-center relative']);
   const inputClass = classNames([
     'pr-12 w-full',
     'text-gray-900 bg-gray-100 focus:bg-white',
@@ -31,6 +26,11 @@
     'rounded-full',
     'transition',
   ]);
+
+  let inputRef;
+
+  $: dispatch('change', value);
+  $: showClearButton = !!value;
 
   export function focus() {
     inputRef.focus();

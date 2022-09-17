@@ -1,10 +1,12 @@
 import type { PageKey } from '$lib/models/news';
 
-export interface SearchTextFilter {
+export interface SearchFilter {
   textFilter?: string;
+  from?: string;
+  to?: string;
 }
 
-export interface SearchRequestParameters extends SearchTextFilter {
+export interface SearchRequestParameters extends SearchFilter {
   sources?: Array<string>;
 }
 

@@ -1,5 +1,5 @@
 import type { SearchRequestParameters } from '$lib/models/searchRequest';
-import searchTextFilter from './searchTextFilter';
+import searchFilter from './searchFilter';
 import settings from './settings';
 import { derived, type Readable } from 'svelte/store';
 
@@ -7,7 +7,7 @@ export interface SearchRequestParametersStore extends Partial<SearchRequestParam
   subscribe: Readable<SearchRequestParameters>['subscribe'];
 }
 
-export default derived([searchTextFilter, settings], ([$searchTextFilter, $settings]) => ({
-  ...$searchTextFilter,
+export default derived([searchFilter, settings], ([$searchFilter, $settings]) => ({
+  ...$searchFilter,
   sources: $settings.sources,
 })) as SearchRequestParametersStore;

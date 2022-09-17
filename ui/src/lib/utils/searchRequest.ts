@@ -26,10 +26,12 @@ for (const [source, index] of sourceToIndex.entries()) {
 
 export function toSearchParams(searchRequest: SearchRequest): string {
   const { searchRequestParameters, pageKey } = searchRequest;
-  const { textFilter, sources } = searchRequestParameters;
+  const { textFilter, from, to, sources } = searchRequestParameters;
   const searchParams = new URLSearchParams();
 
   setTextFilter(searchParams, textFilter);
+  setFrom(searchParams, from);
+  setTo(searchParams, to);
   setSources(searchParams, sources);
   setPageKey(searchParams, pageKey);
 
@@ -39,10 +41,12 @@ export function toSearchParams(searchRequest: SearchRequest): string {
 export function fromSearchParams(searchParams: URLSearchParams): SearchRequest {
   const urlSearchParams = new URLSearchParams(searchParams);
   const textFilter = getTextFilter(urlSearchParams);
+  const from = getFrom(urlSearchParams);
+  const to = getTo(urlSearchParams);
   const sources = getSources(urlSearchParams);
   const pageKey = getPageKey(urlSearchParams);
 
-  return { searchRequestParameters: { textFilter, sources }, pageKey };
+  return { searchRequestParameters: { textFilter, from, to, sources }, pageKey };
 }
 
 function getTextFilter(searchParams: URLSearchParams): string | undefined {
@@ -52,6 +56,26 @@ function getTextFilter(searchParams: URLSearchParams): string | undefined {
 function setTextFilter(searchParams: URLSearchParams, textFilter?: string): void {
   if (textFilter) {
     searchParams.append('textFilter', textFilter);
+  }
+}
+
+function getFrom(searchParams: URLSearchParams): string | undefined {
+  return searchParams.get('from') ?? undefined;
+}
+
+function setFrom(searchParams: URLSearchParams, from?: string): void {
+  if (from) {
+    searchParams.append('from', from);
+  }
+}
+
+function getTo(searchParams: URLSearchParams): string | undefined {
+  return searchParams.get('to') ?? undefined;
+}
+
+function setTo(searchParams: URLSearchParams, to?: string): void {
+  if (to) {
+    searchParams.append('to', to);
   }
 }
 
