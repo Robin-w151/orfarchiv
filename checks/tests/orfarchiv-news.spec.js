@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const moment = require('moment');
 const { join } = require('path');
 
-const baseUrl = process.env.ORFARCHIV_BASE_URL || 'https://orfarchiv.news';
+const baseUrl = process.env.ENVIRONMENT_URL || process.env.ORFARCHIV_BASE_URL || 'https://orfarchiv.news';
 const screenshotsPath = process.env.SCREENSHOTS_PATH ?? '.';
 
 const newsMock = {
