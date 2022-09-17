@@ -9,7 +9,7 @@
 
   const dispatch = createEventDispatcher();
 
-  const wrapperClass = classNames(['flex flex-1 items-center relative']);
+  const wrapperClass = classNames(['flex items-center relative', 'w-full flex-1']);
   const inputClass = classNames([
     'pr-12 w-full',
     'text-gray-900 bg-gray-100 focus:bg-white',

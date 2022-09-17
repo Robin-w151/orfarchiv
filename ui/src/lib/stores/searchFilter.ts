@@ -1,6 +1,7 @@
 import type { SearchFilter } from '$lib/models/searchRequest';
 import { type Writable, writable } from 'svelte/store';
 import debounce from 'lodash.debounce';
+import { DateTime } from 'luxon';
 
 export interface SearchFilterStore extends Partial<SearchFilter> {
   subscribe: Writable<SearchFilter>['subscribe'];
@@ -9,7 +10,12 @@ export interface SearchFilterStore extends Partial<SearchFilter> {
   setTo: (toDate: string | undefined) => void;
 }
 
-const initialState = { textFilter: '' };
+const now = DateTime.now();
+const initialState = {
+  textFilter: '',
+  from: now.minus({ year: 1 }).toISODate(),
+  to: now.plus({ day: 1 }).toISODate(),
+};
 const { subscribe, update } = writable<SearchFilter>(initialState);
 const debouncedUpdate = debounce(update, 250, { leading: false, trailing: true });
 

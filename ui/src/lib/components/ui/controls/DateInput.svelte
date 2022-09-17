@@ -1,20 +1,19 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import classNames from 'classnames';
 
   export let id: string;
   export let value = '';
 
   const dispatch = createEventDispatcher();
 
-  const inputClass = classNames([
-    'w-40',
-    'text-gray-900 bg-gray-100 focus:bg-white',
-    'focus:ring-0',
-    'focus:outline-none focus:ring-2 focus:ring-blue-700',
-    'rounded-md',
-    'transition',
-  ]);
+  const inputClass = `
+    flex-1 w-full
+    text-gray-900 bg-gray-100 focus:bg-white
+    focus:ring-0
+    focus:outline-none focus:ring-2 focus:ring-blue-700
+    rounded-md text-center
+    transition
+  `;
 
   let inputRef;
 
