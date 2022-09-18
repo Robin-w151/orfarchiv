@@ -4,6 +4,7 @@ export interface SearchFilter {
   textFilter?: string;
   from?: string;
   to?: string;
+  timezone?: string;
 }
 
 export interface SearchRequestParameters extends SearchFilter {

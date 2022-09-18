@@ -1,7 +1,8 @@
 import { Collection, MongoClient, type Sort, type WithId } from 'mongodb';
 import type { News, PageKey } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
-import type { SearchRequest } from '$lib/models/searchRequest';
+import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
+import { DateTime } from 'luxon';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
@@ -16,9 +17,8 @@ const PAGE_LIMIT = 100;
 
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   const { searchRequestParameters, pageKey } = searchRequest;
-  const { textFilter, from, to, sources } = searchRequestParameters;
 
-  const query = buildQuery(textFilter, from, to, sources);
+  const query = buildQuery(searchRequestParameters);
   const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
   const limit = pageKey?.type === 'prev' ? 0 : PAGE_LIMIT + 1;
 
@@ -30,7 +30,7 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   });
 }
 
-function buildQuery(textFilter?: string, from?: string, to?: string, sources?: Array<string>) {
+function buildQuery({ textFilter, from, to, timezone, sources }: SearchRequestParameters) {
   const textFilters = textFilter
     ?.split(/\s+/)
     .filter((text) => !!text)
@@ -45,10 +45,10 @@ function buildQuery(textFilter?: string, from?: string, to?: string, sources?: A
         }
       : {};
 
-  const fromDate = getDate(from);
+  const fromDate = getFromDate(from, timezone);
   const fromQuery = fromDate ? { timestamp: { $gte: fromDate } } : {};
 
-  const toDate = getDate(to);
+  const toDate = getToDate(to, timezone);
   const toQuery = toDate ? { timestamp: { $lte: toDate } } : {};
 
   const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
@@ -137,13 +137,25 @@ function getPageKeys(
   return { prevKey, nextKey };
 }
 
-function getDate(date?: string): Date | undefined {
-  if (!date) {
+function getFromDate(from?: string, timezone = 'Europe/Vienna'): Date | undefined {
+  if (!from) {
     return;
   }
 
   try {
-    return new Date(date);
+    return DateTime.fromISO(from).setZone(timezone).startOf('day').toUTC().toJSDate();
+  } catch (_) {
+    return;
+  }
+}
+
+function getToDate(to?: string, timezone = 'Europe/Vienna'): Date | undefined {
+  if (!to) {
+    return;
+  }
+
+  try {
+    return DateTime.fromISO(to).setZone(timezone).endOf('day').toUTC().toJSDate();
   } catch (_) {
     return;
   }

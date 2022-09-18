@@ -14,7 +14,7 @@ const now = DateTime.now();
 const initialState = {
   textFilter: '',
   from: now.minus({ year: 1 }).toISODate(),
-  to: now.plus({ day: 1 }).toISODate(),
+  to: now.toISODate(),
 };
 const { subscribe, update } = writable<SearchFilter>(initialState);
 const debouncedUpdate = debounce(update, 250, { leading: false, trailing: true });
