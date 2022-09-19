@@ -1,6 +1,6 @@
 import type { SearchRequest } from '$lib/models/searchRequest';
 import type { PageKey } from '$lib/models/news';
-import { Settings, Zone } from 'luxon';
+import { DateTime } from 'luxon';
 
 const sourceToIndex = new Map<string, number>([
   ['news', 0],
@@ -44,11 +44,10 @@ export function fromSearchParams(searchParams: URLSearchParams): SearchRequest {
   const textFilter = getTextFilter(urlSearchParams);
   const from = getFrom(urlSearchParams);
   const to = getTo(urlSearchParams);
-  const timezone = getTimezone(urlSearchParams);
   const sources = getSources(urlSearchParams);
   const pageKey = getPageKey(urlSearchParams);
 
-  return { searchRequestParameters: { textFilter, from, to, timezone, sources }, pageKey };
+  return { searchRequestParameters: { textFilter, from, to, sources }, pageKey };
 }
 
 function getTextFilter(searchParams: URLSearchParams): string | undefined {
@@ -67,8 +66,8 @@ function getFrom(searchParams: URLSearchParams): string | undefined {
 
 function setFrom(searchParams: URLSearchParams, from?: string): void {
   if (from) {
-    searchParams.append('from', from);
-    searchParams.append('timezone', getSystemTimezone());
+    const fromDateTime = DateTime.fromISO(from).startOf('day').toISO();
+    searchParams.append('from', fromDateTime);
   }
 }
 
@@ -78,13 +77,9 @@ function getTo(searchParams: URLSearchParams): string | undefined {
 
 function setTo(searchParams: URLSearchParams, to?: string): void {
   if (to) {
-    searchParams.append('to', to);
-    searchParams.append('timezone', getSystemTimezone());
+    const toDateTime = DateTime.fromISO(to).endOf('day').toISO();
+    searchParams.append('to', toDateTime);
   }
-}
-
-function getTimezone(searchParams: URLSearchParams): string | undefined {
-  return searchParams.get('timezone') ?? undefined;
 }
 
 function getSources(searchParams: URLSearchParams): Array<string> | undefined {
@@ -145,13 +140,5 @@ function setPageKey(searchParams: URLSearchParams, pageKey?: PageKey): void {
   if (pageKey) {
     searchParams.append(`${pageKey.type}Id`, pageKey.id);
     searchParams.append(`${pageKey.type}Timestamp`, pageKey.timestamp);
-  }
-}
-
-function getSystemTimezone() {
-  if (Settings.defaultZone instanceof Zone) {
-    return Settings.defaultZone.name;
-  } else {
-    return Settings.defaultZone;
   }
 }

@@ -2,7 +2,6 @@ import { Collection, MongoClient, type Sort, type WithId } from 'mongodb';
 import type { News, PageKey } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
-import { DateTime } from 'luxon';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
@@ -30,7 +29,7 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   });
 }
 
-function buildQuery({ textFilter, from, to, timezone, sources }: SearchRequestParameters) {
+function buildQuery({ textFilter, from, to, sources }: SearchRequestParameters) {
   const textFilters = textFilter
     ?.split(/\s+/)
     .filter((text) => !!text)
@@ -45,10 +44,10 @@ function buildQuery({ textFilter, from, to, timezone, sources }: SearchRequestPa
         }
       : {};
 
-  const fromDate = getFromDate(from, timezone);
+  const fromDate = getDate(from);
   const fromQuery = fromDate ? { timestamp: { $gte: fromDate } } : {};
 
-  const toDate = getToDate(to, timezone);
+  const toDate = getDate(to);
   const toQuery = toDate ? { timestamp: { $lte: toDate } } : {};
 
   const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
@@ -137,25 +136,13 @@ function getPageKeys(
   return { prevKey, nextKey };
 }
 
-function getFromDate(from?: string, timezone = 'Europe/Vienna'): Date | undefined {
-  if (!from) {
+function getDate(date?: string): Date | undefined {
+  if (!date) {
     return;
   }
 
   try {
-    return DateTime.fromISO(from).setZone(timezone).startOf('day').toUTC().toJSDate();
-  } catch (_) {
-    return;
-  }
-}
-
-function getToDate(to?: string, timezone = 'Europe/Vienna'): Date | undefined {
-  if (!to) {
-    return;
-  }
-
-  try {
-    return DateTime.fromISO(to).setZone(timezone).endOf('day').toUTC().toJSDate();
+    return new Date(date);
   } catch (_) {
     return;
   }
