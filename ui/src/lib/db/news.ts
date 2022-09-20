@@ -44,10 +44,10 @@ function buildQuery({ textFilter, from, to, sources }: SearchRequestParameters) 
         }
       : {};
 
-  const fromDate = getDate(from);
+  const fromDate = from?.toJSDate();
   const fromQuery = fromDate ? { timestamp: { $gte: fromDate } } : {};
 
-  const toDate = getDate(to);
+  const toDate = to?.toJSDate();
   const toQuery = toDate ? { timestamp: { $lte: toDate } } : {};
 
   const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
@@ -134,18 +134,6 @@ function getPageKeys(
   const prevKey = !pageKey || pageKey?.type === 'prev' ? prevKeyFn(stories) : undefined;
   const nextKey = !pageKey || pageKey?.type === 'next' ? nextKeyFn(stories) : undefined;
   return { prevKey, nextKey };
-}
-
-function getDate(date?: string): Date | undefined {
-  if (!date) {
-    return;
-  }
-
-  try {
-    return new Date(date);
-  } catch (_) {
-    return;
-  }
 }
 
 function mapToStory(entry: WithId<any>): Story {

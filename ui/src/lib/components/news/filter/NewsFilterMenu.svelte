@@ -26,6 +26,9 @@
   const menuSectionLabelClass = `
   `;
 
+  $: fromDate = $searchFilter.from?.toISODate();
+  $: toDate = $searchFilter.to?.toISODate();
+
   function handleFromChange({ detail: from }) {
     searchFilter.setFrom(from);
   }
@@ -43,11 +46,11 @@
     </span>
     <div class={menuSectionItemClass}>
       <label class={menuSectionLabelClass} for="from-input">Von</label>
-      <DateInput id="from-input" value={$searchFilter.from} on:change={handleFromChange} />
+      <DateInput id="from-input" value={fromDate} on:change={handleFromChange} />
     </div>
     <div class={menuSectionItemClass}>
       <label class={menuSectionLabelClass} for="to-input">Bis</label>
-      <DateInput id="to-input" value={$searchFilter.to} on:change={handleToChange} />
+      <DateInput id="to-input" value={toDate} on:change={handleToChange} />
     </div>
   </section>
 </div>

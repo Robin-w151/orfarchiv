@@ -1,9 +1,10 @@
 import type { PageKey } from '$lib/models/news';
+import type { DateTime } from 'luxon';
 
 export interface SearchFilter {
   textFilter?: string;
-  from?: string;
-  to?: string;
+  from?: DateTime;
+  to?: DateTime;
 }
 
 export interface SearchRequestParameters extends SearchFilter {

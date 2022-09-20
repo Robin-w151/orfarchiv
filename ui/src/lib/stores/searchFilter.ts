@@ -13,8 +13,8 @@ export interface SearchFilterStore extends Partial<SearchFilter> {
 const now = DateTime.now();
 const initialState = {
   textFilter: '',
-  from: now.minus({ year: 1 }).toISODate(),
-  to: now.toISODate(),
+  from: now.minus({ year: 1 }).startOf('day'),
+  to: now.endOf('day'),
 };
 const { subscribe, update } = writable<SearchFilter>(initialState);
 const debouncedUpdate = debounce(update, 250, { leading: false, trailing: true });
@@ -24,11 +24,13 @@ function setTextFilter(textFilter?: string): void {
 }
 
 function setFrom(from?: string): void {
-  update((searchFilter) => ({ ...searchFilter, from }));
+  const newFrom = from ? DateTime.fromISO(from).startOf('day') : undefined;
+  update((searchFilter) => ({ ...searchFilter, from: newFrom }));
 }
 
 function setTo(to?: string): void {
-  update((searchFilter) => ({ ...searchFilter, to }));
+  const newTo = to ? DateTime.fromISO(to).endOf('day') : undefined;
+  update((searchFilter) => ({ ...searchFilter, to: newTo }));
 }
 
 export default { subscribe, setTextFilter, setFrom, setTo } as SearchFilterStore;

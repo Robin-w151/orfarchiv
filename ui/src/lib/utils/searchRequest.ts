@@ -60,25 +60,23 @@ function setTextFilter(searchParams: URLSearchParams, textFilter?: string): void
   }
 }
 
-function getFrom(searchParams: URLSearchParams): string | undefined {
-  return searchParams.get('from') ?? undefined;
+function getFrom(searchParams: URLSearchParams): DateTime | undefined {
+  return fromISO(searchParams.get('from'));
 }
 
-function setFrom(searchParams: URLSearchParams, from?: string): void {
+function setFrom(searchParams: URLSearchParams, from?: DateTime): void {
   if (from) {
-    const fromDateTime = DateTime.fromISO(from).startOf('day').toISO();
-    searchParams.append('from', fromDateTime);
+    searchParams.append('from', from.toISO());
   }
 }
 
-function getTo(searchParams: URLSearchParams): string | undefined {
-  return searchParams.get('to') ?? undefined;
+function getTo(searchParams: URLSearchParams): DateTime | undefined {
+  return fromISO(searchParams.get('to'));
 }
 
-function setTo(searchParams: URLSearchParams, to?: string): void {
+function setTo(searchParams: URLSearchParams, to?: DateTime): void {
   if (to) {
-    const toDateTime = DateTime.fromISO(to).endOf('day').toISO();
-    searchParams.append('to', toDateTime);
+    searchParams.append('to', to.toISO());
   }
 }
 
@@ -141,4 +139,12 @@ function setPageKey(searchParams: URLSearchParams, pageKey?: PageKey): void {
     searchParams.append(`${pageKey.type}Id`, pageKey.id);
     searchParams.append(`${pageKey.type}Timestamp`, pageKey.timestamp);
   }
+}
+
+function fromISO(dateTimeString?: string | null): DateTime | undefined {
+  if (!dateTimeString) {
+    return;
+  }
+  const dateTime = DateTime.fromISO(dateTimeString);
+  return dateTime.isValid ? dateTime : undefined;
 }
