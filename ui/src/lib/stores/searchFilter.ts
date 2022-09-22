@@ -25,12 +25,18 @@ function setTextFilter(textFilter?: string): void {
 
 function setFrom(from?: string): void {
   const newFrom = from ? DateTime.fromISO(from).startOf('day') : undefined;
-  update((searchFilter) => ({ ...searchFilter, from: newFrom }));
+  update((searchFilter) => {
+    const newTo = !searchFilter.to || !newFrom || newFrom <= searchFilter.to ? searchFilter.to : newFrom;
+    return { ...searchFilter, from: newFrom, to: newTo };
+  });
 }
 
 function setTo(to?: string): void {
   const newTo = to ? DateTime.fromISO(to).endOf('day') : undefined;
-  update((searchFilter) => ({ ...searchFilter, to: newTo }));
+  update((searchFilter) => {
+    const newFrom = !searchFilter.from || !newTo || searchFilter.from <= newTo ? searchFilter.from : newTo;
+    return { ...searchFilter, from: newFrom, to: newTo };
+  });
 }
 
 export default { subscribe, setTextFilter, setFrom, setTo } as SearchFilterStore;
