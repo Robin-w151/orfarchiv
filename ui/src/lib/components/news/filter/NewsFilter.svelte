@@ -12,7 +12,7 @@
   import FunnelIcon from '$lib/components/ui/icons/outline/FunnelIcon.svelte';
 
   let subscriptions: Array<Unsubscriber> = [];
-  let searchInputRef: HTMLInputElement = null;
+  let textFilterInputRef: HTMLInputElement = null;
 
   const filterClass = classNames(['flex gap-2', defaultPadding, 'w-full', 'bg-white']);
 
@@ -25,24 +25,44 @@
   });
 
   function handleStartSearch() {
-    searchInputRef.focus();
+    textFilterInputRef.focus();
   }
 
-  function handleSearchChange({ detail: search }: { detail: string }) {
-    searchFilter.setTextFilter(search);
+  function handleTextFilterChange({ detail: textFilter }) {
+    searchFilter.setTextFilter(textFilter);
+  }
+
+  function handleDateFilterFromChange({ detail: from }) {
+    searchFilter.setFrom(from);
+  }
+
+  function handleDateFilterToChange({ detail: to }) {
+    searchFilter.setTo(to);
+  }
+
+  function handleFilterMenuApply() {
+    searchFilter.applyTempSearchFilter();
   }
 </script>
 
 <div class={filterClass}>
   <Input
-    id="search-input"
+    id="text-filter-input"
     value={$searchFilter.textFilter}
-    on:change={handleSearchChange}
-    bind:this={searchInputRef}
+    on:change={handleTextFilterChange}
+    bind:this={textFilterInputRef}
     placeholder="Suche"
   />
-  <Popover btnType="secondary" iconOnly title="Weitere Filter-Optionen" placement="bottom-end">
+  <Popover btnType="secondary" iconOnly title="Weitere Filter-Optionen" placement="bottom-end" let:onClose>
     <FunnelIcon slot="button-content" />
-    <NewsFilterMenu slot="content" />
+    <NewsFilterMenu
+      slot="content"
+      from={$searchFilter.tempSearchFilter.dateFilter?.from}
+      to={$searchFilter.tempSearchFilter.dateFilter?.to}
+      {onClose}
+      on:fromChange={handleDateFilterFromChange}
+      on:toChange={handleDateFilterToChange}
+      on:apply={handleFilterMenuApply}
+    />
   </Popover>
 </div>

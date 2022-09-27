@@ -27,7 +27,8 @@ for (const [source, index] of sourceToIndex.entries()) {
 
 export function toSearchParams(searchRequest: SearchRequest): string {
   const { searchRequestParameters, pageKey } = searchRequest;
-  const { textFilter, from, to, sources } = searchRequestParameters;
+  const { textFilter, dateFilter, sources } = searchRequestParameters;
+  const { from, to } = dateFilter ?? {};
   const searchParams = new URLSearchParams();
 
   setTextFilter(searchParams, textFilter);
@@ -47,7 +48,7 @@ export function fromSearchParams(searchParams: URLSearchParams): SearchRequest {
   const sources = getSources(urlSearchParams);
   const pageKey = getPageKey(urlSearchParams);
 
-  return { searchRequestParameters: { textFilter, from, to, sources }, pageKey };
+  return { searchRequestParameters: { textFilter, dateFilter: { from, to }, sources }, pageKey };
 }
 
 function getTextFilter(searchParams: URLSearchParams): string | undefined {

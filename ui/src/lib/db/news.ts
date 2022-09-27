@@ -29,7 +29,7 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   });
 }
 
-function buildQuery({ textFilter, from, to, sources }: SearchRequestParameters) {
+function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters) {
   const textFilters = textFilter
     ?.split(/\s+/)
     .filter((text) => !!text)
@@ -44,10 +44,10 @@ function buildQuery({ textFilter, from, to, sources }: SearchRequestParameters) 
         }
       : {};
 
-  const fromDate = from?.toJSDate();
+  const fromDate = dateFilter?.from?.toJSDate();
   const fromQuery = fromDate ? { timestamp: { $gte: fromDate } } : {};
 
-  const toDate = to?.toJSDate();
+  const toDate = dateFilter?.to?.toJSDate();
   const toQuery = toDate ? { timestamp: { $lte: toDate } } : {};
 
   const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};

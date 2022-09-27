@@ -1,22 +1,37 @@
-import type { SearchFilter } from '$lib/models/searchRequest';
+import type { DateFilter, SearchFilter } from '$lib/models/searchRequest';
 import { type Writable, writable } from 'svelte/store';
 import debounce from 'lodash.debounce';
 import { DateTime } from 'luxon';
 
-export interface SearchFilterStore extends Partial<SearchFilter> {
-  subscribe: Writable<SearchFilter>['subscribe'];
+export interface SearchFilterStoreProps extends Partial<SearchFilter> {
+  tempSearchFilter: { dateFilter?: DateFilter };
+}
+
+export interface SearchFilterStore extends SearchFilterStoreProps {
+  subscribe: Writable<SearchFilterStoreProps>['subscribe'];
   setTextFilter: (textFilter: string | undefined) => void;
   setFrom: (fromDate: string | undefined) => void;
   setTo: (toDate: string | undefined) => void;
+  applyTempSearchFilter: () => void;
 }
 
 const now = DateTime.now();
+const from = now.minus({ year: 1 }).startOf('day');
+const to = now.endOf('day');
 const initialState = {
   textFilter: '',
-  from: now.minus({ year: 1 }).startOf('day'),
-  to: now.endOf('day'),
+  dateFilter: {
+    from,
+    to,
+  },
+  tempSearchFilter: {
+    dateFilter: {
+      from,
+      to,
+    },
+  },
 };
-const { subscribe, update } = writable<SearchFilter>(initialState);
+const { subscribe, update } = writable<SearchFilterStoreProps>(initialState);
 const debouncedUpdate = debounce(update, 250, { leading: false, trailing: true });
 
 function setTextFilter(textFilter?: string): void {
@@ -26,17 +41,29 @@ function setTextFilter(textFilter?: string): void {
 function setFrom(from?: string): void {
   const newFrom = from ? DateTime.fromISO(from).startOf('day') : undefined;
   update((searchFilter) => {
-    const newTo = !searchFilter.to || !newFrom || newFrom <= searchFilter.to ? searchFilter.to : newFrom;
-    return { ...searchFilter, from: newFrom, to: newTo };
+    const to = searchFilter.tempSearchFilter.dateFilter?.to;
+    const newTo = !to || !newFrom || newFrom <= to ? to : newFrom;
+    return { ...searchFilter, tempSearchFilter: { dateFilter: { from: newFrom, to: newTo } } };
   });
 }
 
 function setTo(to?: string): void {
   const newTo = to ? DateTime.fromISO(to).endOf('day') : undefined;
   update((searchFilter) => {
-    const newFrom = !searchFilter.from || !newTo || searchFilter.from <= newTo ? searchFilter.from : newTo;
-    return { ...searchFilter, from: newFrom, to: newTo };
+    const from = searchFilter.tempSearchFilter.dateFilter?.from;
+    const newFrom = !from || !newTo || from <= newTo ? from : newTo;
+    return { ...searchFilter, tempSearchFilter: { dateFilter: { from: newFrom, to: newTo } } };
   });
 }
 
-export default { subscribe, setTextFilter, setFrom, setTo } as SearchFilterStore;
+function applyTempSearchFilter(): void {
+  update((searchFilter) => ({ ...searchFilter, ...searchFilter.tempSearchFilter }));
+}
+
+export default {
+  subscribe,
+  setTextFilter,
+  setFrom,
+  setTo,
+  applyTempSearchFilter,
+} as SearchFilterStore;

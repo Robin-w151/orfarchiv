@@ -2,9 +2,18 @@
   import DateInput from '$lib/components/ui/controls/DateInput.svelte';
   import TextGradient from '$lib/components/ui/content/TextGradient.svelte';
   import CalendarIcon from '$lib/components/ui/icons/outline/CalendarIcon.svelte';
-  import searchFilter from '$lib/stores/searchFilter';
+  import { createEventDispatcher } from 'svelte';
+  import type { DateTime } from 'luxon';
+  import Button from '$lib/components/ui/controls/Button.svelte';
+
+  export let from: DateTime;
+  export let to: DateTime;
+  export let onClose: () => void;
+
+  const dispatch = createEventDispatcher();
 
   const menuClass = `
+    flex flex-col items-center gap-3
     p-3
     w-64
     text-blue-700 bg-white
@@ -26,15 +35,20 @@
   const menuSectionLabelClass = `
   `;
 
-  $: fromDate = $searchFilter.from?.toISODate();
-  $: toDate = $searchFilter.to?.toISODate();
+  $: fromDate = from?.toISODate();
+  $: toDate = to?.toISODate();
 
   function handleFromChange({ detail: from }) {
-    searchFilter.setFrom(from);
+    dispatch('fromChange', from);
   }
 
   function handleToChange({ detail: to }) {
-    searchFilter.setTo(to);
+    dispatch('toChange', to);
+  }
+
+  function handleApplyClick() {
+    dispatch('apply');
+    onClose();
   }
 </script>
 
@@ -53,4 +67,5 @@
       <DateInput id="to-input" value={toDate} on:change={handleToChange} />
     </div>
   </section>
+  <Button on:click={handleApplyClick}>Anwenden</Button>
 </div>
