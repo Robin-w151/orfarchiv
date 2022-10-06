@@ -23,7 +23,9 @@ export async function GET(event: RequestEvent) {
     }
 
     const optimizedDocument = createDom(optimizedContent.content, url);
-    injectSlideShowImages(optimizedDocument, createDom(data, url));
+    const originalDocument = createDom(data, url);
+    injectSlideShowImages(optimizedDocument, originalDocument);
+    injectStoryFooter(optimizedDocument, originalDocument);
     adjustAnchorTags(optimizedDocument);
 
     const sanitizedArticleContent = sanitizeContent(optimizedDocument.body.innerHTML);
@@ -44,7 +46,7 @@ async function fetchSiteText(url: string): Promise<string> {
   if (!response.ok) {
     throw new Error('Failed to fetch site text!');
   }
-  return await response.text();
+  return response.text();
 }
 
 function createDom(data: string, url: string): Document {
@@ -96,6 +98,13 @@ function injectSlideShowImages(optimizedDocument: Document, originalDocument: Do
     if (slideShowList) {
       slideShowHeader.after(slideShowList);
     }
+  }
+}
+
+function injectStoryFooter(optimizedDocument: Document, originalDocument: Document): void {
+  const storyFooter = originalDocument.querySelector('.story-footer');
+  if (storyFooter) {
+    optimizedDocument.body.appendChild(storyFooter);
   }
 }
 

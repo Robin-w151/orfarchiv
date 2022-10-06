@@ -92,5 +92,9 @@
     video {
       @apply my-2;
     }
+
+    .byline {
+      @apply text-sm text-gray-600;
+    }
   }
 }
