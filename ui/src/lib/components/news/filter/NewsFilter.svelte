@@ -45,7 +45,7 @@
   }
 </script>
 
-<div class={filterClass}>
+<div class={filterClass} id="news-filter">
   <Input
     id="text-filter-input"
     value={$searchFilter.textFilter}

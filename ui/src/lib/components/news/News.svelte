@@ -92,7 +92,7 @@
   }
 </script>
 
-<Content>
+<Content id="news">
   <NewsFilter />
   {#if !anySourcesEnabled}
     <div class={newsFallbackWrapperClass}>
