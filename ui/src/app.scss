@@ -10,7 +10,8 @@
 
 @layer base {
   [type='text'],
-  [type='number'] {
+  [type='number'],
+  [type='date'] {
     border: none;
   }
 }
@@ -90,6 +91,10 @@
 
     video {
       @apply my-2;
+    }
+
+    .byline {
+      @apply text-sm text-gray-600;
     }
   }
 }

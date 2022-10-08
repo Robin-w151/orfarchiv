@@ -1,10 +1,17 @@
 import type { PageKey } from '$lib/models/news';
+import type { DateTime } from 'luxon';
 
-export interface SearchTextFilter {
-  textFilter?: string;
+export interface DateFilter {
+  from?: DateTime;
+  to?: DateTime;
 }
 
-export interface SearchRequestParameters extends SearchTextFilter {
+export interface SearchFilter {
+  textFilter?: string;
+  dateFilter?: DateFilter;
+}
+
+export interface SearchRequestParameters extends SearchFilter {
   sources?: Array<string>;
 }
 

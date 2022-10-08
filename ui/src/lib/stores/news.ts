@@ -1,8 +1,7 @@
 import { type Readable, writable } from 'svelte/store';
-import type { News } from '$lib/models/news';
+import type { News, NewsBucket } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import { DateTime } from 'luxon';
-import type { NewsBucket } from '$lib/models/news';
 
 export interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];

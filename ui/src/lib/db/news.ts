@@ -1,7 +1,7 @@
 import { Collection, MongoClient, type Sort, type WithId } from 'mongodb';
 import type { News, PageKey } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
-import type { SearchRequest } from '$lib/models/searchRequest';
+import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
@@ -16,9 +16,8 @@ const PAGE_LIMIT = 100;
 
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   const { searchRequestParameters, pageKey } = searchRequest;
-  const { textFilter, sources } = searchRequestParameters;
 
-  const query = buildQuery(textFilter, sources);
+  const query = buildQuery(searchRequestParameters);
   const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
   const limit = pageKey?.type === 'prev' ? 0 : PAGE_LIMIT + 1;
 
@@ -30,7 +29,7 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   });
 }
 
-function buildQuery(textFilter?: string, sources?: Array<string>) {
+function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters) {
   const textFilters = textFilter
     ?.split(/\s+/)
     .filter((text) => !!text)
@@ -45,11 +44,17 @@ function buildQuery(textFilter?: string, sources?: Array<string>) {
         }
       : {};
 
+  const fromDate = dateFilter?.from?.toJSDate();
+  const fromQuery = fromDate ? { timestamp: { $gte: fromDate } } : {};
+
+  const toDate = dateFilter?.to?.toJSDate();
+  const toQuery = toDate ? { timestamp: { $lte: toDate } } : {};
+
   const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
-  return { $and: [textQuery, sourceQuery] };
+  return { $and: [textQuery, fromQuery, toQuery, sourceQuery] };
 }
 
-async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<News>) {
+async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<any>) {
   const url = process.env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
   let client;
   try {

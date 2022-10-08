@@ -70,7 +70,7 @@
   {:else if content}
     <article class="story-content {contentClass}" data-testid="story-content">
       {@html content}
-      <div class={contentSourceClass}>Quelle: <a href="https://orf.at" target="_blank" rel="noopener">orf.at</a></div>
+      <div class={contentSourceClass}>Quelle: <a href={url} target="_blank" rel="noopener">orf.at</a></div>
     </article>
   {:else}
     <p data-testid="story-content-error">

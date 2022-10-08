@@ -5,7 +5,7 @@
   import QuestionMarkCircleIcon from '$lib/components/ui/icons/outline/QuestionMarkCircleIcon.svelte';
 
   export let url: string;
-  export let onClose: any;
+  export let onClose: () => void;
 
   const menuClass = `
     flex flex-col gap-2

@@ -6,6 +6,7 @@
 
   export let btnType: BtnType = 'primary';
   export let iconOnly = false;
+  export let title: string = undefined;
   export let disabled: boolean | undefined = undefined;
   export let placement = 'bottom';
 
@@ -21,7 +22,7 @@
 </script>
 
 <Popover let:open>
-  <PopoverButton class={dropdownButtonClass} use={[popperRef]} {disabled}>
+  <PopoverButton class={dropdownButtonClass} use={[popperRef]} {disabled} {title}>
     <slot name="button-content" />
   </PopoverButton>
   {#if open}

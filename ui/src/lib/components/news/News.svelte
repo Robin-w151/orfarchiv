@@ -9,13 +9,13 @@
   import { unsubscribeAll } from '$lib/utils/subscriptions';
   import settings, { type SettingsStore } from '$lib/stores/settings';
   import type { Unsubscriber } from 'svelte/store';
-  import NewsFilter from './NewsFilter.svelte';
   import { get } from 'svelte/store';
   import Button from '$lib/components/ui/controls/Button.svelte';
   import NewsListSkeleton from './NewsListSkeleton.svelte';
   import { defaultPadding } from '$lib/utils/styles';
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import type { SearchRequestParameters } from '$lib/models/searchRequest';
+  import NewsFilter from '$lib/components/news/filter/NewsFilter.svelte';
 
   let subscriptions: Array<Unsubscriber> = [];
 
@@ -92,7 +92,7 @@
   }
 </script>
 
-<Content>
+<Content id="news">
   <NewsFilter />
   {#if !anySourcesEnabled}
     <div class={newsFallbackWrapperClass}>

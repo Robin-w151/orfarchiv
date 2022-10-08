@@ -1,5 +1,6 @@
 import type { SearchRequest } from '$lib/models/searchRequest';
 import type { PageKey } from '$lib/models/news';
+import { DateTime } from 'luxon';
 
 const sourceToIndex = new Map<string, number>([
   ['news', 0],
@@ -26,10 +27,13 @@ for (const [source, index] of sourceToIndex.entries()) {
 
 export function toSearchParams(searchRequest: SearchRequest): string {
   const { searchRequestParameters, pageKey } = searchRequest;
-  const { textFilter, sources } = searchRequestParameters;
+  const { textFilter, dateFilter, sources } = searchRequestParameters;
+  const { from, to } = dateFilter ?? {};
   const searchParams = new URLSearchParams();
 
   setTextFilter(searchParams, textFilter);
+  setFrom(searchParams, from);
+  setTo(searchParams, to);
   setSources(searchParams, sources);
   setPageKey(searchParams, pageKey);
 
@@ -39,10 +43,12 @@ export function toSearchParams(searchRequest: SearchRequest): string {
 export function fromSearchParams(searchParams: URLSearchParams): SearchRequest {
   const urlSearchParams = new URLSearchParams(searchParams);
   const textFilter = getTextFilter(urlSearchParams);
+  const from = getFrom(urlSearchParams);
+  const to = getTo(urlSearchParams);
   const sources = getSources(urlSearchParams);
   const pageKey = getPageKey(urlSearchParams);
 
-  return { searchRequestParameters: { textFilter, sources }, pageKey };
+  return { searchRequestParameters: { textFilter, dateFilter: { from, to }, sources }, pageKey };
 }
 
 function getTextFilter(searchParams: URLSearchParams): string | undefined {
@@ -52,6 +58,26 @@ function getTextFilter(searchParams: URLSearchParams): string | undefined {
 function setTextFilter(searchParams: URLSearchParams, textFilter?: string): void {
   if (textFilter) {
     searchParams.append('textFilter', textFilter);
+  }
+}
+
+function getFrom(searchParams: URLSearchParams): DateTime | undefined {
+  return fromISO(searchParams.get('from'));
+}
+
+function setFrom(searchParams: URLSearchParams, from?: DateTime): void {
+  if (from) {
+    searchParams.append('from', from.toISO());
+  }
+}
+
+function getTo(searchParams: URLSearchParams): DateTime | undefined {
+  return fromISO(searchParams.get('to'));
+}
+
+function setTo(searchParams: URLSearchParams, to?: DateTime): void {
+  if (to) {
+    searchParams.append('to', to.toISO());
   }
 }
 
@@ -114,4 +140,12 @@ function setPageKey(searchParams: URLSearchParams, pageKey?: PageKey): void {
     searchParams.append(`${pageKey.type}Id`, pageKey.id);
     searchParams.append(`${pageKey.type}Timestamp`, pageKey.timestamp);
   }
+}
+
+function fromISO(dateTimeString?: string | null): DateTime | undefined {
+  if (!dateTimeString) {
+    return;
+  }
+  const dateTime = DateTime.fromISO(dateTimeString);
+  return dateTime.isValid ? dateTime : undefined;
 }

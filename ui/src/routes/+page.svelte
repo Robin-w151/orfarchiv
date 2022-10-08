@@ -21,7 +21,7 @@
 </script>
 
 <svelte:head>
-  <title>ORF News Archiv</title>
+  <title>ORF Archiv</title>
 </svelte:head>
 
 <News />

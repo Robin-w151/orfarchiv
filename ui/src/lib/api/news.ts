@@ -39,5 +39,5 @@ export async function fetchContent(url: string): Promise<string> {
   if (!response.ok) {
     throw new Error('Failed to load story content!');
   }
-  return await response.text();
+  return response.text();
 }

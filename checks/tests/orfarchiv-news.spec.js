@@ -138,12 +138,18 @@ class NewsPage {
     this.titleLink = page.locator('header > h1 > a');
     this.loadUpdateLink = page.locator("header a[title='Nach Updates suchen']");
     this.loadMoreButton = page.locator('main > div > button');
-    this.searchInput = page.locator('main input');
-    this.clearSearchButton = page.locator('main input + button');
-    this.newsListItems = page.locator('main ul > li');
-    this.newsListSections = page.locator('main section');
+    this.newsFilter = page.locator('#news #news-filter');
+    this.newsFilterMenuButton = this.newsFilter.locator('div + div > button');
+    this.textFilterInput = this.newsFilter.locator('input');
+    this.textFilterClearButton = this.newsFilter.locator('input + button');
+    this.newsListItems = page.locator('#news ul > li');
+    this.newsListSections = page.locator('#news section');
     this.newsNoContentInfo = page.locator('text=Keine News vorhanden');
-    this.popover = page.locator('body > div#headlessui-portal-root');
+    this.popover = page.locator('body > #headlessui-portal-root');
+  }
+
+  getDateFilterInput() {
+    return this.popover.locator("input[type='date']");
   }
 
   getNewsListSection(index) {
@@ -207,7 +213,7 @@ class NewsPage {
 
   async searchNews(textFilter) {
     const search = this.waitForSearch();
-    await this.searchInput.fill(textFilter);
+    await this.textFilterInput.fill(textFilter);
     await search;
   }
 
@@ -225,7 +231,7 @@ class NewsPage {
 
   async clearTextFilter() {
     const search = this.waitForSearch();
-    await this.clearSearchButton.click();
+    await this.textFilterClearButton.click();
     await search;
   }
 
@@ -334,9 +340,15 @@ test.describe('NewsPage', () => {
       await newsPage.mockSearchNewsApi(newsMock);
       await newsPage.clearTextFilter();
 
-      await expect(newsPage.searchInput).toHaveValue('');
+      await expect(newsPage.textFilterInput).toHaveValue('');
       const expectedCount = newsMock.stories.length;
       await expect(newsPage.newsListItems).toHaveCount(expectedCount);
+    });
+
+    test('date filter is changeable', async () => {
+      await newsPage.newsFilterMenuButton.click();
+      await newsPage.getDateFilterInput().nth(0).isEditable();
+      await newsPage.getDateFilterInput().nth(1).isEditable();
     });
   });
 

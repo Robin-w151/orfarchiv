@@ -27,11 +27,13 @@
 
 <header class={infoClass} on:click on:keydown tabindex="0">
   <h3>{title}</h3>
-  <span class={metadataClass}
-    >{category}{#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if} - {formatTimestamp(timestamp)}</span
+  <span class={metadataClass}>
+    <span>{category ?? 'Keine Kategorie'}</span>
+    {#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if}
+    <span> - {formatTimestamp(timestamp)}</span></span
   >
 </header>
-<Popover btnType="secondary" iconOnly placement="bottom-end" let:onClose>
+<Popover btnType="secondary" iconOnly title="Weitere Optionen" placement="bottom-end" let:onClose>
   <EllipsisVerticalIcon slot="button-content" />
   <StoryMenu {url} {onClose} slot="content" />
 </Popover>
