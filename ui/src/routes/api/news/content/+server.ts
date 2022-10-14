@@ -24,6 +24,7 @@ export async function GET(event: RequestEvent) {
 
     const optimizedDocument = createDom(optimizedContent.content, url);
     const originalDocument = createDom(data, url);
+    removeLinkToTop(optimizedDocument);
     injectSlideShowImages(optimizedDocument, originalDocument);
     injectStoryFooter(optimizedDocument, originalDocument);
     adjustAnchorTags(optimizedDocument);
@@ -55,7 +56,15 @@ function createDom(data: string, url: string): Document {
 
 function removePrintWarnings(document: Document): void {
   document.querySelectorAll('.print-warning').forEach((element) => {
-    element.parentElement?.removeChild(element);
+    element.remove();
+  });
+}
+
+function removeLinkToTop(document: Document): void {
+  document.querySelectorAll('a').forEach((anchor) => {
+    if (anchor.href.includes('#top') && anchor.textContent === 'Seitenanfang') {
+      anchor.remove();
+    }
   });
 }
 
