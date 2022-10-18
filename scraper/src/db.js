@@ -17,10 +17,7 @@ async function persistOrfNews(stories) {
 
     if (storiesToInsert.length > 0) {
       await newsCollection.insertMany(storiesToInsert);
-      logger.info(
-        'Inserted story IDs:',
-        storiesToInsert.map((story) => story.id),
-      );
+      logger.info(`Inserted story IDs: ${storyIdsString(storiesToInsert)}`);
     } else {
       logger.info('Nothing to insert.');
     }
@@ -33,10 +30,7 @@ async function persistOrfNews(stories) {
     if (storiesToUpdate.length > 0) {
       const results = storiesToUpdate.map((story) => newsCollection.replaceOne({ id: story.id }, story));
       await Promise.all(results);
-      logger.info(
-        'Updated story IDs:',
-        storiesToUpdate.map((story) => story.id),
-      );
+      logger.info(`Updated story IDs: ${storyIdsString(storiesToUpdate)}`);
     } else {
       logger.info('Nothing to update.');
     }
@@ -66,6 +60,10 @@ function storyShouldUpdate(newStory, oldStory) {
     newStory.url !== oldStory.url ||
     newStory.timestamp.toISOString() !== oldStory.timestamp.toISOString()
   );
+}
+
+function storyIdsString(stories) {
+  return `[${stories.map((story) => story.id).join(', ')}]`;
 }
 
 module.exports = {
