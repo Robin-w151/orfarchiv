@@ -1,5 +1,4 @@
 <script lang="ts">
-  import classNames from 'classnames';
   import { formatTimestamp } from '$lib/utils/datetime.js';
   import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
   import StoryMenu from '$lib/components/news/story/header/StoryMenu.svelte';
@@ -12,8 +11,12 @@
   export let timestamp;
   export let source;
 
-  const infoClass = classNames(['flex flex-col flex-1 items-start', 'focus:text-blue-700', 'outline-none']);
-  const metadataClass = classNames(['text-sm', 'text-gray-600']);
+  const infoClass = `
+    flex flex-col flex-1 items-start
+    focus:text-blue-700 dark:focus:text-blue-500
+    outline-none
+  `;
+  const metadataClass = 'text-sm text-gray-600 dark:text-gray-400';
 
   $: sourceLabel = getSourceLabel(source);
 

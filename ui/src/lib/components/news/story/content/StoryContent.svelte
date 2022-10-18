@@ -1,11 +1,11 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy, onMount } from 'svelte';
-  import ChevronUpIcon from '../../../ui/icons/outline/ChevronUpIcon.svelte';
+  import ChevronUpIcon from '$lib/components/ui/icons/outline/ChevronUpIcon.svelte';
   import classNames from 'classnames';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
-  import Button from '../../../ui/controls/Button.svelte';
-  import { wait } from '../../../../utils/wait';
-  import { fetchContent } from '../../../../api/news';
+  import Button from '$lib/components/ui/controls/Button.svelte';
+  import { wait } from '$lib/utils/wait';
+  import { fetchContent } from '$lib/api/news';
 
   const MAX_RETRIES = 5;
 
@@ -19,7 +19,7 @@
 
   const wrapperClass = classNames('flex flex-col items-center gap-3');
   const contentClass = classNames('cursor-auto w-full');
-  const contentSourceClass = classNames('text-sm text-gray-600');
+  const contentSourceClass = classNames('text-sm text-gray-500 dark:text-gray-400');
   const errorLinkClass = classNames(['text-blue-700']);
   const collapseContentClass = classNames(['py-1.5 w-48 max-w-full']);
 

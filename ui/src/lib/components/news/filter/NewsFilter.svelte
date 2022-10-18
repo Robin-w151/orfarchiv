@@ -14,7 +14,7 @@
   let subscriptions: Array<Unsubscriber> = [];
   let textFilterInputRef: HTMLInputElement = null;
 
-  const filterClass = classNames(['flex gap-2', defaultPadding, 'w-full', 'bg-white']);
+  const filterClass = classNames(['flex gap-2', defaultPadding, 'w-full', 'bg-white dark:bg-gray-900']);
 
   onMount(() => {
     subscriptions.push(startSearch.onUpdate(handleStartSearch));

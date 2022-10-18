@@ -3,7 +3,6 @@
   import { onDestroy, onMount } from 'svelte';
   import { searchNews } from '$lib/api/news';
   import Content from '$lib/components/ui/content/Content.svelte';
-  import classNames from 'classnames';
   import NewsList from './NewsList.svelte';
   import { loadMoreNews, refreshNews } from '$lib/stores/newsEvents';
   import { unsubscribeAll } from '$lib/utils/subscriptions';
@@ -12,10 +11,10 @@
   import { get } from 'svelte/store';
   import Button from '$lib/components/ui/controls/Button.svelte';
   import NewsListSkeleton from './NewsListSkeleton.svelte';
-  import { defaultPadding } from '$lib/utils/styles';
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import type { SearchRequestParameters } from '$lib/models/searchRequest';
   import NewsFilter from '$lib/components/news/filter/NewsFilter.svelte';
+  import { defaultPadding } from '$lib/utils/styles';
 
   let subscriptions: Array<Unsubscriber> = [];
 
@@ -23,7 +22,12 @@
   $: anySourcesEnabled = hasAnySourcesEnabled($settings);
   $: loadMoreButtonDisabled = $news.nextKey === null;
 
-  const newsFallbackWrapperClass = classNames([defaultPadding, 'w-full', 'text-lg', 'text-gray-800 bg-white']);
+  const newsFallbackWrapperClass = `
+    ${defaultPadding}
+    w-full
+    text-lg
+    text-gray-800 dark:text-gray-300 bg-white dark:bg-gray-900
+  `;
 
   onMount(async () => {
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
