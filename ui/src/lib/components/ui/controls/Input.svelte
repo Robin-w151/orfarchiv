@@ -1,5 +1,4 @@
 <script lang="ts">
-  import classNames from 'classnames';
   import { createEventDispatcher } from 'svelte';
   import XIcon from '$lib/components/ui/icons/outline/XIcon.svelte';
 
@@ -9,23 +8,23 @@
 
   const dispatch = createEventDispatcher();
 
-  const wrapperClass = classNames(['flex items-center relative', 'w-full flex-1']);
-  const inputClass = classNames([
-    'pr-12 w-full',
-    'text-gray-900 bg-gray-100 focus:bg-white',
-    'focus:ring-0',
-    'focus:outline-none focus:ring-2 focus:ring-blue-700',
-    'rounded-md',
-    'transition',
-  ]);
-  const clearButtonClass = classNames([
-    'absolute right-2',
-    'p-1',
-    'text-gray-700 hover:bg-gray-200',
-    'focus:outline-none focus:ring-2 ring-blue-700',
-    'rounded-full',
-    'transition',
-  ]);
+  const wrapperClass = `flex items-center relative w-full flex-1`;
+  const inputClass = `
+    pr-12 w-full
+    text-gray-900 dark:text-gray-100 bg-gray-100 dark:bg-gray-800 focus:bg-white dark:focus:bg-gray-900
+    focus:ring-0
+    focus:outline-none focus:ring-2 focus:ring-blue-700 dark:focus:ring-blue-500
+    rounded-md
+    transition
+  `;
+  const clearButtonClass = `
+    absolute right-2
+    p-1
+    text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700
+    focus:outline-none focus:ring-2 ring-blue-700 dark:ring-blue-500
+    rounded-full
+    transition
+  `;
 
   let inputRef;
 

@@ -17,7 +17,8 @@
     p-3
     w-64
     text-blue-700 bg-white
-    rounded-lg shadow-md
+    dark:text-blue-500 dark:bg-gray-900
+    rounded-lg shadow-md dark:shadow-2xl
   `;
   const menuSectionClass = `
     flex flex-col gap-3
@@ -26,7 +27,7 @@
   const menuSectionTitleClass = `
     flex gap-2
     text-lg
-    text-fuchsia-600
+    text-fuchsia-600 dark:text-fuchsia-400
   `;
   const menuSectionItemClass = `
     flex flex-col items-center gap-1

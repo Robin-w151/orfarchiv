@@ -10,9 +10,9 @@
     flex justify-between items-center gap-6
     ${defaultPadding}
     text-3xl
-    text-blue-700 bg-white
+    text-blue-700 bg-white dark:bg-gray-900
   `;
-  const headerTitleClass = 'focus:bg-blue-100 outline-none rounded-md';
+  const headerTitleClass = 'focus:bg-blue-100 dark:focus:bg-blue-900 outline-none rounded-md';
   const headerActionsClass = 'flex gap-2';
 
   function handleRefreshButtonClick() {

@@ -12,7 +12,7 @@
     'flex flex-col',
     !noGap && 'gap-3',
     !noPadding && defaultPadding,
-    'text-gray-800',
+    'text-gray-800 dark:text-gray-300',
     'outline-none',
     $$props['class'],
   ]);

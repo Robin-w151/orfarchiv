@@ -1,5 +1,4 @@
 <script lang="ts">
-  import classNames from 'classnames';
   import { createEventDispatcher } from 'svelte';
 
   export let id: string;
@@ -8,9 +7,12 @@
 
   const dispatch = createEventDispatcher();
 
-  const wrapperClass = classNames(['inline-flex items-center gap-3']);
-  const inputClass = classNames(['text-blue-700', 'focus:ring-blue-700', 'rounded-md', 'transition']);
-  const labelClass = classNames(['flex-1']);
+  const wrapperClass = `inline-flex items-center gap-3`;
+  const inputClass = `
+    text-blue-700 dark:text-blue-500 focus:ring-blue-700 dark:focus:ring-blue-500
+    rounded-md transition
+  `;
+  const labelClass = `flex-1`;
 
   function handleChange(event: Event) {
     dispatch('change', (event.target as HTMLInputElement).checked);

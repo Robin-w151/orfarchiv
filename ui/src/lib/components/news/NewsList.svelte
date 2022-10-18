@@ -2,13 +2,12 @@
   import Section from '$lib/components/ui/content/Section.svelte';
   import SectionList from '$lib/components/ui/content/SectionList.svelte';
   import type { NewsBucket } from '$lib/models/news';
-  import classNames from 'classnames';
   import Story from '$lib/components/news/story/Story.svelte';
 
   export let storyBuckets: Array<NewsBucket> | undefined = undefined;
   export let isLoading: boolean;
 
-  const listClass = classNames(['cursor-pointer']);
+  const listClass = `cursor-pointer`;
 </script>
 
 {#if storyBuckets}

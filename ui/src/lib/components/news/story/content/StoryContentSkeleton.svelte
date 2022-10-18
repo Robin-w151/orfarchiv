@@ -1,8 +1,6 @@
 <script lang="ts">
-  import classNames from 'classnames';
-
-  const contentSkeletonClass = classNames(['content-skeleton', 'flex flex-col items-start', 'w-full']);
-  const contentSkeletonBarClass = classNames(['bg-gray-300', 'rounded-md animate-pulse']);
+  const contentSkeletonClass = 'content-skeleton flex flex-col items-start w-full';
+  const contentSkeletonBarClass = 'bg-gray-300 dark:bg-gray-600 rounded-md animate-pulse';
 </script>
 
 <div class={contentSkeletonClass} data-testid="story-content-skeleton">
