@@ -23,6 +23,12 @@
     @apply font-sans;
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+    }
+  }
+
   .story-content {
     @apply flex flex-col text-gray-800 dark:text-gray-300;
 
