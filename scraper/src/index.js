@@ -2,7 +2,7 @@ const { scrapeOrfNews } = require('./scrape');
 const { persistOrfNews } = require('./db');
 const sources = require('./sources.json');
 const logger = require('./logger');
-require('dotenv-flow').config();
+require('dotenv-flow').config({ silent: true });
 
 main();
 
