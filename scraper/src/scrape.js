@@ -27,10 +27,7 @@ function collectStories(data, source, alternativeFormat) {
   const document = parser.parse(data);
   const items = alternativeFormat ? document?.rss?.channel?.item : document?.['rdf:RDF']?.item;
   return (
-    items
-      ?.filter(filterStoryRdfItem)
-      .map(mapToStory.bind(null, source, alternativeFormat))
-      .filter((story) => !!story.id) ?? []
+    items?.filter(filterStoryRdfItem).map(mapToStory.bind(null, source, alternativeFormat)).filter(isValidStory) ?? []
   );
 }
 
@@ -48,7 +45,7 @@ function mapRdfToStory(source, rdfItem) {
     title: rdfItem.title.trim(),
     category: rdfItem['dc:subject'],
     url: rdfItem.link,
-    timestamp: rdfItem['dc:date'],
+    timestamp: rdfItem['dc:date'] || fallbackTimestamp(),
     source,
   };
 }
@@ -60,9 +57,21 @@ function mapSimpleToStory(source, item) {
     title: item.title.trim(),
     category: item.category,
     url: item.link,
-    timestamp: new Date(item.pubDate).toISOString(),
+    timestamp: item.pubDate ? new Date(item.pubDate).toISOString() : fallbackTimestamp(),
     source,
   };
+}
+
+function fallbackTimestamp() {
+  return new Date().toISOString();
+}
+
+function isValidStory(story) {
+  const isValid = !!story.id && !!story.title && !!story.url && !!story.timestamp && !!story.source;
+  if (!isValid) {
+    logger.warn(`Invalid story found: ${story.id}`);
+  }
+  return isValid;
 }
 
 module.exports = {
