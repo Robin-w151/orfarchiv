@@ -12,6 +12,9 @@
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
     "format": "prettier --write --plugin-search-dir=. ."
   },
+  "dependencies": {
+    "@vercel/analytics": "^0.1.2"
+  },
   "devDependencies": {
     "@fontsource/roboto": "^4.5.8",
     "@mozilla/readability": "^0.4.2",
@@ -29,7 +32,6 @@
     "@types/luxon": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
-    "@vercel/analytics": "^0.1.2",
     "autoprefixer": "^10.4.12",
     "classnames": "^2.3.2",
     "compute-scroll-into-view": "^1.0.17",
