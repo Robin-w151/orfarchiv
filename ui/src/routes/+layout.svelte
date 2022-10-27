@@ -1,9 +1,17 @@
+<script lang="ts" context="module">
+  import { inject } from '@vercel/analytics';
+  import { browser, dev } from '$app/environment';
+
+  if (browser && !dev) {
+    inject();
+  }
+</script>
+
 <script lang="ts">
-  import '../app.scss';
   import { webVitals } from '$lib/utils/vitals';
-  import { browser } from '$app/environment';
   import { page } from '$app/stores';
   import Header from '$lib/components/ui/content/Header.svelte';
+  import '../app.scss';
 
   const analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
   $: if (browser && analyticsId) {

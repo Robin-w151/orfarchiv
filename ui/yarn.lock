@@ -1478,6 +1478,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vercel/analytics@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "@vercel/analytics@npm:0.1.2"
+  peerDependencies:
+    react: ^16.8||^17||^18
+  checksum: 5517d24b06006444985a8dc32710aaabb0e3c7029ec409cef52ebec82d87eda996b13c9f66da86cb6f429d9e647eb4197dcf5dedb4f22bce081a4ce857791eef
+  languageName: node
+  linkType: hard
+
 "@vercel/nft@npm:^0.22.0":
   version: 0.22.1
   resolution: "@vercel/nft@npm:0.22.1"
@@ -6869,6 +6878,7 @@ __metadata:
     "@types/luxon": ^3.0.1
     "@typescript-eslint/eslint-plugin": ^5.38.1
     "@typescript-eslint/parser": ^5.38.1
+    "@vercel/analytics": ^0.1.2
     autoprefixer: ^10.4.12
     classnames: ^2.3.2
     compute-scroll-into-view: ^1.0.17
