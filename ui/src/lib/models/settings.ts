@@ -26,6 +26,10 @@ export const sources: Array<Source> = [
     key: 'science',
   },
   {
+    label: 'Religion',
+    key: 'religion',
+  },
+  {
     label: 'Ö3',
     key: 'oe3',
   },

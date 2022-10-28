@@ -18,6 +18,11 @@
     "alternativeFormat": true
   },
   {
+    "source": "religion",
+    "rssUrl": "https://rss.orf.at/religion.xml",
+    "alternativeFormat": true
+  },
+  {
     "source": "oe3",
     "rssUrl": "https://rss.orf.at/oe3.xml"
   },

@@ -19,6 +19,7 @@ const sourceToIndex = new Map<string, number>([
   ['kaernten', 13],
   ['tirol', 14],
   ['vorarlberg', 15],
+  ['religion', 16],
 ]);
 const indexToSource = new Map<number, string>();
 for (const [source, index] of sourceToIndex.entries()) {
