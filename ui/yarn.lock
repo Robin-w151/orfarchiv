@@ -2404,7 +2404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.1.0":
+"acorn@npm:^8.1.0, acorn@npm:^8.8.1":
   version: 8.8.1
   resolution: "acorn@npm:8.8.1"
   bin:
@@ -7851,11 +7851,13 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.41.0
     "@typescript-eslint/parser": ^5.41.0
     "@vercel/analytics": ^0.1.3
+    acorn: ^8.8.1
     autoprefixer: ^10.4.13
     classnames: ^2.3.2
     compute-scroll-into-view: ^1.0.17
     dompurify: ^2.4.0
     dotenv-flow: ^3.2.0
+    escodegen: ^2.0.0
     eslint: 8.26.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1

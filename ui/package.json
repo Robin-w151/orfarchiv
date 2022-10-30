@@ -10,7 +10,8 @@
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check --plugin-search-dir=. . && eslint .",
-    "format": "prettier --write --plugin-search-dir=. ."
+    "format": "prettier --write --plugin-search-dir=. .",
+    "fix:jsdom": "node scripts/fix-jsdom.js"
   },
   "dependencies": {
     "@vercel/analytics": "^0.1.3"
@@ -32,11 +33,13 @@
     "@types/luxon": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
+    "acorn": "^8.8.1",
     "autoprefixer": "^10.4.13",
     "classnames": "^2.3.2",
     "compute-scroll-into-view": "^1.0.17",
     "dompurify": "^2.4.0",
     "dotenv-flow": "^3.2.0",
+    "escodegen": "^2.0.0",
     "eslint": "8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
