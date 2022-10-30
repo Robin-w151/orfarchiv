@@ -2,6 +2,8 @@
   export let href: string;
   export let target: string | undefined = '_blank';
 
+  let rel = target === '_blank' ? 'noreferrer' : undefined;
+
   const linkClass = `
     text-blue-800 dark:text-blue-500 dark:hover:text-blue-700 hover:bg-blue-100
     focus:bg-blue-100 outline-none
@@ -9,6 +11,6 @@
   `;
 </script>
 
-<a class={linkClass} {href} {target}>
+<a class={linkClass} {href} {target} {rel}>
   <slot />
 </a>

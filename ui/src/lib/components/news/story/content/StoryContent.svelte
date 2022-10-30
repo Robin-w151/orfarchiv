@@ -6,6 +6,7 @@
   import Button from '$lib/components/ui/controls/Button.svelte';
   import { wait } from '$lib/utils/wait';
   import { fetchContent } from '$lib/api/news';
+  import Link from '$lib/components/ui/controls/Link.svelte';
 
   const MAX_RETRIES = 5;
 
@@ -70,16 +71,12 @@
   {:else if content}
     <article class="story-content {contentClass}" data-testid="story-content">
       {@html content}
-      <div class={contentSourceClass}>Quelle: <a href={url} target="_blank" rel="noopener">orf.at</a></div>
+      <div class={contentSourceClass}>Quelle: <Link href={url}>orf.at</Link></div>
     </article>
   {:else}
     <p data-testid="story-content-error">
-      Inhalt kann nicht angezeigt werden. Klicken Sie <a
-        class={errorLinkClass}
-        href={url}
-        target="_blank"
-        rel="noopener">hier</a
-      > um zum Artikel zu gelangen.
+      Inhalt kann nicht angezeigt werden. Klicken Sie <Link class={errorLinkClass} href={url}>hier</Link> um zum Artikel
+      zu gelangen.
     </p>
   {/if}
   <Button

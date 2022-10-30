@@ -55,7 +55,7 @@
 </script>
 
 <div class={menuClass}>
-  <a class={menuItemClass} href={url} target="_blank" rel="noopener" on:click={handleOpenArticleClick}>
+  <a class={menuItemClass} href={url} target="_blank" rel="noreferrer" on:click={handleOpenArticleClick}>
     <NewspaperIcon />
     <span>Link zum Artikel</span>
   </a>
@@ -74,7 +74,7 @@
     class={menuItemClass}
     href="https://der.orf.at/kontakt/orf-online-angebote100.html"
     target="_blank"
-    rel="noopener"
+    rel="noreferrer"
     on:click={handleOpenSupportClick}
   >
     <QuestionMarkCircleIcon />
