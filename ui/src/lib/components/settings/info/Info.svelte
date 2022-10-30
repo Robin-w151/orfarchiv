@@ -13,8 +13,8 @@
 <Section class="grid-info" title="Info">
   <SectionList>
     <SimpleItem>Version {appVersion}</SimpleItem>
-    <SimpleItem>Source Code on <Link href={sourceCodeUrl}>GitHub</Link></SimpleItem>
+    <SimpleItem>Quellcode auf <Link href={sourceCodeUrl}>GitHub</Link></SimpleItem>
     <SimpleItem>Powered by <Link href={svelteKitUrl}>SvelteKit</Link></SimpleItem>
-    <SimpleItem>Deployed with <Link href={vercelUrl}>Vercel</Link></SimpleItem>
+    <SimpleItem>Gehostet bei <Link href={vercelUrl}>Vercel</Link></SimpleItem>
   </SectionList>
 </Section>
