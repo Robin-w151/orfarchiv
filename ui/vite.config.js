@@ -11,6 +11,7 @@ const config = {
   },
   define: {
     'import.meta.env.VERCEL_ANALYTICS_ID': JSON.stringify(process.env.VERCEL_ANALYTICS_ID),
+    'import.meta.env.APP_VERSION': JSON.stringify(process.env.npm_package_version),
   },
 };
 

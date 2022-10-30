@@ -10,6 +10,7 @@
     w-full
     bg-white dark:bg-gray-900
     overflow-clip
+    ${$$props['class']}
   `;
   const titleClass = `
     flex gap-2 justify-center items-center sticky top-0 z-20

@@ -1,56 +1,43 @@
 <script lang="ts">
   import Content from '$lib/components/ui/content/Content.svelte';
-  import Section from '$lib/components/ui/content/Section.svelte';
-  import SectionList from '$lib/components/ui/content/SectionList.svelte';
-  import Item from '$lib/components/ui/content/Item.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
-  import Checkbox from '$lib/components/ui/controls/Checkbox.svelte';
-  import settings from '$lib/stores/settings';
   import { goto } from '$app/navigation';
   import Actions from '$lib/components/ui/content/Actions.svelte';
-  import { sources } from '$lib/models/settings.js';
 
-  function handleOpenLinksInNewTabChange({ detail: checked }: { detail: boolean }) {
-    settings.setOpenLinksInNewTab(checked);
-  }
+  import { defaultGap } from '$lib/utils/styles';
+  import General from './general/General.svelte';
+  import Sources from './sources/Sources.svelte';
+  import Info from './info/Info.svelte';
 
-  function handleSourceChange(source: string, { detail: checked }: { detail: boolean }) {
-    settings.setSource(source, checked);
-  }
+  const gridClass = `
+    grid grid-cols-auto sm:grid-cols-[1fr_1fr] ${defaultGap}
+    w-full
+  `;
+  const generalClass = `
+    sm:col-span-2
+  `;
+  const infoClass = `
+    flex flex-col items-center ${defaultGap}
+  `;
 
-  function handleSaveButtonClick() {
+  function handleReadyButtonClick() {
     goto('/');
   }
 </script>
 
 <Content>
-  <Section title="Allgemein">
-    <SectionList>
-      <Item>
-        <Checkbox
-          id="open-links-in-new-tab"
-          label="Links in neuem Tab öffnen"
-          checked={$settings.openLinksInNewTab}
-          on:change={handleOpenLinksInNewTabChange}
-        />
-      </Item>
-    </SectionList>
-  </Section>
-  <Section title="Quellen">
-    <SectionList>
-      {#each sources as { label, key } (key)}
-        <Item>
-          <Checkbox
-            id={`source-${key}`}
-            {label}
-            checked={$settings.sources?.includes(key)}
-            on:change={handleSourceChange.bind(null, key)}
-          />
-        </Item>
-      {/each}
-    </SectionList>
-  </Section>
-  <Actions>
-    <Button on:click={handleSaveButtonClick}>Fertig</Button>
-  </Actions>
+  <div class={gridClass}>
+    <div class={generalClass}>
+      <General />
+    </div>
+    <div>
+      <Sources />
+    </div>
+    <div class={infoClass}>
+      <Info />
+      <Actions>
+        <Button on:click={handleReadyButtonClick}>Fertig</Button>
+      </Actions>
+    </div>
+  </div>
 </Content>

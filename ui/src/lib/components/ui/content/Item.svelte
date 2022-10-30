@@ -3,13 +3,14 @@
   import computeScrollIntoView from 'compute-scroll-into-view';
   import { defaultPadding } from '$lib/utils/styles';
 
+  export let noFlex = false;
   export let noGap = false;
   export let noPadding = false;
 
   let itemRef;
 
   const itemClass = classNames([
-    'flex flex-col',
+    !noFlex && 'flex flex-col',
     !noGap && 'gap-3',
     !noPadding && defaultPadding,
     'text-gray-800 dark:text-gray-300',
