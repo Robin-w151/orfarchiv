@@ -120,7 +120,7 @@ function injectStoryFooter(optimizedDocument: Document, originalDocument: Docume
 function adjustAnchorTags(document: Document): void {
   document.querySelectorAll('a').forEach((anchor) => {
     anchor.target = '_blank';
-    anchor.rel = 'noreferrer';
+    anchor.rel = 'noopener noreferrer';
   });
 }
 
