@@ -16,7 +16,7 @@
     <script>
       const { colorScheme } = JSON.parse(localStorage.getItem('styles') ?? '{}');
       const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
-      if (colorScheme === 'dark' || (!colorScheme && prefersDarkColorScheme)) {
+      if (colorScheme === 'dark' || ((!colorScheme || colorScheme === 'system') && prefersDarkColorScheme)) {
         document.documentElement.classList.add('dark');
       }
     </script>

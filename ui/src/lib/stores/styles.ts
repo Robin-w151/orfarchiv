@@ -1,7 +1,7 @@
 import type { Writable } from 'svelte/store';
 import { writable } from 'svelte-local-storage-store';
 
-export type ColorScheme = 'light' | 'dark';
+export type ColorScheme = 'light' | 'dark' | 'system';
 
 export interface StylesStoreProps {
   colorScheme: ColorScheme;
@@ -9,14 +9,14 @@ export interface StylesStoreProps {
 
 export interface StylesStore extends StylesStoreProps {
   subscribe: Writable<StylesStoreProps>['subscribe'];
-  toggleColorScheme: () => void;
+  setColorScheme: (colorScheme: ColorScheme) => void;
 }
 
-const initialState: StylesStoreProps = { colorScheme: 'light' };
+const initialState: StylesStoreProps = { colorScheme: 'system' };
 const { subscribe, update } = writable<StylesStoreProps>('styles', initialState);
 
-function toggleColorScheme() {
-  update((styles) => ({ ...styles, colorScheme: styles.colorScheme === 'light' ? 'dark' : 'light' }));
+function setColorScheme(colorScheme: ColorScheme) {
+  update((styles) => ({ ...styles, colorScheme }));
 }
 
-export default { subscribe, toggleColorScheme } as StylesStore;
+export default { subscribe, setColorScheme } as StylesStore;

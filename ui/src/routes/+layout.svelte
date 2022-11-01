@@ -24,13 +24,6 @@
   }
   $: if (browser) applyColorScheme($styles.colorScheme);
 
-  if (browser) {
-    const hasDarkClass = document.documentElement.classList.contains('dark');
-    if (hasDarkClass && $styles.colorScheme === 'light') {
-      styles.toggleColorScheme();
-    }
-  }
-
   const wrapperClass = `
     flex flex-col gap-2 sm:gap-3
     p-2 pb-4 sm:p-4
@@ -39,13 +32,32 @@
   const mainClass = 'flex flex-col gap-2 sm:gap-3';
 
   function applyColorScheme(colorScheme: ColorScheme) {
-    const rootClasses = document.documentElement.classList;
+    const prefersDarkColorScheme = getPrefersDarkColorScheme();
+    if (colorScheme === 'system') {
+      if (prefersDarkColorScheme) {
+        setDarkClass();
+      } else {
+        setLightClass();
+      }
+    }
     if (colorScheme === 'light') {
-      rootClasses.remove('dark');
+      setLightClass();
     }
     if (colorScheme === 'dark') {
-      rootClasses.add('dark');
+      setDarkClass();
     }
+  }
+
+  function getPrefersDarkColorScheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)')?.matches;
+  }
+
+  function setLightClass() {
+    document.documentElement.classList.remove('dark');
+  }
+
+  function setDarkClass() {
+    document.documentElement.classList.add('dark');
   }
 </script>
 
