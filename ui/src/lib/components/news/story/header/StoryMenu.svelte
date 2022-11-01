@@ -3,6 +3,7 @@
   import NewspaperIcon from '$lib/components/ui/icons/outline/NewspaperIcon.svelte';
   import ClipboardDocumentIcon from '$lib/components/ui/icons/outline/ClipboardDocumentIcon.svelte';
   import QuestionMarkCircleIcon from '$lib/components/ui/icons/outline/QuestionMarkCircleIcon.svelte';
+  import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
 
   export let url: string;
   export let onClose: () => void;
@@ -10,8 +11,6 @@
   const menuClass = `
     flex flex-col gap-2
     p-2
-    bg-white dark:bg-gray-900
-    rounded-lg shadow-md dark:shadow-2xl
   `;
   const menuItemClass = `
     flex gap-2
@@ -54,7 +53,7 @@
   }
 </script>
 
-<div class={menuClass}>
+<PopoverContent class={menuClass}>
   <a class={menuItemClass} href={url} target="_blank" rel="noopener noreferrer" on:click={handleOpenArticleClick}>
     <NewspaperIcon />
     <span>Link zum Artikel</span>
@@ -80,4 +79,4 @@
     <QuestionMarkCircleIcon />
     <span>Kundendienst</span>
   </a>
-</div>
+</PopoverContent>

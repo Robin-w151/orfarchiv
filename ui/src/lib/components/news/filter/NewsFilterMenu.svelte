@@ -5,6 +5,7 @@
   import { createEventDispatcher } from 'svelte';
   import type { DateTime } from 'luxon';
   import Button from '$lib/components/ui/controls/Button.svelte';
+  import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
 
   export let from: DateTime;
   export let to: DateTime;
@@ -14,11 +15,8 @@
 
   const menuClass = `
     flex flex-col items-center gap-3
-    p-3
-    w-64
-    text-blue-700 bg-white
-    dark:text-blue-500 dark:bg-gray-900
-    rounded-lg shadow-md dark:shadow-2xl
+    p-3 w-64
+    text-blue-700 dark:text-blue-500
   `;
   const menuSectionClass = `
     flex flex-col gap-3
@@ -32,8 +30,6 @@
   const menuSectionItemClass = `
     flex flex-col items-center gap-1
     w-full
-  `;
-  const menuSectionLabelClass = `
   `;
 
   $: fromDate = from?.toISODate();
@@ -53,20 +49,20 @@
   }
 </script>
 
-<div class={menuClass}>
+<PopoverContent class={menuClass}>
   <section class={menuSectionClass}>
     <span class={menuSectionTitleClass}>
       <CalendarIcon />
       <TextGradient>Zeitraum</TextGradient>
     </span>
     <div class={menuSectionItemClass}>
-      <label class={menuSectionLabelClass} for="from-input">Von</label>
+      <label for="from-input">Von</label>
       <DateInput id="from-input" value={fromDate} on:change={handleFromChange} />
     </div>
     <div class={menuSectionItemClass}>
-      <label class={menuSectionLabelClass} for="to-input">Bis</label>
+      <label for="to-input">Bis</label>
       <DateInput id="to-input" value={toDate} on:change={handleToChange} />
     </div>
   </section>
   <Button on:click={handleApplyClick}>Anwenden</Button>
-</div>
+</PopoverContent>
