@@ -16,7 +16,7 @@ const config = {
         'connect-src': ['self', 'https://vitals.vercel-analytics.com'],
         'font-src': ['self', 'data:'],
         'img-src': ['*', 'data:'],
-        'script-src': ['self', 'sha256-DBD2RdrVtIyRnxKaZ2mQWvn0vcX69mbRtrk0F7vSMgo='],
+        'script-src': ['self', 'sha256-8FR83D/QToot/LDrjPM48Pnj7ZjkIdojmwQi93fY4oU='],
         'style-src': ['self', 'unsafe-inline'],
       },
     },

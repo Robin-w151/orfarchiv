@@ -14,7 +14,9 @@
     <meta name="msapplication-TileColor" content="blue" />
     <meta name="google-site-verification" content="6NToxA5WDNFIGBREvrYLc6LW6TH7DajeLBBaqoVuUBQ" />
     <script>
-      if (window.matchMedia('(prefers-color-scheme: dark)')?.matches) {
+      const { colorScheme } = JSON.parse(localStorage.getItem('styles') ?? '{}');
+      const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
+      if (colorScheme === 'dark' || (!colorScheme && prefersDarkColorScheme)) {
         document.documentElement.classList.add('dark');
       }
     </script>

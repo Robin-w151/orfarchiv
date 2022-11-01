@@ -22,12 +22,14 @@
       analyticsId,
     });
   }
-  $: if (browser) {
-    if (document.documentElement.classList.contains('dark')) {
+  $: if (browser) applyColorScheme($styles.colorScheme);
+
+  if (browser) {
+    const hasDarkClass = document.documentElement.classList.contains('dark');
+    if (hasDarkClass && $styles.colorScheme === 'light') {
       styles.toggleColorScheme();
     }
   }
-  $: if (browser) applyColorScheme($styles.colorScheme);
 
   const wrapperClass = `
     flex flex-col gap-2 sm:gap-3
