@@ -13,9 +13,6 @@
     "format": "prettier --write --plugin-search-dir=. .",
     "fix:jsdom": "node scripts/fix-jsdom.js"
   },
-  "dependencies": {
-    "@vercel/analytics": "^0.1.3"
-  },
   "devDependencies": {
     "@fontsource/roboto": "^4.5.8",
     "@mozilla/readability": "^0.4.2",
@@ -33,6 +30,7 @@
     "@types/luxon": "^3.0.2",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
+    "@vercel/analytics": "^0.1.3",
     "acorn": "^8.8.1",
     "autoprefixer": "^10.4.13",
     "classnames": "^2.3.2",
