@@ -22,10 +22,8 @@
     @apply font-sans;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-    }
+  :root.dark {
+    color-scheme: dark;
   }
 
   .story-content {
