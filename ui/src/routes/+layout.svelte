@@ -13,6 +13,7 @@
   import Header from '$lib/components/ui/content/Header.svelte';
   import '../app.scss';
   import styles, { type ColorScheme } from '$lib/stores/styles';
+  import { onDestroy, onMount } from 'svelte';
 
   const analyticsId = import.meta.env.VERCEL_ANALYTICS_ID;
   $: if (browser && analyticsId) {
@@ -31,10 +32,21 @@
   `;
   const mainClass = 'flex flex-col gap-2 sm:gap-3';
 
-  function applyColorScheme(colorScheme: ColorScheme) {
-    const prefersDarkColorScheme = getPrefersDarkColorScheme();
+  onMount(() => {
+    if (browser) {
+      getPrefersDarkColorSchemeQuery().addEventListener('change', changeColorScheme);
+    }
+  });
+
+  onDestroy(() => {
+    if (browser) {
+      getPrefersDarkColorSchemeQuery().removeEventListener('change', changeColorScheme);
+    }
+  });
+
+  function applyColorScheme(colorScheme: ColorScheme, prefersDarkColorScheme?: boolean) {
     if (colorScheme === 'system') {
-      if (prefersDarkColorScheme) {
+      if (prefersDarkColorScheme ?? getPrefersDarkColorSchemeQuery()?.matches) {
         setDarkClass();
       } else {
         setLightClass();
@@ -48,8 +60,15 @@
     }
   }
 
-  function getPrefersDarkColorScheme() {
-    return window.matchMedia('(prefers-color-scheme: dark)')?.matches;
+  function changeColorScheme({ matches: prefersDarkColorScheme }) {
+    const colorScheme = $styles.colorScheme;
+    if (colorScheme === 'system') {
+      applyColorScheme(colorScheme, prefersDarkColorScheme);
+    }
+  }
+
+  function getPrefersDarkColorSchemeQuery() {
+    return window.matchMedia('(prefers-color-scheme: dark)');
   }
 
   function setLightClass() {
