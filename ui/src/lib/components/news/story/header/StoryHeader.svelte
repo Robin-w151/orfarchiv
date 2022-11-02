@@ -32,7 +32,7 @@
   <h3>{title}</h3>
   <span class={metadataClass}>
     <span>{category ?? 'Keine Kategorie'}</span>
-    {#if sourceLabel}<span>&nbsp;({sourceLabel})</span>{/if}
+    {#if sourceLabel}<span>({sourceLabel})</span>{/if}
     <span> - {formatTimestamp(timestamp)}</span></span
   >
 </header>
