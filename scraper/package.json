@@ -1,6 +1,6 @@
 {
   "name": "scraper",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "main": "src/index.js",
   "scripts": {
@@ -8,9 +8,9 @@
   },
   "packageManager": "yarn@3.2.1",
   "devDependencies": {
-    "@babel/core": "^7.18.9",
-    "@babel/eslint-parser": "^7.18.9",
-    "eslint": "8.22.0",
+    "@babel/core": "^7.19.6",
+    "@babel/eslint-parser": "^7.19.1",
+    "eslint": "8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-recommended": "^4.1.0",
     "eslint-plugin-prettier": "^4.2.1",
@@ -19,9 +19,9 @@
   "dependencies": {
     "axios": "^0.27.2",
     "dotenv-flow": "^3.2.0",
-    "fast-xml-parser": "^4.0.9",
-    "mongodb": "^4.8.0",
+    "fast-xml-parser": "^4.0.11",
+    "mongodb": "^4.11.0",
     "re2": "^1.17.7",
-    "winston": "^3.8.1"
+    "winston": "^3.8.2"
   }
 }
