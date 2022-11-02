@@ -2,7 +2,7 @@ const logger = require('./logger');
 const { MongoClient } = require('mongodb');
 const { join } = require('path');
 const { writeFile, mkdir } = require('fs').promises;
-require('dotenv-flow').config();
+require('dotenv-flow').config({ silent: true });
 
 main();
 
@@ -36,7 +36,7 @@ async function withOrfArchivDb(handler) {
     client = await MongoClient.connect(url);
     const db = client.db('orfarchiv');
     const newsCollection = db.collection('news');
-    return handler(newsCollection);
+    return await handler(newsCollection);
   } catch (error) {
     throw new Error(`DB error. Cause ${error.message}`);
   } finally {
