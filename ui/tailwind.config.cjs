@@ -3,10 +3,6 @@ module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   darkMode: 'class',
   theme: {
-    fontFamily: {
-      sans: ['Roboto', 'system-ui', 'sans-serif'],
-      serif: ['Georgia', 'system-ui', 'serif'],
-    },
     extend: {
       transitionDelay: {
         '25': '25ms',

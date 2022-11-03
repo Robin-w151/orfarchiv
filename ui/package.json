@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "2.9.1",
+  "version": "2.9.2",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev --host",
@@ -14,7 +14,6 @@
     "fix:jsdom": "node scripts/fix-jsdom.js"
   },
   "devDependencies": {
-    "@fontsource/roboto": "^4.5.8",
     "@mozilla/readability": "^0.4.2",
     "@popperjs/core": "^2.11.6",
     "@rgossiaux/svelte-headlessui": "^1.0.2",
