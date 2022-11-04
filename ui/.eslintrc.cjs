@@ -1,5 +1,3 @@
-const prettier = require('./.prettierrc.json');
-
 module.exports = {
   root: true,
   rules: {
@@ -8,14 +6,11 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     'no-unused-vars': 'off',
     'svelte/no-at-html-tags': 'off',
-    'prettier/prettier': [
-      'error',
-      {
-        ...prettier,
-      },
-    ],
   },
-  extends: ['plugin:@typescript-eslint/recommended', 'plugin:svelte/recommended', 'plugin:prettier/recommended'],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:svelte/recommended',
+  ],
   plugins: ['svelte3', '@typescript-eslint'],
   env: {
     browser: true,
@@ -32,10 +27,10 @@ module.exports = {
   overrides: [
     {
       files: ['*.svelte'],
-      parser: 'svelte-eslint-parser',
-      parserOptions: {
-        parser: '@typescript-eslint/parser',
-      },
+      processor: 'svelte3/svelte3',
     },
   ],
+  settings: {
+    'svelte3/typescript': () => require('typescript'),
+  }
 };
