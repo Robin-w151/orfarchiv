@@ -17,7 +17,7 @@
       <Radio
         id="color-scheme-system"
         name="color-scheme"
-        label="System"
+        label="Automatisch"
         checked={$styles.colorScheme === 'system'}
         on:change={handleColorSchemeRadioChange.bind(null, 'system')}
       />
