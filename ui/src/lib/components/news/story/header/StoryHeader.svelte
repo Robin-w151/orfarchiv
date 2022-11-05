@@ -5,11 +5,11 @@
   import { sources } from '$lib/models/settings';
   import Popover from '$lib/components/ui/controls/Popover.svelte';
 
-  export let title;
-  export let category;
-  export let url;
-  export let timestamp;
-  export let source;
+  export let title: string;
+  export let category: string;
+  export let url: string;
+  export let timestamp: string;
+  export let source: string;
 
   const infoClass = `
     flex flex-col flex-1 items-start

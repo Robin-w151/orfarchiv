@@ -13,7 +13,7 @@
   export let timestamp: string;
   export let source: string;
 
-  let itemRef;
+  let itemRef: Item;
   let showContentInitial = false;
   let showContent = false;
 

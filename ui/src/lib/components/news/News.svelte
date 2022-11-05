@@ -1,25 +1,27 @@
 <script lang="ts">
-  import news, { type NewsStore } from '$lib/stores/news';
-  import { onDestroy, onMount } from 'svelte';
   import { searchNews } from '$lib/api/news';
+  import NewsFilter from '$lib/components/news/filter/NewsFilter.svelte';
   import Content from '$lib/components/ui/content/Content.svelte';
-  import NewsList from './NewsList.svelte';
+  import Button from '$lib/components/ui/controls/Button.svelte';
+  import type { News } from '$lib/models/news';
+  import type { SearchRequestParameters } from '$lib/models/searchRequest';
+  import type { Settings } from '$lib/models/settings';
+  import news from '$lib/stores/news';
   import { loadMoreNews, refreshNews } from '$lib/stores/newsEvents';
+  import searchRequestParameters from '$lib/stores/searchRequestParameters';
+  import settings from '$lib/stores/settings';
+  import { defaultPadding } from '$lib/utils/styles';
   import { unsubscribeAll } from '$lib/utils/subscriptions';
-  import settings, { type SettingsStore } from '$lib/stores/settings';
+  import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
   import { get } from 'svelte/store';
-  import Button from '$lib/components/ui/controls/Button.svelte';
+  import NewsList from './NewsList.svelte';
   import NewsListSkeleton from './NewsListSkeleton.svelte';
-  import searchRequestParameters from '$lib/stores/searchRequestParameters';
-  import type { SearchRequestParameters } from '$lib/models/searchRequest';
-  import NewsFilter from '$lib/components/news/filter/NewsFilter.svelte';
-  import { defaultPadding } from '$lib/utils/styles';
 
   let subscriptions: Array<Unsubscriber> = [];
 
-  $: showNewsList = hasNews($news);
-  $: anySourcesEnabled = hasAnySourcesEnabled($settings);
+  $: showNewsList = hasNews($news as News);
+  $: anySourcesEnabled = hasAnySourcesEnabled($settings as Settings);
   $: loadMoreButtonDisabled = $news.nextKey === null;
 
   const newsFallbackWrapperClass = `
@@ -80,15 +82,12 @@
     }
   }
 
-  function hasNews(newsStore?: NewsStore): boolean {
-    return (
-      !!newsStore?.storyBuckets &&
-      newsStore.storyBuckets.reduce((count, bucket) => count + bucket.stories.length, 0) > 0
-    );
+  function hasNews(news?: News): boolean {
+    return !!news?.storyBuckets && news.storyBuckets.reduce((count, bucket) => count + bucket.stories.length, 0) > 0;
   }
 
-  function hasAnySourcesEnabled(settingsStore?: SettingsStore): boolean {
-    return !settingsStore || !settingsStore.sources || settingsStore.sources.length > 0;
+  function hasAnySourcesEnabled(settings?: Settings): boolean {
+    return !settings || !settings.sources || settings.sources.length > 0;
   }
 
   function handleLoadMoreClick(): void {

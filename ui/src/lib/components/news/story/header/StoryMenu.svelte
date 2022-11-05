@@ -23,7 +23,7 @@
   `;
 
   $: shareData = url ? { text: url } : undefined;
-  $: showShareButton = isWebShareAvailable(shareData);
+  $: showShareButton = shareData && isWebShareAvailable(shareData);
   $: showCopyToClipboardButton = isClipboardAvailable();
 
   function isWebShareAvailable(data: ShareData): boolean {

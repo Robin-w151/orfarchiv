@@ -7,7 +7,7 @@
   export let noGap = false;
   export let noPadding = false;
 
-  let itemRef;
+  let itemRef: HTMLDivElement;
 
   const itemClass = classNames([
     !noFlex && 'flex flex-col',

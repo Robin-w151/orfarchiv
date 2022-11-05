@@ -12,7 +12,7 @@
   import FunnelIcon from '$lib/components/ui/icons/outline/FunnelIcon.svelte';
 
   let subscriptions: Array<Unsubscriber> = [];
-  let textFilterInputRef: HTMLInputElement = null;
+  let textFilterInputRef: Input | null = null;
 
   const filterClass = classNames(['flex gap-2', defaultPadding, 'w-full', 'bg-white dark:bg-gray-900']);
 
@@ -25,18 +25,18 @@
   });
 
   function handleStartSearch() {
-    textFilterInputRef.focus();
+    textFilterInputRef?.focus();
   }
 
-  function handleTextFilterChange({ detail: textFilter }) {
+  function handleTextFilterChange({ detail: textFilter }: { detail: string }) {
     searchFilter.setTextFilter(textFilter);
   }
 
-  function handleDateFilterFromChange({ detail: from }) {
+  function handleDateFilterFromChange({ detail: from }: { detail: string }) {
     searchFilter.setFrom(from);
   }
 
-  function handleDateFilterToChange({ detail: to }) {
+  function handleDateFilterToChange({ detail: to }: { detail: string }) {
     searchFilter.setTo(to);
   }
 

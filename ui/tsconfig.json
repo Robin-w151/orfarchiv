@@ -8,7 +8,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "sourceMap": true,
-    "strict": true
+    "strict": true,
+    "types": ["vite/client"]
   },
   "include": ["./jest-setup.ts"]
 }

@@ -6,7 +6,7 @@
 
   export let btnType: BtnType = 'primary';
   export let iconOnly = false;
-  export let title: string = undefined;
+  export let title: string | undefined = undefined;
   export let disabled: boolean | undefined = undefined;
   export let placement = 'bottom';
 

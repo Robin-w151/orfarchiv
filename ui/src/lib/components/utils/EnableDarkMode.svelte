@@ -33,7 +33,7 @@
     }
   }
 
-  function changeColorScheme({ matches: prefersDarkColorScheme }) {
+  function changeColorScheme({ matches: prefersDarkColorScheme }: { matches: boolean }) {
     const colorScheme = $styles.colorScheme;
     if (colorScheme === 'system') {
       applyColorScheme(colorScheme, prefersDarkColorScheme);

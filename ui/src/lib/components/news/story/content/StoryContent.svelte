@@ -15,7 +15,7 @@
   const dispatch = createEventDispatcher();
 
   let isLoading = true;
-  let content;
+  let content: string;
   let isClosed = false;
 
   const wrapperClass = classNames('flex flex-col items-center gap-3');
@@ -28,7 +28,8 @@
     try {
       content = await fetchContentWithRetry(url);
     } catch (error) {
-      console.warn(`Error: ${error.message}`);
+      const { message } = error as Error;
+      console.warn(`Error: ${message}`);
     } finally {
       isLoading = false;
     }

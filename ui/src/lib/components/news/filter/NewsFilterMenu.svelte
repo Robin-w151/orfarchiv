@@ -7,8 +7,8 @@
   import Button from '$lib/components/ui/controls/Button.svelte';
   import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
 
-  export let from: DateTime;
-  export let to: DateTime;
+  export let from: DateTime | undefined;
+  export let to: DateTime | undefined;
   export let onClose: () => void;
 
   const dispatch = createEventDispatcher();
@@ -35,11 +35,11 @@
   $: fromDate = from?.toISODate();
   $: toDate = to?.toISODate();
 
-  function handleFromChange({ detail: from }) {
+  function handleFromChange({ detail: from }: { detail: string }) {
     dispatch('fromChange', from);
   }
 
-  function handleToChange({ detail: to }) {
+  function handleToChange({ detail: to }: { detail: string }) {
     dispatch('toChange', to);
   }
 
