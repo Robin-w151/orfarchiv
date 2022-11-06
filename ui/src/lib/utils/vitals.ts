@@ -1,9 +1,9 @@
 import { getCLS, getFCP, getFID, getLCP, getTTFB, type Metric } from 'web-vitals';
 
 const vitalsUrl = '/api/vitals';
-const connection = (navigator as any)?.connection;
 
 function getConnectionSpeed() {
+  const connection = (navigator as any)?.connection;
   return 'connection' in navigator && connection && 'effectiveType' in connection ? connection.effectiveType : '';
 }
 
