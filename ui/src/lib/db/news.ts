@@ -38,8 +38,8 @@ function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters
   const textQuery =
     textFilters && textFilters.length > 0
       ? {
-          $or: ['title', 'category', 'source'].map((key) => ({
-            $and: textFilters?.map((filter) => ({ [key]: { $in: [filter] } })),
+          $and: textFilters?.map((filter) => ({
+            $or: ['title', 'category', 'source'].map((key) => ({ [key]: { $in: [filter] } })),
           })),
         }
       : {};
