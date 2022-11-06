@@ -2,12 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "UI Dev",
       "type": "node",
       "request": "launch",
-      "name": "UI Dev",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "yarn",
       "runtimeArgs": ["dev"]
+    },
+    {
+      "name": "UI Fix jsdom",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ui",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["fix:jsdom"]
     }
   ]
 }
