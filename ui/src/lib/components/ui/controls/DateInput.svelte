@@ -15,7 +15,7 @@
     transition
   `;
 
-  let inputRef;
+  let inputRef: HTMLInputElement;
 
   $: dispatch('change', value);
 

@@ -75,7 +75,8 @@
     try {
       await handler();
     } catch (error) {
-      if (error.name === 'AbortError') {
+      const { name } = error as Error;
+      if (name === 'AbortError') {
         return;
       }
       console.warn(error);
