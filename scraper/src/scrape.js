@@ -5,10 +5,10 @@ const logger = require('./logger');
 
 const GUID_RE2 = new RE2('/stories/(?<id>[0-9]+)');
 
-async function scrapeOrfNews(url, source, alternativeFormat = false) {
+async function scrapeOrfNews(url, source) {
   logger.info(`Scraping RSS feed: '${source}'`);
   const data = await fetchOrfNews(url);
-  return collectStories(data, source, alternativeFormat);
+  return collectStories(data, source);
 }
 
 async function fetchOrfNews(url) {
@@ -21,22 +21,45 @@ async function fetchOrfNews(url) {
   }
 }
 
-function collectStories(data, source, alternativeFormat) {
-  logger.info(`Parsing data${alternativeFormat ? ' (alternative format) ' : ''}...`);
+function collectStories(data, source) {
+  logger.info(`Parsing data...`);
   const parser = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '@_' });
   const document = parser.parse(data);
-  const items = alternativeFormat ? document?.rss?.channel?.item : document?.['rdf:RDF']?.item;
-  return (
-    items?.filter(filterStoryRdfItem).map(mapToStory.bind(null, source, alternativeFormat)).filter(isValidStory) ?? []
-  );
+
+  const [format, items] = detectFormat(document);
+  logger.info(`Detected format: '${format}'`);
+
+  return items?.filter(filterStoryRdfItem).map(mapToStory.bind(null, source, format)).filter(isValidStory) ?? [];
+}
+
+function detectFormat(document) {
+  let items;
+
+  items = document?.['rdf:RDF']?.item;
+  if (items && Array.isArray(items)) {
+    return ['RDF', items];
+  }
+
+  items = document?.rss?.channel?.item;
+  if (items && Array.isArray(items)) {
+    return ['SIMPLE', items];
+  }
+
+  return ['UNKNOWN', []];
 }
 
 function filterStoryRdfItem(rdfItem) {
   return rdfItem && rdfItem.link?.includes('stories');
 }
 
-function mapToStory(source, alternativeFormat, item) {
-  return alternativeFormat ? mapSimpleToStory(source, item) : mapRdfToStory(source, item);
+function mapToStory(source, format, item) {
+  if (format === 'RDF') {
+    return mapRdfToStory(source, item);
+  }
+  if (format === 'SIMPLE') {
+    return mapSimpleToStory(source, item);
+  }
+  return null;
 }
 
 function mapRdfToStory(source, rdfItem) {

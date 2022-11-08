@@ -9,18 +9,15 @@
   },
   {
     "source": "help",
-    "rssUrl": "https://rss.orf.at/help.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/help.xml"
   },
   {
     "source": "science",
-    "rssUrl": "https://rss.orf.at/science.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/science.xml"
   },
   {
     "source": "religion",
-    "rssUrl": "https://rss.orf.at/religion.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/religion.xml"
   },
   {
     "source": "oe3",
@@ -32,52 +29,42 @@
   },
   {
     "source": "oesterreich",
-    "rssUrl": "https://rss.orf.at/oesterreich.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/oesterreich.xml"
   },
   {
     "source": "burgenland",
-    "rssUrl": "https://rss.orf.at/burgenland.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/burgenland.xml"
   },
   {
     "source": "wien",
-    "rssUrl": "https://rss.orf.at/wien.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/wien.xml"
   },
   {
     "source": "noe",
-    "rssUrl": "https://rss.orf.at/noe.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/noe.xml"
   },
   {
     "source": "ooe",
-    "rssUrl": "https://rss.orf.at/ooe.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/ooe.xml"
   },
   {
     "source": "salzburg",
-    "rssUrl": "https://rss.orf.at/salzburg.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/salzburg.xml"
   },
   {
     "source": "steiermark",
-    "rssUrl": "https://rss.orf.at/steiermark.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/steiermark.xml"
   },
   {
     "source": "kaernten",
-    "rssUrl": "https://rss.orf.at/kaernten.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/kaernten.xml"
   },
   {
     "source": "tirol",
-    "rssUrl": "https://rss.orf.at/tirol.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/tirol.xml"
   },
   {
     "source": "vorarlberg",
-    "rssUrl": "https://rss.orf.at/vorarlberg.xml",
-    "alternativeFormat": true
+    "rssUrl": "https://rss.orf.at/vorarlberg.xml"
   }
 ]
