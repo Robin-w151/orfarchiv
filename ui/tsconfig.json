@@ -11,5 +11,5 @@
     "strict": true,
     "types": ["vite/client"]
   },
-  "include": ["./src", "./jest-setup.ts"]
+  "include": ["./src"]
 }
