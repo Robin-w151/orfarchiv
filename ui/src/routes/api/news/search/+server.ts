@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
-import { searchNews } from '$lib/db/news';
+import { searchNews } from '$lib/backend/db/news';
 import { fromSearchParams } from '$lib/utils/searchRequest';
 
 /** @type {import('@sveltejs/kit').RequestHandler} */
