@@ -15,15 +15,3 @@ export async function GET(event: RequestEvent) {
     },
   });
 }
-
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function POST(event: RequestEvent) {
-  const searchRequest = await event.request.json();
-  const news = await searchNews(searchRequest);
-
-  return json(news, {
-    headers: {
-      'Cache-Control': 'no-cache',
-    },
-  });
-}
