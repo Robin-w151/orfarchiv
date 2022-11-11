@@ -1,7 +1,8 @@
-import type { News, PageKey } from '$lib/models/news';
+import type { News } from '$lib/models/news';
 import type { SearchRequestParameters } from '$lib/models/searchRequest';
 import { toSearchParams } from '$lib/utils/searchRequest';
 import news from '$lib/stores/news';
+import type { PageKey } from '$lib/models/pageKey';
 
 let abortController: AbortController | null = null;
 

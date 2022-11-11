@@ -4,6 +4,7 @@
   import ClipboardDocumentIcon from '$lib/components/ui/icons/outline/ClipboardDocumentIcon.svelte';
   import QuestionMarkCircleIcon from '$lib/components/ui/icons/outline/QuestionMarkCircleIcon.svelte';
   import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
+  import BookmarkIcon from '$lib/components/ui/icons/outline/BookmarkIcon.svelte';
 
   export let url: string;
   export let onClose: () => void;
@@ -38,6 +39,10 @@
     onClose();
   }
 
+  function handleReadLaterClick() {
+    onClose();
+  }
+
   function handleShareArticleClick() {
     navigator.share(shareData);
     onClose();
@@ -58,6 +63,10 @@
     <NewspaperIcon />
     <span>Link zum Artikel</span>
   </a>
+  <button class={menuItemClass} on:click={handleReadLaterClick}>
+    <BookmarkIcon />
+    <span>Später lesen</span>
+  </button>
   {#if showShareButton}
     <button class={menuItemClass} on:click={handleShareArticleClick}>
       <ShareIcon />

@@ -1,3 +1,4 @@
+import type { PageKey } from './pageKey';
 import type { Story } from './story';
 
 export interface News {
@@ -14,10 +15,4 @@ export interface NewsBucket {
   minAgeInMin: number;
   maxAgeInMin?: number;
   stories: Array<Story>;
-}
-
-export interface PageKey {
-  id: string;
-  timestamp: string;
-  type: 'prev' | 'next';
 }
