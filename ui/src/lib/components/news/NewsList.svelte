@@ -17,7 +17,7 @@
         <SectionList class={listClass}>
           {#each bucket.stories as story (story.id)}
             <li>
-              <Story {...story} />
+              <Story {story} />
             </li>
           {/each}
         </SectionList>

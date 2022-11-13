@@ -5,8 +5,10 @@
   import QuestionMarkCircleIcon from '$lib/components/ui/icons/outline/QuestionMarkCircleIcon.svelte';
   import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
   import BookmarkIcon from '$lib/components/ui/icons/outline/BookmarkIcon.svelte';
+  import readLater from '$lib/stores/readLater';
+  import type { Story } from '$lib/models/story';
 
-  export let url: string;
+  export let story: Story;
   export let onClose: () => void;
 
   const menuClass = `
@@ -23,7 +25,7 @@
     transition
   `;
 
-  $: shareData = url ? { text: url } : undefined;
+  $: shareData = story.url ? { text: story.url } : undefined;
   $: showShareButton = shareData && isWebShareAvailable(shareData);
   $: showCopyToClipboardButton = isClipboardAvailable();
 
@@ -40,6 +42,7 @@
   }
 
   function handleReadLaterClick() {
+    readLater.addStory(story);
     onClose();
   }
 
@@ -49,7 +52,7 @@
   }
 
   function handleCopyToClipboardClick() {
-    navigator.clipboard.writeText(url);
+    navigator.clipboard.writeText(story.url);
     onClose();
   }
 
@@ -59,7 +62,7 @@
 </script>
 
 <PopoverContent class={menuClass}>
-  <a class={menuItemClass} href={url} target="_blank" rel="noopener noreferrer" on:click={handleOpenArticleClick}>
+  <a class={menuItemClass} href={story.url} target="_blank" rel="noopener noreferrer" on:click={handleOpenArticleClick}>
     <NewspaperIcon />
     <span>Link zum Artikel</span>
   </a>

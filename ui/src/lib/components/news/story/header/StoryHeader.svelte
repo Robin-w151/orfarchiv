@@ -4,12 +4,9 @@
   import StoryMenu from '$lib/components/news/story/header/StoryMenu.svelte';
   import { sources } from '$lib/models/settings';
   import Popover from '$lib/components/ui/controls/Popover.svelte';
+  import type { Story } from '$lib/models/story';
 
-  export let title: string;
-  export let category: string;
-  export let url: string;
-  export let timestamp: string;
-  export let source: string;
+  export let story: Story;
 
   const infoClass = `
     flex flex-col flex-1 items-start
@@ -18,7 +15,7 @@
   `;
   const metadataClass = 'text-sm text-gray-600 dark:text-gray-400';
 
-  $: sourceLabel = getSourceLabel(source);
+  $: sourceLabel = getSourceLabel(story?.source);
 
   function getSourceLabel(source: string): string | undefined {
     if (!source || source === 'news') {
@@ -28,15 +25,17 @@
   }
 </script>
 
-<header class={infoClass} on:click on:keydown tabindex="0">
-  <h3>{title}</h3>
-  <span class={metadataClass}>
-    <span>{category ?? 'Keine Kategorie'}</span>
-    {#if sourceLabel}<span>({sourceLabel})</span>{/if}
-    <span> - {formatTimestamp(timestamp)}</span></span
-  >
-</header>
-<Popover btnType="secondary" iconOnly title="Weitere Optionen" placement="bottom-end" let:onClose>
-  <EllipsisVerticalIcon slot="button-content" />
-  <StoryMenu {url} {onClose} slot="content" />
-</Popover>
+{#if story}
+  <header class={infoClass} on:click on:keydown tabindex="0">
+    <h3>{story.title}</h3>
+    <span class={metadataClass}>
+      <span>{story.category ?? 'Keine Kategorie'}</span>
+      {#if sourceLabel}<span>({sourceLabel})</span>{/if}
+      <span> - {formatTimestamp(story.timestamp)}</span></span
+    >
+  </header>
+  <Popover btnType="secondary" iconOnly title="Weitere Optionen" placement="bottom-end" let:onClose>
+    <EllipsisVerticalIcon slot="button-content" />
+    <StoryMenu {story} {onClose} slot="content" />
+  </Popover>
+{/if}

@@ -6,12 +6,9 @@
   import StoryContent from '$lib/components/news/story/content/StoryContent.svelte';
   import Fade from '$lib/components/ui/transitions/Fade.svelte';
   import { tick } from 'svelte';
+  import type { Story } from '$lib/models/story';
 
-  export let title: string;
-  export let category: string;
-  export let url: string;
-  export let timestamp: string;
-  export let source: string;
+  export let story: Story;
 
   let itemRef: Item;
   let showContentInitial = false;
@@ -69,19 +66,11 @@
 
 <Item bind:this={itemRef} noGap noPadding>
   <div class="header {headerClass}" on:click={handleHeaderWrapperClick}>
-    <StoryHeader
-      {title}
-      {category}
-      {url}
-      {timestamp}
-      {source}
-      on:click={handleHeaderClick}
-      on:keydown={handleHeaderKeydown}
-    />
+    <StoryHeader {story} on:click={handleHeaderClick} on:keydown={handleHeaderKeydown} />
   </div>
   {#if showContent}
     <Fade class="content {contentClass}">
-      <StoryContent {url} on:collapse={handleStoryContentCollapse} />
+      <StoryContent url={story.url} on:collapse={handleStoryContentCollapse} />
     </Fade>
   {/if}
 </Item>
