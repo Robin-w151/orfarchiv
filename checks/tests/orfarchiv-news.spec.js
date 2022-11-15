@@ -93,6 +93,10 @@ const newsMockUpdate = {
     type: 'prev',
   },
 };
+const newsMockEmptyUpdate = {
+  stories: [],
+  prevKey: null,
+};
 const newsMockWithFilter = {
   stories: [
     {
@@ -164,15 +168,25 @@ class NewsPage {
     return this.getNewsListItem(index).locator('article');
   }
 
-  async mockSearchNewsApi(data, filter) {
+  async mockSearchNewsApi(data, { filter, update } = {}) {
     await this.page.route('**/api/news/search**', (route) => {
       const url = new URL(route.request().url());
+      const prevId = url.searchParams.get('prevId');
+      if (prevId && !update) {
+        route.fulfill({
+          status: 200,
+          body: JSON.stringify(newsMockEmptyUpdate),
+        });
+        return;
+      }
+
       const filterParam = url.searchParams.get('textFilter');
       if ((!filter && !filterParam) || filter === filterParam) {
         route.fulfill({
           status: 200,
           body: JSON.stringify(data),
         });
+        return;
       } else {
         route.continue();
       }
@@ -303,7 +317,7 @@ test.describe('NewsPage', () => {
     });
 
     test('search news updates', async () => {
-      await newsPage.mockSearchNewsApi(newsMockUpdate);
+      await newsPage.mockSearchNewsApi(newsMockUpdate, { update: true });
       await newsPage.searchNewsUpdates();
 
       const expectedCount = newsMock.stories.length + newsMockUpdate.stories.length;
@@ -319,7 +333,7 @@ test.describe('NewsPage', () => {
     });
 
     test('enter filter', async () => {
-      await newsPage.mockSearchNewsApi(newsMockWithFilter, 'bei');
+      await newsPage.mockSearchNewsApi(newsMockWithFilter, { filter: 'bei' });
       await newsPage.searchNews('bei');
 
       const expectedCount = newsMockWithFilter.stories.length;

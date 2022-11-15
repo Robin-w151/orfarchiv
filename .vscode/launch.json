@@ -24,6 +24,14 @@
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "yarn",
       "runtimeArgs": ["fix:jsdom"]
+    },
+    {
+      "name": "Checks",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/checks",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["test:debug"]
     }
   ]
 }
