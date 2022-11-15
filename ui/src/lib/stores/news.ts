@@ -5,22 +5,26 @@ import { DateTime } from 'luxon';
 
 export interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
-  setNews: (_: News) => void;
-  addNews: (_: News, append?: boolean) => void;
-  setIsLoading: (_: boolean) => void;
+  setNews: (news: News, newNews?: News) => void;
+  addNews: (news: News, append?: boolean) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 const initialState = { stories: [], isLoading: true };
 const { subscribe, update } = writable<News>(initialState);
 
-function setNews(news: News): void {
-  if (!news) {
+function setNews(news: News, newNews?: News): void {
+  if (!news && !newNews) {
     return;
   }
+
   const { stories, prevKey, nextKey } = news;
+  const { stories: newStories, prevKey: newPrevKey } = newNews ?? {};
+  const combinedStories = combineStories(stories, newStories);
+
   update((oldNews) => {
-    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories });
-    return { ...oldNews, stories, storyBuckets, prevKey, nextKey };
+    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: combinedStories });
+    return { ...oldNews, stories: combinedStories, storyBuckets, prevKey: newPrevKey ?? prevKey, nextKey };
   });
 }
 
@@ -30,7 +34,7 @@ function addNews(news: News, append = true): void {
   }
   const { stories, prevKey, nextKey } = news;
   update((oldNews) => {
-    const newStories = append ? (oldNews.stories ?? []).concat(stories) : (stories ?? []).concat(oldNews.stories);
+    const newStories = combineStories(oldNews.stories, stories, append);
     const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: newStories });
     const newNews = { ...oldNews, stories: newStories, storyBuckets };
     if (append) {
@@ -101,6 +105,10 @@ function createStoryBucketsAndFilter(news: News): Array<NewsBucket> | undefined 
     }
   });
   return buckets;
+}
+
+function combineStories(oldStories: Array<Story>, newStories: Array<Story> = [], append = false): Array<Story> {
+  return append ? (oldStories ?? []).concat(newStories) : (newStories ?? []).concat(oldStories);
 }
 
 export default { subscribe, setNews, addNews, setIsLoading } as NewsStore;

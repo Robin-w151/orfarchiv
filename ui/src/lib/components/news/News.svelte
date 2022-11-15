@@ -43,7 +43,14 @@
 
   async function fetchNews(searchRequestParameters: SearchRequestParameters) {
     await withLogging(async () => {
-      news.setNews(await searchNews(searchRequestParameters));
+      const foundNews = await searchNews(searchRequestParameters);
+      if (!foundNews?.prevKey) {
+        news.setNews(foundNews);
+        return;
+      }
+
+      const newNews = await searchNews(searchRequestParameters, foundNews?.prevKey);
+      news.setNews(foundNews, newNews);
     });
   }
 
