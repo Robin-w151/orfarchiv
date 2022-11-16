@@ -23,7 +23,7 @@ function addStory(story: Story): void {
   update((readLater) => ({ ...readLater, stories: insertIfAbsent(story, readLater.stories) }));
 }
 
-function insertIfAbsent(story: Story, stories: Array<Story>): void {
+function insertIfAbsent(story: Story, stories: Array<Story>): Array<Story> {
   const isAbsent = !stories.find((s) => s.id === story.id);
 
   let newStories = stories;
