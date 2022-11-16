@@ -23,7 +23,7 @@ function insertIfAbsent(story: Story, stories: Array<Story>) {
   let newStories = stories;
   if (isAbsent) {
     newStories = [story, ...stories];
-    db.persistStory(story);
+    db.persist(story);
   }
 
   return newStories;
