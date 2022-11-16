@@ -3,7 +3,7 @@
   import NewsFilter from '$lib/components/news/filter/NewsFilter.svelte';
   import Content from '$lib/components/ui/content/Content.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
-  import type { News } from '$lib/models/news';
+  import type { News, NewsBucket } from '$lib/models/news';
   import type { SearchRequestParameters } from '$lib/models/searchRequest';
   import type { Settings } from '$lib/models/settings';
   import news from '$lib/stores/news';
@@ -17,12 +17,15 @@
   import { get } from 'svelte/store';
   import NewsList from './NewsList.svelte';
   import NewsListSkeleton from './NewsListSkeleton.svelte';
+  import readLater from '$lib/stores/readLater';
 
   let subscriptions: Array<Unsubscriber> = [];
+  let showReadLaterList = false;
 
   $: showNewsList = hasNews($news as News);
   $: anySourcesEnabled = hasAnySourcesEnabled($settings as Settings);
   $: loadMoreButtonDisabled = $news.nextKey === null;
+  $: readLaterBucket = { name: 'Lesezeichen', stories: $readLater.stories };
 
   const newsFallbackWrapperClass = `
     ${defaultPadding}
@@ -98,14 +101,20 @@
     return !settings || !settings.sources || settings.sources.length > 0;
   }
 
+  function handleToggleReadLater() {
+    showReadLaterList = !showReadLaterList;
+  }
+
   function handleLoadMoreClick(): void {
     loadMoreNews.notify();
   }
 </script>
 
 <Content id="news">
-  <NewsFilter />
-  {#if !anySourcesEnabled}
+  <NewsFilter {showReadLaterList} on:toggleReadLater={handleToggleReadLater} />
+  {#if showReadLaterList}
+    <NewsList storyBuckets={[readLaterBucket]} />
+  {:else if !anySourcesEnabled}
     <div class={newsFallbackWrapperClass}>
       <span
         >Aktuell sind alle Quellen deaktiviert. Gehen Sie zu den Einstellungen und aktivieren Sie mindestens eine Quelle

@@ -4,17 +4,26 @@
   import classNames from 'classnames';
   import { defaultPadding } from '$lib/utils/styles';
   import type { Unsubscriber } from 'svelte/store';
-  import { onDestroy, onMount } from 'svelte';
+  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
   import { startSearch } from '$lib/stores/newsEvents';
   import { unsubscribeAll } from '$lib/utils/subscriptions';
   import Popover from '$lib/components/ui/controls/Popover.svelte';
   import NewsFilterMenu from '$lib/components/news/filter/NewsFilterMenu.svelte';
   import FunnelIcon from '$lib/components/ui/icons/outline/FunnelIcon.svelte';
+  import Button from '$lib/components/ui/controls/Button.svelte';
+  import BookmarkIcon from '$lib/components/ui/icons/outline/BookmarkIcon.svelte';
+  import NewspaperIcon from '$lib/components/ui/icons/outline/NewspaperIcon.svelte';
+
+  export let showReadLaterList = false;
+
+  const dispatch = createEventDispatcher();
+
+  const filterClass = classNames(['flex gap-2', defaultPadding, 'w-full', 'bg-white dark:bg-gray-900']);
 
   let subscriptions: Array<Unsubscriber> = [];
   let textFilterInputRef: Input | null = null;
 
-  const filterClass = classNames(['flex gap-2', defaultPadding, 'w-full', 'bg-white dark:bg-gray-900']);
+  $: toggleReadLaterTitle = showReadLaterList ? 'Alle News anzeigen' : 'Lesezeichen anzeigen';
 
   onMount(() => {
     subscriptions.push(startSearch.onUpdate(handleStartSearch));
@@ -30,6 +39,10 @@
 
   function handleTextFilterChange({ detail: textFilter }: { detail: string }) {
     searchFilter.setTextFilter(textFilter);
+  }
+
+  function handleReadLaterToggleButtonClick() {
+    dispatch('toggleReadLater');
   }
 
   function handleDateFilterFromChange({ detail: from }: { detail: string }) {
@@ -53,6 +66,13 @@
     bind:this={textFilterInputRef}
     placeholder="Suche"
   />
+  <Button btnType="secondary" iconOnly title={toggleReadLaterTitle} on:click={handleReadLaterToggleButtonClick}>
+    {#if showReadLaterList}
+      <NewspaperIcon />
+    {:else}
+      <BookmarkIcon />
+    {/if}
+  </Button>
   <Popover btnType="secondary" iconOnly title="Weitere Filter-Optionen" placement="bottom-end" let:onClose>
     <FunnelIcon slot="button-content" />
     <NewsFilterMenu

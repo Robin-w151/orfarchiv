@@ -12,7 +12,7 @@ export interface News {
 
 export interface NewsBucket {
   name: string;
-  minAgeInMin: number;
-  maxAgeInMin?: number;
   stories: Array<Story>;
+  minAgeInMin?: number;
+  maxAgeInMin?: number;
 }

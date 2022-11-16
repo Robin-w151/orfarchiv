@@ -23,7 +23,7 @@ function setNews(news: News, newNews?: News): void {
   const combinedStories = combineStories(stories, newStories);
 
   update((oldNews) => {
-    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: combinedStories });
+    const storyBuckets = createStoryBuckets({ ...oldNews, stories: combinedStories });
     return { ...oldNews, stories: combinedStories, storyBuckets, prevKey: newPrevKey ?? prevKey, nextKey };
   });
 }
@@ -35,7 +35,7 @@ function addNews(news: News, append = true): void {
   const { stories, prevKey, nextKey } = news;
   update((oldNews) => {
     const newStories = combineStories(oldNews.stories, stories, append);
-    const storyBuckets = createStoryBucketsAndFilter({ ...oldNews, stories: newStories });
+    const storyBuckets = createStoryBuckets({ ...oldNews, stories: newStories });
     const newNews = { ...oldNews, stories: newStories, storyBuckets };
     if (append) {
       newNews.nextKey = nextKey;
@@ -50,7 +50,7 @@ function setIsLoading(isLoading: boolean): void {
   update((oldNews) => ({ ...oldNews, isLoading }));
 }
 
-function createStoryBucketsAndFilter(news: News): Array<NewsBucket> | undefined {
+function createStoryBuckets(news: News): Array<NewsBucket> | undefined {
   if (!news) {
     return undefined;
   }

@@ -5,7 +5,7 @@
   import Story from '$lib/components/news/story/Story.svelte';
 
   export let storyBuckets: Array<NewsBucket> | undefined = undefined;
-  export let isLoading: boolean;
+  export let isLoading = false;
 
   const listClass = `cursor-pointer`;
 </script>
