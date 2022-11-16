@@ -5,6 +5,7 @@
   import RefreshIcon from '$lib/components/ui/icons/outline/RefreshIcon.svelte';
   import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
   import TextGradient from '$lib/components/ui/content/TextGradient.svelte';
+  import BookmarkIcon from '../icons/outline/BookmarkIcon.svelte';
 
   const headerClass = `
     flex justify-between items-center gap-6
@@ -29,6 +30,9 @@
   <div class={headerActionsClass}>
     <ButtonLink href="/" title="Nach Updates suchen" iconOnly on:click={handleRefreshButtonClick} preventDefault>
       <RefreshIcon />
+    </ButtonLink>
+    <ButtonLink href="/bookmarks" title="Lesezeichen" iconOnly prefetch>
+      <BookmarkIcon />
     </ButtonLink>
     <ButtonLink href="/settings" title="Einstellungen" iconOnly prefetch>
       <CogIcon />

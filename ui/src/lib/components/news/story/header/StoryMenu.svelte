@@ -5,8 +5,9 @@
   import QuestionMarkCircleIcon from '$lib/components/ui/icons/outline/QuestionMarkCircleIcon.svelte';
   import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
   import BookmarkIcon from '$lib/components/ui/icons/outline/BookmarkIcon.svelte';
-  import readLater from '$lib/stores/readLater';
+  import bookmarks from '$lib/stores/bookmarks';
   import type { Story } from '$lib/models/story';
+  import BookmarkSlashIcon from '$lib/components/ui/icons/outline/BookmarkSlashIcon.svelte';
 
   export let story: Story;
   export let onClose: () => void;
@@ -28,6 +29,7 @@
   $: shareData = story.url ? { text: story.url } : undefined;
   $: showShareButton = shareData && isWebShareAvailable(shareData);
   $: showCopyToClipboardButton = isClipboardAvailable();
+  $: isBookmarked = bookmarks.isBookmarked(story);
 
   function isWebShareAvailable(data: ShareData): boolean {
     return navigator.canShare?.(data) && !!navigator.share;
@@ -41,8 +43,13 @@
     onClose();
   }
 
-  function handleReadLaterClick() {
-    readLater.addStory(story);
+  function handleAddToBookmarksClick() {
+    bookmarks.addStory(story);
+    onClose();
+  }
+
+  function handleRemoveFromBookmarksClick() {
+    bookmarks.removeStory(story);
     onClose();
   }
 
@@ -64,12 +71,19 @@
 <PopoverContent class={menuClass}>
   <a class={menuItemClass} href={story.url} target="_blank" rel="noopener noreferrer" on:click={handleOpenArticleClick}>
     <NewspaperIcon />
-    <span>Link zum Artikel</span>
+    <span>In orf.at öffnen</span>
   </a>
-  <button class={menuItemClass} on:click={handleReadLaterClick}>
-    <BookmarkIcon />
-    <span>Später lesen</span>
-  </button>
+  {#if isBookmarked}
+    <button class={menuItemClass} on:click={handleRemoveFromBookmarksClick}>
+      <BookmarkSlashIcon />
+      <span>Von Lesezeichen entfernen</span>
+    </button>
+  {:else}
+    <button class={menuItemClass} on:click={handleAddToBookmarksClick}>
+      <BookmarkIcon />
+      <span>Zu Lesezeichen hinzufügen</span>
+    </button>
+  {/if}
   {#if showShareButton}
     <button class={menuItemClass} on:click={handleShareArticleClick}>
       <ShareIcon />

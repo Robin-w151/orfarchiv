@@ -1,5 +1,5 @@
 import type { Story } from './story';
 
-export interface ReadLater {
+export interface Bookmarks {
   stories: Array<Story>;
 }
