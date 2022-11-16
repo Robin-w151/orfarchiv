@@ -1,5 +1,6 @@
 import type { ReadLater } from '$lib/models/readLater';
 import type { Story } from '$lib/models/story';
+import { DateTime } from 'luxon';
 import { writable, type Readable } from 'svelte/store';
 import ReadLaterDB from './persistence/readLaterDB';
 
@@ -15,7 +16,7 @@ init();
 
 async function init(): Promise<void> {
   await db.init();
-  const stories = await db.findAll();
+  const stories = (await db.findAll()).sort(compareStories);
   update((readLater) => ({ ...readLater, stories }));
 }
 
@@ -32,7 +33,11 @@ function insertIfAbsent(story: Story, stories: Array<Story>): Array<Story> {
     db.persist(story);
   }
 
-  return newStories;
+  return newStories.sort(compareStories);
+}
+
+function compareStories(s1: Story, s2: Story): number {
+  return DateTime.fromISO(s2.timestamp).valueOf() - DateTime.fromISO(s1.timestamp).valueOf();
 }
 
 export default { subscribe, addStory } as ReadLaterStore;
