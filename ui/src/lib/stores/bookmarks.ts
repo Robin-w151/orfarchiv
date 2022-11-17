@@ -1,59 +1,47 @@
+import { browser } from '$app/environment';
 import type { Bookmarks } from '$lib/models/bookmarks';
 import type { Story } from '$lib/models/story';
-import { DateTime } from 'luxon';
-import { writable } from 'svelte-local-storage-store';
-import { get, type Readable } from 'svelte/store';
+import Dexie, { liveQuery, type Table } from 'dexie';
+import { writable, type Readable } from 'svelte/store';
 
 export interface BookmarksStore extends Readable<Bookmarks>, Partial<Bookmarks> {
   addStory: (story: Story) => void;
   removeStory: (story: Story) => void;
-  isBookmarked: (story: Story) => boolean;
+  isBookmarked: (story: Story) => Promise<boolean>;
 }
 
+class BookmarksDb extends Dexie {
+  stories!: Table<Story>;
+
+  constructor() {
+    super('bookmarks');
+    this.version(1).stores({
+      stories: 'id,timestamp',
+    });
+  }
+}
+
+let db: BookmarksDb | null = null;
 const initialState = { stories: [] };
-const store = writable<Bookmarks>('bookmarks', initialState);
-const { subscribe, update } = store;
+const { subscribe, update } = writable<Bookmarks>(initialState);
+
+if (browser) {
+  db = new BookmarksDb();
+  liveQuery(() => (db ? db.stories.toCollection().reverse().sortBy('timestamp') : [])).subscribe((stories) =>
+    update((bookmarks) => ({ ...bookmarks, stories })),
+  );
+}
 
 function addStory(story: Story): void {
-  update((bookmarks) => ({ ...bookmarks, stories: insertIfAbsent(story, bookmarks.stories) }));
+  db?.stories.add(story, story.id);
 }
 
 function removeStory(story: Story): void {
-  update((bookmarks) => ({ ...bookmarks, stories: removeIfPresent(story, bookmarks.stories) }));
+  db?.stories.delete(story.id);
 }
 
-function insertIfAbsent(story: Story, stories: Array<Story>): Array<Story> {
-  const isAbsent = !isStoryContained(story, stories);
-
-  let newStories = stories;
-  if (isAbsent) {
-    newStories = [story, ...stories];
-  }
-
-  return newStories.sort(compareStories);
-}
-
-function removeIfPresent(story: Story, stories: Array<Story>): Array<Story> {
-  const isPresent = isStoryContained(story, stories);
-
-  let newStories = stories;
-  if (isPresent) {
-    newStories = stories.filter((s) => s.id !== story.id);
-  }
-
-  return newStories;
-}
-
-function compareStories(s1: Story, s2: Story): number {
-  return DateTime.fromISO(s2.timestamp).valueOf() - DateTime.fromISO(s1.timestamp).valueOf();
-}
-
-function isBookmarked(story: Story): boolean {
-  return isStoryContained(story, get(store).stories);
-}
-
-function isStoryContained(story: Story, stories: Array<Story>): boolean {
-  return !!stories.find((s) => s.id === story.id);
+async function isBookmarked(story: Story): Promise<boolean> {
+  return !!(await db?.stories.get(story.id)) ?? false;
 }
 
 export default { subscribe, addStory, removeStory, isBookmarked } as BookmarksStore;
