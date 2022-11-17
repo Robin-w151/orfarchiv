@@ -10,7 +10,7 @@
   import { loadMoreNews, refreshNews } from '$lib/stores/newsEvents';
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import settings from '$lib/stores/settings';
-  import { defaultPadding } from '$lib/utils/styles';
+  import { defaultAlertTextBox, defaultPadding } from '$lib/utils/styles';
   import { unsubscribeAll } from '$lib/utils/subscriptions';
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
@@ -23,13 +23,6 @@
   $: showNewsList = hasNews($news as News);
   $: anySourcesEnabled = hasAnySourcesEnabled($settings as Settings);
   $: loadMoreButtonDisabled = $news.nextKey === null;
-
-  const newsFallbackWrapperClass = `
-    ${defaultPadding}
-    w-full
-    text-lg
-    text-gray-800 dark:text-gray-300 bg-white dark:bg-gray-900
-  `;
 
   onMount(async () => {
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
@@ -106,7 +99,7 @@
 <Content id="news">
   <NewsFilter />
   {#if !anySourcesEnabled}
-    <div class={newsFallbackWrapperClass}>
+    <div class={defaultAlertTextBox}>
       <span
         >Aktuell sind alle Quellen deaktiviert. Gehen Sie zu den Einstellungen und aktivieren Sie mindestens eine Quelle
         um Nachrichten zu sehen.</span
@@ -117,7 +110,7 @@
   {:else if $news.isLoading}
     <NewsListSkeleton />
   {:else}
-    <div class={newsFallbackWrapperClass}>
+    <div class={defaultAlertTextBox}>
       <span>Keine News vorhanden. Versuchen Sie es später erneut.</span>
     </div>
   {/if}
