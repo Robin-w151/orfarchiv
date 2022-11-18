@@ -4,8 +4,6 @@
   import NewsList from './NewsList.svelte';
   import { defaultAlertTextBox } from '$lib/utils/styles';
 
-  console.log(bookmarks);
-
   $: bookmarksAvailable = $bookmarks.stories?.length > 0;
   $: bookmarksBucket = { name: 'Lesezeichen', stories: $bookmarks.stories };
 </script>
