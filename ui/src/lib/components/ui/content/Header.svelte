@@ -1,11 +1,11 @@
 <script lang="ts">
   import TextGradient from '$lib/components/ui/content/TextGradient.svelte';
   import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
+  import BookmarkSquareIcon from '$lib/components/ui/icons/outline/BookmarkSquareIcon.svelte';
   import CogIcon from '$lib/components/ui/icons/outline/CogIcon.svelte';
   import RefreshIcon from '$lib/components/ui/icons/outline/RefreshIcon.svelte';
   import { refreshNews } from '$lib/stores/newsEvents';
   import { defaultPadding } from '$lib/utils/styles';
-  import BookmarkSquareIcon from '../icons/outline/BookmarkSquareIcon.svelte';
 
   const headerClass = `
     flex justify-between items-center gap-6
