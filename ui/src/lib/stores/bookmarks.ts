@@ -2,12 +2,12 @@ import { browser } from '$app/environment';
 import type { Bookmarks } from '$lib/models/bookmarks';
 import type { Story } from '$lib/models/story';
 import Dexie, { liveQuery, type Table } from 'dexie';
-import { writable, type Readable } from 'svelte/store';
+import { get, writable, type Readable } from 'svelte/store';
 
 export interface BookmarksStore extends Readable<Bookmarks>, Partial<Bookmarks> {
   addStory: (story: Story) => void;
   removeStory: (story: Story) => void;
-  isBookmarked: (story: Story) => Promise<boolean>;
+  isBookmarked: (story: Story) => boolean;
 }
 
 class BookmarksDb extends Dexie {
@@ -23,7 +23,8 @@ class BookmarksDb extends Dexie {
 
 let db: BookmarksDb | null = null;
 const initialState = { stories: [] };
-const { subscribe, update } = writable<Bookmarks>(initialState);
+const store = writable<Bookmarks>(initialState);
+const { subscribe, update } = store;
 
 if (browser) {
   db = new BookmarksDb();
@@ -40,8 +41,8 @@ function removeStory(story: Story): void {
   db?.stories.delete(story.id);
 }
 
-async function isBookmarked(story: Story): Promise<boolean> {
-  return !!(await db?.stories.get(story.id)) ?? false;
+function isBookmarked(story: Story): boolean {
+  return !!get(store).stories.find((s) => s.id === story.id);
 }
 
 export default { subscribe, addStory, removeStory, isBookmarked } as BookmarksStore;
