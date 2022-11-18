@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { defaultPadding } from '$lib/utils/styles';
-  import { refreshNews } from '$lib/stores/newsEvents';
+  import TextGradient from '$lib/components/ui/content/TextGradient.svelte';
+  import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
   import CogIcon from '$lib/components/ui/icons/outline/CogIcon.svelte';
   import RefreshIcon from '$lib/components/ui/icons/outline/RefreshIcon.svelte';
-  import ButtonLink from '$lib/components/ui/controls/ButtonLink.svelte';
-  import TextGradient from '$lib/components/ui/content/TextGradient.svelte';
-  import BookmarkIcon from '../icons/outline/BookmarkIcon.svelte';
+  import { refreshNews } from '$lib/stores/newsEvents';
+  import { defaultPadding } from '$lib/utils/styles';
+  import BookmarkSquareIcon from '../icons/outline/BookmarkSquareIcon.svelte';
 
   const headerClass = `
     flex justify-between items-center gap-6
@@ -32,7 +32,7 @@
       <RefreshIcon />
     </ButtonLink>
     <ButtonLink href="/bookmarks" title="Lesezeichen" iconOnly prefetch>
-      <BookmarkIcon />
+      <BookmarkSquareIcon />
     </ButtonLink>
     <ButtonLink href="/settings" title="Einstellungen" iconOnly prefetch>
       <CogIcon />
