@@ -5,4 +5,5 @@ export interface Story {
   url: string;
   timestamp: string;
   source: string;
+  isBookmarked?: boolean;
 }

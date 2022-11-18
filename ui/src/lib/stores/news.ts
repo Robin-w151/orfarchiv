@@ -1,7 +1,9 @@
-import { type Readable, writable } from 'svelte/store';
+import { type Readable, writable, derived } from 'svelte/store';
 import type { News, NewsBucket } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import { DateTime } from 'luxon';
+import bookmarks from './bookmarks';
+import type { Bookmarks } from '$lib/models/bookmarks';
 
 export interface NewsStore extends Partial<News> {
   subscribe: Readable<News>['subscribe'];
@@ -11,7 +13,8 @@ export interface NewsStore extends Partial<News> {
 }
 
 const initialState = { stories: [], isLoading: true };
-const { subscribe, update } = writable<News>(initialState);
+const news = writable<News>(initialState);
+const { update } = news;
 
 function setNews(news: News, newNews?: News): void {
   if (!news && !newNews) {
@@ -23,8 +26,7 @@ function setNews(news: News, newNews?: News): void {
   const combinedStories = combineStories(stories, newStories);
 
   update((oldNews) => {
-    const storyBuckets = createStoryBuckets({ ...oldNews, stories: combinedStories });
-    return { ...oldNews, stories: combinedStories, storyBuckets, prevKey: newPrevKey ?? prevKey, nextKey };
+    return { ...oldNews, stories: combinedStories, prevKey: newPrevKey ?? prevKey, nextKey };
   });
 }
 
@@ -33,10 +35,10 @@ function addNews(news: News, append = true): void {
     return;
   }
   const { stories, prevKey, nextKey } = news;
+
   update((oldNews) => {
     const newStories = combineStories(oldNews.stories, stories, append);
-    const storyBuckets = createStoryBuckets({ ...oldNews, stories: newStories });
-    const newNews = { ...oldNews, stories: newStories, storyBuckets };
+    const newNews = { ...oldNews, stories: newStories };
     if (append) {
       newNews.nextKey = nextKey;
     } else if (prevKey) {
@@ -50,11 +52,10 @@ function setIsLoading(isLoading: boolean): void {
   update((oldNews) => ({ ...oldNews, isLoading }));
 }
 
-function createStoryBuckets(news: News): Array<NewsBucket> | undefined {
-  if (!news) {
+function createStoryBuckets(stories: Array<Story>): Array<NewsBucket> | undefined {
+  if (!stories) {
     return undefined;
   }
-  const stories = news.stories ?? [];
 
   const now = DateTime.now();
   function isInBucket(bucket: NewsBucket, story: Story) {
@@ -110,5 +111,39 @@ function createStoryBuckets(news: News): Array<NewsBucket> | undefined {
 function combineStories(oldStories: Array<Story>, newStories: Array<Story> = [], append = false): Array<Story> {
   return append ? (oldStories ?? []).concat(newStories) : (newStories ?? []).concat(oldStories);
 }
+
+function setBookmarkStatus(stories: Array<Story>, bookmarkStories: Array<Story>): Array<Story> {
+  const bookmarkIds = bookmarkStories.map((b) => b.id);
+  return stories.map((story) => ({ ...story, isBookmarked: bookmarkIds.includes(story.id) }));
+}
+
+let oldStories: Array<Story>;
+let oldBookmarkStories: Array<Story>;
+let cachedStories: Array<Story>;
+let cachedStoryBuckets: Array<NewsBucket> | undefined;
+
+function combineNewsAndBookmarks([news, bookmarks]: [News, Bookmarks]): News {
+  const stories = news.stories;
+  const bookmarkStories = bookmarks.stories;
+
+  let newStories = cachedStories;
+  let newStoryBuckets = cachedStoryBuckets;
+
+  if (oldStories !== stories || oldBookmarkStories !== bookmarkStories) {
+    oldStories = stories;
+    oldBookmarkStories = bookmarkStories;
+
+    newStories = setBookmarkStatus(stories, bookmarkStories);
+    newStoryBuckets = createStoryBuckets(newStories);
+
+    cachedStories = newStories;
+    cachedStoryBuckets = newStoryBuckets;
+  }
+
+  return { ...news, stories: newStories, storyBuckets: newStoryBuckets };
+}
+
+const extendedStore = derived([news, bookmarks], combineNewsAndBookmarks);
+const { subscribe } = extendedStore;
 
 export default { subscribe, setNews, addNews, setIsLoading } as NewsStore;

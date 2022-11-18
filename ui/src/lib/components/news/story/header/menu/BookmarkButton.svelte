@@ -3,14 +3,13 @@
   import BookmarkSlashIcon from '$lib/components/ui/icons/outline/BookmarkSlashIcon.svelte';
   import type { Story } from '$lib/models/story';
   import bookmarks from '$lib/stores/bookmarks';
+  import { afterUpdate } from 'svelte';
 
   export let story: Story;
   export let onClose: () => void;
 
   let clazz: string;
   export { clazz as class };
-
-  $: isBookmarked = bookmarks.isBookmarked(story);
 
   function handleAddToBookmarksClick() {
     bookmarks.addStory(story);
@@ -23,16 +22,14 @@
   }
 </script>
 
-{#await isBookmarked then bookmarked}
-  {#if bookmarked}
-    <button class={clazz} on:click={handleRemoveFromBookmarksClick}>
-      <BookmarkSlashIcon />
-      <span>Von Lesezeichen entfernen</span>
-    </button>
-  {:else}
-    <button class={clazz} on:click={handleAddToBookmarksClick}>
-      <BookmarkIcon />
-      <span>Zu Lesezeichen hinzufügen</span>
-    </button>
-  {/if}
-{/await}
+{#if story.isBookmarked}
+  <button class={clazz} on:click={handleRemoveFromBookmarksClick}>
+    <BookmarkSlashIcon />
+    <span>Von Lesezeichen entfernen</span>
+  </button>
+{:else}
+  <button class={clazz} on:click={handleAddToBookmarksClick}>
+    <BookmarkIcon />
+    <span>Zu Lesezeichen hinzufügen</span>
+  </button>
+{/if}
