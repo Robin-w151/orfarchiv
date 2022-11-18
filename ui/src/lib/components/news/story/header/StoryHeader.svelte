@@ -1,7 +1,7 @@
 <script lang="ts">
   import { formatTimestamp } from '$lib/utils/datetime.js';
   import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
-  import StoryMenu from '$lib/components/news/story/header/StoryMenu.svelte';
+  import StoryMenu from '$lib/components/news/story/header/menu/StoryMenu.svelte';
   import { sources } from '$lib/models/settings';
   import Popover from '$lib/components/ui/controls/Popover.svelte';
   import type { Story } from '$lib/models/story';

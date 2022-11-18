@@ -1,17 +1,17 @@
 <script lang="ts">
   import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
   import type { Story } from '$lib/models/story';
-  import BookmarkButton from './menu/BookmarkButton.svelte';
-  import OpenArticleButton from './menu/OpenArticleButton.svelte';
-  import OpenSupportButton from './menu/OpenSupportButton.svelte';
-  import ShareButton from './menu/ShareButton.svelte';
+  import BookmarkButton from './BookmarkButton.svelte';
+  import OpenArticleButton from './OpenArticleButton.svelte';
+  import OpenSupportButton from './OpenSupportButton.svelte';
+  import ShareButton from './ShareButton.svelte';
 
   export let story: Story;
   export let onClose: () => void;
 
   const menuClass = `
     flex flex-col gap-2
-    p-2 w-64 h-50
+    p-2
   `;
   const menuItemClass = `
     flex gap-2
@@ -26,7 +26,7 @@
 
 <PopoverContent class={menuClass}>
   <OpenArticleButton class={menuItemClass} {story} {onClose} />
+  <BookmarkButton class={menuItemClass} {story} {onClose} />
   <ShareButton class={menuItemClass} {story} {onClose} />
   <OpenSupportButton class={menuItemClass} {onClose} />
-  <BookmarkButton class={menuItemClass} {story} {onClose} />
 </PopoverContent>
