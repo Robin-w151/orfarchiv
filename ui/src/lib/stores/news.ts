@@ -61,7 +61,7 @@ function createStoryBuckets(news: News): Array<NewsBucket> | undefined {
     const timestamp = DateTime.fromISO(story.timestamp);
     const ageInMin = now.diff(timestamp).as('minutes');
     const { minAgeInMin, maxAgeInMin } = bucket;
-    return minAgeInMin <= ageInMin && (!maxAgeInMin || maxAgeInMin > ageInMin);
+    return (!minAgeInMin || minAgeInMin <= ageInMin) && (!maxAgeInMin || maxAgeInMin > ageInMin);
   }
 
   const buckets: Array<NewsBucket> = [
