@@ -1,10 +1,9 @@
-import type { Writable } from 'svelte/store';
 import type { Settings } from '$lib/models/settings';
-import { writable } from 'svelte-local-storage-store';
 import { sources } from '$lib/models/settings';
+import { writable } from 'svelte-local-storage-store';
+import type { Readable } from 'svelte/store';
 
-export interface SettingsStore extends Partial<Settings> {
-  subscribe: Writable<Settings>['subscribe'];
+export interface SettingsStore extends Readable<Settings>, Partial<Settings> {
   setOpenLinksInNewTab: (_: boolean) => void;
   setSource: (_source: string, _included: boolean) => void;
 }

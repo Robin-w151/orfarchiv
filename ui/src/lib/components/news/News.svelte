@@ -10,7 +10,7 @@
   import { loadMoreNews, refreshNews } from '$lib/stores/newsEvents';
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import settings from '$lib/stores/settings';
-  import { defaultAlertTextBox, defaultPadding } from '$lib/utils/styles';
+  import { defaultAlertTextBox } from '$lib/utils/styles';
   import { unsubscribeAll } from '$lib/utils/subscriptions';
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';

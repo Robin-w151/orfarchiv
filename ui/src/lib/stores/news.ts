@@ -5,8 +5,7 @@ import { DateTime } from 'luxon';
 import bookmarks from './bookmarks';
 import type { Bookmarks } from '$lib/models/bookmarks';
 
-export interface NewsStore extends Partial<News> {
-  subscribe: Readable<News>['subscribe'];
+export interface NewsStore extends Readable<News>, Partial<News> {
   setNews: (news: News, newNews?: News) => void;
   addNews: (news: News, append?: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;

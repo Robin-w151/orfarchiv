@@ -1,5 +1,5 @@
-import type { Writable } from 'svelte/store';
 import { writable } from 'svelte-local-storage-store';
+import type { Readable } from 'svelte/store';
 
 export type ColorScheme = 'light' | 'dark' | 'system';
 
@@ -7,8 +7,7 @@ export interface StylesStoreProps {
   colorScheme: ColorScheme;
 }
 
-export interface StylesStore extends StylesStoreProps {
-  subscribe: Writable<StylesStoreProps>['subscribe'];
+export interface StylesStore extends Readable<StylesStoreProps>, Partial<StylesStoreProps> {
   setColorScheme: (colorScheme: ColorScheme) => void;
 }
 

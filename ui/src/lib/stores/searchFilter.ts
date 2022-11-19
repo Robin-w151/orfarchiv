@@ -1,14 +1,13 @@
 import type { DateFilter, SearchFilter } from '$lib/models/searchRequest';
-import { type Writable, writable } from 'svelte/store';
 import debounce from 'lodash.debounce';
 import { DateTime } from 'luxon';
+import { writable, type Readable } from 'svelte/store';
 
 export interface SearchFilterStoreProps extends Partial<SearchFilter> {
   tempSearchFilter: { dateFilter?: DateFilter };
 }
 
-export interface SearchFilterStore extends SearchFilterStoreProps {
-  subscribe: Writable<SearchFilterStoreProps>['subscribe'];
+export interface SearchFilterStore extends Readable<SearchFilterStoreProps>, Partial<SearchFilterStoreProps> {
   setTextFilter: (textFilter: string | undefined) => void;
   setFrom: (fromDate: string | undefined) => void;
   setTo: (toDate: string | undefined) => void;

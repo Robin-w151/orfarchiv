@@ -3,7 +3,6 @@
   import BookmarkSlashIcon from '$lib/components/ui/icons/outline/BookmarkSlashIcon.svelte';
   import type { Story } from '$lib/models/story';
   import bookmarks from '$lib/stores/bookmarks';
-  import { afterUpdate } from 'svelte';
 
   export let story: Story;
   export let onClose: () => void;

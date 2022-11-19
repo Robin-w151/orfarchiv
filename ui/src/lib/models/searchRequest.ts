@@ -1,4 +1,4 @@
-import type { PageKey } from '$lib/models/news';
+import type { PageKey } from '$lib/models/pageKey';
 import type { DateTime } from 'luxon';
 
 export interface DateFilter {

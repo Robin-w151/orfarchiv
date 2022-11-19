@@ -4,9 +4,9 @@ import settings from './settings';
 import { derived, type Readable } from 'svelte/store';
 import { distinctUntilChanged } from './utils';
 
-export interface SearchRequestParametersStore extends Partial<SearchRequestParameters> {
-  subscribe: Readable<SearchRequestParameters>['subscribe'];
-}
+export interface SearchRequestParametersStore
+  extends Readable<SearchRequestParameters>,
+    Partial<SearchRequestParameters> {}
 
 function searchFilterStorePropsNotEqual(p1?: SearchFilterStoreProps, p2?: SearchFilterStoreProps): boolean {
   return (

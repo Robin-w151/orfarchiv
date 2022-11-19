@@ -1,5 +1,5 @@
 import type { SearchRequest } from '$lib/models/searchRequest';
-import type { PageKey } from '$lib/models/news';
+import type { PageKey } from '$lib/models/pageKey';
 import { DateTime } from 'luxon';
 
 const sourceToIndex = new Map<string, number>([
