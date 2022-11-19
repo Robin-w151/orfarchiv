@@ -65,12 +65,13 @@
 </script>
 
 <Item bind:this={itemRef} noGap noPadding>
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class="header {headerClass}" on:click={handleHeaderWrapperClick}>
     <StoryHeader {story} on:click={handleHeaderClick} on:keydown={handleHeaderKeydown} />
   </div>
   {#if showContent}
     <Fade class="content {contentClass}">
-      <StoryContent url={story.url} on:collapse={handleStoryContentCollapse} />
+      <StoryContent {story} on:collapse={handleStoryContentCollapse} />
     </Fade>
   {/if}
 </Item>

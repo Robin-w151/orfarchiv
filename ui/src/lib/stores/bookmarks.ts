@@ -8,6 +8,7 @@ import BookmarksDb from './persistence/bookmarksDb';
 export interface BookmarksStore extends Readable<Bookmarks>, Partial<Bookmarks> {
   addStory: (story: Story) => void;
   removeStory: (story: Story) => void;
+  setIsViewed: (story: Story) => void;
   setTextFilter: (textFilter: string) => void;
 }
 
@@ -29,6 +30,15 @@ function addStory(story: Story): void {
 
 function removeStory(story: Story): void {
   db?.stories.delete(story.id);
+}
+
+function setIsViewed(story: Story): void {
+  db?.stories
+    .where('id')
+    .equals(story.id)
+    .modify((s) => {
+      s.isViewed = true;
+    });
 }
 
 function setTextFilter(textFilter: string): void {
@@ -56,4 +66,4 @@ function filterStory(textFilters: Array<RegExp>, story: Story): boolean {
   });
 }
 
-export default { subscribe, addStory, removeStory, setTextFilter } as BookmarksStore;
+export default { subscribe, addStory, removeStory, setIsViewed, setTextFilter } as BookmarksStore;

@@ -7,10 +7,12 @@
   import { wait } from '$lib/utils/wait';
   import { fetchContent } from '$lib/api/news';
   import Link from '$lib/components/ui/controls/Link.svelte';
+  import bookmarks from '$lib/stores/bookmarks';
+  import type { Story } from '$lib/models/story';
 
   const MAX_RETRIES = 5;
 
-  export let url: string;
+  export let story: Story;
 
   const dispatch = createEventDispatcher();
 
@@ -26,7 +28,7 @@
 
   onMount(async () => {
     try {
-      content = await fetchContentWithRetry(url);
+      content = await fetchContentWithRetry(story.url);
     } catch (error) {
       const { message } = error as Error;
       console.warn(`Error: ${message}`);
@@ -42,7 +44,11 @@
   async function fetchContentWithRetry(url: string): Promise<string> {
     for (let retry = 0; retry < MAX_RETRIES && !isClosed; retry++) {
       try {
-        return await fetchContent(url);
+        const content = await fetchContent(url);
+        if (story.isBookmarked) {
+          bookmarks.setIsViewed(story);
+        }
+        return content;
       } catch (error) {
         if (retry < MAX_RETRIES - 1) {
           await wait(1000 * 2 ** retry);
@@ -72,11 +78,11 @@
   {:else if content}
     <article class="story-content {contentClass}" data-testid="story-content">
       {@html content}
-      <div class={contentSourceClass}>Quelle: <Link href={url}>orf.at</Link></div>
+      <div class={contentSourceClass}>Quelle: <Link href={story.url}>orf.at</Link></div>
     </article>
   {:else}
     <p data-testid="story-content-error">
-      Inhalt kann nicht angezeigt werden. Klicken Sie <Link class={errorLinkClass} href={url}>hier</Link> um zum Artikel
+      Inhalt kann nicht angezeigt werden. Klicken Sie <Link class={errorLinkClass} href={story.url}>hier</Link> um zum Artikel
       zu gelangen.
     </p>
   {/if}
