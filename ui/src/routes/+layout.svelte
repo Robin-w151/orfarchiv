@@ -1,8 +1,9 @@
 <script lang="ts">
-  import '../app.scss';
   import Header from '$lib/components/ui/content/Header.svelte';
-  import EnableDarkMode from '$lib/components/utils/EnableDarkMode.svelte';
   import EnableAnalytics from '$lib/components/utils/EnableAnalytics.svelte';
+  import EnableDarkMode from '$lib/components/utils/EnableDarkMode.svelte';
+  import EnableGlobalKeybindings from '$lib/components/utils/EnableGlobalKeybindings.svelte';
+  import '../app.scss';
 
   const wrapperClass = `
     flex flex-col gap-2 sm:gap-3
@@ -14,6 +15,7 @@
 
 <EnableDarkMode />
 <EnableAnalytics />
+<EnableGlobalKeybindings />
 
 <div class={wrapperClass}>
   <Header />
