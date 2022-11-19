@@ -5,13 +5,12 @@
   import FunnelIcon from '$lib/components/ui/icons/outline/FunnelIcon.svelte';
   import { startSearch } from '$lib/stores/newsEvents';
   import searchFilter from '$lib/stores/searchFilter';
-  import { defaultPadding } from '$lib/utils/styles';
+  import { defaultBackground, defaultPadding } from '$lib/utils/styles';
   import { unsubscribeAll } from '$lib/utils/subscriptions';
-  import classNames from 'classnames';
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
 
-  const filterClass = classNames(['flex gap-2', defaultPadding, 'w-full', 'bg-white dark:bg-gray-900']);
+  const filterClass = `flex gap-2 ${defaultPadding} w-full ${defaultBackground}`;
 
   let subscriptions: Array<Unsubscriber> = [];
   let textFilterInputRef: Input | null = null;

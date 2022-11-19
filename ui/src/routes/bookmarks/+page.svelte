@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Bookmarks from '$lib/components/news/Bookmarks.svelte';
+  import Bookmarks from '$lib/components/news/bookmarks/Bookmarks.svelte';
 </script>
 
 <svelte:head>
