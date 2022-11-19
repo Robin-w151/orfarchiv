@@ -416,7 +416,7 @@ test.describe('NewsPage', () => {
     });
   });
 
-  test.describe('Stories', () => {
+  test.describe('Story', () => {
     let newsPage;
 
     test.beforeEach(async ({ page }) => {
@@ -438,12 +438,22 @@ test.describe('NewsPage', () => {
       const expectedStoryInfo = `${category} - ${moment(timestamp).format('DD.MM.YYYY, HH:mm')}`;
       await expect(storyInfo).toHaveText(expectedStoryInfo);
     });
+  });
+
+  test.describe('Story options', () => {
+    let newsPage;
+
+    const storyIndex = 2;
+    let storyMenu;
+
+    test.beforeEach(async ({ page }) => {
+      newsPage = await setupNewsPage(page, newsMock);
+
+      storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
+      await storyMenu.click();
+    });
 
     test('article link', async () => {
-      const storyIndex = 2;
-      const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
-      await storyMenu.click();
-
       const articleLink = newsPage.popover.locator('a').nth(0);
       await articleLink.hover();
       await expect(articleLink).toBeVisible();
@@ -452,12 +462,19 @@ test.describe('NewsPage', () => {
       await expectExternalLink(articleLink, expectedHref);
     });
 
-    test('share button', async () => {
-      const storyIndex = 3;
-      const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
-      await storyMenu.click();
+    test('bookmark button', async () => {
+      const bookmarkButton = newsPage.popover.locator('button').nth(0);
+      await bookmarkButton.hover();
+      await expect(bookmarkButton).toBeVisible();
+      await expect(bookmarkButton).toHaveText('Zu Lesezeichen hinzufügen');
 
-      const shareButton = newsPage.popover.locator('button');
+      await bookmarkButton.click();
+      await storyMenu.click();
+      await expect(bookmarkButton).toHaveText('Von Lesezeichen entfernen');
+    });
+
+    test('share button', async () => {
+      const shareButton = newsPage.popover.locator('button').nth(1);
       await shareButton.hover();
       await expect(shareButton).toBeVisible();
 
@@ -468,10 +485,6 @@ test.describe('NewsPage', () => {
     });
 
     test('support link', async () => {
-      const storyIndex = 4;
-      const storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
-      await storyMenu.click();
-
       const supportLink = newsPage.popover.locator('a').nth(1);
       await supportLink.hover();
       await expect(supportLink).toBeVisible();
