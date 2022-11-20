@@ -14,7 +14,7 @@
     focus:text-blue-700 dark:focus:text-blue-500
     outline-none
   `;
-  const metadataClass = 'flex flex-wrap items-center gap-1 text-sm text-gray-600 dark:text-gray-400';
+  const metadataClass = 'flex flex-wrap items-center gap-x-1 text-sm text-gray-600 dark:text-gray-400';
   const viewedIconClass = 'w-5 h-5';
 
   $: showViewedIcon = story.isBookmarked && story.isViewed;
