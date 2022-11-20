@@ -6,6 +6,7 @@
   import Info from './info/Info.svelte';
   import Appearance from '$lib/components/settings/appearance/Appearance.svelte';
   import Developer from './developer/Developer.svelte';
+  import { PUBLIC_APP_MODE } from '$env/static/public';
 
   const gridClass = `
     grid grid-cols-auto sm:grid-cols-[1fr_1fr] ${defaultGap}
@@ -22,7 +23,9 @@
       <General />
       <Appearance />
       <Info />
-      <Developer />
+      {#if PUBLIC_APP_MODE === 'dev'}
+        <Developer />
+      {/if}
     </div>
     <div>
       <Sources />
