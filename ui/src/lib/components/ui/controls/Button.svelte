@@ -7,7 +7,11 @@
   export let disabled: boolean | undefined = undefined;
   export let title: string | undefined = undefined;
 
-  $: buttonClass = buttonClassFn({ btnType, iconOnly, clazz: $$props['class'] });
+  let clazz: string | undefined = undefined;
+  export { clazz as class };
+  export let customStyle = false;
+
+  $: buttonClass = buttonClassFn({ btnType, iconOnly, clazz, customStyle });
 </script>
 
 <button class={buttonClass} {type} {disabled} {title} on:click on:keydown>

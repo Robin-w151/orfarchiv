@@ -3,14 +3,14 @@
   import Content from '$lib/components/ui/content/Content.svelte';
   import NewsList from '../NewsList.svelte';
   import { defaultAlertTextBox } from '$lib/utils/styles';
-  import BookmarkFilter from '../filter/BookmarkFilter.svelte';
+  import BookmarkActions from '../filter/BookmarkActions.svelte';
 
   $: bookmarksAvailable = $bookmarks.filteredStories?.length > 0;
   $: bookmarksBucket = { name: 'Lesezeichen', stories: $bookmarks.filteredStories };
 </script>
 
 <Content id="bookmarks">
-  <BookmarkFilter />
+  <BookmarkActions />
   {#if bookmarksAvailable}
     <NewsList storyBuckets={[bookmarksBucket]} />
   {:else}

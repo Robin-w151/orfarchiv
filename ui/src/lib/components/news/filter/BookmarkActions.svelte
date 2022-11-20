@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Button from '$lib/components/ui/controls/Button.svelte';
   import Input from '$lib/components/ui/controls/Input.svelte';
+  import Popover from '$lib/components/ui/controls/Popover.svelte';
   import TrashIcon from '$lib/components/ui/icons/outline/TrashIcon.svelte';
   import bookmarks from '$lib/stores/bookmarks';
   import { startSearch } from '$lib/stores/newsEvents';
@@ -8,6 +8,7 @@
   import { unsubscribeAll } from '$lib/utils/subscriptions';
   import { onDestroy, onMount } from 'svelte';
   import type { Unsubscriber } from 'svelte/store';
+  import BookmarkDeleteMenu from './BookmarkDeleteMenu.svelte';
 
   const filterClass = `flex gap-2 ${defaultPadding} w-full ${defaultBackground}`;
 
@@ -30,7 +31,11 @@
     bookmarks.setTextFilter(textFilter);
   }
 
-  function handleDeleteAllViewedButtonClick() {
+  function handleDeleteAllBookmarks() {
+    bookmarks.removeAll();
+  }
+
+  function handleDeleteAllViewedBookmarks() {
     bookmarks.removeAllViewed();
   }
 </script>
@@ -43,8 +48,13 @@
     bind:this={textFilterInputRef}
     placeholder="Suche"
   />
-  <Button btnType="secondary" on:click={handleDeleteAllViewedButtonClick}>
-    <TrashIcon />
-    <span>Alle gelesenen löschen</span>
-  </Button>
+  <Popover btnType="secondary" iconOnly title="Lesezeichen löschen" placement="bottom-end" let:onClose>
+    <TrashIcon slot="button-content" />
+    <BookmarkDeleteMenu
+      slot="content"
+      {onClose}
+      on:removeAllBookmarks={handleDeleteAllBookmarks}
+      on:removeAllViewedBookmarks={handleDeleteAllViewedBookmarks}
+    />
+  </Popover>
 </div>

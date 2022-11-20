@@ -20,6 +20,7 @@ const secondaryClass = (focusEnabled: boolean) =>
 export const buttonClassFn = ({
   btnType,
   iconOnly,
+  customStyle,
   focusDisabled,
   clazz,
 }: {
@@ -27,17 +28,20 @@ export const buttonClassFn = ({
   iconOnly: boolean;
   focusDisabled?: boolean;
   clazz?: string;
+  customStyle?: boolean;
 }) => {
   const focusEnabled = focusDisabled === undefined ? true : !focusDisabled;
-  return classNames([
-    'flex justify-center gap-1',
-    iconOnly ? 'p-2' : 'px-3 py-2',
-    !iconOnly && 'w-28 min-w-fit',
-    btnType === 'primary' && primaryClass(focusEnabled),
-    btnType === 'secondary' && secondaryClass(focusEnabled),
-    'rounded-md',
-    'transition',
-    'disabled:cursor-not-allowed',
-    clazz,
-  ]);
+  return customStyle
+    ? clazz
+    : classNames([
+        'flex justify-center gap-1',
+        iconOnly ? 'p-2' : 'px-3 py-2',
+        !iconOnly && 'w-28 min-w-fit',
+        btnType === 'primary' && primaryClass(focusEnabled),
+        btnType === 'secondary' && secondaryClass(focusEnabled),
+        'rounded-md',
+        'transition',
+        'disabled:cursor-not-allowed',
+        clazz,
+      ]);
 };
