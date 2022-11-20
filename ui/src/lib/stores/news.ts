@@ -113,7 +113,7 @@ function combineStories(oldStories: Array<Story>, newStories: Array<Story> = [],
 
 function setBookmarkStatus(stories: Array<Story>, bookmarkStories: Array<Story>): Array<Story> {
   const bookmarkIds = bookmarkStories.map((b) => b.id);
-  return stories.map((story) => ({ ...story, isBookmarked: bookmarkIds.includes(story.id) }));
+  return stories.map((story) => ({ ...story, isBookmarked: +bookmarkIds.includes(story.id) }));
 }
 
 let oldStories: Array<Story>;

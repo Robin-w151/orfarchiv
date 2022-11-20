@@ -30,7 +30,7 @@ export const buttonClassFn = ({
 }) => {
   const focusEnabled = focusDisabled === undefined ? true : !focusDisabled;
   return classNames([
-    'flex justify-center',
+    'flex justify-center gap-1',
     iconOnly ? 'p-2' : 'px-3 py-2',
     !iconOnly && 'w-28 min-w-fit',
     btnType === 'primary' && primaryClass(focusEnabled),

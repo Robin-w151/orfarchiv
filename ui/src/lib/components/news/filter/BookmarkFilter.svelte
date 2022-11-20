@@ -1,5 +1,7 @@
 <script lang="ts">
+  import Button from '$lib/components/ui/controls/Button.svelte';
   import Input from '$lib/components/ui/controls/Input.svelte';
+  import TrashIcon from '$lib/components/ui/icons/outline/TrashIcon.svelte';
   import bookmarks from '$lib/stores/bookmarks';
   import { startSearch } from '$lib/stores/newsEvents';
   import { defaultBackground, defaultPadding } from '$lib/utils/styles';
@@ -27,6 +29,10 @@
   function handleTextFilterChange({ detail: textFilter }: { detail: string }) {
     bookmarks.setTextFilter(textFilter);
   }
+
+  function handleDeleteAllViewedButtonClick() {
+    bookmarks.removeAllViewed();
+  }
 </script>
 
 <div class={filterClass} id="bookmark-filter">
@@ -37,4 +43,8 @@
     bind:this={textFilterInputRef}
     placeholder="Suche"
   />
+  <Button btnType="secondary" on:click={handleDeleteAllViewedButtonClick}>
+    <TrashIcon />
+    <span>Alle gelesenen löschen</span>
+  </Button>
 </div>

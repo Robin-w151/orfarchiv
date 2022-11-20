@@ -11,12 +11,12 @@
   export { clazz as class };
 
   function handleAddToBookmarksClick() {
-    bookmarks.addStory(story);
+    bookmarks.add(story);
     onClose();
   }
 
   function handleRemoveFromBookmarksClick() {
-    bookmarks.removeStory(story);
+    bookmarks.remove(story);
     onClose();
   }
 </script>

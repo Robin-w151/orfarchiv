@@ -6,8 +6,9 @@ import { writable, type Readable } from 'svelte/store';
 import BookmarksDb from './persistence/bookmarksDb';
 
 export interface BookmarksStore extends Readable<Bookmarks>, Partial<Bookmarks> {
-  addStory: (story: Story) => void;
-  removeStory: (story: Story) => void;
+  add: (story: Story) => void;
+  remove: (story: Story) => void;
+  removeAllViewed: () => void;
   setIsViewed: (story: Story) => void;
   setTextFilter: (textFilter: string) => void;
 }
@@ -24,12 +25,16 @@ if (browser) {
   });
 }
 
-function addStory(story: Story): void {
-  db?.stories.add({ ...story, isBookmarked: true }, story.id);
+function add(story: Story): void {
+  db?.stories.add({ ...story, isBookmarked: 1 }, story.id);
 }
 
-function removeStory(story: Story): void {
+function remove(story: Story): void {
   db?.stories.delete(story.id);
+}
+
+function removeAllViewed(): void {
+  db?.stories.where('isViewed').equals(1).delete();
 }
 
 function setIsViewed(story: Story): void {
@@ -37,7 +42,7 @@ function setIsViewed(story: Story): void {
     .where('id')
     .equals(story.id)
     .modify((s) => {
-      s.isViewed = true;
+      s.isViewed = 1;
     });
 }
 
@@ -66,4 +71,4 @@ function filterStory(textFilters: Array<RegExp>, story: Story): boolean {
   });
 }
 
-export default { subscribe, addStory, removeStory, setIsViewed, setTextFilter } as BookmarksStore;
+export default { subscribe, add, remove, removeAllViewed, setIsViewed, setTextFilter } as BookmarksStore;
