@@ -4,18 +4,23 @@
   import { defaultPadding } from '$lib/utils/styles';
 
   export let noFlex = false;
+  export let noColumn = false;
   export let noGap = false;
   export let noPadding = false;
+
+  let clazz: string | undefined = undefined;
+  export { clazz as class };
 
   let itemRef: HTMLDivElement;
 
   const itemClass = classNames([
-    !noFlex && 'flex flex-col',
+    !noFlex && 'flex',
+    noColumn ? 'flex-row items-center justify-between' : 'flex-col',
     !noGap && 'gap-3',
     !noPadding && defaultPadding,
     'text-gray-800 dark:text-gray-300',
     'outline-none',
-    $$props['class'],
+    clazz,
   ]);
 
   export function scrollIntoView(): void {

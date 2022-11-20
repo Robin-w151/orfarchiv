@@ -8,11 +8,13 @@ export interface SettingsStore extends Readable<Settings>, Partial<Settings> {
   setSource: (_source: string, _included: boolean) => void;
 }
 
+export const SETTINGS_STORE_NAME = 'settings';
+
 const initialState = {
   openLinksInNewTab: true,
   sources: sources.map((source) => source.key),
 };
-const { subscribe, update } = writable<Settings>('settings', initialState);
+const { subscribe, update } = writable<Settings>(SETTINGS_STORE_NAME, initialState);
 
 function setOpenLinksInNewTab(openLinksInNewTab: boolean): void {
   update((settings) => ({ ...settings, openLinksInNewTab }));

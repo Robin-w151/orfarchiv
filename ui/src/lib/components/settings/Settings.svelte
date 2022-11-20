@@ -5,6 +5,7 @@
   import Sources from './sources/Sources.svelte';
   import Info from './info/Info.svelte';
   import Appearance from '$lib/components/settings/appearance/Appearance.svelte';
+  import Developer from './developer/Developer.svelte';
 
   const gridClass = `
     grid grid-cols-auto sm:grid-cols-[1fr_1fr] ${defaultGap}
@@ -21,6 +22,7 @@
       <General />
       <Appearance />
       <Info />
+      <Developer />
     </div>
     <div>
       <Sources />

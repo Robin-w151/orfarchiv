@@ -3,6 +3,7 @@ import type { News } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
 import type { PageKey } from '$lib/models/pageKey';
+import { env } from '$env/dynamic/private';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
@@ -56,7 +57,7 @@ function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters
 }
 
 async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<any>) {
-  const url = process.env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
+  const url = env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
   let client;
   try {
     client = await MongoClient.connect(url);
