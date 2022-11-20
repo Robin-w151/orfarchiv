@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from '$lib/components/ui/controls/Button.svelte';
   import BookmarkIcon from '$lib/components/ui/icons/outline/BookmarkIcon.svelte';
   import BookmarkSlashIcon from '$lib/components/ui/icons/outline/BookmarkSlashIcon.svelte';
   import type { Story } from '$lib/models/story';
@@ -22,13 +23,13 @@
 </script>
 
 {#if story.isBookmarked}
-  <button class={clazz} on:click={handleRemoveFromBookmarksClick}>
+  <Button class={clazz} customStyle on:click={handleRemoveFromBookmarksClick}>
     <BookmarkSlashIcon />
     <span>Von Lesezeichen entfernen</span>
-  </button>
+  </Button>
 {:else}
-  <button class={clazz} on:click={handleAddToBookmarksClick}>
+  <Button class={clazz} customStyle on:click={handleAddToBookmarksClick}>
     <BookmarkIcon />
     <span>Zu Lesezeichen hinzufügen</span>
-  </button>
+  </Button>
 {/if}

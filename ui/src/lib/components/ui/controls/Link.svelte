@@ -4,10 +4,13 @@
 
   let clazz: string | undefined = undefined;
   export { clazz as class };
+  export let customStyle = false;
 
   let rel = target === '_blank' ? 'noopener noreferrer' : undefined;
 
-  const linkClass = `
+  const linkClass = customStyle
+    ? clazz
+    : `
     text-blue-800 dark:text-blue-500 dark:hover:text-blue-700 hover:bg-blue-100
     focus:bg-blue-100 outline-none
     cursor-pointer

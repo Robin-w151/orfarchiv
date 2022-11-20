@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Link from '$lib/components/ui/controls/Link.svelte';
   import QuestionMarkCircleIcon from '$lib/components/ui/icons/outline/QuestionMarkCircleIcon.svelte';
 
   export let onClose: () => void;
@@ -11,13 +12,12 @@
   }
 </script>
 
-<a
+<Link
   class={clazz}
+  customStyle
   href="https://der.orf.at/kontakt/orf-online-angebote100.html"
-  target="_blank"
-  rel="noopener noreferrer"
   on:click={handleOpenSupportClick}
 >
   <QuestionMarkCircleIcon />
   <span>Kundendienst</span>
-</a>
+</Link>

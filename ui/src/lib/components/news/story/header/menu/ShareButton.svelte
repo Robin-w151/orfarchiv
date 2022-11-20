@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Button from '$lib/components/ui/controls/Button.svelte';
   import ClipboardDocumentIcon from '$lib/components/ui/icons/outline/ClipboardDocumentIcon.svelte';
   import ShareIcon from '$lib/components/ui/icons/outline/ShareIcon.svelte';
   import type { Story } from '$lib/models/story';
@@ -33,13 +34,13 @@
 </script>
 
 {#if showShareButton}
-  <button class={clazz} on:click={handleShareArticleClick}>
+  <Button class={clazz} customStyle on:click={handleShareArticleClick}>
     <ShareIcon />
     <span>Artikel teilen</span>
-  </button>
+  </Button>
 {:else if showCopyToClipboardButton}
-  <button class={clazz} on:click={handleCopyToClipboardClick}>
+  <Button class={clazz} customStyle on:click={handleCopyToClipboardClick}>
     <ClipboardDocumentIcon />
     <span>In Zwischenablage kopieren</span>
-  </button>
+  </Button>
 {/if}

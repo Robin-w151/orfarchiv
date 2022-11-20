@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Link from '$lib/components/ui/controls/Link.svelte';
   import NewspaperIcon from '$lib/components/ui/icons/outline/NewspaperIcon.svelte';
   import type { Story } from '$lib/models/story';
 
@@ -13,7 +14,7 @@
   }
 </script>
 
-<a class={clazz} href={story.url} target="_blank" rel="noopener noreferrer" on:click={handleOpenArticleClick}>
+<Link class={clazz} customStyle href={story.url} on:click={handleOpenArticleClick}>
   <NewspaperIcon />
   <span>In orf.at öffnen</span>
-</a>
+</Link>
