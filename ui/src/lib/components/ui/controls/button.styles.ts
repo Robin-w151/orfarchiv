@@ -1,16 +1,16 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 export type BtnType = 'primary' | 'secondary';
 
 const primaryClass = (focusEnabled: boolean) =>
-  classNames([
+  clsx([
     'text-white bg-blue-700 hover:bg-blue-600 disabled:bg-gray-600',
     focusEnabled && 'focus:outline-none focus:ring-2 ring-offset-2 ring-blue-700 disabled:ring-gray-600',
     'shadow-lg',
   ]);
 
 const secondaryClass = (focusEnabled: boolean) =>
-  classNames([
+  clsx([
     'text-blue-700 dark:text-blue-500 hover:text-fuchsia-600 dark:hover:text-fuchsia-400 hover:bg-gray-100 dark:hover:bg-gray-800',
     focusEnabled &&
       'focus:text-fuchsia-600 dark:focus:text-fuchsia-400 focus:outline-none focus:ring-2 ring-blue-700 dark:ring-blue-500',
@@ -33,7 +33,7 @@ export const buttonClassFn = ({
   const focusEnabled = focusDisabled === undefined ? true : !focusDisabled;
   return customStyle
     ? clazz
-    : classNames([
+    : clsx([
         'flex justify-center gap-1',
         iconOnly ? 'p-2' : 'px-3 py-2',
         !iconOnly && 'w-28 min-w-fit',

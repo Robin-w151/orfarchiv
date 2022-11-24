@@ -1,5 +1,5 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import clsx from 'clsx';
   import Item from '$lib/components/ui/content/Item.svelte';
   import { defaultPadding } from '$lib/utils/styles';
   import StoryHeader from '$lib/components/news/story/header/StoryHeader.svelte';
@@ -16,7 +16,7 @@
 
   $: handleContentViewCollapse(showContent);
 
-  $: headerClass = classNames([
+  $: headerClass = clsx([
     'flex flex-row items-center gap-3',
     defaultPadding,
     'text-gray-800 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500',
@@ -25,7 +25,7 @@
     'cursor-pointer',
     'transition',
   ]);
-  $: contentClass = classNames([defaultPadding, 'cursor-auto']);
+  $: contentClass = clsx([defaultPadding, 'cursor-auto']);
 
   function toggleShowContent(): void {
     showContent = !showContent;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import clsx from 'clsx';
   import computeScrollIntoView from '$lib/utils/computeScrollIntoView';
   import { defaultPadding } from '$lib/utils/styles';
 
@@ -13,7 +13,7 @@
 
   let itemRef: HTMLDivElement;
 
-  const itemClass = classNames([
+  const itemClass = clsx([
     !noFlex && 'flex',
     noColumn ? 'flex-row items-center justify-between' : 'flex-col',
     !noGap && 'gap-3',

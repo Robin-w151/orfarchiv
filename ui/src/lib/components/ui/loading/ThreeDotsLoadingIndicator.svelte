@@ -1,8 +1,8 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import clsx from 'clsx';
 
-  const loadingIndicatorClass = classNames(['flex justify-center items-center gap-2', $$props['class']]);
-  const dotClass = classNames(['w-2 h-2', 'rounded-full']);
+  const loadingIndicatorClass = clsx(['flex justify-center items-center gap-2', $$props['class']]);
+  const dotClass = clsx(['w-2 h-2', 'rounded-full']);
 </script>
 
 <div class="loading-indicator {loadingIndicatorClass}">

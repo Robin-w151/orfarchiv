@@ -1,7 +1,7 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import clsx from 'clsx';
 
-  const listClass = classNames([
+  const listClass = clsx([
     'w-full',
     'bg-white dark:bg-gray-900',
     'divide-y-2 divide-solid divide-gray-200 dark:divide-gray-700',

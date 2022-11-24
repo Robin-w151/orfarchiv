@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy, onMount } from 'svelte';
   import ChevronUpIcon from '$lib/components/ui/icons/outline/ChevronUpIcon.svelte';
-  import classNames from 'classnames';
+  import clsx from 'clsx';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
   import { wait } from '$lib/utils/wait';
@@ -20,11 +20,11 @@
   let content: string;
   let isClosed = false;
 
-  const wrapperClass = classNames('flex flex-col items-center gap-3');
-  const contentClass = classNames('cursor-auto w-full');
-  const contentSourceClass = classNames('text-sm text-gray-500 dark:text-gray-400');
-  const errorLinkClass = classNames(['text-blue-700']);
-  const collapseContentClass = classNames(['py-1.5 w-48 max-w-full']);
+  const wrapperClass = clsx('flex flex-col items-center gap-3');
+  const contentClass = clsx('cursor-auto w-full');
+  const contentSourceClass = clsx('text-sm text-gray-500 dark:text-gray-400');
+  const errorLinkClass = clsx(['text-blue-700']);
+  const collapseContentClass = clsx(['py-1.5 w-48 max-w-full']);
 
   onMount(async () => {
     try {

@@ -1,16 +1,16 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import clsx from 'clsx';
 
   export let large = false;
 
-  const ringClass = classNames([
+  const ringClass = clsx([
     'flex justify-center items-center',
     'w-full h-full aspect-square',
     large ? 'border-8' : 'border-4',
     'border-current border-x-transparent border-solid',
     'rounded-full',
   ]);
-  const innerRingClass = classNames([
+  const innerRingClass = clsx([
     large ? 'w-11/12' : 'w-5/6',
     'aspect-square',
     large ? 'border-8' : 'border-4',

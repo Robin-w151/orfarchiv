@@ -1,7 +1,7 @@
 <script lang="ts">
-  import classNames from 'classnames';
+  import clsx from 'clsx';
 
-  const actionsClass = classNames(['flex justify-center gap-2', 'w-full']);
+  const actionsClass = clsx(['flex justify-center gap-2', 'w-full']);
 </script>
 
 <div class={actionsClass}>
