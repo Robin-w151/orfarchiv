@@ -1,6 +1,6 @@
 <script lang="ts">
   import classNames from 'classnames';
-  import computeScrollIntoView from 'compute-scroll-into-view';
+  import computeScrollIntoView from '$lib/utils/computeScrollIntoView';
   import { defaultPadding } from '$lib/utils/styles';
 
   export let noFlex = false;
@@ -24,7 +24,11 @@
   ]);
 
   export function scrollIntoView(): void {
-    const actions = computeScrollIntoView(itemRef, { scrollMode: 'if-needed', block: 'start' });
+    const actions = computeScrollIntoView(itemRef, {
+      scrollMode: 'if-needed',
+      block: 'start',
+      viewportInset: { y: 80 },
+    });
     const canSmoothScroll = 'scrollBehavior' in document.body.style;
     actions.forEach(({ el, top, left }) => {
       const topWithOffset = Math.max(top - 80, 0);
