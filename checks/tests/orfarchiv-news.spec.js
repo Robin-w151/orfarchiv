@@ -1,9 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const moment = require('moment');
-const { join } = require('path');
 
 const baseUrl = process.env.ENVIRONMENT_URL || process.env.ORFARCHIV_BASE_URL || 'https://orfarchiv.news';
-const screenshotsPath = process.env.SCREENSHOTS_PATH ?? '.';
 
 const newsMock = {
   stories: [
@@ -542,18 +540,8 @@ async function setupNewsPage(page, mock) {
   return newsPage;
 }
 
-async function cleanupNewsPage(page, testInfo) {
-  if (testInfo.status === 'failed') {
-    const path = screenshotPath(testInfo);
-    await page.screenshot({ path });
-  }
+async function cleanupNewsPage(page) {
   await page.close();
-}
-
-function screenshotPath(testInfo) {
-  const [, ...paths] = testInfo.titlePath;
-  const path = paths.join('-').replace(/\s/g, '-') + '.png';
-  return join(screenshotsPath, path);
 }
 
 async function expectExternalLink(locator, expectedHref) {
