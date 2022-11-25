@@ -6,20 +6,10 @@
 
 <Section title="Aktuell" isLoading>
   <SectionList>
-    <li>
-      <StorySkeleton />
-    </li>
-    <li>
-      <StorySkeleton />
-    </li>
-    <li>
-      <StorySkeleton />
-    </li>
-    <li>
-      <StorySkeleton />
-    </li>
-    <li>
-      <StorySkeleton />
-    </li>
+    <StorySkeleton />
+    <StorySkeleton />
+    <StorySkeleton />
+    <StorySkeleton />
+    <StorySkeleton />
   </SectionList>
 </Section>
