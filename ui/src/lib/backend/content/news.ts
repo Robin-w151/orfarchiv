@@ -16,7 +16,8 @@ export async function fetchStoryContent(url: string): Promise<string> {
 
   const optimizedDocument = createDom(optimizedContent.content, url);
   const originalDocument = createDom(data, url);
-  removeLinkToTop(optimizedDocument);
+  removeSiteNavigation(optimizedDocument);
+  removeSiteAnchors(optimizedDocument);
   injectSlideShowImages(optimizedDocument, originalDocument);
   injectStoryFooter(optimizedDocument, originalDocument);
   adjustAnchorTags(optimizedDocument);
@@ -42,9 +43,15 @@ function removePrintWarnings(document: Document): void {
   });
 }
 
-function removeLinkToTop(document: Document): void {
+function removeSiteNavigation(document: Document): void {
+  document.querySelectorAll('nav').forEach((navigation) => {
+    navigation.remove();
+  });
+}
+
+function removeSiteAnchors(document: Document): void {
   document.querySelectorAll('a').forEach((anchor) => {
-    if (anchor.href.includes('#top') && anchor.textContent === 'Seitenanfang') {
+    if (anchor.href.match(/orf\.at.*#/i)) {
       anchor.remove();
     }
   });
