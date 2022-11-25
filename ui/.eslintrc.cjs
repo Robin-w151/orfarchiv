@@ -7,7 +7,7 @@ module.exports = {
     'no-unused-vars': 'off',
     'svelte/no-at-html-tags': 'off',
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier', 'plugin:storybook/recommended'],
   plugins: ['svelte3', '@typescript-eslint'],
   env: {
     browser: true,
