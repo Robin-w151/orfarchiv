@@ -281,8 +281,8 @@ test.describe('NewsPage', () => {
     });
   });
 
-  test.afterEach(async ({ page }, testInfo) => {
-    await cleanupNewsPage(page, testInfo);
+  test.afterEach(async ({ page }) => {
+    await cleanupPage(page);
   });
 
   test.afterAll(async ({ browser }) => {
@@ -293,7 +293,7 @@ test.describe('NewsPage', () => {
     let newsPage;
 
     test.beforeEach(async ({ page }) => {
-      newsPage = await setupNewsPage(page, newsMock);
+      newsPage = await setupPage(page, newsMock);
     });
 
     test('title', async () => {
@@ -306,7 +306,7 @@ test.describe('NewsPage', () => {
     let newsPage;
 
     test.beforeEach(async ({ page }) => {
-      newsPage = await setupNewsPage(page, newsMock);
+      newsPage = await setupPage(page, newsMock);
     });
 
     test('search news', async () => {
@@ -380,7 +380,7 @@ test.describe('NewsPage', () => {
     });
 
     test.beforeEach(async ({ page }) => {
-      newsPage = await setupNewsPage(page, newsMockWithAdjustedTimestamps);
+      newsPage = await setupPage(page, newsMockWithAdjustedTimestamps);
     });
 
     test('Aktuell', async () => {
@@ -418,7 +418,7 @@ test.describe('NewsPage', () => {
     let newsPage;
 
     test.beforeEach(async ({ page }) => {
-      newsPage = await setupNewsPage(page, newsMock);
+      newsPage = await setupPage(page, newsMock);
     });
 
     test('title', async () => {
@@ -445,7 +445,7 @@ test.describe('NewsPage', () => {
     let storyMenu;
 
     test.beforeEach(async ({ page }) => {
-      newsPage = await setupNewsPage(page, newsMock);
+      newsPage = await setupPage(page, newsMock);
 
       storyMenu = newsPage.getNewsListItem(storyIndex).locator('button');
       await storyMenu.click();
@@ -496,7 +496,7 @@ test.describe('NewsPage', () => {
     let newsPage;
 
     test.beforeEach(async ({ page }) => {
-      newsPage = await setupNewsPage(page, newsMock);
+      newsPage = await setupPage(page, newsMock);
     });
 
     test('text', async () => {
@@ -532,7 +532,7 @@ function nowMinusHours(hours) {
   return moment().subtract(hours, 'hours').toISOString(false);
 }
 
-async function setupNewsPage(page, mock) {
+async function setupPage(page, mock) {
   const newsPage = new NewsPage(page);
   await newsPage.mockSearchNewsApi(mock);
   await newsPage.visitSite();
@@ -540,7 +540,7 @@ async function setupNewsPage(page, mock) {
   return newsPage;
 }
 
-async function cleanupNewsPage(page) {
+async function cleanupPage(page) {
   await page.close();
 }
 

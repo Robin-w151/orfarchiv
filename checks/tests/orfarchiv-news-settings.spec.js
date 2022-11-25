@@ -33,8 +33,8 @@ class SettingsPage {
 }
 
 test.describe('SettingsPage', () => {
-  test.afterEach(async ({ page }, testInfo) => {
-    await cleanupPage(page, testInfo);
+  test.afterEach(async ({ page }) => {
+    await cleanupPage(page);
   });
 
   test.afterAll(async ({ browser }) => {
