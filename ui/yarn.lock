@@ -1025,21 +1025,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-vercel@npm:^1.0.0-next.81":
-  version: 1.0.0-next.81
-  resolution: "@sveltejs/adapter-vercel@npm:1.0.0-next.81"
+"@sveltejs/adapter-vercel@npm:^1.0.0-next.84":
+  version: 1.0.0-next.84
+  resolution: "@sveltejs/adapter-vercel@npm:1.0.0-next.84"
   dependencies:
     "@vercel/nft": ^0.22.1
     esbuild: ^0.15.12
-  checksum: 4f3a25b8dffba59867af3903e2ef3a9a7ad989c285532c8e05f9fee7f8c0cbbaba8615079a28cd3762535b9fffb3896e95102036cb96016f2987ad95b32013c2
+  checksum: e541d458863434fb0b3472e7a43db8784733a0a65a7584961f2f3af672118566566a8039b94466886144967b901f50ecb7d6d584bab4e297b756b6692020a42f
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^1.0.0-next.551":
-  version: 1.0.0-next.551
-  resolution: "@sveltejs/kit@npm:1.0.0-next.551"
+"@sveltejs/kit@npm:^1.0.0-next.561":
+  version: 1.0.0-next.561
+  resolution: "@sveltejs/kit@npm:1.0.0-next.561"
   dependencies:
-    "@sveltejs/vite-plugin-svelte": ^1.1.0
+    "@sveltejs/vite-plugin-svelte": ^1.3.1
     "@types/cookie": ^0.5.1
     cookie: ^0.5.0
     devalue: ^4.2.0
@@ -1056,19 +1056,20 @@ __metadata:
     vite: ^3.2.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 5ae4afa5a8be6c9ae59d5a269135e25fdbf21673c10f6162bcf41bcb98368d4971ff0c808d6651ec3488c81124356fe961dd97575c8548282ce676faee347977
+  checksum: 74009ddf304229c278a6ea4edb0b065b83108c87f00539817f51e5fee6f10b0b40199a74a6b1bb5430d19353fba67c874f074b323a23deef6f0037eb5d78bbbf
   languageName: node
   linkType: hard
 
-"@sveltejs/vite-plugin-svelte@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@sveltejs/vite-plugin-svelte@npm:1.1.0"
+"@sveltejs/vite-plugin-svelte@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@sveltejs/vite-plugin-svelte@npm:1.3.1"
   dependencies:
     debug: ^4.3.4
     deepmerge: ^4.2.2
     kleur: ^4.1.5
     magic-string: ^0.26.7
-    svelte-hmr: ^0.15.0
+    svelte-hmr: ^0.15.1
+    vitefu: ^0.2.2
   peerDependencies:
     diff-match-patch: ^1.0.5
     svelte: ^3.44.0
@@ -1076,7 +1077,7 @@ __metadata:
   peerDependenciesMeta:
     diff-match-patch:
       optional: true
-  checksum: 401a146aed79b9888b1dcb349c6e79f67502f8233d0208c50446f33b64c790f7e86dfe33fbf0482e485b024f7845438290277155731d81d3ef5208cb7e6dd2fa
+  checksum: f55d9c4db4a79af8c31abdaae46f6369032ad1aaead882ad8fa3a1a71618491a2a96cab3013c59cad194fc36f02167372da98cd2d8004e65c5f3b8060dfa97af
   languageName: node
   linkType: hard
 
@@ -2662,9 +2663,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.13.0":
-  version: 2.13.0
-  resolution: "eslint-plugin-svelte@npm:2.13.0"
+"eslint-plugin-svelte@npm:^2.13.1":
+  version: 2.13.1
+  resolution: "eslint-plugin-svelte@npm:2.13.1"
   dependencies:
     debug: ^4.3.1
     eslint-utils: ^3.0.0
@@ -2674,14 +2675,14 @@ __metadata:
     postcss-load-config: ^3.1.4
     postcss-safe-parser: ^6.0.0
     sourcemap-codec: ^1.4.8
-    svelte-eslint-parser: ^0.21.0
+    svelte-eslint-parser: ^0.22.0
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0-0
     svelte: ^3.37.0
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: 7b175055b21b1aef2bdf2ac83ea22da9d203ed9db1aec86cf9845d907e58b3da9cd684e01753bbf989c8d8ec9e9f765c5babb8a2784afda5c32c0759d6e6d74c
+  checksum: 45ab0d0a13bbb759a1730cf74ce9d790711f5f0ef165eac05950a9a0cf574eca79963124c2b0883113398b05ad4016f7c03878d7a547b66cd7e99ac31958c14c
   languageName: node
   linkType: hard
 
@@ -4851,25 +4852,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte-eslint-parser@npm:^0.21.0":
-  version: 0.21.0
-  resolution: "svelte-eslint-parser@npm:0.21.0"
+"svelte-eslint-parser@npm:^0.22.0":
+  version: 0.22.0
+  resolution: "svelte-eslint-parser@npm:0.22.0"
   dependencies:
     eslint-scope: ^7.0.0
     eslint-visitor-keys: ^3.0.0
     espree: ^9.0.0
   peerDependencies:
     svelte: ^3.37.0
-  checksum: 59450d23c3f6fb344d4f8ee482f9587ebbd7c29a93868f6ea943160b5f527997383cd2113f64559e2975500ad356f1aa979085faaeb3e808e03a90f86ea5db99
+  checksum: 888d35c5acec12984efb9094679492578021d60597deac5f13cc53b94940ce873229db3799005380de67dc67ae7ad5f36d44acad94ec0597c8740cfc836e77e9
   languageName: node
   linkType: hard
 
-"svelte-hmr@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "svelte-hmr@npm:0.15.0"
+"svelte-hmr@npm:^0.15.1":
+  version: 0.15.1
+  resolution: "svelte-hmr@npm:0.15.1"
   peerDependencies:
     svelte: ">=3.19.0"
-  checksum: e15581769aa5a6f8e1eeaf3f47a34b579c76f5a72d2ae1ba32cca6ab71b73d721defde472f1d4b924f8ade0d5bb6a7a04aa1817c3b4705c45dffa2732df07a83
+  checksum: af2e5c356ed6467d6567ce1b908bc077c9d08a89f3ffda81e63989c1c3f374a88b1b67453e86e3674320aa10e7cdf42a10dc551900997b627b4702db447f2bf3
   languageName: node
   linkType: hard
 
@@ -5170,8 +5171,8 @@ __metadata:
     "@mozilla/readability": ^0.4.2
     "@popperjs/core": ^2.11.6
     "@rgossiaux/svelte-headlessui": ^1.0.2
-    "@sveltejs/adapter-vercel": ^1.0.0-next.81
-    "@sveltejs/kit": ^1.0.0-next.551
+    "@sveltejs/adapter-vercel": ^1.0.0-next.84
+    "@sveltejs/kit": ^1.0.0-next.561
     "@tailwindcss/forms": ^0.5.3
     "@types/dompurify": ^2.4.0
     "@types/jsdom": ^20.0.1
@@ -5190,7 +5191,7 @@ __metadata:
     eslint: 8.26.0
     eslint-config-prettier: ^8.5.0
     eslint-plugin-prettier: ^4.2.1
-    eslint-plugin-svelte: ^2.13.0
+    eslint-plugin-svelte: ^2.13.1
     eslint-plugin-svelte3: ^4.0.0
     idb: ^7.1.1
     jsdom: ^20.0.3
@@ -5332,6 +5333,18 @@ __metadata:
   bin:
     vite: bin/vite.js
   checksum: 0f3e8f89c15809bd6bd8dec54b04b7c9b87374314d00928035f9d70190b4b220e8206b5d77a1e4097a5019cebf7862df4fbc11fbbb35c4f75f359999123d2c25
+  languageName: node
+  linkType: hard
+
+"vitefu@npm:^0.2.2":
+  version: 0.2.2
+  resolution: "vitefu@npm:0.2.2"
+  peerDependencies:
+    vite: ^3.0.0
+  peerDependenciesMeta:
+    vite:
+      optional: true
+  checksum: 8f2e928f57de3af183373e513b7564cc80a2b9f2a37302323e095b4c97b9f93a7e3d64d5d6e0f479c8437d302ed2d0be04571cfac6d3f1e7182eb61368963818
   languageName: node
   linkType: hard
 
