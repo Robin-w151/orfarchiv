@@ -12,11 +12,11 @@
   },
   "devDependencies": {
     "dotenv-flow": "^3.2.0",
-    "eslint": "^8.26.0",
+    "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-recommended": "^4.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1"
+    "prettier": "^2.8.0"
   },
   "packageManager": "yarn@3.2.3"
 }
