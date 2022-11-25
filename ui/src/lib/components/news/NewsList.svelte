@@ -16,9 +16,7 @@
       <Section title={bucket.name} {isLoading}>
         <SectionList class={listClass}>
           {#each bucket.stories as story (story.id)}
-            <li>
-              <Story {story} />
-            </li>
+            <Story {story} />
           {/each}
         </SectionList>
       </Section>

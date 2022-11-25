@@ -11,7 +11,7 @@
   let clazz: string | undefined = undefined;
   export { clazz as class };
 
-  let itemRef: HTMLDivElement;
+  let itemRef: HTMLLIElement;
 
   const itemClass = clsx([
     !noFlex && 'flex',
@@ -42,6 +42,6 @@
   }
 </script>
 
-<div class={itemClass} on:click on:keydown bind:this={itemRef}>
+<li class={itemClass} on:click on:keydown bind:this={itemRef}>
   <slot />
-</div>
+</li>
