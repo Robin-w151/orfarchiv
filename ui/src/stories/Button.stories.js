@@ -1,51 +1,80 @@
-import Button from './Button.svelte';
+import ButtonView from './ButtonView.svelte';
 
-// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-// More on argTypes: https://storybook.js.org/docs/svelte/api/argtypes
+const defaultArgs = {
+  type: 'button',
+  btnType: 'primary',
+  iconOnly: false,
+  disabled: false,
+  title: 'Button',
+};
+
 export default {
-  title: 'Example/Button',
-  component: Button,
+  title: 'Button',
+  component: ButtonView,
+  args: defaultArgs,
   argTypes: {
-    backgroundColor: { control: 'color' },
-    label: { control: 'text' },
-    onClick: { action: 'onClick' },
-    primary: { control: 'boolean' },
-    size: {
+    type: {
+      type: 'string',
+      description: 'HTMLButtonElement type',
+      table: {
+        defaultValue: { summary: defaultArgs.type },
+      },
       control: { type: 'select' },
-      options: ['small', 'medium', 'large'],
+      options: ['button', 'reset', 'submit'],
+    },
+    btnType: {
+      type: 'string',
+      description: 'Button style type',
+      table: {
+        defaultValue: { summary: defaultArgs.btnType },
+      },
+      control: { type: 'select' },
+      options: ['primary', 'secondary'],
+    },
+    iconOnly: {
+      type: 'boolean',
+      description: 'Enables icon-only mode',
+      table: {
+        defaultValue: { summary: defaultArgs.iconOnly },
+      },
+      control: 'boolean',
+    },
+    disabled: {
+      type: 'boolean',
+      description: 'Disables button',
+      table: {
+        defaultValue: { summary: defaultArgs.disabled },
+      },
+      control: 'boolean',
+    },
+    title: {
+      type: 'string',
+      description: 'Sets "title" attribute (should render default browser tooltip)',
+      control: 'text',
     },
   },
 };
 
-// More on component templates: https://storybook.js.org/docs/svelte/writing-stories/introduction#using-args
 const Template = (args) => ({
-  Component: Button,
+  Component: ButtonView,
   props: args,
   on: {
     click: args.onClick,
   },
 });
 
-// More on args: https://storybook.js.org/docs/svelte/writing-stories/args
 export const Primary = Template.bind({});
 Primary.args = {
-  primary: true,
-  label: 'Button',
+  btnType: 'primary',
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: 'Button',
+  btnType: 'secondary',
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  size: 'large',
-  label: 'Button',
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: 'small',
-  label: 'Button',
+export const IconOnly = Template.bind({});
+IconOnly.args = {
+  btnType: 'primary',
+  iconOnly: true,
 };
