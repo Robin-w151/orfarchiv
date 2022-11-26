@@ -11,10 +11,11 @@ const primaryClass = (focusEnabled: boolean) =>
 
 const secondaryClass = (focusEnabled: boolean) =>
   clsx([
-    'text-blue-700 dark:text-blue-500 hover:text-fuchsia-600 dark:hover:text-fuchsia-400 hover:bg-gray-100 dark:hover:bg-gray-800',
+    'text-blue-700 disabled:text-gray-600 hover:text-fuchsia-600 disabled:bg-transparent hover:bg-gray-100',
+    'dark:text-blue-500 dark:disabled:text-gray-400 dark:hover:text-fuchsia-400 dark:disabled:bg-transparent dark:hover:bg-gray-800',
     focusEnabled &&
       'focus:text-fuchsia-600 dark:focus:text-fuchsia-400 focus:outline-none focus:ring-2 ring-blue-700 dark:ring-blue-500',
-    'hover:shadow-lg',
+    'hover:shadow-lg disabled:hover:shadow-none',
   ]);
 
 export const buttonClassFn = ({
