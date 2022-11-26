@@ -21,11 +21,11 @@
   <SectionList>
     <Item noColumn>
       <span>IndexedDB</span>
-      <Button on:click={handleResetIndexedDbButtonClick}>Zurücksetzen</Button>
+      <Button size="small" on:click={handleResetIndexedDbButtonClick}>Zurücksetzen</Button>
     </Item>
     <Item noColumn>
       <span>LocalStorage</span>
-      <Button on:click={handleResetLocalStorageButtonClick}>Zurücksetzen</Button>
+      <Button size="small" on:click={handleResetLocalStorageButtonClick}>Zurücksetzen</Button>
     </Item>
   </SectionList>
 </Section>

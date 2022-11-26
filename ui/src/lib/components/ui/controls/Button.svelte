@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { type BtnType, buttonClassFn } from './button.styles';
+  import { type BtnType, buttonClassFn, type Size } from './button.styles';
 
   export let type: 'button' | 'reset' | 'submit' = 'button';
   export let btnType: BtnType = 'primary';
+  export let size: Size = 'normal';
   export let iconOnly = false;
   export let disabled: boolean | undefined = undefined;
   export let title: string | undefined = undefined;
@@ -11,7 +12,7 @@
   export { clazz as class };
   export let customStyle = false;
 
-  $: buttonClass = buttonClassFn({ btnType, iconOnly, clazz, customStyle });
+  $: buttonClass = buttonClassFn({ btnType, size, iconOnly, clazz, customStyle });
 </script>
 
 <button class={buttonClass} {type} {disabled} {title} on:click on:keydown>

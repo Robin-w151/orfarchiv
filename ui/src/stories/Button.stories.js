@@ -3,6 +3,7 @@ import ButtonView from './ButtonView.svelte';
 const defaultArgs = {
   type: 'button',
   btnType: 'primary',
+  size: 'normal',
   iconOnly: false,
   disabled: false,
   title: 'Button',
@@ -24,12 +25,21 @@ export default {
     },
     btnType: {
       type: 'string',
-      description: 'Button style type',
+      description: 'Style type',
       table: {
         defaultValue: { summary: defaultArgs.btnType },
       },
       control: { type: 'select' },
       options: ['primary', 'secondary'],
+    },
+    size: {
+      type: 'string',
+      description: 'Size type',
+      table: {
+        defaultValue: { summary: defaultArgs.size },
+      },
+      control: { type: 'select' },
+      options: ['small', 'normal'],
     },
     iconOnly: {
       type: 'boolean',
@@ -41,7 +51,7 @@ export default {
     },
     disabled: {
       type: 'boolean',
-      description: 'Disables button',
+      description: 'Disables button (HTMLButtonElement disabled attribute)',
       table: {
         defaultValue: { summary: defaultArgs.disabled },
       },
@@ -49,7 +59,7 @@ export default {
     },
     title: {
       type: 'string',
-      description: 'Sets "title" attribute (should render default browser tooltip)',
+      description: 'HTMLElement title (should render default browser tooltip)',
       control: 'text',
     },
   },
