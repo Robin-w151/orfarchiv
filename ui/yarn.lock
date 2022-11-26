@@ -15221,6 +15221,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"storybook-tailwind-dark-mode@npm:^1.0.15":
+  version: 1.0.15
+  resolution: "storybook-tailwind-dark-mode@npm:1.0.15"
+  peerDependencies:
+    "@storybook/addons": ^6.2.9
+    "@storybook/api": ^6.2.9
+    "@storybook/components": ^6.2.9
+    "@storybook/core-events": ^6.2.9
+    "@storybook/theming": ^6.2.9
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 102e356318b84a4995221f038ea786a86eacbf31f581fa017e21cb131ae3f88690fe78886c0d582cafb52332e13984a1322d694e4ee2862ade0c14cb2777c654
+  languageName: node
+  linkType: hard
+
 "stream-browserify@npm:^2.0.1":
   version: 2.0.2
   resolution: "stream-browserify@npm:2.0.2"
@@ -16293,6 +16313,7 @@ __metadata:
     prettier: ^2.8.0
     prettier-plugin-svelte: ^2.8.1
     sass: ^1.56.1
+    storybook-tailwind-dark-mode: ^1.0.15
     svelte: ^3.53.1
     svelte-check: ^2.9.2
     svelte-loader: ^3.1.4
