@@ -1,4 +1,5 @@
 const preprocess = require('svelte-preprocess');
+const { mergeConfig } = require('vite');
 
 module.exports = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx|svelte)'],
@@ -19,5 +20,10 @@ module.exports = {
   },
   features: {
     storyStoreV7: true,
+  },
+  viteFinal: async (config) => {
+    return mergeConfig(config, {
+      resolve: (await import('../vite.config.js')).default.resolve,
+    });
   },
 };

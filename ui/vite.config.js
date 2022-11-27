@@ -1,5 +1,9 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import dotenv from 'dotenv-flow';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config();
 
@@ -12,6 +16,11 @@ const config = {
   define: {
     'import.meta.env.VERCEL_ANALYTICS_ID': JSON.stringify(process.env.VERCEL_ANALYTICS_ID),
     'import.meta.env.APP_VERSION': JSON.stringify(process.env.npm_package_version),
+  },
+  resolve: {
+    alias: {
+      $lib: resolve(__dirname, 'src/lib'),
+    },
   },
 };
 
