@@ -4,7 +4,8 @@ export type BtnType = 'primary' | 'secondary';
 export type Size = 'small' | 'normal';
 
 const layout = 'flex justify-center gap-1';
-const miscellaneous = 'disabled:shadow-none hover:shadow-lg rounded-md transition disabled:cursor-not-allowed';
+const miscellaneous =
+  'disabled:shadow-none hover:shadow-lg focus:shadow-lg rounded-md transition disabled:cursor-not-allowed';
 
 const primaryColor = 'text-white bg-blue-700 hover:bg-blue-600 disabled:bg-gray-600';
 const primaryOutline = 'focus:outline-none focus:ring-2 ring-offset-2 ring-blue-700 disabled:ring-gray-600';
