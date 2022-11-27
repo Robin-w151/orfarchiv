@@ -3,7 +3,7 @@
   import NewspaperIcon from '$lib/components/ui/icons/outline/NewspaperIcon.svelte';
 </script>
 
-<Button {...$$props}>
+<Button {...$$props} on:click on:keydown>
   {#if $$props['iconOnly']}
     <NewspaperIcon />
   {:else}

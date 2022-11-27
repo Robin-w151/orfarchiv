@@ -25,12 +25,19 @@ export default {
       description: 'Controls whether the checkbox is checked',
       control: 'boolean',
     },
+    onChange: {
+      action: 'change',
+      description: 'Called when the state of the checkbox is changed',
+    },
   },
 };
 
 const Template = (args) => ({
   Component: CheckboxCmp,
   props: args,
+  on: {
+    change: args.onChange,
+  },
 });
 
 export const Checkbox = Template.bind({});

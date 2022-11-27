@@ -62,12 +62,24 @@ export default {
       description: 'HTMLElement title (should render default browser tooltip)',
       control: 'text',
     },
+    onClick: {
+      action: 'click',
+      description: 'Called when the button is clicked',
+    },
+    onKeydown: {
+      action: 'keydown',
+      description: 'Called when a key is pressed down',
+    },
   },
 };
 
 const Template = (args) => ({
   Component: ButtonView,
   props: args,
+  on: {
+    click: args.onClick,
+    keydown: args.onKeydown,
+  },
 });
 
 export const Primary = Template.bind({});

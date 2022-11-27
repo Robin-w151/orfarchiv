@@ -31,12 +31,19 @@ export default {
       description: 'Controls whether the radio control is active',
       control: 'boolean',
     },
+    onChange: {
+      action: 'change',
+      description: 'Called when the state of the radio control is activated',
+    },
   },
 };
 
 const Template = (args) => ({
   Component: RadioCmp,
   props: args,
+  on: {
+    change: args.onChange,
+  },
 });
 
 export const Radio = Template.bind({});
