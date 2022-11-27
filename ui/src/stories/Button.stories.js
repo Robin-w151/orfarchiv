@@ -1,6 +1,6 @@
 import ButtonView from './ButtonView.svelte';
 
-const defaultArgs = {
+const args = {
   type: 'button',
   btnType: 'primary',
   size: 'normal',
@@ -12,13 +12,13 @@ const defaultArgs = {
 export default {
   title: 'Button',
   component: ButtonView,
-  args: defaultArgs,
+  args,
   argTypes: {
     type: {
       type: 'string',
-      description: 'HTMLButtonElement type',
+      description: 'HTMLButtonElement type attribute',
       table: {
-        defaultValue: { summary: defaultArgs.type },
+        defaultValue: { summary: args.type },
       },
       control: { type: 'select' },
       options: ['button', 'reset', 'submit'],
@@ -27,7 +27,7 @@ export default {
       type: 'string',
       description: 'Style type',
       table: {
-        defaultValue: { summary: defaultArgs.btnType },
+        defaultValue: { summary: args.btnType },
       },
       control: { type: 'select' },
       options: ['primary', 'secondary'],
@@ -36,7 +36,7 @@ export default {
       type: 'string',
       description: 'Size type',
       table: {
-        defaultValue: { summary: defaultArgs.size },
+        defaultValue: { summary: args.size },
       },
       control: { type: 'select' },
       options: ['small', 'normal'],
@@ -45,7 +45,7 @@ export default {
       type: 'boolean',
       description: 'Enables icon-only mode',
       table: {
-        defaultValue: { summary: defaultArgs.iconOnly },
+        defaultValue: { summary: args.iconOnly },
       },
       control: 'boolean',
     },
@@ -53,7 +53,7 @@ export default {
       type: 'boolean',
       description: 'Disables button (HTMLButtonElement disabled attribute)',
       table: {
-        defaultValue: { summary: defaultArgs.disabled },
+        defaultValue: { summary: args.disabled },
       },
       control: 'boolean',
     },
@@ -68,9 +68,6 @@ export default {
 const Template = (args) => ({
   Component: ButtonView,
   props: args,
-  on: {
-    click: args.onClick,
-  },
 });
 
 export const Primary = Template.bind({});
