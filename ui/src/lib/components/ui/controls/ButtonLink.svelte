@@ -1,18 +1,19 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import { prefetch as sveltePrefetch } from '$app/navigation';
-  import { buttonClassFn } from './button.styles';
+  import { buttonClassFn, type Size } from './button.styles';
 
   export let href: string;
   export let title: string;
   export let target: string | undefined = undefined;
+  export let size: Size = 'normal';
   export let iconOnly = false;
   export let preventDefault = false;
   export let prefetch = false;
 
   const dispatch = createEventDispatcher();
 
-  const buttonClass = buttonClassFn({ btnType: 'secondary', iconOnly, clazz: $$props['class'] });
+  const buttonClass = buttonClassFn({ btnType: 'secondary', size, iconOnly, clazz: $$props['class'] });
 
   function triggerPrefetchRoute(): void {
     if (prefetch) {
