@@ -8,7 +8,7 @@ const args = {
 };
 
 export default {
-  title: 'FormControl/Radio',
+  title: 'Controls/Radio',
   args,
   argTypes: {
     id: {

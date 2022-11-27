@@ -7,7 +7,7 @@ const args = {
 };
 
 export default {
-  title: 'FormControl/Checkbox',
+  title: 'Controls/Checkbox',
   args,
   argTypes: {
     id: {

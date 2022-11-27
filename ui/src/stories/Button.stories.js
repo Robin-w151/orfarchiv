@@ -10,7 +10,7 @@ const args = {
 };
 
 export default {
-  title: 'Button',
+  title: 'Controls/Button',
   component: ButtonView,
   args,
   argTypes: {
