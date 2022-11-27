@@ -18,9 +18,9 @@ class SettingsPage {
   }
 
   getListSectionInput(sectionTitle, label) {
-    return this.getListSection(sectionTitle)
-      .locator('li', { has: this.page.locator(`label:text-is("${label}")`) })
-      .locator('input');
+    return this.getListSection(sectionTitle).locator('li label', {
+      has: this.page.locator(`text="${label}"`),
+    });
   }
 
   async visitSite() {
