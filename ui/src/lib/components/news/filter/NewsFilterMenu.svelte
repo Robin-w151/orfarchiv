@@ -90,7 +90,7 @@
     </div>
   </section>
   <div class={menuActionsClass}>
+    <Button class={menuButtonClass} btnType="secondary" on:click={handleResetClick}>Zurücksetzen</Button>
     <Button class={menuButtonClass} on:click={handleApplyClick}>Anwenden</Button>
-    <Button class={menuButtonClass} on:click={handleResetClick}>Zurücksetzen</Button>
   </div>
 </PopoverContent>
