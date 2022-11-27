@@ -32,6 +32,14 @@
       "cwd": "${workspaceFolder}/checks",
       "runtimeExecutable": "yarn",
       "runtimeArgs": ["test:debug"]
+    },
+    {
+      "name": "Storybook",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ui",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["storybook"]
     }
   ]
 }
