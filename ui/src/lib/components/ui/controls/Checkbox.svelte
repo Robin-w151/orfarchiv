@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { inputClass, labelClass, wrapperClass } from './toggleInput.styles';
+  import { inputClass, labelClass, wrapperClass } from './checkbox.styles';
 
   export let id: string;
   export let label: string;
