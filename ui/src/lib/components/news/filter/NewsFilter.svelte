@@ -38,10 +38,6 @@
   function handleDateFilterToChange({ detail: to }: { detail: string }) {
     searchFilter.setTo(to);
   }
-
-  function handleFilterMenuApply() {
-    searchFilter.applyTempSearchFilter();
-  }
 </script>
 
 <div class={filterClass} id="news-filter">
@@ -61,7 +57,12 @@
       {onClose}
       on:fromChange={handleDateFilterFromChange}
       on:toChange={handleDateFilterToChange}
-      on:apply={handleFilterMenuApply}
+      on:apply={searchFilter.applyTempSearchFilter}
+      on:reset={searchFilter.resetDateFilter}
+      on:selectToday={searchFilter.selectDateFilterToday}
+      on:selectLastWeek={searchFilter.selectDateFilterLastWeek}
+      on:selectLastMonth={searchFilter.selectDateFilterLastMonth}
+      on:selectLastYear={searchFilter.selectDateFilterLastYear}
     />
   </Popover>
 </div>
