@@ -20,3 +20,5 @@
 .vscode/*.code-snippets
 
 *.code-workspace
+
+*.mongodb
