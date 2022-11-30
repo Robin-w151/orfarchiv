@@ -14,7 +14,7 @@
   const dispatch = createEventDispatcher();
 
   const menuClass = `
-    flex flex-col items-center gap-3
+    flex flex-col items-center gap-5
     p-3 w-80
     text-blue-700 dark:text-blue-500
   `;
