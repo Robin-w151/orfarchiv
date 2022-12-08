@@ -1,10 +1,10 @@
 {
   "name": "db",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "license": "MIT",
-  "main": "src/index.js",
   "scripts": {
-    "backup": "node src"
+    "backup": "node src/backup.js",
+    "setup": "node src/setup.js"
   },
   "dependencies": {
     "dotenv-flow": "^3.2.0",
