@@ -6,6 +6,8 @@ services:
       - orfarchiv-db-network
     ports:
       - '27017:27017'
+    volumes:
+      - orfarchiv:/data/db
     restart: always
   orfarchiv-db-ui:
     image: mongo-express
@@ -18,3 +20,5 @@ services:
     restart: always
 networks:
   orfarchiv-db-network:
+volumes:
+  orfarchiv:
