@@ -17,10 +17,10 @@
   const metadataClass = 'flex flex-wrap items-center gap-x-1 text-sm text-gray-600 dark:text-gray-400';
   const viewedIconClass = 'w-5 h-5';
 
-  $: showViewedIcon = story.isBookmarked && story.isViewed;
+  $: showViewedIcon = story?.isBookmarked && story?.isViewed;
   $: sourceLabel = getSourceLabel(story?.source);
 
-  function getSourceLabel(source: string): string | undefined {
+  function getSourceLabel(source: string | undefined): string | undefined {
     if (!source || source === 'news') {
       return undefined;
     }
