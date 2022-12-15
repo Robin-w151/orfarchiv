@@ -12082,26 +12082,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-tailwind-dark-mode@npm:^1.0.15":
-  version: 1.0.15
-  resolution: "storybook-tailwind-dark-mode@npm:1.0.15"
-  peerDependencies:
-    "@storybook/addons": ^6.2.9
-    "@storybook/api": ^6.2.9
-    "@storybook/components": ^6.2.9
-    "@storybook/core-events": ^6.2.9
-    "@storybook/theming": ^6.2.9
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  peerDependenciesMeta:
-    react:
-      optional: true
-    react-dom:
-      optional: true
-  checksum: 102e356318b84a4995221f038ea786a86eacbf31f581fa017e21cb131ae3f88690fe78886c0d582cafb52332e13984a1322d694e4ee2862ade0c14cb2777c654
-  languageName: node
-  linkType: hard
-
 "storybook@npm:^7.0.0-beta.8":
   version: 7.0.0-beta.8
   resolution: "storybook@npm:7.0.0-beta.8"
@@ -12910,7 +12890,6 @@ __metadata:
     sass: ^1.56.2
     storybook: ^7.0.0-beta.8
     storybook-dark-mode: ^2.0.4
-    storybook-tailwind-dark-mode: ^1.0.15
     svelte: ^3.55.0
     svelte-check: ^2.10.2
     svelte-loader: ^3.1.4
