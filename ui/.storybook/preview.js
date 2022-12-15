@@ -8,4 +8,7 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  darkMode: {
+    stylePreview: true,
+  },
 };
