@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
-  import { prefetch as sveltePrefetch } from '$app/navigation';
+  import { preloadData } from '$app/navigation';
   import { buttonClassFn, type Size } from './button.styles';
 
   export let href: string;
@@ -17,7 +17,7 @@
 
   function triggerPrefetchRoute(): void {
     if (prefetch) {
-      sveltePrefetch(href);
+      preloadData(href);
     }
   }
 
