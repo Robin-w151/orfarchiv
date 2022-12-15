@@ -6,6 +6,7 @@
   import RefreshIcon from '$lib/components/ui/icons/outline/RefreshIcon.svelte';
   import { refreshNews } from '$lib/stores/newsEvents';
   import { defaultPadding } from '$lib/utils/styles';
+  import { page } from '$app/stores';
 
   const headerClass = `
     flex justify-between items-center gap-6
@@ -15,6 +16,8 @@
   `;
   const headerTitleClass = 'focus:bg-blue-100 dark:focus:bg-blue-900 outline-none rounded-md';
   const headerActionsClass = 'flex gap-2';
+
+  $: showReloadButton = $page.url.pathname === '/';
 
   function handleRefreshButtonClick() {
     refreshNews.notify();
@@ -28,9 +31,11 @@
     </a>
   </h1>
   <div class={headerActionsClass}>
-    <ButtonLink href="/" title="Nach Updates suchen" iconOnly on:click={handleRefreshButtonClick} preventDefault>
-      <RefreshIcon />
-    </ButtonLink>
+    {#if showReloadButton}
+      <ButtonLink href="/" title="Nach Updates suchen" iconOnly on:click={handleRefreshButtonClick} preventDefault>
+        <RefreshIcon />
+      </ButtonLink>
+    {/if}
     <ButtonLink href="/bookmarks" title="Lesezeichen" iconOnly prefetch>
       <BookmarkSquareIcon />
     </ButtonLink>
