@@ -2,9 +2,9 @@ import { fetchStoryContent } from '$lib/backend/content/news';
 import { ContentNotFoundError, OptimizedContentIsEmptyError } from '$lib/errors/errors';
 import type { RequestEvent } from '@sveltejs/kit';
 import { getUrlSearchParam } from '../../utils';
+import type { RequestHandler } from '@sveltejs/kit';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function GET(event: RequestEvent) {
+export const GET = (async (event: RequestEvent) => {
   const url = getUrlSearchParam(event);
   if (!url) {
     return new Response(undefined, { status: 400 });
@@ -26,4 +26,4 @@ export async function GET(event: RequestEvent) {
 
     return new Response(undefined, { status: 500 });
   }
-}
+}) satisfies RequestHandler;

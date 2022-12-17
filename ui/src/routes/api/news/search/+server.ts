@@ -2,9 +2,9 @@ import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { searchNews } from '$lib/backend/db/news';
 import { fromSearchParams } from '$lib/utils/searchRequest';
+import type { RequestHandler } from '@sveltejs/kit';
 
-/** @type {import('@sveltejs/kit').RequestHandler} */
-export async function GET(event: RequestEvent) {
+export const GET = (async (event: RequestEvent) => {
   const url = new URL(event.request.url);
   const searchRequest = fromSearchParams(url.searchParams);
   const news = await searchNews(searchRequest);
@@ -14,4 +14,4 @@ export async function GET(event: RequestEvent) {
       'Cache-Control': 'max-age=0, s-maxage=300',
     },
   });
-}
+}) satisfies RequestHandler;
