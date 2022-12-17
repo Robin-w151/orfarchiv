@@ -21,6 +21,7 @@ export async function fetchStoryContent(url: string): Promise<string> {
   injectSlideShowImages(optimizedDocument, originalDocument);
   injectStoryFooter(optimizedDocument, originalDocument);
   adjustAnchorTags(optimizedDocument);
+  adjustTables(optimizedDocument);
 
   return sanitizeContent(optimizedDocument.body.innerHTML);
 }
@@ -37,20 +38,20 @@ function createDom(data: string, url: string): Document {
   return new JSDOM(data, { url }).window.document;
 }
 
-function removePrintWarnings(document: Document): void {
-  document.querySelectorAll('.print-warning').forEach((element) => {
+function removePrintWarnings(optimizedDocument: Document): void {
+  optimizedDocument.querySelectorAll('.print-warning').forEach((element) => {
     element.remove();
   });
 }
 
-function removeSiteNavigation(document: Document): void {
-  document.querySelectorAll('nav').forEach((navigation) => {
+function removeSiteNavigation(optimizedDocument: Document): void {
+  optimizedDocument.querySelectorAll('nav').forEach((navigation) => {
     navigation.remove();
   });
 }
 
-function removeSiteAnchors(document: Document): void {
-  document.querySelectorAll('a').forEach((anchor) => {
+function removeSiteAnchors(optimizedDocument: Document): void {
+  optimizedDocument.querySelectorAll('a').forEach((anchor) => {
     if (anchor.href.match(/orf\.at.*#/i)) {
       anchor.remove();
     }
@@ -106,10 +107,53 @@ function injectStoryFooter(optimizedDocument: Document, originalDocument: Docume
   }
 }
 
-function adjustAnchorTags(document: Document): void {
-  document.querySelectorAll('a').forEach((anchor) => {
+function adjustAnchorTags(optimizedDocument: Document): void {
+  optimizedDocument.querySelectorAll('a').forEach((anchor) => {
     anchor.target = '_blank';
     anchor.rel = 'noopener noreferrer';
+  });
+}
+
+function adjustTables(optimizedDocument: Document): void {
+  optimizedDocument.querySelectorAll('table').forEach((table) => {
+    const tableColumns = table.tHead?.rows[0]?.cells.length ?? 0;
+    console.log(tableColumns);
+
+    if (tableColumns === 0) {
+      table.remove();
+      return;
+    }
+
+    const columnHasContent: Array<boolean> = Array(tableColumns).fill(false);
+    let isTableValid = true;
+
+    [...table.rows].forEach((tableRow) => {
+      [...tableRow.children].forEach((tableCell, index) => {
+        if (index < columnHasContent.length) {
+          if (tableCell.innerHTML) {
+            columnHasContent[index] = true;
+          }
+        } else {
+          isTableValid = false;
+        }
+      });
+    });
+
+    console.log(columnHasContent);
+    console.log(isTableValid);
+
+    if (!isTableValid) {
+      table.remove();
+      return;
+    }
+
+    [...table.rows].forEach((tableRow) => {
+      [...tableRow.cells].forEach((tableCell, index) => {
+        if (!columnHasContent[index]) {
+          tableCell.remove();
+        }
+      });
+    });
   });
 }
 
