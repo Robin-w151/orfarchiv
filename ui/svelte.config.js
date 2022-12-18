@@ -1,5 +1,8 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapterNode from '@sveltejs/adapter-node';
+import adapterVercel from '@sveltejs/adapter-vercel';
 import preprocess from 'svelte-preprocess';
+
+const useAdapterNode = process.env.USE_ADAPTER_NODE;
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -9,7 +12,7 @@ const config = {
     postcss: true,
   }),
   kit: {
-    adapter: adapter(),
+    adapter: useAdapterNode ? adapterNode() : adapterVercel(),
     csp: {
       directives: {
         'default-src': ['none'],

@@ -1,0 +1,7 @@
+.storybook/
+.svelte-kit/
+.vercel/
+.vscode/
+node_modules/
+.env
+.env.local

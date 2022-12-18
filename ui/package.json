@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "3.4.3",
+  "version": "3.4.4",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev --host",
@@ -26,6 +26,7 @@
     "@storybook/svelte": "next",
     "@storybook/sveltekit": "next",
     "@storybook/testing-library": "^0.0.13",
+    "@sveltejs/adapter-node": "^1.0.0",
     "@sveltejs/adapter-vercel": "^1.0.0",
     "@sveltejs/kit": "^1.0.1",
     "@tailwindcss/forms": "^0.5.3",
