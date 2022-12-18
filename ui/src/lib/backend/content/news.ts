@@ -117,7 +117,6 @@ function adjustAnchorTags(optimizedDocument: Document): void {
 function adjustTables(optimizedDocument: Document): void {
   optimizedDocument.querySelectorAll('table').forEach((table) => {
     const tableColumns = table.tHead?.rows[0]?.cells.length ?? 0;
-    console.log(tableColumns);
 
     if (tableColumns === 0) {
       table.remove();
@@ -138,9 +137,6 @@ function adjustTables(optimizedDocument: Document): void {
         }
       });
     });
-
-    console.log(columnHasContent);
-    console.log(isTableValid);
 
     if (!isTableValid) {
       table.remove();
