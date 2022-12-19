@@ -5,16 +5,17 @@
   export let id: string;
   export let name: string;
   export let label: string;
-  export let checked = false;
+  export let value: string;
+  export let group: string;
 
   const dispatch = createEventDispatcher();
 
   function handleChange() {
-    dispatch('change');
+    dispatch('change', value);
   }
 </script>
 
 <span class={wrapperClass}>
-  <input class={inputClass} {id} {name} type="radio" {checked} on:change={handleChange} />
+  <input class={inputClass} type="radio" {id} {name} {value} bind:group on:change={handleChange} />
   <label class={labelClass} for={id}>{label}</label>
 </span>

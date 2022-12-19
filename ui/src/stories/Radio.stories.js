@@ -1,10 +1,10 @@
-import RadioCmp from '$lib/components/ui/controls/Radio.svelte';
+import RadioView from './RadioView.svelte';
 
 const args = {
   id: 'radio',
   name: 'radio',
   label: 'Radio',
-  checked: false,
+  value: 'radio-value',
 };
 
 export default {
@@ -26,10 +26,11 @@ export default {
       description: 'Companion label text content',
       control: 'text',
     },
-    checked: {
-      type: 'boolean',
-      description: 'Controls whether the radio control is active',
-      control: 'boolean',
+    value: {
+      type: 'string',
+      description:
+        'Value of this particular radio control. If equal to bound group, the radio control should be active.',
+      control: 'text',
     },
     onChange: {
       action: 'change',
@@ -39,7 +40,7 @@ export default {
 };
 
 const Template = (args) => ({
-  Component: RadioCmp,
+  Component: RadioView,
   props: args,
   on: {
     change: args.onChange,

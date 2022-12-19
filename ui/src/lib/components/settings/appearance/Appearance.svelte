@@ -3,11 +3,14 @@
   import SectionList from '$lib/components/ui/content/SectionList.svelte';
   import Item from '$lib/components/ui/content/Item.svelte';
   import Radio from '$lib/components/ui/controls/Radio.svelte';
-  import type { ColorScheme } from '$lib/stores/styles';
-  import styles from '$lib/stores/styles';
+  import styles, { type ColorScheme } from '$lib/stores/styles';
 
-  function handleColorSchemeRadioChange(colorScheme: ColorScheme) {
-    styles.setColorScheme(colorScheme);
+  let colorScheme: ColorScheme | undefined = $styles.colorScheme;
+
+  function handleColorSchemeRadioChange() {
+    if (colorScheme) {
+      styles.setColorScheme(colorScheme);
+    }
   }
 </script>
 
@@ -18,8 +21,9 @@
         id="color-scheme-system"
         name="color-scheme"
         label="Automatisch"
-        checked={$styles.colorScheme === 'system'}
-        on:change={handleColorSchemeRadioChange.bind(null, 'system')}
+        value="system"
+        bind:group={colorScheme}
+        on:change={handleColorSchemeRadioChange}
       />
     </Item>
     <Item>
@@ -27,8 +31,9 @@
         id="color-scheme-light"
         name="color-scheme"
         label="Hell"
-        checked={$styles.colorScheme === 'light'}
-        on:change={handleColorSchemeRadioChange.bind(null, 'light')}
+        value="light"
+        bind:group={colorScheme}
+        on:change={handleColorSchemeRadioChange}
       />
     </Item>
     <Item>
@@ -36,8 +41,9 @@
         id="color-scheme-dark"
         name="color-scheme"
         label="Dunkel"
-        checked={$styles.colorScheme === 'dark'}
-        on:change={handleColorSchemeRadioChange.bind(null, 'dark')}
+        value="dark"
+        bind:group={colorScheme}
+        on:change={handleColorSchemeRadioChange}
       />
     </Item>
   </SectionList>
