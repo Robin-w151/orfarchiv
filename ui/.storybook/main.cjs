@@ -1,19 +1,19 @@
 module.exports = {
-  'stories': [
+  stories: [
     '../src/**/*.mdx',
     '../src/**/*.stories.@(js|jsx|ts|tsx)',
   ],
-  'addons': [
+  addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
     'storybook-dark-mode',
   ],
-  'framework': {
-    'name': '@storybook/sveltekit',
-    'options': {},
+  framework: {
+    name: '@storybook/sveltekit',
+    options: {},
   },
-  'docs': {
-    'docsPage': true,
+  docs: {
+    docsPage: true,
   },
 };
