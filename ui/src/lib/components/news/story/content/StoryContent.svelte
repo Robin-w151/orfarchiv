@@ -30,7 +30,7 @@
 
   onMount(async () => {
     try {
-      content = await fetchContentWithRetry(story.url);
+      content = await fetchContentWithRetry(story);
     } catch (error) {
       const { message } = error as Error;
       console.warn(`Error: ${message}`);
@@ -43,10 +43,11 @@
     isClosed = true;
   });
 
-  async function fetchContentWithRetry(url: string): Promise<string> {
+  async function fetchContentWithRetry(story: Story): Promise<string> {
     for (let retry = 0; retry < MAX_RETRIES && !isClosed; retry++) {
       try {
-        const content = await fetchContent(url, get(settings).fetchReadMoreContent);
+        const fetchReadMoreContent = get(settings).fetchReadMoreContent && story.source === 'news';
+        const content = await fetchContent(story.url, fetchReadMoreContent);
         if (story.isBookmarked) {
           bookmarks.setIsViewed(story);
         }
