@@ -1,8 +1,7 @@
 import { json } from '@sveltejs/kit';
-import type { RequestEvent } from '@sveltejs/kit';
+import type { RequestEvent, RequestHandler } from '@sveltejs/kit';
 import { searchNews } from '$lib/backend/db/news';
 import { fromSearchParams } from '$lib/utils/searchRequest';
-import type { RequestHandler } from '@sveltejs/kit';
 
 export const GET = (async (event: RequestEvent) => {
   const url = new URL(event.request.url);

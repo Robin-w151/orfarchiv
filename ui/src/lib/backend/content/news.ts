@@ -2,20 +2,32 @@ import { Readability } from '@mozilla/readability';
 import { JSDOM } from 'jsdom';
 import createDOMPurify from 'dompurify';
 import { ContentNotFoundError, OptimizedContentIsEmptyError } from '$lib/errors/errors';
+import { isOrfStoryUrl } from '$lib/backend/utils/urls';
 
-export async function fetchStoryContent(url: string): Promise<string> {
-  const data = await fetchSiteHtmlText(url);
+export async function fetchStoryContent(url: string, fetchReadMoreContent = false): Promise<string> {
+  let currentUrl = url;
+  let data = await fetchSiteHtmlText(currentUrl);
+  let originalDocument = createDom(data, currentUrl);
 
-  const document = createDom(data, url);
+  if (fetchReadMoreContent) {
+    const readMoreUrl = findReadMoreUrl(originalDocument);
+
+    if (readMoreUrl) {
+      currentUrl = readMoreUrl;
+      data = await fetchSiteHtmlText(currentUrl);
+      originalDocument = createDom(data, currentUrl);
+    }
+  }
+
+  const document = createDom(data, currentUrl);
   removePrintWarnings(document);
 
   const optimizedContent = new Readability(document).parse();
   if (!optimizedContent) {
-    throw new OptimizedContentIsEmptyError(`Optimized content from url '${url}' is empty`);
+    throw new OptimizedContentIsEmptyError(`Optimized content from url '${currentUrl}' is empty`);
   }
 
-  const optimizedDocument = createDom(optimizedContent.content, url);
-  const originalDocument = createDom(data, url);
+  const optimizedDocument = createDom(optimizedContent.content, currentUrl);
   removeSiteNavigation(optimizedDocument);
   removeSiteAnchors(optimizedDocument);
   injectSlideShowImages(optimizedDocument, originalDocument);
@@ -36,6 +48,19 @@ async function fetchSiteHtmlText(url: string): Promise<string> {
 
 function createDom(data: string, url: string): Document {
   return new JSDOM(data, { url }).window.document;
+}
+
+function findReadMoreUrl(originalDocument: Document): string | null {
+  return [...originalDocument.querySelectorAll('p')]
+    .filter((p) => {
+      if (!p.textContent?.match(/^mehr dazu in/i)) {
+        return false;
+      }
+
+      const anchor = p.querySelector('a');
+      return isOrfStoryUrl(anchor?.href);
+    })
+    .map((p) => p.querySelector('a')?.href ?? '')[0];
 }
 
 function removePrintWarnings(optimizedDocument: Document): void {

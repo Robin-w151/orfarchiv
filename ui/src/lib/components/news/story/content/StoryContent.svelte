@@ -9,6 +9,8 @@
   import Link from '$lib/components/ui/controls/Link.svelte';
   import bookmarks from '$lib/stores/bookmarks';
   import type { Story } from '$lib/models/story';
+  import { get } from 'svelte/store';
+  import settings from '$lib/stores/settings';
 
   const MAX_RETRIES = 5;
 
@@ -44,7 +46,7 @@
   async function fetchContentWithRetry(url: string): Promise<string> {
     for (let retry = 0; retry < MAX_RETRIES && !isClosed; retry++) {
       try {
-        const content = await fetchContent(url);
+        const content = await fetchContent(url, get(settings).fetchReadMoreContent);
         if (story.isBookmarked) {
           bookmarks.setIsViewed(story);
         }

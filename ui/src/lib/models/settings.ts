@@ -1,5 +1,5 @@
 export interface Settings {
-  openLinksInNewTab: boolean;
+  fetchReadMoreContent: boolean;
   sources: Array<string>;
 }
 

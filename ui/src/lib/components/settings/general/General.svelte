@@ -5,8 +5,8 @@
   import Checkbox from '$lib/components/ui/controls/Checkbox.svelte';
   import settings from '$lib/stores/settings';
 
-  function handleOpenLinksInNewTabChange({ detail: checked }: { detail: boolean }) {
-    settings.setOpenLinksInNewTab(checked);
+  function handleFetchReadMoreContentChange({ detail: checked }: { detail: boolean }) {
+    settings.setFetchReadMoreContent(checked);
   }
 </script>
 
@@ -14,10 +14,10 @@
   <SectionList>
     <Item>
       <Checkbox
-        id="open-links-in-new-tab"
-        label="Links in neuem Tab öffnen"
-        checked={$settings.openLinksInNewTab}
-        on:change={handleOpenLinksInNewTabChange}
+        id="fetch-read-more-content"
+        label="Inhalt von weiterführendem Artikel laden"
+        checked={$settings.fetchReadMoreContent}
+        on:change={handleFetchReadMoreContentChange}
       />
     </Item>
   </SectionList>

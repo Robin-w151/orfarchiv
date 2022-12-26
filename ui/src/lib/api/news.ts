@@ -21,12 +21,13 @@ export async function searchNews(searchRequestParameters: SearchRequestParameter
     throw new Error('Failed to search news!');
   }
 
-  const data = await response.json();
-  return data;
+  return await response.json();
 }
 
-export async function fetchContent(url: string): Promise<string> {
-  const response = await fetch(`/api/news/content?url=${encodeURIComponent(url)}`);
+export async function fetchContent(url: string, fetchReadMoreContent = false): Promise<string> {
+  const response = await fetch(
+    `/api/news/content?url=${encodeURIComponent(url)}${fetchReadMoreContent ? '&fetchReadMoreContent=true' : ''}`,
+  );
   if (!response.ok) {
     throw new Error('Failed to load story content!');
   }

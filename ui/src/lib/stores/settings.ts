@@ -4,20 +4,20 @@ import { writable } from 'svelte-local-storage-store';
 import type { Readable } from 'svelte/store';
 
 export interface SettingsStore extends Readable<Settings>, Partial<Settings> {
-  setOpenLinksInNewTab: (_: boolean) => void;
+  setFetchReadMoreContent: (_: boolean) => void;
   setSource: (_source: string, _included: boolean) => void;
 }
 
 export const SETTINGS_STORE_NAME = 'settings';
 
 const initialState = {
-  openLinksInNewTab: true,
+  fetchReadMoreContent: false,
   sources: sources.map((source) => source.key),
 };
 const { subscribe, update } = writable<Settings>(SETTINGS_STORE_NAME, initialState);
 
-function setOpenLinksInNewTab(openLinksInNewTab: boolean): void {
-  update((settings) => ({ ...settings, openLinksInNewTab }));
+function setFetchReadMoreContent(fetchReadMoreContent: boolean): void {
+  update((settings) => ({ ...settings, fetchReadMoreContent }));
 }
 
 function setSource(source: string, included: boolean): void {
@@ -34,4 +34,4 @@ function setSource(source: string, included: boolean): void {
   });
 }
 
-export default { subscribe, setOpenLinksInNewTab, setSource } as SettingsStore;
+export default { subscribe, setFetchReadMoreContent, setSource } as SettingsStore;
