@@ -53,7 +53,12 @@ function createDom(data: string, url: string): Document {
 function findReadMoreUrl(originalDocument: Document): string | null {
   return [...originalDocument.querySelectorAll('p')]
     .filter((p) => {
-      if (!p.textContent?.match(/^mehr dazu in/i)) {
+      const text = p.textContent;
+      if (!text) {
+        return false;
+      }
+
+      if (![/^mehr dazu in/i, /^lesen sie mehr/i].some((regexp) => !!text.match(regexp))) {
         return false;
       }
 
