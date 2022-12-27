@@ -49,14 +49,14 @@ test.describe('SettingsPage', () => {
       settingsPage = await setupPage(page);
     });
 
-    test('open links in new tab', async () => {
-      const checkbox = settingsPage.getListSectionInput(sectionTitle, 'Links in neuem Tab öffnen');
-      await expect(checkbox).toBeChecked();
+    test('fetch read more content', async () => {
+      const checkbox = settingsPage.getListSectionInput(sectionTitle, 'Inhalt von weiterführendem Artikel laden');
+      await expect(checkbox).not.toBeChecked();
 
       await checkbox.click();
       await settingsPage.visitSite();
 
-      await expect(checkbox).not.toBeChecked();
+      await expect(checkbox).toBeChecked();
     });
   });
 
