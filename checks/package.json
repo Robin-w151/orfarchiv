@@ -1,6 +1,6 @@
 {
   "name": "checks",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "scripts": {
     "test": "playwright test",
     "test:debug": "playwright test --debug"
@@ -12,11 +12,11 @@
   },
   "devDependencies": {
     "dotenv-flow": "^3.2.0",
-    "eslint": "^8.28.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-config-recommended": "^4.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.0"
+    "prettier": "^2.8.1"
   },
   "packageManager": "yarn@3.2.3"
 }
