@@ -14,7 +14,7 @@
   $: showShareButton = shareData && isWebShareAvailable(shareData);
   $: showCopyToClipboardButton = isClipboardAvailable();
 
-  function isWebShareAvailable(data: ShareData): boolean {
+  function isWebShareAvailable(data): boolean {
     return navigator.canShare?.(data) && !!navigator.share;
   }
 
