@@ -5,15 +5,10 @@ import { createLogger, format, transports } from 'winston';
 export const ORFARCHIV_DB_URL = env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
 
 // Logger
-const { align, colorize, combine, timestamp, printf } = format;
+const { combine, json, timestamp } = format;
 export const logger = createLogger({
   level: 'info',
-  format: combine(
-    align(),
-    colorize(),
-    timestamp(),
-    printf((log) => `${log.timestamp} ${log.level} ${log.message}`),
-  ),
+  format: combine(timestamp(), json()),
   transports: [new transports.Console()],
 });
 
