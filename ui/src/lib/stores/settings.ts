@@ -2,13 +2,12 @@ import type { Settings } from '$lib/models/settings';
 import { sources } from '$lib/models/settings';
 import { writable } from 'svelte-local-storage-store';
 import type { Readable } from 'svelte/store';
+import { SETTINGS_STORE_NAME } from '$lib/configs/client';
 
 export interface SettingsStore extends Readable<Settings>, Partial<Settings> {
   setFetchReadMoreContent: (_: boolean) => void;
   setSource: (_source: string, _included: boolean) => void;
 }
-
-export const SETTINGS_STORE_NAME = 'settings';
 
 const initialState = {
   fetchReadMoreContent: false,

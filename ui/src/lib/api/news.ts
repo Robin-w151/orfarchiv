@@ -2,6 +2,8 @@ import type { News } from '$lib/models/news';
 import type { PageKey } from '$lib/models/pageKey';
 import type { SearchRequestParameters } from '$lib/models/searchRequest';
 import { toSearchParams } from '$lib/utils/searchRequest';
+import type { StoryContent } from '$lib/models/story';
+import { API_NEWS_CONTENT_URL, API_NEWS_SEARCH_URL } from '$lib/configs/client';
 
 let abortController: AbortController | null = null;
 
@@ -12,7 +14,7 @@ export async function searchNews(searchRequestParameters: SearchRequestParameter
   abortController?.abort();
   abortController = new AbortController();
 
-  const response = await fetch(`/api/news/search?${searchParams}`, {
+  const response = await fetch(API_NEWS_SEARCH_URL(searchParams), {
     signal: abortController.signal,
   });
   abortController = null;
@@ -24,12 +26,15 @@ export async function searchNews(searchRequestParameters: SearchRequestParameter
   return await response.json();
 }
 
-export async function fetchContent(url: string, fetchReadMoreContent = false): Promise<string> {
-  const response = await fetch(
-    `/api/news/content?url=${encodeURIComponent(url)}${fetchReadMoreContent ? '&fetchReadMoreContent=true' : ''}`,
-  );
+export async function fetchContent(url: string, fetchReadMoreContent = false): Promise<StoryContent> {
+  const searchParams = new URLSearchParams();
+  searchParams.append('url', url);
+  if (fetchReadMoreContent) {
+    searchParams.append('fetchReadMoreContent', 'true');
+  }
+  const response = await fetch(API_NEWS_CONTENT_URL(searchParams.toString()));
   if (!response.ok) {
     throw new Error('Failed to load story content!');
   }
-  return response.text();
+  return response.json();
 }

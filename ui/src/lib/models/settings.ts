@@ -78,3 +78,10 @@ export const sources: Array<Source> = [
     key: 'vorarlberg',
   },
 ];
+
+export function getSourceLabel(source?: string): string | undefined {
+  if (!source || source === 'news') {
+    return undefined;
+  }
+  return sources.find((s) => s.key === source)?.label;
+}

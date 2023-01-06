@@ -1,6 +1,5 @@
 import { getCLS, getFCP, getFID, getLCP, getTTFB, type Metric } from 'web-vitals';
-
-const vitalsUrl = '/api/vitals';
+import { WEB_VITALS_URL } from '$lib/configs/client';
 
 function getConnectionSpeed() {
   const connection = (navigator as any)?.connection;
@@ -32,9 +31,9 @@ function sendToAnalytics(metric: Metric, options: { [s: string]: any }) {
     type: 'application/x-www-form-urlencoded',
   });
   if (navigator.sendBeacon) {
-    navigator.sendBeacon(vitalsUrl, blob);
+    navigator.sendBeacon(WEB_VITALS_URL, blob);
   } else
-    fetch(vitalsUrl, {
+    fetch(WEB_VITALS_URL, {
       body: blob,
       method: 'POST',
       credentials: 'omit',

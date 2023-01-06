@@ -10,7 +10,7 @@
   let clazz: string;
   export { clazz as class };
 
-  $: shareData = story.url ? { text: story.url } : undefined;
+  $: shareData = story?.url ? { text: story?.url } : undefined;
   $: showShareButton = shareData && isWebShareAvailable(shareData);
   $: showCopyToClipboardButton = isClipboardAvailable();
 

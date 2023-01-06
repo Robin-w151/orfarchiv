@@ -2,7 +2,7 @@
   import { formatTimestamp } from '$lib/utils/datetime.js';
   import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
   import StoryMenu from '$lib/components/news/story/header/menu/StoryMenu.svelte';
-  import { sources } from '$lib/models/settings';
+  import { getSourceLabel } from '$lib/models/settings';
   import Popover from '$lib/components/ui/controls/Popover.svelte';
   import type { Story } from '$lib/models/story';
   import EyeIcon from '$lib/components/ui/icons/outline/EyeIcon.svelte';
@@ -19,13 +19,6 @@
 
   $: showViewedIcon = story?.isBookmarked && story?.isViewed;
   $: sourceLabel = getSourceLabel(story?.source);
-
-  function getSourceLabel(source: string | undefined): string | undefined {
-    if (!source || source === 'news') {
-      return undefined;
-    }
-    return sources.find((s) => s.key === source)?.label;
-  }
 </script>
 
 {#if story}

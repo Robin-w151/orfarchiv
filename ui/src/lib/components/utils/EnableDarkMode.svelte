@@ -3,7 +3,7 @@
   import { onDestroy, onMount } from 'svelte';
   import styles, { type ColorScheme } from '$lib/stores/styles';
 
-  $: if (browser) applyColorScheme($styles.colorScheme);
+  $: if (browser) applyColorScheme($styles.colorScheme ?? 'system');
 
   onMount(() => {
     if (browser) {

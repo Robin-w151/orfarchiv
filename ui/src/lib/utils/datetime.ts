@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon';
-
-const FORMAT = 'dd.MM.yyyy, HH:mm';
+import { DATETIME_FORMAT } from '$lib/configs/client';
 
 export function formatTimestamp(timestamp: string): string {
   const datetime = DateTime.fromISO(timestamp);
@@ -8,5 +7,5 @@ export function formatTimestamp(timestamp: string): string {
 }
 
 function formatTimestampWithDefaultTimezone(timestamp: DateTime): string {
-  return timestamp.toFormat(FORMAT);
+  return timestamp.toFormat(DATETIME_FORMAT);
 }

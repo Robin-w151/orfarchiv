@@ -1,5 +1,6 @@
 import { fetchStoryContent } from '$lib/backend/content/news';
 import { ContentNotFoundError, OptimizedContentIsEmptyError } from '$lib/errors/errors';
+import { json } from '@sveltejs/kit';
 import type { RequestEvent, RequestHandler } from '@sveltejs/kit';
 import { getFetchReadMoreContentSearchParam, getUrlSearchParam } from '$lib/backend/utils/searchParams';
 
@@ -12,7 +13,7 @@ export const GET = (async (event: RequestEvent) => {
   try {
     const fetchReadMoreContent = getFetchReadMoreContentSearchParam(event);
     const content = await fetchStoryContent(url, fetchReadMoreContent);
-    return new Response(content, {
+    return json(content, {
       headers: {
         'Cache-Control': 'max-age=0, s-maxage=86400',
       },

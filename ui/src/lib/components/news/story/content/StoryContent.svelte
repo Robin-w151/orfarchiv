@@ -1,36 +1,38 @@
 <script lang="ts">
   import { createEventDispatcher, onDestroy, onMount } from 'svelte';
   import ChevronUpIcon from '$lib/components/ui/icons/outline/ChevronUpIcon.svelte';
-  import clsx from 'clsx';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
   import { wait } from '$lib/utils/wait';
   import { fetchContent } from '$lib/api/news';
   import Link from '$lib/components/ui/controls/Link.svelte';
   import bookmarks from '$lib/stores/bookmarks';
-  import type { Story } from '$lib/models/story';
+  import type { Story, StoryContent } from '$lib/models/story';
   import { get } from 'svelte/store';
   import settings from '$lib/stores/settings';
-
-  const MAX_RETRIES = 5;
+  import { getSourceLabel } from '$lib/models/settings';
+  import { STORY_CONTENT_FETCH_MAX_RETRIES } from '$lib/configs/client';
 
   export let story: Story;
 
   const dispatch = createEventDispatcher();
 
+  const wrapperClass = 'flex flex-col items-center gap-3';
+  const contentClass = 'cursor-auto w-full';
+  const contentInfoClass = 'text-sm text-gray-500 dark:text-gray-400';
+  const errorLinkClass = 'text-blue-700';
+  const collapseContentClass = 'py-1.5 w-48 max-w-full';
+
   let isLoading = true;
-  let content: string;
+  let storyContent: StoryContent;
   let isClosed = false;
 
-  const wrapperClass = clsx('flex flex-col items-center gap-3');
-  const contentClass = clsx('cursor-auto w-full');
-  const contentSourceClass = clsx('text-sm text-gray-500 dark:text-gray-400');
-  const errorLinkClass = clsx(['text-blue-700']);
-  const collapseContentClass = clsx(['py-1.5 w-48 max-w-full']);
+  $: sourceLabel = getSourceLabel(storyContent?.source?.name);
+  $: sourceUrl = storyContent?.source?.url ?? story?.url;
 
   onMount(async () => {
     try {
-      content = await fetchContentWithRetry(story);
+      storyContent = await fetchContentWithRetry(story);
     } catch (error) {
       const { message } = error as Error;
       console.warn(`Error: ${message}`);
@@ -43,8 +45,8 @@
     isClosed = true;
   });
 
-  async function fetchContentWithRetry(story: Story): Promise<string> {
-    for (let retry = 0; retry < MAX_RETRIES && !isClosed; retry++) {
+  async function fetchContentWithRetry(story: Story): Promise<StoryContent> {
+    for (let retry = 0; retry < STORY_CONTENT_FETCH_MAX_RETRIES && !isClosed; retry++) {
       try {
         const fetchReadMoreContent = get(settings).fetchReadMoreContent && story.source === 'news';
         const content = await fetchContent(story.url, fetchReadMoreContent);
@@ -53,13 +55,13 @@
         }
         return content;
       } catch (error) {
-        if (retry < MAX_RETRIES - 1) {
+        if (retry < STORY_CONTENT_FETCH_MAX_RETRIES - 1) {
           await wait(1000 * 2 ** retry);
         }
       }
     }
 
-    throw new Error(`Failed to load story content after ${MAX_RETRIES} retries!`);
+    throw new Error(`Failed to load story content after ${STORY_CONTENT_FETCH_MAX_RETRIES} retries!`);
   }
 
   function handleCollapseFieldClick(): void {
@@ -78,10 +80,13 @@
 <div class={wrapperClass}>
   {#if isLoading}
     <StoryContentSkeleton />
-  {:else if content}
+  {:else if storyContent}
     <article class="story-content {contentClass}" data-testid="story-content">
-      {@html content}
-      <div class={contentSourceClass}>Quelle: <Link href={story.url}>orf.at</Link></div>
+      {#if sourceLabel}
+        <div class={contentInfoClass}>Inhalt geladen von {sourceLabel}</div>
+      {/if}
+      {@html storyContent.content}
+      <div class={contentInfoClass}>Quelle: <Link href={sourceUrl}>orf.at</Link></div>
     </article>
   {:else}
     <p data-testid="story-content-error">

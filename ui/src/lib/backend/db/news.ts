@@ -1,9 +1,10 @@
-import { type Collection, MongoClient, type Sort, type WithId } from 'mongodb';
+import { type Collection, type Sort, type WithId } from 'mongodb';
 import type { News } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
 import type { PageKey } from '$lib/models/pageKey';
-import { env } from '$env/dynamic/private';
+import orfArchivDb from '$lib/backend/db/init';
+import { NEWS_QUERY_PAGE_LIMIT } from '$lib/configs/server';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
@@ -14,20 +15,29 @@ interface PaginatedQuery {
   nextKeyFn: PageKeyFn;
 }
 
-const PAGE_LIMIT = 100;
-
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   const { searchRequestParameters, pageKey } = searchRequest;
 
   const query = buildQuery(searchRequestParameters);
   const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
-  const limit = pageKey?.type === 'prev' ? 0 : PAGE_LIMIT + 1;
+  const limit = pageKey?.type === 'prev' ? 0 : NEWS_QUERY_PAGE_LIMIT + 1;
 
   return withOrfArchivDb(async (newsCollection) => {
     const stories = await executeQuery(newsCollection, paginatedQuery, sort, limit);
     const orderedStories = correctOrder(stories, pageKey);
     const { prevKey, nextKey } = getPageKeys(stories, prevKeyFn, nextKeyFn, pageKey);
-    return { stories: orderedStories.filter((_, index) => index < PAGE_LIMIT).map(mapToStory), prevKey, nextKey };
+    return {
+      stories: orderedStories.filter((_, index) => index < NEWS_QUERY_PAGE_LIMIT).map(mapToStory),
+      prevKey,
+      nextKey,
+    };
+  });
+}
+
+export async function searchStory(url: string): Promise<Story> {
+  const query = { url };
+  return withOrfArchivDb(async (newsCollection) => {
+    return newsCollection.findOne(query);
   });
 }
 
@@ -56,18 +66,12 @@ function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters
   return { $and: [textQuery, fromQuery, toQuery, sourceQuery] };
 }
 
-async function withOrfArchivDb(handler: (newsCollection: Collection) => Promise<any>) {
-  const url = env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
-  let client;
+async function withOrfArchivDb(handler: (newsCollection: Collection<Document>) => Promise<any>) {
   try {
-    client = await MongoClient.connect(url);
-    const db = client.db('orfarchiv');
-    const newsCollection = db.collection('news');
+    const newsCollection = orfArchivDb.collection('news');
     return await handler(newsCollection);
   } catch (error: any) {
     throw new Error(`DB error. Cause: ${error.message}`);
-  } finally {
-    await client?.close();
   }
 }
 
@@ -85,7 +89,7 @@ function generatePaginationQuery(query: any, pageKey?: PageKey): PaginatedQuery 
   }
 
   function nextKeyFn(stories: Array<Story>): PageKey | null {
-    if (stories.length < PAGE_LIMIT + 1) {
+    if (stories.length < NEWS_QUERY_PAGE_LIMIT + 1) {
       return null;
     }
 
@@ -119,7 +123,12 @@ function generatePaginationQuery(query: any, pageKey?: PageKey): PaginatedQuery 
   return { paginatedQuery, sort, prevKeyFn, nextKeyFn };
 }
 
-function executeQuery(newsCollection: Collection, query: any, sort: Sort, limit: number): Promise<Array<Story>> {
+function executeQuery(
+  newsCollection: Collection<Document>,
+  query: any,
+  sort: Sort,
+  limit: number,
+): Promise<Array<Story>> {
   return newsCollection.find(query).limit(limit).sort(sort).toArray() as unknown as Promise<Array<Story>>;
 }
 

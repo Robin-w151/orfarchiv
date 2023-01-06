@@ -3,23 +3,30 @@ import { JSDOM } from 'jsdom';
 import createDOMPurify from 'dompurify';
 import { ContentNotFoundError, OptimizedContentIsEmptyError } from '$lib/errors/errors';
 import { isOrfStoryUrl } from '$lib/backend/utils/urls';
+import type { StoryContent, StorySource } from '$lib/models/story';
+import { searchStory } from '$lib/backend/db/news';
 
-export async function fetchStoryContent(url: string, fetchReadMoreContent = false): Promise<string> {
+export async function fetchStoryContent(url: string, fetchReadMoreContent = false): Promise<StoryContent> {
   let currentUrl = url;
-  let data = await fetchSiteHtmlText(currentUrl);
-  let originalDocument = createDom(data, currentUrl);
+  let currentData = await fetchSiteHtmlText(currentUrl);
+  let source;
+  let originalDocument = createDom(currentData, currentUrl);
 
   if (fetchReadMoreContent) {
     const readMoreUrl = findReadMoreUrl(originalDocument);
 
     if (readMoreUrl) {
       currentUrl = readMoreUrl;
-      data = await fetchSiteHtmlText(currentUrl);
+      const [story, data] = await Promise.all([searchStory(currentUrl), fetchSiteHtmlText(currentUrl)]);
+
+      currentData = data;
+      source = story?.source ?? findSourceFromUrl(currentUrl);
+
       originalDocument = createDom(data, currentUrl);
     }
   }
 
-  const document = createDom(data, currentUrl);
+  const document = createDom(currentData, currentUrl);
   removePrintWarnings(document);
 
   const optimizedContent = new Readability(document).parse();
@@ -35,7 +42,12 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
   adjustAnchorTags(optimizedDocument);
   adjustTables(optimizedDocument);
 
-  return sanitizeContent(optimizedDocument.body.innerHTML);
+  const storySource = source ? ({ name: source, url: currentUrl } satisfies StorySource) : undefined;
+
+  return {
+    content: sanitizeContent(optimizedDocument.body.innerHTML),
+    source: storySource,
+  };
 }
 
 async function fetchSiteHtmlText(url: string): Promise<string> {
@@ -66,6 +78,10 @@ function findReadMoreUrl(originalDocument: Document): string | null {
       return isOrfStoryUrl(anchor?.href);
     })
     .map((p) => p.querySelector('a')?.href ?? '')[0];
+}
+
+function findSourceFromUrl(url: string): string | undefined {
+  return /^https:\/\/(?<source>\w+)\.orf\.at/i.exec(url)?.groups?.source;
 }
 
 function removePrintWarnings(optimizedDocument: Document): void {

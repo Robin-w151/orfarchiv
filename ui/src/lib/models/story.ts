@@ -8,3 +8,13 @@ export interface Story {
   isBookmarked?: number;
   isViewed?: number;
 }
+
+export interface StoryContent {
+  content: string;
+  source?: StorySource;
+}
+
+export interface StorySource {
+  name: string;
+  url: string;
+}
