@@ -35,7 +35,7 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
 }
 
 export async function searchStory(url: string): Promise<Story> {
-  const query = { url };
+  const query = { url, source: { $ne: 'oesterreich' } };
   return withOrfArchivDb(async (newsCollection) => {
     return newsCollection.findOne(query);
   });
