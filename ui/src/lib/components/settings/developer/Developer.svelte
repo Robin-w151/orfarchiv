@@ -3,8 +3,7 @@
   import Section from '$lib/components/ui/content/Section.svelte';
   import SectionList from '$lib/components/ui/content/SectionList.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
-  import { BOOKMARKS_STORE_NAME } from '$lib/stores/persistence/bookmarksDb';
-  import { SETTINGS_STORE_NAME } from '$lib/stores/settings';
+  import { BOOKMARKS_STORE_NAME, SETTINGS_STORE_NAME } from '$lib/configs/client';
 
   function handleResetIndexedDbButtonClick() {
     indexedDB.deleteDatabase(BOOKMARKS_STORE_NAME);
