@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Popover, PopoverButton, PopoverPanel, Portal } from '@rgossiaux/svelte-headlessui';
   import { createPopperActions } from 'svelte-popperjs';
-  import { type BtnType, buttonClassFn, type Size } from './button.styles';
+  import { type BtnType, buttonClassFn, type Size } from '../controls/button.styles';
   import clsx from 'clsx';
 
   export let btnType: BtnType = 'primary';

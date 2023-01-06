@@ -1,8 +1,8 @@
 <script lang="ts">
   import Button from '$lib/components/ui/controls/Button.svelte';
-  import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
+  import PopoverContent from '$lib/components/ui/content/PopoverContent.svelte';
   import TrashIcon from '$lib/components/ui/icons/outline/TrashIcon.svelte';
-  import { defaultMenuClass, defaultMenuItemClass } from '$lib/utils/styles';
+  import { defaultMenuClass } from '$lib/utils/styles';
   import { createEventDispatcher } from 'svelte';
 
   export let onClose: () => void;

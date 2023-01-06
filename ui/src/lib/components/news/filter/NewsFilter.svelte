@@ -1,7 +1,7 @@
 <script lang="ts">
   import NewsFilterMenu from '$lib/components/news/filter/NewsFilterMenu.svelte';
   import Input from '$lib/components/ui/controls/Input.svelte';
-  import Popover from '$lib/components/ui/controls/Popover.svelte';
+  import Popover from '$lib/components/ui/content/Popover.svelte';
   import FunnelIcon from '$lib/components/ui/icons/outline/FunnelIcon.svelte';
   import { startSearch } from '$lib/stores/newsEvents';
   import searchFilter from '$lib/stores/searchFilter';

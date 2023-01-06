@@ -1,6 +1,6 @@
 <script lang="ts">
   import Input from '$lib/components/ui/controls/Input.svelte';
-  import Popover from '$lib/components/ui/controls/Popover.svelte';
+  import Popover from '$lib/components/ui/content/Popover.svelte';
   import TrashIcon from '$lib/components/ui/icons/outline/TrashIcon.svelte';
   import bookmarks from '$lib/stores/bookmarks';
   import { startSearch } from '$lib/stores/newsEvents';

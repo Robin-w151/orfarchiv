@@ -5,7 +5,7 @@
   import { createEventDispatcher } from 'svelte';
   import type { DateTime } from 'luxon';
   import Button from '$lib/components/ui/controls/Button.svelte';
-  import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
+  import PopoverContent from '$lib/components/ui/content/PopoverContent.svelte';
 
   export let from: DateTime | undefined;
   export let to: DateTime | undefined;

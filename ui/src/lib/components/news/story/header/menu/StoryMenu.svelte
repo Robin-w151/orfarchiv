@@ -1,5 +1,5 @@
 <script lang="ts">
-  import PopoverContent from '$lib/components/ui/controls/PopoverContent.svelte';
+  import PopoverContent from '$lib/components/ui/content/PopoverContent.svelte';
   import type { Story } from '$lib/models/story';
   import { defaultMenuClass, defaultMenuItemClass } from '$lib/utils/styles';
   import BookmarkButton from './BookmarkButton.svelte';

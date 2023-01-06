@@ -3,7 +3,7 @@
   import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
   import StoryMenu from '$lib/components/news/story/header/menu/StoryMenu.svelte';
   import { getSourceLabel } from '$lib/models/settings';
-  import Popover from '$lib/components/ui/controls/Popover.svelte';
+  import Popover from '$lib/components/ui/content/Popover.svelte';
   import type { Story } from '$lib/models/story';
   import EyeIcon from '$lib/components/ui/icons/outline/EyeIcon.svelte';
 
