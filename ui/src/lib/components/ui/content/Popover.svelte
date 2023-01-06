@@ -2,7 +2,6 @@
   import { Popover, PopoverButton, PopoverPanel, Portal } from '@rgossiaux/svelte-headlessui';
   import { createPopperActions } from 'svelte-popperjs';
   import { type BtnType, buttonClassFn, type Size } from '../controls/button.styles';
-  import clsx from 'clsx';
 
   export let btnType: BtnType = 'primary';
   export let size: Size = 'normal';
@@ -11,6 +10,14 @@
   export let disabled: boolean | undefined = undefined;
   export let placement = 'bottom';
 
+  interface $$Slots {
+    default: {
+      onClose: () => void;
+    };
+    ['button-content']: unknown;
+    content: unknown;
+  }
+
   const [popperRef, popperContent] = createPopperActions();
   const popperOptions = {
     placement,
@@ -18,8 +25,9 @@
     modifiers: [{ name: 'offset', options: { offset: [0, 8] } }],
   };
 
+  const dropdownContentClass = 'z-40';
+
   $: dropdownButtonClass = buttonClassFn({ btnType, size, iconOnly });
-  const dropdownContentClass = clsx(['z-40']);
 </script>
 
 <Popover let:open>
