@@ -5,8 +5,11 @@ import { ContentNotFoundError, OptimizedContentIsEmptyError } from '$lib/errors/
 import { isOrfStoryUrl } from '$lib/backend/utils/urls';
 import type { StoryContent, StorySource } from '$lib/models/story';
 import { searchStory } from '$lib/backend/db/news';
+import { logger } from '$lib/configs/server';
 
 export async function fetchStoryContent(url: string, fetchReadMoreContent = false): Promise<StoryContent> {
+  logger.info(`Fetch content with url '${url}' and fetchReadMoreContent '${fetchReadMoreContent}'`);
+
   let currentUrl = url;
   let currentData = await fetchSiteHtmlText(currentUrl);
   let source;
@@ -31,6 +34,7 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
 
   const optimizedContent = new Readability(document).parse();
   if (!optimizedContent) {
+    logger.warn(`Error transforming content with url '${currentUrl}'`);
     throw new OptimizedContentIsEmptyError(`Optimized content from url '${currentUrl}' is empty`);
   }
 

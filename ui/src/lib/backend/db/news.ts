@@ -4,7 +4,7 @@ import type { Story } from '$lib/models/story';
 import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
 import type { PageKey } from '$lib/models/pageKey';
 import orfArchivDb from '$lib/backend/db/init';
-import { NEWS_QUERY_PAGE_LIMIT } from '$lib/configs/server';
+import { logger, NEWS_QUERY_PAGE_LIMIT } from '$lib/configs/server';
 
 type PageKeyFn = (stories: Array<Story>) => PageKey | null;
 
@@ -16,6 +16,8 @@ interface PaginatedQuery {
 }
 
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
+  logger.info(`Search news with request '${JSON.stringify(searchRequest)}'`);
+
   const { searchRequestParameters, pageKey } = searchRequest;
 
   const query = buildQuery(searchRequestParameters);
@@ -35,6 +37,8 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
 }
 
 export async function searchStory(url: string): Promise<Story> {
+  logger.info(`Search story with url '${url}'`);
+
   const query = { url, source: { $ne: 'oesterreich' } };
   return withOrfArchivDb(async (newsCollection) => {
     return newsCollection.findOne(query);
