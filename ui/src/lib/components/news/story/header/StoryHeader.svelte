@@ -1,11 +1,9 @@
 <script lang="ts">
   import { formatTimestamp } from '$lib/utils/datetime.js';
-  import EllipsisVerticalIcon from '$lib/components/ui/icons/outline/EllipsisVerticalIcon.svelte';
-  import StoryMenu from '$lib/components/news/story/header/menu/StoryMenu.svelte';
   import { getSourceLabel } from '$lib/models/settings';
-  import Popover from '$lib/components/ui/content/Popover.svelte';
   import type { Story } from '$lib/models/story';
   import EyeIcon from '$lib/components/ui/icons/outline/EyeIcon.svelte';
+  import StoryPopover from '$lib/components/news/story/header/options/StoryPopover.svelte';
 
   export let story: Story;
 
@@ -34,8 +32,5 @@
       <span>{formatTimestamp(story.timestamp)}</span></span
     >
   </header>
-  <Popover btnType="secondary" iconOnly title="Weitere Optionen" placement="bottom-end" let:onClose>
-    <EllipsisVerticalIcon slot="button-content" />
-    <StoryMenu {story} {onClose} slot="content" />
-  </Popover>
+  <StoryPopover {story} />
 {/if}

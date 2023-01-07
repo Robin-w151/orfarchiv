@@ -4,8 +4,7 @@
   import TrashIcon from '$lib/components/ui/icons/outline/TrashIcon.svelte';
   import { defaultMenuClass } from '$lib/utils/styles';
   import { createEventDispatcher } from 'svelte';
-
-  export let onClose: () => void;
+  import Popover from '$lib/components/ui/content/Popover.svelte';
 
   const dispatch = createEventDispatcher();
 
@@ -21,22 +20,37 @@
 
   function handleRemoveAllBookmarksButtonClick() {
     dispatch('removeAllBookmarks');
-    onClose();
   }
 
   function handleRemoveAllViewedBookmarksButtonClick() {
     dispatch('removeAllViewedBookmarks');
-    onClose();
   }
 </script>
 
-<PopoverContent class={defaultMenuClass}>
-  <Button class={menuDeleteItemClass} customStyle on:click={handleRemoveAllBookmarksButtonClick}>
-    <TrashIcon />
-    <span>Alle Lesezeichen löschen</span>
-  </Button>
-  <Button class={menuDeleteItemClass} customStyle on:click={handleRemoveAllViewedBookmarksButtonClick}>
-    <TrashIcon />
-    <span>Gelesene Lesezeichen löschen</span>
-  </Button>
-</PopoverContent>
+<Popover btnType="secondary" iconOnly title="Lesezeichen löschen" placement="bottom-end" let:onClose>
+  <TrashIcon slot="button-content" />
+  <PopoverContent class={defaultMenuClass} slot="content">
+    <Button
+      class={menuDeleteItemClass}
+      customStyle
+      on:click={() => {
+        handleRemoveAllBookmarksButtonClick();
+        onClose();
+      }}
+    >
+      <TrashIcon />
+      <span>Alle Lesezeichen löschen</span>
+    </Button>
+    <Button
+      class={menuDeleteItemClass}
+      customStyle
+      on:click={() => {
+        handleRemoveAllViewedBookmarksButtonClick();
+        onClose();
+      }}
+    >
+      <TrashIcon />
+      <span>Gelesene Lesezeichen löschen</span>
+    </Button>
+  </PopoverContent>
+</Popover>
