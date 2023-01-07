@@ -19,6 +19,8 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
     const readMoreUrl = findReadMoreUrl(originalDocument);
 
     if (readMoreUrl) {
+      logger.info(`Fetch content with readMore url '${readMoreUrl}'`);
+
       currentUrl = readMoreUrl;
       const [story, data] = await Promise.all([searchStory(currentUrl), fetchSiteHtmlText(currentUrl)]);
 
@@ -74,7 +76,7 @@ function findReadMoreUrl(originalDocument: Document): string | null {
         return false;
       }
 
-      if (![/^mehr dazu in/i, /^lesen sie mehr/i].some((regexp) => !!text.match(regexp))) {
+      if (![/mehr\s+dazu\s+in/i, /lesen\s+sie\s+mehr/i].some((regexp) => !!text.match(regexp))) {
         return false;
       }
 
