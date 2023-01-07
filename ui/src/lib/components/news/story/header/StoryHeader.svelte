@@ -11,10 +11,11 @@
     focus:text-blue-700 dark:focus:text-blue-500
     outline-none
   `;
-  const titleClass = 'flex items-center gap-2';
+  const titleClass = 'w-full';
   const metadataClass = 'flex flex-wrap items-center gap-x-1 text-sm text-gray-600 dark:text-gray-400';
   const viewedBadge = `
-    px-1 py-px
+    float-right
+    mt-2 ml-2 px-1 py-px
     text-sm
     bg-blue-700 text-white
     rounded-sm
@@ -27,12 +28,14 @@
 {#if story}
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <header class={infoClass} on:click on:keydown tabindex="0">
-    <h3 class={titleClass}>
-      <span>{story.title}</span>
+    <div class={titleClass}>
       {#if showViewedInfo}
         <span class={viewedBadge}>Gelesen</span>
       {/if}
-    </h3>
+      <h3>
+        <span>{story.title}</span>
+      </h3>
+    </div>
     <span class={metadataClass}>
       <span>{story.category ?? 'Keine Kategorie'}</span>
       {#if sourceLabel}<span>({sourceLabel})</span>{/if}
