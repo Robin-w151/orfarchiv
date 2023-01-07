@@ -13,7 +13,11 @@ class OrfArchivDb {
     }
   }
 
-  public collection(name: string): Collection<Document> {
+  public newsCollection(): Collection<Document> {
+    return this.collection('news');
+  }
+
+  private collection(name: string): Collection<Document> {
     if (this.db) {
       return this.db.collection(name);
     } else {

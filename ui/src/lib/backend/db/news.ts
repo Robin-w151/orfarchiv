@@ -24,25 +24,25 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   const { paginatedQuery, sort, prevKeyFn, nextKeyFn } = generatePaginationQuery(query, pageKey);
   const limit = pageKey?.type === 'prev' ? 0 : NEWS_QUERY_PAGE_LIMIT + 1;
 
-  return withOrfArchivDb(async (newsCollection) => {
-    const stories = await executeQuery(newsCollection, paginatedQuery, sort, limit);
-    const orderedStories = correctOrder(stories, pageKey);
-    const { prevKey, nextKey } = getPageKeys(stories, prevKeyFn, nextKeyFn, pageKey);
-    return {
-      stories: orderedStories.filter((_, index) => index < NEWS_QUERY_PAGE_LIMIT).map(mapToStory),
-      prevKey,
-      nextKey,
-    };
-  });
+  const newsCollection = orfArchivDb.newsCollection();
+  const stories = await executeQuery(newsCollection, paginatedQuery, sort, limit);
+  const orderedStories = correctOrder(stories, pageKey);
+  const { prevKey, nextKey } = getPageKeys(stories, prevKeyFn, nextKeyFn, pageKey);
+
+  return {
+    stories: orderedStories.filter((_, index) => index < NEWS_QUERY_PAGE_LIMIT).map(mapToStory),
+    prevKey,
+    nextKey,
+  };
 }
 
 export async function searchStory(url: string): Promise<Story> {
   logger.info(`Search story with url '${url}'`);
 
   const query = { url, source: { $ne: 'oesterreich' } };
-  return withOrfArchivDb(async (newsCollection) => {
-    return newsCollection.findOne(query);
-  });
+  const newsCollection = orfArchivDb.newsCollection();
+
+  return newsCollection.findOne(query);
 }
 
 function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters) {
@@ -68,15 +68,6 @@ function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters
 
   const sourceQuery = sources?.length && sources.length > 0 ? { source: { $in: sources } } : {};
   return { $and: [textQuery, fromQuery, toQuery, sourceQuery] };
-}
-
-async function withOrfArchivDb(handler: (newsCollection: Collection<Document>) => Promise<any>) {
-  try {
-    const newsCollection = orfArchivDb.collection('news');
-    return await handler(newsCollection);
-  } catch (error: any) {
-    throw new Error(`DB error. Cause: ${error.message}`);
-  }
 }
 
 function generatePaginationQuery(query: any, pageKey?: PageKey): PaginatedQuery {
