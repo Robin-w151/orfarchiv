@@ -132,7 +132,9 @@ const newsMockNoContent = {
 };
 const contentMockText =
   'Sporting Lissabon hat gestern das Debüt von Eintracht Frankfurt und Trainer Oliver Glasner in der UEFA Champions League verpatzt. Der portugiesische Vizemeister gewann beim regierenden Europa-League-Sieger durch Tore nach der Pause mit 3:0 (0:0). Im zweiten Spiel am frühen Abend fertigte Ajax Amsterdam die Glasgow Rangers 4:0 (3:0) ab.';
-const contentMock = `<div><p>${contentMockText}</p></div>`;
+const contentMock = {
+  content: `<div><p>${contentMockText}</p></div>`,
+};
 
 class NewsPage {
   constructor(page) {
@@ -184,7 +186,6 @@ class NewsPage {
           status: 200,
           body: JSON.stringify(data),
         });
-        return;
       } else {
         route.continue();
       }
@@ -196,9 +197,9 @@ class NewsPage {
       route.fulfill({
         status: 200,
         headers: {
-          'Content-Type': 'text/plain',
+          'Content-Type': 'application/json',
         },
-        body: data,
+        body: JSON.stringify(data),
       }),
     );
   }
