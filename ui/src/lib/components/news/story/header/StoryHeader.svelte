@@ -2,7 +2,6 @@
   import { formatTimestamp } from '$lib/utils/datetime.js';
   import { getSourceLabel } from '$lib/models/settings';
   import type { Story } from '$lib/models/story';
-  import EyeIcon from '$lib/components/ui/icons/outline/EyeIcon.svelte';
   import StoryPopover from '$lib/components/news/story/header/options/StoryPopover.svelte';
 
   export let story: Story;
@@ -12,21 +11,29 @@
     focus:text-blue-700 dark:focus:text-blue-500
     outline-none
   `;
+  const titleClass = 'flex items-center gap-2';
   const metadataClass = 'flex flex-wrap items-center gap-x-1 text-sm text-gray-600 dark:text-gray-400';
-  const viewedIconClass = 'w-5 h-5';
+  const viewedBadge = `
+    px-1 py-px
+    text-sm
+    bg-blue-700 text-white
+    rounded-sm
+  `;
 
-  $: showViewedIcon = story?.isBookmarked && story?.isViewed;
+  $: showViewedInfo = story?.isBookmarked && story?.isViewed;
   $: sourceLabel = getSourceLabel(story?.source);
 </script>
 
 {#if story}
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
   <header class={infoClass} on:click on:keydown tabindex="0">
-    <h3>{story.title}</h3>
-    <span class={metadataClass}>
-      {#if showViewedIcon}
-        <EyeIcon class={viewedIconClass} />
+    <h3 class={titleClass}>
+      <span>{story.title}</span>
+      {#if showViewedInfo}
+        <span class={viewedBadge}>Gelesen</span>
       {/if}
+    </h3>
+    <span class={metadataClass}>
       <span>{story.category ?? 'Keine Kategorie'}</span>
       {#if sourceLabel}<span>({sourceLabel})</span>{/if}
       <span>{formatTimestamp(story.timestamp)}</span></span
