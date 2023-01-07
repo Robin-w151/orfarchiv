@@ -15,3 +15,7 @@ export const DATETIME_FORMAT = 'dd.MM.yyyy, HH:mm';
 
 // Story
 export const STORY_CONTENT_FETCH_MAX_RETRIES = 5;
+export const STORY_CONTENT_READ_MORE_REGEXPS = [/mehr\s+dazu\s+in/i, /lesen\s+sie\s+mehr/i];
+
+// URLs
+export const URL_ORF_STORY_REGEXP = /^https:\/\/.*orf\.at\/.*\/stories\/\d+/i;
