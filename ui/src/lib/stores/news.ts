@@ -9,6 +9,7 @@ export interface NewsStore extends Readable<News>, Partial<News> {
   setNews: (news: News, newNews?: News) => void;
   addNews: (news: News, append?: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;
+  setUrl: (storyId: string, url: string) => void;
 }
 
 const initialState = { stories: [], isLoading: true };
@@ -49,6 +50,25 @@ function addNews(news: News, append = true): void {
 
 function setIsLoading(isLoading: boolean): void {
   update((oldNews) => ({ ...oldNews, isLoading }));
+}
+
+function setUrl(storyId: string, url: string): void {
+  update((news) => {
+    const index = news.stories.findIndex((story) => story.id === storyId);
+    if (index === -1) {
+      return news;
+    }
+
+    const story = news.stories[index];
+    if (story.url === url) {
+      return news;
+    }
+
+    const stories = [...news.stories];
+    stories[index] = { ...story, url };
+
+    return { ...news, stories };
+  });
 }
 
 function createStoryBuckets(stories: Array<Story>): Array<NewsBucket> | undefined {
@@ -145,4 +165,4 @@ function combineNewsAndBookmarks([news, bookmarks]: [News, Bookmarks]): News {
 const extendedStore = derived([news, bookmarks], combineNewsAndBookmarks);
 const { subscribe } = extendedStore;
 
-export default { subscribe, setNews, addNews, setIsLoading } as NewsStore;
+export default { subscribe, setNews, addNews, setIsLoading, setUrl } as NewsStore;

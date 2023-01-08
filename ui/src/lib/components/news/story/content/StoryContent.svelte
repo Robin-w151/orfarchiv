@@ -12,6 +12,7 @@
   import settings from '$lib/stores/settings';
   import { getSourceLabel } from '$lib/models/settings';
   import { STORY_CONTENT_FETCH_MAX_RETRIES } from '$lib/configs/client';
+  import news from '$lib/stores/news';
 
   export let story: Story;
 
@@ -33,6 +34,9 @@
   onMount(async () => {
     try {
       storyContent = await fetchContentWithRetry(story);
+      if (storyContent.source) {
+        news.setUrl(story.id, storyContent.source.url);
+      }
     } catch (error) {
       const { message } = error as Error;
       console.warn(`Error: ${message}`);
