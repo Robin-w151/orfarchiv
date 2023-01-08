@@ -166,7 +166,7 @@ test.describe('SettingsPage', () => {
   });
 });
 
-async function setupPage(page, mock) {
+async function setupPage(page) {
   const settingsPage = new SettingsPage(page);
   await settingsPage.visitSite();
   return settingsPage;
