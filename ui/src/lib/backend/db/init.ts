@@ -1,4 +1,4 @@
-import { Collection, Db, MongoClient } from 'mongodb';
+import { type Collection, type Db, MongoClient } from 'mongodb';
 import { logger, ORFARCHIV_DB_URL } from '$lib/configs/server';
 
 class OrfArchivDb {
