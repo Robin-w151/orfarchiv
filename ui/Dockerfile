@@ -16,6 +16,7 @@ ENV PUBLIC_APP_MODE=prod
 ENV PUBLIC_ENABLE_ANALYTICS=false
 ENV USE_ADAPTER_NODE=true
 
+RUN npx svelte-kit sync
 RUN yarn fix:jsdom
 RUN yarn build
 
