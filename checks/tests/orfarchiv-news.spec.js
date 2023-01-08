@@ -424,14 +424,14 @@ test.describe('NewsPage', () => {
 
     test('title', async () => {
       const storyIndex = 0;
-      const storyTitle = newsPage.getNewsListItem(storyIndex).locator('header > h3');
+      const storyTitle = newsPage.getNewsListItem(storyIndex).locator('header h3');
       const expectedStoryTitle = newsMock.stories[storyIndex].title;
       await expect(storyTitle).toHaveText(expectedStoryTitle);
     });
 
     test('info', async () => {
       const storyIndex = 1;
-      const storyInfo = newsPage.getNewsListItem(storyIndex).locator('header > span');
+      const storyInfo = newsPage.getNewsListItem(storyIndex).locator('header > div + span');
 
       const { category, timestamp } = newsMock.stories[storyIndex];
       const expectedStoryInfo = `${category} ${moment(timestamp).format('DD.MM.YYYY, HH:mm')}`;
