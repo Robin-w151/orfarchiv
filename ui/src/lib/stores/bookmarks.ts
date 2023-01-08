@@ -103,19 +103,27 @@ function filterStory(textFilters: Array<RegExp>, story: Story): boolean {
 
 function mergeStoryContent(oldStories: Array<Story>, newStories: Array<Story>): Array<Story> {
   const mergedStories = [...newStories];
-  for (let i = 0, j = 0; i < mergedStories.length; i++) {
+  const oldStoriesMap = toMap(oldStories);
+
+  for (let i = 0; i < mergedStories.length; i++) {
     const newStory = { ...mergedStories[i] };
-    const oldStory = oldStories[j];
+    const oldStory = oldStoriesMap.get(newStory.id);
 
     if (newStory.id === oldStory?.id) {
-      j++;
       if (oldStory.content) {
         newStory.content = oldStory.content;
         mergedStories[i] = newStory;
       }
     }
   }
+
   return mergedStories;
+}
+
+function toMap(stories: Array<Story>): Map<string, Story> {
+  const map = new Map<string, Story>();
+  stories.forEach((story) => map.set(story.id, story));
+  return map;
 }
 
 export default {
