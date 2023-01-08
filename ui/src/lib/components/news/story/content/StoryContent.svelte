@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onDestroy, onMount } from 'svelte';
+  import { createEventDispatcher, getContext, onDestroy, onMount } from 'svelte';
   import ChevronUpIcon from '$lib/components/ui/icons/outline/ChevronUpIcon.svelte';
   import StoryContentSkeleton from './StoryContentSkeleton.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
@@ -11,8 +11,7 @@
   import { get } from 'svelte/store';
   import settings from '$lib/stores/settings';
   import { getSourceLabel } from '$lib/models/settings';
-  import { STORY_CONTENT_FETCH_MAX_RETRIES } from '$lib/configs/client';
-  import news from '$lib/stores/news';
+  import { CTX_STORE, STORY_CONTENT_FETCH_MAX_RETRIES } from '$lib/configs/client';
 
   export let story: Story;
 
@@ -24,18 +23,26 @@
   const errorLinkClass = 'text-blue-700';
   const collapseContentClass = 'py-1.5 w-48 max-w-full';
 
+  let store = getContext(CTX_STORE);
   let isLoading = true;
-  let storyContent: StoryContent;
   let isClosed = false;
 
-  $: sourceLabel = getSourceLabel(storyContent?.source?.name);
-  $: sourceUrl = storyContent?.source?.url ?? story?.url;
+  $: sourceLabel = getSourceLabel(story?.content?.source?.name);
+  $: sourceUrl = story?.content?.source?.url ?? story?.url;
 
   onMount(async () => {
     try {
-      storyContent = await fetchContentWithRetry(story);
-      if (storyContent.source) {
-        news.setUrl(story.id, storyContent.source.url);
+      if (story.content) {
+        return;
+      }
+
+      const storyContent = await fetchContentWithRetry(story);
+      if (storyContent) {
+        store?.setContent?.(story.id, storyContent);
+
+        if (story.isBookmarked && !story.isViewed) {
+          bookmarks.setIsViewed(story);
+        }
       }
     } catch (error) {
       const { message } = error as Error;
@@ -53,18 +60,13 @@
     for (let retry = 0; retry < STORY_CONTENT_FETCH_MAX_RETRIES && !isClosed; retry++) {
       try {
         const fetchReadMoreContent = get(settings).fetchReadMoreContent && story.source === 'news';
-        const content = await fetchContent(story.url, fetchReadMoreContent);
-        if (story.isBookmarked) {
-          bookmarks.setIsViewed(story);
-        }
-        return content;
+        return await fetchContent(story.url, fetchReadMoreContent);
       } catch (error) {
         if (retry < STORY_CONTENT_FETCH_MAX_RETRIES - 1) {
           await wait(1000 * 2 ** retry);
         }
       }
     }
-
     throw new Error(`Failed to load story content after ${STORY_CONTENT_FETCH_MAX_RETRIES} retries!`);
   }
 
@@ -84,12 +86,12 @@
 <div class={wrapperClass}>
   {#if isLoading}
     <StoryContentSkeleton />
-  {:else if storyContent}
+  {:else if story.content}
     <article class="story-content {contentClass}" data-testid="story-content">
       {#if sourceLabel}
         <div class={contentInfoClass}>Inhalt geladen von {sourceLabel}</div>
       {/if}
-      {@html storyContent.content}
+      {@html story.content.content}
       <div class={contentInfoClass}>Quelle: <Link href={sourceUrl}>orf.at</Link></div>
     </article>
   {:else}

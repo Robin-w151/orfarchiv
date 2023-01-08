@@ -13,7 +13,7 @@
 <Content id="bookmarks">
   <BookmarkActions />
   {#if bookmarksAvailable}
-    <NewsList storyBuckets={[bookmarksBucket]} isLoading={$bookmarks.isLoading} />
+    <NewsList storyBuckets={[bookmarksBucket]} isLoading={$bookmarks.isLoading} store={bookmarks} />
   {:else if $bookmarks.isLoading}
     <NewsListSkeleton />
   {:else}

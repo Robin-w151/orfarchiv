@@ -1,6 +1,6 @@
 import { type Readable, writable, derived } from 'svelte/store';
 import type { News, NewsBucket } from '$lib/models/news';
-import type { Story } from '$lib/models/story';
+import type { Story, StoryContent } from '$lib/models/story';
 import { DateTime } from 'luxon';
 import bookmarks from './bookmarks';
 import type { Bookmarks } from '$lib/models/bookmarks';
@@ -9,7 +9,7 @@ export interface NewsStore extends Readable<News>, Partial<News> {
   setNews: (news: News, newNews?: News) => void;
   addNews: (news: News, append?: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;
-  setUrl: (storyId: string, url: string) => void;
+  setContent: (storyId: string, content: StoryContent) => void;
 }
 
 const initialState = { stories: [], isLoading: true };
@@ -52,7 +52,7 @@ function setIsLoading(isLoading: boolean): void {
   update((oldNews) => ({ ...oldNews, isLoading }));
 }
 
-function setUrl(storyId: string, url: string): void {
+function setContent(storyId: string, content: StoryContent): void {
   update((news) => {
     const index = news.stories.findIndex((story) => story.id === storyId);
     if (index === -1) {
@@ -60,12 +60,8 @@ function setUrl(storyId: string, url: string): void {
     }
 
     const story = news.stories[index];
-    if (story.url === url) {
-      return news;
-    }
-
     const stories = [...news.stories];
-    stories[index] = { ...story, url };
+    stories[index] = { ...story, content };
 
     return { ...news, stories };
   });
@@ -165,4 +161,4 @@ function combineNewsAndBookmarks([news, bookmarks]: [News, Bookmarks]): News {
 const extendedStore = derived([news, bookmarks], combineNewsAndBookmarks);
 const { subscribe } = extendedStore;
 
-export default { subscribe, setNews, addNews, setIsLoading, setUrl } as NewsStore;
+export default { subscribe, setNews, addNews, setIsLoading, setContent } as NewsStore;

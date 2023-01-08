@@ -109,7 +109,7 @@
       >
     </div>
   {:else if showNewsList}
-    <NewsList storyBuckets={$news.storyBuckets} isLoading={$news.isLoading} />
+    <NewsList storyBuckets={$news.storyBuckets} isLoading={$news.isLoading} store={news} />
   {:else if $news.isLoading}
     <NewsListSkeleton />
   {:else}
