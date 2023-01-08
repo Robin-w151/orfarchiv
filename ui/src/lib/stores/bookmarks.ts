@@ -15,14 +15,16 @@ export interface BookmarksStore extends Readable<Bookmarks>, Partial<Bookmarks> 
 }
 
 let db: BookmarksDb | null = null;
-const initialState = { stories: [], filteredStories: [], textFilter: '' };
+const initialState = { stories: [], filteredStories: [], textFilter: '', isLoading: true };
 const store = writable<Bookmarks>(initialState);
 const { subscribe, update } = store;
 
 if (browser) {
   db = new BookmarksDb();
   liveQuery(() => (db ? db.stories.toCollection().reverse().sortBy('timestamp') : [])).subscribe((stories) => {
-    update((bookmarks) => ({ ...bookmarks, stories, filteredStories: filterStories(bookmarks.textFilter, stories) }));
+    update((bookmarks) => {
+      return { ...bookmarks, stories, filteredStories: filterStories(bookmarks.textFilter, stories), isLoading: false };
+    });
   });
 }
 

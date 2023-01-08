@@ -6,16 +6,18 @@
 
   export let story: Story;
 
-  const infoClass = `
-    flex flex-col flex-1 items-start
+  const headerClass = `
+    w-full
     focus:text-blue-700 dark:focus:text-blue-500
     outline-none
   `;
-  const titleClass = 'w-full';
+  const infoClass = `
+    flex flex-col flex-1 items-start
+  `;
   const metadataClass = 'flex flex-wrap items-center gap-x-1 text-sm text-gray-600 dark:text-gray-400';
   const viewedBadge = `
     float-right
-    mt-2 ml-2 px-1 py-px
+    mt-1 ml-2 px-1 py-px
     text-sm
     bg-blue-700 text-white
     rounded-sm
@@ -27,20 +29,20 @@
 
 {#if story}
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <header class={infoClass} on:click on:keydown tabindex="0">
-    <div class={titleClass}>
-      {#if showViewedInfo}
-        <span class={viewedBadge}>Gelesen</span>
-      {/if}
+  <header class={headerClass} on:click on:keydown tabindex="0">
+    {#if showViewedInfo}
+      <span class={viewedBadge}>Gelesen</span>
+    {/if}
+    <div class={infoClass}>
       <h3>
         <span>{story.title}</span>
       </h3>
+      <span class={metadataClass}>
+        <span>{story.category ?? 'Keine Kategorie'}</span>
+        {#if sourceLabel}<span>({sourceLabel})</span>{/if}
+        <span>{formatTimestamp(story.timestamp)}</span></span
+      >
     </div>
-    <span class={metadataClass}>
-      <span>{story.category ?? 'Keine Kategorie'}</span>
-      {#if sourceLabel}<span>({sourceLabel})</span>{/if}
-      <span>{formatTimestamp(story.timestamp)}</span></span
-    >
   </header>
   <StoryPopover {story} />
 {/if}

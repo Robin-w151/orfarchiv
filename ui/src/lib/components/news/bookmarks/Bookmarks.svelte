@@ -4,6 +4,7 @@
   import NewsList from '../NewsList.svelte';
   import { defaultAlertTextBox } from '$lib/utils/styles';
   import BookmarkActions from '../filter/BookmarkActions.svelte';
+  import NewsListSkeleton from '$lib/components/news/NewsListSkeleton.svelte';
 
   $: bookmarksAvailable = $bookmarks.filteredStories?.length > 0;
   $: bookmarksBucket = { name: 'Lesezeichen', stories: $bookmarks.filteredStories };
@@ -12,7 +13,9 @@
 <Content id="bookmarks">
   <BookmarkActions />
   {#if bookmarksAvailable}
-    <NewsList storyBuckets={[bookmarksBucket]} />
+    <NewsList storyBuckets={[bookmarksBucket]} isLoading={$bookmarks.isLoading} />
+  {:else if $bookmarks.isLoading}
+    <NewsListSkeleton />
   {:else}
     <div class={defaultAlertTextBox}>
       <p>Aktuell sind keine Lesezeichen vorhanden.</p>

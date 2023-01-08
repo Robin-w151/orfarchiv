@@ -431,7 +431,7 @@ test.describe('NewsPage', () => {
 
     test('info', async () => {
       const storyIndex = 1;
-      const storyInfo = newsPage.getNewsListItem(storyIndex).locator('header > div + span');
+      const storyInfo = newsPage.getNewsListItem(storyIndex).locator('header h3 + span');
 
       const { category, timestamp } = newsMock.stories[storyIndex];
       const expectedStoryInfo = `${category} ${moment(timestamp).format('DD.MM.YYYY, HH:mm')}`;
