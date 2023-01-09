@@ -1,10 +1,9 @@
 import { browser } from '$app/environment';
 import type { Bookmarks } from '$lib/models/bookmarks';
-import type { Story } from '$lib/models/story';
+import type { Story, StoryContent } from '$lib/models/story';
 import { liveQuery } from 'dexie';
 import { writable, type Readable } from 'svelte/store';
 import BookmarksDb from './persistence/bookmarksDb';
-import type { StoryContent } from '$lib/models/story';
 
 export interface BookmarksStore extends Readable<Bookmarks>, Partial<Bookmarks> {
   add: (story: Story) => void;
@@ -37,7 +36,9 @@ if (browser) {
 }
 
 function add(story: Story): void {
-  db?.stories.add({ ...story, isBookmarked: 1 }, story.id);
+  const newStory = { ...story, isBookmarked: 1 };
+  delete newStory.content;
+  db?.stories.add(newStory, story.id);
 }
 
 function remove(story: Story): void {
