@@ -49,6 +49,7 @@ function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters
   const textFilters = textFilter
     ?.split(/\s+/)
     .filter((text) => !!text)
+    .map((text) => text.toLowerCase())
     .map((text) => new RegExp(`${text}`, 'i'));
 
   const textQuery =
