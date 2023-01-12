@@ -206,7 +206,7 @@ function adjustTables(optimizedDocument: Document): void {
 }
 
 function sanitizeContent(html: string): string {
-  const DOMPurify = createDOMPurify(new JSDOM('').window as any);
+  const DOMPurify = createDOMPurify(new JSDOM('').window as unknown as Window);
   return DOMPurify.sanitize(html, {
     USE_PROFILES: { html: true },
     ADD_ATTR: ['target'],

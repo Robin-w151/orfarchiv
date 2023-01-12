@@ -1,9 +1,9 @@
 import { getCLS, getFCP, getFID, getLCP, getTTFB, type Metric } from 'web-vitals';
 import { WEB_VITALS_URL } from '$lib/configs/client';
+import { isNavigatorWithConnection } from '$lib/utils/types';
 
 function getConnectionSpeed() {
-  const connection = (navigator as any)?.connection;
-  return 'connection' in navigator && connection && 'effectiveType' in connection ? connection.effectiveType : '';
+  return isNavigatorWithConnection(navigator) ? navigator.connection.effectiveType : '';
 }
 
 function sendToAnalytics(metric: Metric, options: { [s: string]: any }) {

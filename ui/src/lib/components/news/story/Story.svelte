@@ -7,6 +7,7 @@
   import Fade from '$lib/components/ui/transitions/Fade.svelte';
   import { tick } from 'svelte';
   import type { Story } from '$lib/models/story';
+  import type { KeyboardEvent } from 'react';
 
   export let story: Story;
 
@@ -55,8 +56,8 @@
     toggleShowContent();
   }
 
-  function handleHeaderKeydown(event: Event): void {
-    const code = (event as any).code;
+  function handleHeaderKeydown(event: KeyboardEvent): void {
+    const code = event.code;
     if (code === 'Enter' || code === 'Space') {
       event.preventDefault();
       toggleShowContent();

@@ -74,8 +74,8 @@
     dispatch('collapse');
   }
 
-  function handleCollapseFieldKeydown(event: Event): void {
-    const code = (event as any).code;
+  function handleCollapseFieldKeydown(event: KeyboardEvent): void {
+    const code = event.code;
     if (code === 'Enter' || code === 'Space') {
       event.preventDefault();
       dispatch('collapse');
