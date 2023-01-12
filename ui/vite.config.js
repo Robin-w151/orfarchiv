@@ -5,7 +5,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-dotenv.config();
+dotenv.config({ silent: true });
 
 /** @type {import('vite').UserConfig} */
 const config = {
