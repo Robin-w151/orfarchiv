@@ -61,7 +61,7 @@
     maxlength="256"
   />
   {#if showClearButton}
-    <button class={clearButtonClass} on:click={handleClearButtonClick}>
+    <button class={clearButtonClass} on:click={handleClearButtonClick} on:keydown={handleKeydown}>
       <XIcon />
     </button>
   {/if}

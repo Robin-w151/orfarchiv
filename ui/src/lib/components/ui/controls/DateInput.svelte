@@ -19,6 +19,10 @@
 
   $: dispatch('change', value);
 
+  export function focus() {
+    inputRef.focus();
+  }
+
   function handleKeydown(event: KeyboardEvent) {
     if (event.key === 'Escape') {
       event.preventDefault();
