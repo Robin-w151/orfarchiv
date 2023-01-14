@@ -12,10 +12,10 @@
     overflow-clip
     ${$$props['class']}
   `;
-  const titleClass = `
+  const headerClass = `
     flex gap-2 justify-center items-center sticky top-0 z-20
     ${defaultPadding}
-    w-full h-12 sm:h-14 text-lg
+    w-full h-12 sm:h-[54px] text-lg
     text-blue-700 dark:text-blue-500 bg-white/80 dark:bg-gray-900/80
     border-solid border-b-2 border-gray-200 dark:border-gray-700
     backdrop-blur-sm
@@ -25,7 +25,7 @@
 
 <section class={sectionClass}>
   {#if title}
-    <header class={titleClass}>
+    <header class={headerClass}>
       {#if isLoading}
         <ConicGradientSpinner />
       {:else}

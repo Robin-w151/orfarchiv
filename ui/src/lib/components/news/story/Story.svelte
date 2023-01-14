@@ -18,7 +18,7 @@
   $: handleContentViewCollapse(showContent);
 
   $: headerClass = clsx([
-    'flex flex-row items-center gap-3',
+    'flex flex-row items-center gap-3 top-12 sm:top-[54px]',
     defaultPadding,
     'text-gray-800 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500',
     'border-gray-200 dark:border-gray-700',
@@ -79,12 +79,6 @@
 
 <style lang="scss">
   .header {
-    top: theme('spacing.12');
-
-    @screen sm {
-      top: theme('spacing.14');
-    }
-
     &.sticky {
       margin-bottom: -2px;
     }
