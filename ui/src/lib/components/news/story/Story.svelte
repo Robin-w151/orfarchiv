@@ -79,10 +79,10 @@
 
 <style lang="scss">
   .header {
-    top: 46px;
+    top: theme('spacing.12');
 
     @screen sm {
-      top: 54px;
+      top: theme('spacing.14');
     }
 
     &.sticky {

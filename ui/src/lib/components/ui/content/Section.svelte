@@ -1,6 +1,6 @@
 <script lang="ts">
   import { defaultPadding } from '$lib/utils/styles';
-  import ThreeDotsLoadingIndicator from '$lib/components/ui/loading/ThreeDotsLoadingIndicator.svelte';
+  import ConicGradientSpinner from '$lib/components/ui/loading/ConicGradientSpinner.svelte';
 
   export let title: string;
   export let isLoading = false;
@@ -15,7 +15,7 @@
   const titleClass = `
     flex gap-2 justify-center items-center sticky top-0 z-20
     ${defaultPadding}
-    w-full text-lg
+    w-full h-12 sm:h-14 text-lg
     text-blue-700 dark:text-blue-500 bg-white/80 dark:bg-gray-900/80
     border-solid border-b-2 border-gray-200 dark:border-gray-700
     backdrop-blur-sm
@@ -27,7 +27,7 @@
   {#if title}
     <header class={titleClass}>
       {#if isLoading}
-        <ThreeDotsLoadingIndicator class="h-7" />
+        <ConicGradientSpinner />
       {:else}
         <h2>{title}</h2>
       {/if}
