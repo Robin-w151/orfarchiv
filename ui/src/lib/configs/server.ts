@@ -2,7 +2,7 @@ import { env } from '$env/dynamic/private';
 import { createLogger, format, transports } from 'winston';
 
 // Database
-export const ORFARCHIV_DB_URL = env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
+export const ORFARCHIV_DB_URL = () => env.ORFARCHIV_DB_URL?.trim() || 'mongodb://localhost';
 
 // Logger
 const { combine, json, timestamp } = format;

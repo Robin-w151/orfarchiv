@@ -8,7 +8,7 @@ class OrfArchivDb {
   public async init(): Promise<void> {
     if (!this.isInitialized()) {
       logger.info('Initializing orfarchiv db');
-      this.client = await MongoClient.connect(ORFARCHIV_DB_URL);
+      this.client = await MongoClient.connect(ORFARCHIV_DB_URL());
       this.db = this.client.db('orfarchiv');
     }
   }
