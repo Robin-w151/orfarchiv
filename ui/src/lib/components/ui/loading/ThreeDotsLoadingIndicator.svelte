@@ -1,7 +1,7 @@
 <script lang="ts">
   import clsx from 'clsx';
 
-  const loadingIndicatorClass = clsx(['flex justify-center items-center gap-2', $$props['class']]);
+  const loadingIndicatorClass = clsx(['flex justify-center items-center gap-2', 'w-fit', $$props['class']]);
   const dotClass = clsx(['w-2 h-2', 'rounded-full']);
 </script>
 
