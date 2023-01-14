@@ -4150,9 +4150,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-node@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@sveltejs/adapter-node@npm:1.1.0"
+"@sveltejs/adapter-node@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@sveltejs/adapter-node@npm:1.1.1"
   dependencies:
     "@rollup/plugin-commonjs": ^24.0.0
     "@rollup/plugin-json": ^6.0.0
@@ -4160,25 +4160,25 @@ __metadata:
     rollup: ^3.7.0
   peerDependencies:
     "@sveltejs/kit": ^1.0.0
-  checksum: 431e37fa960b0fd82d8f70175629bcc5a1653c391a661f7add0bb06d19fd614be38fd6aec971158cb21020d61f836c70b006e1454286387172815f509bade945
+  checksum: 01768bfb0ef582d9e60cfb64e5d09233c1c968412cbc16aaf89accee5698ae2a31fdd8f00d754af371fc9788f4d0b353dbfe5fe2d717cff82ed4a09c8f1f1aa2
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-vercel@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@sveltejs/adapter-vercel@npm:1.0.1"
+"@sveltejs/adapter-vercel@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@sveltejs/adapter-vercel@npm:1.0.2"
   dependencies:
     "@vercel/nft": ^0.22.1
     esbuild: ^0.16.3
   peerDependencies:
     "@sveltejs/kit": ^1.0.0
-  checksum: 61ac52a1755a25829ca43d55cd92ef6ee994e987c58a1012f8c37d4bb7f9649fd27f2a3478a5ebeef249a8a569cd19a7114f34ac3f623f6bf8f40e71dc9e9f8f
+  checksum: f6b377cc577a2bb3a4dd987b2c26277e21ae93a9d3be1972d8e4be5d2700c144aa5c9d308187de6a6e7ebaacabfbf06ea1f0d082ec634a75d8aa792e7e2cdda3
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^1.0.11":
-  version: 1.0.11
-  resolution: "@sveltejs/kit@npm:1.0.11"
+"@sveltejs/kit@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@sveltejs/kit@npm:1.1.0"
   dependencies:
     "@sveltejs/vite-plugin-svelte": ^2.0.0
     "@types/cookie": ^0.5.1
@@ -4192,13 +4192,13 @@ __metadata:
     set-cookie-parser: ^2.5.1
     sirv: ^2.0.2
     tiny-glob: ^0.2.9
-    undici: 5.14.0
+    undici: 5.15.0
   peerDependencies:
     svelte: ^3.54.0
     vite: ^4.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 650e84c7cf3fa5ef72782398b3f7971879d0b82adccea7892bd7b69ac19999227e5a323823be362e492350d06b9e01c60be4cd00522203ddc59011a00edb4c8d
+  checksum: 525afe04922814e3cf9b20b55bbb1360173b55842a4b37a6e5b5a162df48e5c0c1f381af9680554893f1a3b452398091a340832d646fc870fd603b49932c2957
   languageName: node
   linkType: hard
 
@@ -4909,12 +4909,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vercel/analytics@npm:^0.1.6":
-  version: 0.1.6
-  resolution: "@vercel/analytics@npm:0.1.6"
+"@vercel/analytics@npm:^0.1.8":
+  version: 0.1.8
+  resolution: "@vercel/analytics@npm:0.1.8"
   peerDependencies:
     react: ^16.8||^17||^18
-  checksum: 4428e27778cac2ddb1b55fb2e499e04cbe7ddb76dac4fbcbc1e992729da03166807f72c28664ab0addad7223217baef55b5b7b5210a25967c3652b6b2c07d0be
+  checksum: e837f66494372d557e32383e7ab7192a40da242a16d4f650f61b6e0c5ea282b2a37120ec125d3c5d5e3228c3d1957f48c93d299b4b466169e9d7a853a8014c3a
   languageName: node
   linkType: hard
 
@@ -10650,12 +10650,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.8.2":
-  version: 2.8.2
-  resolution: "prettier@npm:2.8.2"
+"prettier@npm:^2.8.3":
+  version: 2.8.3
+  resolution: "prettier@npm:2.8.3"
   bin:
     prettier: bin-prettier.js
-  checksum: 740c56c2128d587d656ea1dde9bc9c3503dfc94db4f3ac387259215eeb2e216680bdad9d18a0c9feecc6b42cfa188d6fa777df4c36c1d00cedd4199074fbfbd2
+  checksum: 92f2ceb522d454370e02082aa74ad27388672f7cee8975028b59517c069fe643bdc73e322675c8faf2ff173d7a626d1a6389f26b474000308e793aa25fff46e5
   languageName: node
   linkType: hard
 
@@ -12593,9 +12593,9 @@ __metadata:
     "@storybook/svelte": 7.0.0-beta.27
     "@storybook/sveltekit": 7.0.0-beta.27
     "@storybook/testing-library": ^0.0.13
-    "@sveltejs/adapter-node": ^1.1.0
-    "@sveltejs/adapter-vercel": ^1.0.1
-    "@sveltejs/kit": ^1.0.11
+    "@sveltejs/adapter-node": ^1.1.1
+    "@sveltejs/adapter-vercel": ^1.0.2
+    "@sveltejs/kit": ^1.1.0
     "@tailwindcss/forms": ^0.5.3
     "@types/dompurify": ^2.4.0
     "@types/jsdom": ^20.0.1
@@ -12603,7 +12603,7 @@ __metadata:
     "@types/luxon": ^3.2.0
     "@typescript-eslint/eslint-plugin": ^5.48.1
     "@typescript-eslint/parser": ^5.48.1
-    "@vercel/analytics": ^0.1.6
+    "@vercel/analytics": ^0.1.8
     acorn: ^8.8.1
     autoprefixer: ^10.4.13
     clsx: ^1.2.1
@@ -12624,7 +12624,7 @@ __metadata:
     luxon: ^3.2.1
     mongodb: ^4.13.0
     postcss: ^8.4.21
-    prettier: ^2.8.2
+    prettier: ^2.8.3
     prettier-plugin-svelte: ^2.9.0
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -12645,12 +12645,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"undici@npm:5.14.0":
-  version: 5.14.0
-  resolution: "undici@npm:5.14.0"
+"undici@npm:5.15.0":
+  version: 5.15.0
+  resolution: "undici@npm:5.15.0"
   dependencies:
     busboy: ^1.6.0
-  checksum: 7a076e44d84b25844b4eb657034437b8b9bb91f17d347de474fdea1d4263ce7ae9406db79cd30de5642519277b4893f43073258bcc8fed420b295da3fdd11b26
+  checksum: cdc03ceff8d2b76a5ae08dc48d0b9d44dcb970f6e89e8a3cfe7031b9351dd3c90b223c143565c153a5f1165cd573aae1b128e6b9f557b4af4eb36da337a2a345
   languageName: node
   linkType: hard
 
