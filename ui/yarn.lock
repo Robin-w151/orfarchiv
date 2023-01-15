@@ -4000,9 +4000,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-node@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@sveltejs/adapter-node@npm:1.1.1"
+"@sveltejs/adapter-node@npm:^1.1.3":
+  version: 1.1.3
+  resolution: "@sveltejs/adapter-node@npm:1.1.3"
   dependencies:
     "@rollup/plugin-commonjs": ^24.0.0
     "@rollup/plugin-json": ^6.0.0
@@ -4010,30 +4010,30 @@ __metadata:
     rollup: ^3.7.0
   peerDependencies:
     "@sveltejs/kit": ^1.0.0
-  checksum: 01768bfb0ef582d9e60cfb64e5d09233c1c968412cbc16aaf89accee5698ae2a31fdd8f00d754af371fc9788f4d0b353dbfe5fe2d717cff82ed4a09c8f1f1aa2
+  checksum: c603a16b79ba8d2689b28444dd5922825fa70f716e5976b1ec86eebe63cd8a2b9083121cbe9e830982918f051e3c6b7e8ff1f37513e02d7023c4aee99848f55d
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-vercel@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "@sveltejs/adapter-vercel@npm:1.0.2"
+"@sveltejs/adapter-vercel@npm:^1.0.4":
+  version: 1.0.4
+  resolution: "@sveltejs/adapter-vercel@npm:1.0.4"
   dependencies:
     "@vercel/nft": ^0.22.1
     esbuild: ^0.16.3
   peerDependencies:
     "@sveltejs/kit": ^1.0.0
-  checksum: f6b377cc577a2bb3a4dd987b2c26277e21ae93a9d3be1972d8e4be5d2700c144aa5c9d308187de6a6e7ebaacabfbf06ea1f0d082ec634a75d8aa792e7e2cdda3
+  checksum: db35ec8fd0c58c150d80d4601c349988e548fa2aa43d644956ffbd26efafcbd79b346a852a99cfc60cbf6e2dafb611b3450f6be76ee10058dfd1a64546998ab3
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "@sveltejs/kit@npm:1.1.0"
+"@sveltejs/kit@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@sveltejs/kit@npm:1.1.1"
   dependencies:
     "@sveltejs/vite-plugin-svelte": ^2.0.0
     "@types/cookie": ^0.5.1
     cookie: ^0.5.0
-    devalue: ^4.2.0
+    devalue: ^4.2.2
     esm-env: ^1.0.0
     kleur: ^4.1.5
     magic-string: ^0.27.0
@@ -4048,7 +4048,7 @@ __metadata:
     vite: ^4.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 525afe04922814e3cf9b20b55bbb1360173b55842a4b37a6e5b5a162df48e5c0c1f381af9680554893f1a3b452398091a340832d646fc870fd603b49932c2957
+  checksum: aa7f95ed6667b5323b5fcee89b3d90813ed15ac0d582d26058ba32e21da710c0fa7f75e452064745e8bdbbe04f12514106cc99223eeeaff4c8dedce27e1f010b
   languageName: node
   linkType: hard
 
@@ -6321,10 +6321,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"devalue@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "devalue@npm:4.2.0"
-  checksum: 29f29f72255b6330030773e02def96aa118dc410f5f2d2d389d674068bd2a698668421a0d2176d7c98e7941cbe5d535a251002d589ecc222f6e2b16783351b3d
+"devalue@npm:^4.2.2":
+  version: 4.2.2
+  resolution: "devalue@npm:4.2.2"
+  checksum: 68446dc824150f6712d8a655174eefe67d0e116dd1a7262f66440a2d0735fe4e1a11c5b8e434cf0245c7411a9239b02ff909a13360f18f7d6ca56b01a9c144d7
   languageName: node
   linkType: hard
 
@@ -6888,9 +6888,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.31.0":
-  version: 8.31.0
-  resolution: "eslint@npm:8.31.0"
+"eslint@npm:8.32.0":
+  version: 8.32.0
+  resolution: "eslint@npm:8.32.0"
   dependencies:
     "@eslint/eslintrc": ^1.4.1
     "@humanwhocodes/config-array": ^0.11.8
@@ -6933,7 +6933,7 @@ __metadata:
     text-table: ^0.2.0
   bin:
     eslint: bin/eslint.js
-  checksum: 5e5688bb864edc6b12d165849994812eefa67fb3fc44bb26f53659b63edcd8bcc68389d27cc6cc9e5b79ee22f24b6f311fa3ed047bddcafdec7d84c1b5561e4f
+  checksum: 23c8fb3c57291eecd9c1448faf603226a8f885022a2cd96e303459bf72e39b7f54987c6fb948f0f9eecaf7085600e6eb0663482a35ea83da12e9f9141a22b91e
   languageName: node
   linkType: hard
 
@@ -12417,9 +12417,9 @@ __metadata:
     "@storybook/svelte": 7.0.0-beta.27
     "@storybook/sveltekit": 7.0.0-beta.27
     "@storybook/testing-library": ^0.0.13
-    "@sveltejs/adapter-node": ^1.1.1
-    "@sveltejs/adapter-vercel": ^1.0.2
-    "@sveltejs/kit": ^1.1.0
+    "@sveltejs/adapter-node": ^1.1.3
+    "@sveltejs/adapter-vercel": ^1.0.4
+    "@sveltejs/kit": ^1.1.1
     "@tailwindcss/forms": ^0.5.3
     "@types/dompurify": ^2.4.0
     "@types/jsdom": ^20.0.1
@@ -12436,7 +12436,7 @@ __metadata:
     dompurify: ^2.4.3
     dotenv-flow: ^3.2.0
     escodegen: ^2.0.0
-    eslint: 8.31.0
+    eslint: 8.32.0
     eslint-config-prettier: ^8.6.0
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-storybook: ^0.6.10
