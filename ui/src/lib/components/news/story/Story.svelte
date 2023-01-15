@@ -7,7 +7,6 @@
   import Fade from '$lib/components/ui/transitions/Fade.svelte';
   import { tick } from 'svelte';
   import type { Story } from '$lib/models/story';
-  import type { KeyboardEvent } from 'react';
 
   export let story: Story;
 
