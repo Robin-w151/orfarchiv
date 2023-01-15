@@ -1,4 +1,4 @@
-.DS_Store
+/.DS_Store
 node_modules
 /build
 /.svelte-kit
@@ -11,5 +11,6 @@ node_modules
 pnpm-lock.yaml
 package-lock.json
 yarn.lock
+/.yarn
 
 /.vercel

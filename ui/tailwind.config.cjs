@@ -5,8 +5,8 @@ module.exports = {
   theme: {
     extend: {
       transitionDelay: {
-        '25': '25ms',
-        '50': '50ms',
+        25: '25ms',
+        50: '50ms',
       },
     },
   },
