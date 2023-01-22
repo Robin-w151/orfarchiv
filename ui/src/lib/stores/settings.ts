@@ -1,6 +1,6 @@
 import type { Settings } from '$lib/models/settings';
 import { sources } from '$lib/models/settings';
-import { writable } from 'svelte-local-storage-store';
+import { persisted } from 'svelte-local-storage-store';
 import type { Readable } from 'svelte/store';
 import { SETTINGS_STORE_NAME } from '$lib/configs/client';
 
@@ -13,7 +13,7 @@ const initialState = {
   fetchReadMoreContent: false,
   sources: sources.map((source) => source.key),
 };
-const { subscribe, update } = writable<Settings>(SETTINGS_STORE_NAME, initialState);
+const { subscribe, update } = persisted<Settings>(SETTINGS_STORE_NAME, initialState);
 
 function setFetchReadMoreContent(fetchReadMoreContent: boolean): void {
   update((settings) => ({ ...settings, fetchReadMoreContent }));

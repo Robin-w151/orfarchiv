@@ -1,4 +1,4 @@
-import { writable } from 'svelte-local-storage-store';
+import { persisted } from 'svelte-local-storage-store';
 import type { Readable } from 'svelte/store';
 import { STYLES_STORE_NAME } from '$lib/configs/client';
 
@@ -13,7 +13,7 @@ export interface StylesStore extends Readable<StylesStoreProps>, Partial<StylesS
 }
 
 const initialState: StylesStoreProps = { colorScheme: 'system' };
-const { subscribe, update } = writable<StylesStoreProps>(STYLES_STORE_NAME, initialState);
+const { subscribe, update } = persisted<StylesStoreProps>(STYLES_STORE_NAME, initialState);
 
 function setColorScheme(colorScheme: ColorScheme) {
   update((styles) => ({ ...styles, colorScheme }));
