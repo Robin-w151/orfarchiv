@@ -16,6 +16,9 @@ ENV PUBLIC_APP_MODE=prod
 ENV PUBLIC_ENABLE_ANALYTICS=false
 ENV USE_ADAPTER_NODE=true
 
+ARG ORFARCHIV_DB_URL="mongodb://localhost"
+ENV ORFARCHIV_DB_URL="$ORFARCHIV_DB_URL"
+
 RUN npx svelte-kit sync
 RUN yarn fix:jsdom
 RUN yarn build
@@ -29,9 +32,9 @@ COPY --from=build /app/build/ /app/
 COPY --from=build /app/package.json /app/
 COPY --from=build /app/node_modules/ /app/node_modules
 
+COPY entrypoint.sh /app/
+
 EXPOSE 8080
 ENV PORT=8080
 
-USER 1111:1111
-
-CMD ["node", "--experimental-specifier-resolution=node", "."]
+ENTRYPOINT ["./entrypoint.sh"]
