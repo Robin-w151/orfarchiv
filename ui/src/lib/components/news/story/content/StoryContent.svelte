@@ -12,6 +12,7 @@
   import settings from '$lib/stores/settings';
   import { getSourceLabel } from '$lib/models/settings';
   import { CTX_STORE, STORY_CONTENT_FETCH_MAX_RETRIES } from '$lib/configs/client';
+  import type { SetContent } from '$lib/stores/types';
 
   export let story: Story;
 
@@ -23,7 +24,7 @@
   const errorLinkClass = 'text-blue-700';
   const collapseContentClass = 'py-1.5 w-48 max-w-full';
 
-  let store = getContext(CTX_STORE);
+  let store = getContext(CTX_STORE) satisfies SetContent;
   let isLoading = true;
   let isClosed = false;
 
