@@ -104,6 +104,7 @@
     class={collapseContentClass}
     btnType="secondary"
     iconOnly
+    title="Artikel schließen"
     on:click={handleCollapseFieldClick}
     on:keydown={handleCollapseFieldKeydown}
   >
