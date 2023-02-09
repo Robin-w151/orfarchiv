@@ -3345,15 +3345,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-vercel@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "@sveltejs/adapter-vercel@npm:1.0.6"
+"@sveltejs/adapter-vercel@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@sveltejs/adapter-vercel@npm:2.0.2"
   dependencies:
     "@vercel/nft": ^0.22.1
     esbuild: ^0.16.3
   peerDependencies:
-    "@sveltejs/kit": ^1.0.0
-  checksum: edb45127d6b1472301b03c30b60fb4ad62b4383a21f994c668916cffd68ccb4f5008645daa2e33d7e214b8342e9a7e0c0b42174aa5338d2294e1bf80f753ff0c
+    "@sveltejs/kit": ^1.5.0
+  checksum: b12384944d3f67a38f90d167d0be55e67b35577d1d41da26f9da820724b2e4bc1cc55da0e2dc02209ce4cf3aafbaf12ff50bd91796d14be9de1ce33c9d3d36a4
   languageName: node
   linkType: hard
 
@@ -11815,7 +11815,7 @@ __metadata:
     "@storybook/sveltekit": 7.0.0-beta.27
     "@storybook/testing-library": ^0.0.13
     "@sveltejs/adapter-node": ^1.1.7
-    "@sveltejs/adapter-vercel": ^1.0.6
+    "@sveltejs/adapter-vercel": ^2.0.2
     "@sveltejs/kit": ^1.5.2
     "@tailwindcss/forms": ^0.5.3
     "@types/dompurify": ^2.4.0
