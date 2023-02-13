@@ -33,6 +33,10 @@
 
   onMount(async () => {
     try {
+      if (story.isBookmarked && !story.isViewed) {
+        bookmarks.setIsViewed(story);
+      }
+
       if (story.content) {
         return;
       }
@@ -40,10 +44,6 @@
       const storyContent = await fetchContentWithRetry(story);
       if (storyContent) {
         store?.setContent?.(story.id, storyContent);
-
-        if (story.isBookmarked && !story.isViewed) {
-          bookmarks.setIsViewed(story);
-        }
       }
     } catch (error) {
       const { message } = error as Error;
