@@ -14,6 +14,7 @@
     <meta name="msapplication-TileColor" content="blue" />
     <meta name="google-site-verification" content="6NToxA5WDNFIGBREvrYLc6LW6TH7DajeLBBaqoVuUBQ" />
     <link rel="icon" href="/images/icon.svg" />
+    %sveltekit.head%
     <script>
       const { colorScheme } = JSON.parse(localStorage.getItem('styles') ?? '{}');
       const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
@@ -21,7 +22,6 @@
         document.documentElement.classList.add('dark');
       }
     </script>
-    %sveltekit.head%
   </head>
   <body class="flex justify-center bg-gray-200 dark:bg-gray-700 outline-none">
     <div style="display: contents">%sveltekit.body%</div>
