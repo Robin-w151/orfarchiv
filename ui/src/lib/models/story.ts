@@ -5,13 +5,13 @@ export interface Story {
   url: string;
   timestamp: string;
   source: string;
-  content?: StoryContent;
   isBookmarked?: number;
   isViewed?: number;
 }
 
 export interface StoryContent {
   content: string;
+  id?: string;
   source?: StorySource;
 }
 

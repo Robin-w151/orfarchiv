@@ -3,7 +3,7 @@ import type { Story } from './story';
 
 export interface News {
   stories: Array<Story>;
-  isLoading: boolean;
+  isLoading?: boolean;
   storyBuckets?: Array<NewsBucket>;
   search?: string;
   prevKey?: PageKey | null;

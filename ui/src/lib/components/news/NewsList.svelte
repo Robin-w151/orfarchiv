@@ -1,16 +1,11 @@
 <script lang="ts">
+  import Story from '$lib/components/news/story/Story.svelte';
   import Section from '$lib/components/ui/content/Section.svelte';
   import SectionList from '$lib/components/ui/content/SectionList.svelte';
   import type { NewsBucket } from '$lib/models/news';
-  import Story from '$lib/components/news/story/Story.svelte';
-  import { setContext } from 'svelte';
-  import { CTX_STORE } from '$lib/configs/client';
-  import type { SetContent } from '$lib/stores/types';
 
   export let storyBuckets: Array<NewsBucket> | undefined = undefined;
   export let isLoading = false;
-  export let store: SetContent | undefined = undefined;
-  $: setContext(CTX_STORE, store);
 
   const listClass = `cursor-pointer`;
 </script>

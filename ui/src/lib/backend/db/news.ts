@@ -1,4 +1,4 @@
-import { type Collection, type Sort, type WithId } from 'mongodb';
+import type { Collection, Sort, WithId } from 'mongodb';
 import type { News } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
@@ -36,13 +36,13 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
   };
 }
 
-export async function searchStory(url: string): Promise<Story> {
+export async function searchStory(url: string): Promise<Story | null> {
   logger.info(`Search story with url '${url}'`);
 
   const query = { url, source: { $ne: 'oesterreich' } };
   const newsCollection = orfArchivDb.newsCollection();
 
-  return newsCollection.findOne(query);
+  return newsCollection.findOne(query) as unknown as Promise<Story | null>;
 }
 
 function buildQuery({ textFilter, dateFilter, sources }: SearchRequestParameters) {

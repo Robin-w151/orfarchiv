@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "3.6.18",
+  "version": "3.7.0",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev --host",
@@ -52,6 +52,7 @@
     "eslint-plugin-svelte3": "^4.0.0",
     "jsdom": "^21.1.0",
     "lodash.debounce": "^4.0.8",
+    "lru-cache": "^7.16.1",
     "luxon": "^3.2.1",
     "mongodb": "^5.0.1",
     "postcss": "^8.4.21",

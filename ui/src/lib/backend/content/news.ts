@@ -13,6 +13,7 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
 
   let currentUrl = url;
   let currentData = await fetchSiteHtmlText(currentUrl);
+  let id;
   let source;
   let originalDocument = createDom(currentData, currentUrl);
 
@@ -26,6 +27,7 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
       const [story, data] = await Promise.all([searchStory(currentUrl), fetchSiteHtmlText(currentUrl)]);
 
       currentData = data;
+      id = story?.id;
       source = story?.source ?? findSourceFromUrl(currentUrl);
 
       originalDocument = createDom(data, currentUrl);
@@ -53,6 +55,7 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
 
   return {
     content: sanitizeContent(optimizedDocument.body.innerHTML),
+    id,
     source: storySource,
   };
 }
