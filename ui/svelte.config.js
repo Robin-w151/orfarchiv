@@ -1,7 +1,7 @@
 import adapterNode from '@sveltejs/adapter-node';
 import adapterVercel from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/kit/vite';
-import cspScriptHashes from './csp-script-hashes.json' assert { type: 'json' };
+import cspScriptHashes from './csp-script-hashes.js';
 
 const useAdapterNode = process.env.USE_ADAPTER_NODE === 'true';
 const disableCsp = process.env.DISABLE_CSP === 'true';
