@@ -1,10 +1,11 @@
 {
   "name": "ui",
-  "version": "3.7.0",
+  "version": "3.7.1",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev --host",
     "build": "vite build",
+    "generate:csp-script-hashes": "node scripts/generate-csp-script-hashes.js",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",

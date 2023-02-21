@@ -18,6 +18,14 @@
       "runtimeArgs": ["build"]
     },
     {
+      "name": "UI Generate CSP Script Hashes",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ui",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["generate:csp-script-hashes"]
+    },
+    {
       "name": "UI Fix jsdom",
       "type": "node",
       "request": "launch",
