@@ -37,12 +37,9 @@
         return;
       }
 
-      if (story.isBookmarked && !story.isViewed) {
-        bookmarks.setIsViewed(story);
-      }
-
       storyContent = contentStore.getContent(story.id);
       if (storyContent) {
+        setIsViewed(story);
         return;
       }
 
@@ -55,6 +52,8 @@
           delete originalContent.source;
           contentStore.setContent(storyContent.id, originalContent);
         }
+
+        setIsViewed(story);
       }
     } catch (error) {
       const { message } = error as Error;
@@ -80,6 +79,12 @@
       }
     }
     throw new Error(`Failed to load story content after ${STORY_CONTENT_FETCH_MAX_RETRIES} retries!`);
+  }
+
+  function setIsViewed(story: Story): void {
+    if (story.isBookmarked && !story.isViewed) {
+      bookmarks.setIsViewed(story);
+    }
   }
 
   function handleCollapseFieldClick(): void {
