@@ -3,6 +3,7 @@ import { sources } from '$lib/models/settings';
 import { persisted } from 'svelte-local-storage-store';
 import type { Readable } from 'svelte/store';
 import { SETTINGS_STORE_NAME } from '$lib/configs/client';
+import { browser } from '$app/environment';
 
 export interface SettingsStore extends Readable<Settings>, Partial<Settings> {
   setFetchReadMoreContent: (_: boolean) => void;
@@ -31,6 +32,10 @@ function setSource(source: string, included: boolean): void {
     }
     return { ...settings, sources: newSources };
   });
+}
+
+if (browser) {
+  console.log('settings-store-initialized');
 }
 
 export default { subscribe, setFetchReadMoreContent, setSource } as SettingsStore;
