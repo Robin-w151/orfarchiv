@@ -53,10 +53,6 @@ test.describe('SettingsPage', () => {
     await cleanupPage(page);
   });
 
-  test.afterAll(async ({ browser }) => {
-    await browser.close();
-  });
-
   test.describe('General', () => {
     const sectionTitle = 'Allgemein';
 

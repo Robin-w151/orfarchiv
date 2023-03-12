@@ -286,10 +286,6 @@ test.describe('NewsPage', () => {
     await cleanupPage(page);
   });
 
-  test.afterAll(async ({ browser }) => {
-    await browser.close();
-  });
-
   test.describe('Site', () => {
     let newsPage;
 
