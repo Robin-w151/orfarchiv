@@ -23,6 +23,16 @@ class SettingsPage {
     });
   }
 
+  async waitForSettingsStore() {
+    return new Promise((resolve) => {
+      this.page.on('console', (data) => {
+        if (data.text() === 'settings-store-initialized') {
+          resolve(data);
+        }
+      });
+    });
+  }
+
   async visitSite() {
     const url = `${baseUrl}/settings`;
     const response = await this.page.goto(url);
@@ -33,6 +43,12 @@ class SettingsPage {
 }
 
 test.describe('SettingsPage', () => {
+  let settingsPage;
+
+  test.beforeEach(async ({ page }) => {
+    settingsPage = await setupPage(page);
+  });
+
   test.afterEach(async ({ page }) => {
     await cleanupPage(page);
   });
@@ -42,12 +58,7 @@ test.describe('SettingsPage', () => {
   });
 
   test.describe('General', () => {
-    let settingsPage;
-    let sectionTitle = 'Allgemein';
-
-    test.beforeEach(async ({ page }) => {
-      settingsPage = await setupPage(page);
-    });
+    const sectionTitle = 'Allgemein';
 
     test('fetch read more content', async () => {
       const checkbox = settingsPage.getListSectionInput(sectionTitle, 'Inhalt von weiterführendem Artikel laden');
@@ -61,12 +72,7 @@ test.describe('SettingsPage', () => {
   });
 
   test.describe('Info', () => {
-    let settingsPage;
-    let sectionTitle = 'Info';
-
-    test.beforeEach(async ({ page }) => {
-      settingsPage = await setupPage(page);
-    });
+    const sectionTitle = 'Info';
 
     test('version', async () => {
       const version = settingsPage.getListSectionItem(sectionTitle, 0);
@@ -90,12 +96,7 @@ test.describe('SettingsPage', () => {
   });
 
   test.describe('Appearance', () => {
-    let settingsPage;
-    let sectionTitle = 'Darstellung';
-
-    test.beforeEach(async ({ page }) => {
-      settingsPage = await setupPage(page);
-    });
+    const sectionTitle = 'Darstellung';
 
     test('system', async () => {
       const radioButton = settingsPage.getListSectionInput(sectionTitle, 'Automatisch');
@@ -126,6 +127,7 @@ test.describe('SettingsPage', () => {
   });
 
   test.describe('Source', () => {
+    const sectionTitle = 'Quellen';
     const sources = [
       'News',
       'Sport',
@@ -145,12 +147,6 @@ test.describe('SettingsPage', () => {
       'Tirol',
       'Vorarlberg',
     ];
-    let settingsPage;
-    let sectionTitle = 'Quellen';
-
-    test.beforeEach(async ({ page }) => {
-      settingsPage = await setupPage(page);
-    });
 
     for (const source of sources) {
       test(source, async () => {
@@ -168,7 +164,7 @@ test.describe('SettingsPage', () => {
 
 async function setupPage(page) {
   const settingsPage = new SettingsPage(page);
-  await settingsPage.visitSite();
+  await Promise.all([settingsPage.waitForSettingsStore(), settingsPage.visitSite()]);
   return settingsPage;
 }
 
