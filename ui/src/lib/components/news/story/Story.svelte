@@ -74,16 +74,16 @@
   }
 
   function handleHeaderKeydown(event: KeyboardEvent): void {
-    const code = event.code;
+    const { code, ctrlKey } = event;
     if (code === 'Enter' || code === 'Space') {
       event.preventDefault();
       toggleShowContent();
     }
-    if (code === 'ArrowUp') {
+    if (code === 'ArrowUp' && ctrlKey) {
       event.preventDefault();
       dispatch('selectStory', { id: story.id, next: false });
     }
-    if (code === 'ArrowDown') {
+    if (code === 'ArrowDown' && ctrlKey) {
       event.preventDefault();
       dispatch('selectStory', { id: story.id, next: true });
     }
