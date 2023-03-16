@@ -5,15 +5,22 @@
   import { defaultAlertTextBox } from '$lib/utils/styles';
   import BookmarkActions from '../filter/BookmarkActions.svelte';
   import NewsListSkeleton from '$lib/components/news/NewsListSkeleton.svelte';
+  import { get } from 'svelte/store';
+  import { selectStory } from '$lib/stores/newsEvents';
 
   $: bookmarksAvailable = $bookmarks.filteredStories?.length > 0;
   $: bookmarksBucket = { name: 'Lesezeichen', stories: $bookmarks.filteredStories };
+
+  function handleStorySelect({ detail: { id, next } }: { detail: { id: string; next: boolean } }): void {
+    const stories = get(bookmarks).stories;
+    selectStory.select(stories, id, next);
+  }
 </script>
 
 <Content id="bookmarks">
   <BookmarkActions />
   {#if bookmarksAvailable}
-    <NewsList storyBuckets={[bookmarksBucket]} isLoading={$bookmarks.isLoading} />
+    <NewsList storyBuckets={[bookmarksBucket]} isLoading={$bookmarks.isLoading} on:selectStory={handleStorySelect} />
   {:else if $bookmarks.isLoading}
     <NewsListSkeleton />
   {:else}

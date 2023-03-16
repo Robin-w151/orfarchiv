@@ -7,7 +7,7 @@
   import type { SearchRequestParameters } from '$lib/models/searchRequest';
   import type { Settings } from '$lib/models/settings';
   import news from '$lib/stores/news';
-  import { loadMoreNews, refreshNews } from '$lib/stores/newsEvents';
+  import { loadMoreNews, refreshNews, selectStory } from '$lib/stores/newsEvents';
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import settings from '$lib/stores/settings';
   import { defaultAlertTextBox } from '$lib/utils/styles';
@@ -96,6 +96,11 @@
   function handleLoadMoreClick(): void {
     loadMoreNews.notify();
   }
+
+  function handleStorySelect({ detail: { id, next } }: { detail: { id: string; next: boolean } }): void {
+    const stories = get(news).stories;
+    selectStory.select(stories, id, next);
+  }
 </script>
 
 <Content id="news">
@@ -108,7 +113,7 @@
       >
     </div>
   {:else if showNewsList}
-    <NewsList storyBuckets={$news.storyBuckets} isLoading={$news.isLoading} />
+    <NewsList storyBuckets={$news.storyBuckets} isLoading={$news.isLoading} on:selectStory={handleStorySelect} />
   {:else if $news.isLoading}
     <NewsListSkeleton />
   {:else}

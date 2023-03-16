@@ -5,7 +5,7 @@
   import StoryHeader from '$lib/components/news/story/header/StoryHeader.svelte';
   import StoryContent from '$lib/components/news/story/content/StoryContent.svelte';
   import Fade from '$lib/components/ui/transitions/Fade.svelte';
-  import { onDestroy, onMount, tick } from 'svelte';
+  import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
   import type { Story } from '$lib/models/story';
   import { selectStory } from '$lib/stores/newsEvents';
   import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
@@ -13,6 +13,7 @@
   export let story: Story;
 
   const subscriptions: Array<Subscription> = [];
+  const dispatch = createEventDispatcher();
 
   let itemRef: Item;
   let headerRef: StoryHeader;
@@ -40,7 +41,7 @@
     unsubscribeAll(subscriptions);
   });
 
-  function scrollIntoView() {
+  function scrollIntoView(): void {
     tick().then(() => itemRef.scrollIntoView());
   }
 
@@ -80,11 +81,11 @@
     }
     if (code === 'ArrowUp') {
       event.preventDefault();
-      selectStory.prevStory(story.id);
+      dispatch('selectStory', { id: story.id, next: false });
     }
     if (code === 'ArrowDown') {
       event.preventDefault();
-      selectStory.nextStory(story.id);
+      dispatch('selectStory', { id: story.id, next: true });
     }
   }
 

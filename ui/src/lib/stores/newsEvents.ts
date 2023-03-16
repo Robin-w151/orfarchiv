@@ -1,5 +1,4 @@
-import { get } from 'svelte/store';
-import news from './news';
+import type { Story } from '$lib/models/story';
 import { createRxjsStore } from './utils';
 
 export const refreshNews = createEventStore();
@@ -18,21 +17,27 @@ function createEventStore() {
 function createStorySelectStore() {
   const { subscribe, next } = createRxjsStore<string>();
 
-  function nextStory(storyId: string): void {
-    const stories = get(news).stories;
+  function select(stories: Array<Story>, storyId: string, next: boolean) {
+    if (next) {
+      nextStory(stories, storyId);
+    } else {
+      prevStory(stories, storyId);
+    }
+  }
+
+  function nextStory(stories: Array<Story>, storyId: string): void {
     const index = stories.findIndex((story) => story.id === storyId);
     if (index > -1 && index < stories.length - 1) {
       next(stories[index + 1].id);
     }
   }
 
-  function prevStory(storyId: string): void {
-    const stories = get(news).stories;
+  function prevStory(stories: Array<Story>, storyId: string): void {
     const index = stories.findIndex((story) => story.id === storyId);
     if (index > 0) {
       next(stories[index - 1].id);
     }
   }
 
-  return { subscribe, nextStory, prevStory };
+  return { subscribe, select };
 }
