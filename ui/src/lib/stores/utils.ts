@@ -15,5 +15,5 @@ export function createRxjsStore<T>(supplier?: () => Subject<T>) {
   const subject = supplier ? supplier() : new Subject<T>();
   const subscribe = subject.subscribe.bind(subject);
   const next = subject.next.bind(subject);
-  return { subscribe, next };
+  return { subscribe, set: next };
 }

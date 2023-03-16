@@ -89,7 +89,7 @@
     }
   }
 
-  function handleStorySelect(storyId: string): void {
+  function handleStorySelect(storyId?: string): void {
     if (story.id === storyId) {
       headerRef.focus();
       scrollIntoView();

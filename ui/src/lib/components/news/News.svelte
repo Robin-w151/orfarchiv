@@ -99,7 +99,7 @@
 
   function handleStorySelect({ detail: { id, next } }: { detail: { id: string; next: boolean } }): void {
     const stories = get(news).stories;
-    selectStory.select(stories, id, next);
+    selectStory.select({ stories, id, next });
   }
 </script>
 

@@ -1,5 +1,12 @@
 import type { Story } from '$lib/models/story';
+import { filter, map, Observable, Subject } from 'rxjs';
 import { createRxjsStore } from './utils';
+
+export interface SelectStory {
+  stories: Array<Story>;
+  id: string;
+  next: boolean;
+}
 
 export const refreshNews = createEventStore();
 
@@ -10,34 +17,28 @@ export const startSearch = createEventStore();
 export const selectStory = createStorySelectStore();
 
 function createEventStore() {
-  const { subscribe, next } = createRxjsStore<void>();
-  return { subscribe, onUpdate: subscribe, notify: next };
+  const { subscribe, set } = createRxjsStore<void>();
+  return { subscribe, onUpdate: subscribe, notify: set };
 }
 
 function createStorySelectStore() {
-  const { subscribe, next } = createRxjsStore<string>();
+  const subject = new Subject<SelectStory>();
+  const store = subject.pipe(
+    map(selectStory),
+    filter((select) => !!select),
+  );
 
-  function select(stories: Array<Story>, storyId: string, next: boolean) {
-    if (next) {
-      nextStory(stories, storyId);
-    } else {
-      prevStory(stories, storyId);
+  function selectStory({ stories, id, next }: SelectStory): string | undefined {
+    const index = stories.findIndex((story) => story.id === id);
+    if (next && index > -1 && index < stories.length - 1) {
+      return stories[index + 1].id;
+    }
+    if (!next && index > 0) {
+      return stories[index - 1].id;
     }
   }
 
-  function nextStory(stories: Array<Story>, storyId: string): void {
-    const index = stories.findIndex((story) => story.id === storyId);
-    if (index > -1 && index < stories.length - 1) {
-      next(stories[index + 1].id);
-    }
-  }
+  (store as any).select = subject.next.bind(subject);
 
-  function prevStory(stories: Array<Story>, storyId: string): void {
-    const index = stories.findIndex((story) => story.id === storyId);
-    if (index > 0) {
-      next(stories[index - 1].id);
-    }
-  }
-
-  return { subscribe, select };
+  return store as Observable<string | undefined> & { select: (select: SelectStory) => void };
 }
