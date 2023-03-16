@@ -11,14 +11,13 @@
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import settings from '$lib/stores/settings';
   import { defaultAlertTextBox } from '$lib/utils/styles';
-  import { unsubscribeAll } from '$lib/utils/subscriptions';
+  import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
   import { onDestroy, onMount } from 'svelte';
-  import type { Unsubscriber } from 'svelte/store';
   import { get } from 'svelte/store';
   import NewsList from './NewsList.svelte';
   import NewsListSkeleton from './NewsListSkeleton.svelte';
 
-  let subscriptions: Array<Unsubscriber> = [];
+  const subscriptions: Array<Subscription> = [];
 
   $: showNewsList = hasNews($news as News);
   $: anySourcesEnabled = hasAnySourcesEnabled($settings as Settings);

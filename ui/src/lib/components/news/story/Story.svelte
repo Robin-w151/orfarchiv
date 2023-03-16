@@ -5,12 +5,17 @@
   import StoryHeader from '$lib/components/news/story/header/StoryHeader.svelte';
   import StoryContent from '$lib/components/news/story/content/StoryContent.svelte';
   import Fade from '$lib/components/ui/transitions/Fade.svelte';
-  import { tick } from 'svelte';
+  import { onDestroy, onMount, tick } from 'svelte';
   import type { Story } from '$lib/models/story';
+  import { selectStory } from '$lib/stores/newsEvents';
+  import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
 
   export let story: Story;
 
+  const subscriptions: Array<Subscription> = [];
+
   let itemRef: Item;
+  let headerRef: StoryHeader;
   let showContentInitial = false;
   let showContent = false;
 
@@ -27,6 +32,18 @@
   ]);
   $: contentClass = clsx([defaultPadding, 'cursor-auto']);
 
+  onMount(() => {
+    subscriptions.push(selectStory.subscribe(handleStorySelect));
+  });
+
+  onDestroy(() => {
+    unsubscribeAll(subscriptions);
+  });
+
+  function scrollIntoView() {
+    tick().then(() => itemRef.scrollIntoView());
+  }
+
   function toggleShowContent(): void {
     showContent = !showContent;
   }
@@ -37,7 +54,7 @@
 
   function handleContentViewCollapse(showContent: boolean): void {
     if (showContentInitial && !showContent) {
-      tick().then(() => itemRef.scrollIntoView());
+      scrollIntoView();
     }
 
     if (!showContentInitial) {
@@ -61,13 +78,28 @@
       event.preventDefault();
       toggleShowContent();
     }
+    if (code === 'ArrowUp') {
+      event.preventDefault();
+      selectStory.prevStory(story.id);
+    }
+    if (code === 'ArrowDown') {
+      event.preventDefault();
+      selectStory.nextStory(story.id);
+    }
+  }
+
+  function handleStorySelect(storyId: string): void {
+    if (story.id === storyId) {
+      headerRef.focus();
+      scrollIntoView();
+    }
   }
 </script>
 
 <Item bind:this={itemRef} noGap noPadding>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <div class="header {headerClass}" on:click={handleHeaderWrapperClick}>
-    <StoryHeader {story} on:click={handleHeaderClick} on:keydown={handleHeaderKeydown} />
+    <StoryHeader {story} on:click={handleHeaderClick} on:keydown={handleHeaderKeydown} bind:this={headerRef} />
   </div>
   {#if showContent}
     <Fade class="content {contentClass}">

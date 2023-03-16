@@ -3,14 +3,14 @@
   import { startSearch } from '$lib/stores/newsEvents';
   import searchFilter from '$lib/stores/searchFilter';
   import { defaultBackground, defaultPadding } from '$lib/utils/styles';
-  import { unsubscribeAll } from '$lib/utils/subscriptions';
+  import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
   import { onDestroy, onMount } from 'svelte';
-  import type { Unsubscriber } from 'svelte/store';
   import NewsFilterPopover from '$lib/components/news/filter/NewsFilterPopover.svelte';
+
+  const subscriptions: Array<Subscription> = [];
 
   const filterClass = `flex gap-2 ${defaultPadding} w-full ${defaultBackground}`;
 
-  let subscriptions: Array<Unsubscriber> = [];
   let textFilterInputRef: Input | null = null;
 
   onMount(() => {

@@ -23,13 +23,19 @@
     rounded-sm
   `;
 
+  let headerRef: HTMLHeadElement;
+
+  export function focus(): void {
+    headerRef.focus();
+  }
+
   $: showViewedInfo = story?.isBookmarked && story?.isViewed;
   $: sourceLabel = getSourceLabel(story?.source);
 </script>
 
 {#if story}
   <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-  <header class={headerClass} on:click on:keydown tabindex="0">
+  <header class={headerClass} on:click on:keydown bind:this={headerRef} tabindex="0">
     {#if showViewedInfo}
       <span class={viewedBadge}>Gelesen</span>
     {/if}
