@@ -10463,17 +10463,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-dark-mode@npm:^2.0.5":
-  version: 2.0.5
-  resolution: "storybook-dark-mode@npm:2.0.5"
+"storybook-dark-mode@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "storybook-dark-mode@npm:2.1.1"
   dependencies:
     "@storybook/addons": ^6.5.14
     "@storybook/api": ^6.5.14
     "@storybook/components": ^6.5.14
     "@storybook/core-events": ^6.5.14
+    "@storybook/global": ^5.0.0
     "@storybook/theming": ^6.5.14
     fast-deep-equal: ^3.1.3
-    global: ^4.4.0
     memoizerific: ^1.11.3
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -10483,7 +10483,7 @@ __metadata:
       optional: true
     react-dom:
       optional: true
-  checksum: 0888c881beace9ca27985c8959f4207a42e6a952f8a62d60216ff1ef6df16150e4a0297a39f83870969e8592beaf59999e035a1ed50aeb0ad854487060cee699
+  checksum: 44d6313013a1d63f47c95e2e8e0d11c24d467b3540259e152ceb3236636dbadf7a46c6f7f183946b105ee53173cb13815f1f88ca6da41fc74673c3c11f619863
   languageName: node
   linkType: hard
 
@@ -11224,7 +11224,7 @@ __metadata:
     rxjs: ^7.8.0
     sass: ^1.59.3
     storybook: 7.0.0-beta.45
-    storybook-dark-mode: ^2.0.5
+    storybook-dark-mode: ^2.1.1
     svelte: ^3.57.0
     svelte-check: ^3.1.4
     svelte-loader: ^3.1.7
