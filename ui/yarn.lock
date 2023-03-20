@@ -3500,15 +3500,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/adapter-vercel@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "@sveltejs/adapter-vercel@npm:2.3.2"
+"@sveltejs/adapter-vercel@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "@sveltejs/adapter-vercel@npm:2.4.0"
   dependencies:
     "@vercel/nft": ^0.22.1
     esbuild: ^0.16.3
   peerDependencies:
     "@sveltejs/kit": ^1.5.0
-  checksum: b83b5d728acb0f2e21914cc9287f8cdaeb08822e17776547ef2c1d7396e7a586132e9bb036cb249f09ec120a162262b2da2cad2ae59fdd004a710169daf478e6
+  checksum: cdebe71b37818c7221358961afbab00c3aaf53c0b088ccd4157cba0e57c4777772d2f4717ea3008ecb4ca7bd6d7a6fb57cdedfc7f920f688dd9a9199f998504e
   languageName: node
   linkType: hard
 
@@ -6288,9 +6288,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte@npm:^2.21.0":
-  version: 2.21.0
-  resolution: "eslint-plugin-svelte@npm:2.21.0"
+"eslint-plugin-svelte@npm:^2.22.0":
+  version: 2.22.0
+  resolution: "eslint-plugin-svelte@npm:2.22.0"
   dependencies:
     "@jridgewell/sourcemap-codec": ^1.4.14
     debug: ^4.3.1
@@ -6307,7 +6307,7 @@ __metadata:
   peerDependenciesMeta:
     svelte:
       optional: true
-  checksum: c43d0af1d3ba49204f9afbba3d9a85d580477749e671f89223a777c61419787232d1acca645a03eb0e63e12ac35a4b371047f41a52fdf51ee3ec98737d893195
+  checksum: d8c39641cc4d5466b3e4068a2bd3a8a285cfa15470d47568f488fca9213c7b1a1278a97018f879f2db375a6c4be8fce40cd06ec2fc6f2aa82fd0a423759099ba
   languageName: node
   linkType: hard
 
@@ -8470,10 +8470,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lru-cache@npm:^8.0.3":
-  version: 8.0.3
-  resolution: "lru-cache@npm:8.0.3"
-  checksum: 943a7c809d35343f6a38007e1626d0a39eedcd7fc18a405a78f9e54aeadc785316f9de45da9116bd679c22ed14b6df9da519eab309b952eb28870b9dea29efc3
+"lru-cache@npm:^8.0.4":
+  version: 8.0.4
+  resolution: "lru-cache@npm:8.0.4"
+  checksum: dee2b905a8cd688c5847faa46ba3cfeaa0766283b244bfd6177420e04e9d923fc901a9a578fc3963d70959631595240ead37abaf43e21968bb9805bbd9519856
   languageName: node
   linkType: hard
 
@@ -9687,12 +9687,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^2.8.4":
-  version: 2.8.4
-  resolution: "prettier@npm:2.8.4"
+"prettier@npm:^2.8.5":
+  version: 2.8.5
+  resolution: "prettier@npm:2.8.5"
   bin:
     prettier: bin-prettier.js
-  checksum: c173064bf3df57b6d93d19aa98753b9b9dd7657212e33b41ada8e2e9f9884066bb9ca0b4005b89b3ab137efffdf8fbe0b462785aba20364798ff4303aadda57e
+  checksum: b7f8d30e14061e0478bc5a59d4d889688d804c173a0daa91b1b85dc08eef5eb6956d1b59f4037770776fda5b967f6c9ca3b7a8a43c50bedb4c7b182029f865aa
   languageName: node
   linkType: hard
 
@@ -10847,7 +10847,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"storybook-dark-mode@npm:^2.0.5":
+"storybook-dark-mode@npm:^2.1.1":
   version: 2.1.1
   resolution: "storybook-dark-mode@npm:2.1.1"
   dependencies:
@@ -11613,7 +11613,7 @@ __metadata:
     "@storybook/sveltekit": 7.0.0-rc.4
     "@storybook/testing-library": ^0.0.13
     "@sveltejs/adapter-node": ^1.2.3
-    "@sveltejs/adapter-vercel": ^2.3.2
+    "@sveltejs/adapter-vercel": ^2.4.0
     "@sveltejs/kit": ^1.12.0
     "@tailwindcss/forms": ^0.5.3
     "@types/dompurify": ^3.0.0
@@ -11635,22 +11635,22 @@ __metadata:
     eslint-config-prettier: ^8.7.0
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-storybook: ^0.6.11
-    eslint-plugin-svelte: ^2.21.0
+    eslint-plugin-svelte: ^2.22.0
     eslint-plugin-svelte3: ^4.0.0
     jsdom: ^21.1.1
     lodash.debounce: ^4.0.8
-    lru-cache: ^8.0.3
+    lru-cache: ^8.0.4
     luxon: ^3.3.0
     mongodb: ^5.1.0
     postcss: ^8.4.21
-    prettier: ^2.8.4
+    prettier: ^2.8.5
     prettier-plugin-svelte: ^2.9.0
     react: ^18.2.0
     react-dom: ^18.2.0
     rxjs: ^7.8.0
     sass: ^1.59.3
     storybook: 7.0.0-rc.4
-    storybook-dark-mode: ^2.0.5
+    storybook-dark-mode: ^2.1.1
     svelte: ^3.57.0
     svelte-check: ^3.1.4
     svelte-loader: ^3.1.7
@@ -11659,7 +11659,7 @@ __metadata:
     tailwindcss: 3.2.4
     tslib: ^2.5.0
     typescript: ^5.0.2
-    vite: ^4.2.0
+    vite: ^4.2.1
     web-vitals: ^3.3.0
     winston: ^3.8.2
   languageName: unknown
@@ -11924,9 +11924,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "vite@npm:4.2.0"
+"vite@npm:^4.2.1":
+  version: 4.2.1
+  resolution: "vite@npm:4.2.1"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
@@ -11958,7 +11958,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 1088cdc0c89ab835aab07a0a114397b749e8dfb20f4b94241ba179d9c371b72d31e13782b22893860c3d65da596e43b24fce5e023f79cfde427f42549f2e1844
+  checksum: 70eb162ffc299017a3c310e3adc95e9661def6b17aafd1f8e5e02e516766060435590dbe3df1e4e95acc3583c728a76e91f07c546221d1e701f1b2b021293f45
   languageName: node
   linkType: hard
 
