@@ -9,14 +9,12 @@
   let clazz: string;
   export { clazz as class };
 
-  $: url = story?.content?.source?.url ?? story?.url;
-
   function handleOpenArticleClick() {
     onClose();
   }
 </script>
 
-<Link class={clazz} customStyle href={url} on:click={handleOpenArticleClick}>
+<Link class={clazz} customStyle href={story.url} on:click={handleOpenArticleClick}>
   <NewspaperIcon />
   <span>In orf.at öffnen</span>
 </Link>

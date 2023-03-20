@@ -26,7 +26,7 @@
 
 <header class={headerClass}>
   <h1>
-    <a class={headerTitleClass} href="/" title="Startseite" data-sveltekit-prefetch>
+    <a class={headerTitleClass} href="/" title="Startseite" data-sveltekit-preload-code="hover">
       <TextGradient>ORF Archiv</TextGradient>
     </a>
   </h1>

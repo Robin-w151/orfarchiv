@@ -2,6 +2,8 @@ import type { Story } from '$lib/models/story';
 import { filter, map, Observable, Subject } from 'rxjs';
 import { createRxjsStore } from './utils';
 
+export type SelectStoryStore = Observable<string | undefined> & { select: (select: SelectStory) => void };
+
 export interface SelectStory {
   stories: Array<Story>;
   id: string;
@@ -38,7 +40,7 @@ function createStorySelectStore() {
     }
   }
 
-  (store as any).select = subject.next.bind(subject);
+  (store as SelectStoryStore).select = subject.next.bind(subject);
 
-  return store as Observable<string | undefined> & { select: (select: SelectStory) => void };
+  return store as SelectStoryStore;
 }

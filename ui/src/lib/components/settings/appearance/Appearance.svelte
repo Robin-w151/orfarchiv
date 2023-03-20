@@ -5,7 +5,7 @@
   import Radio from '$lib/components/ui/controls/Radio.svelte';
   import styles, { type ColorScheme } from '$lib/stores/styles';
 
-  let colorScheme: ColorScheme | undefined = $styles.colorScheme;
+  let colorScheme: ColorScheme = $styles.colorScheme;
 
   function handleColorSchemeRadioChange() {
     if (colorScheme) {
