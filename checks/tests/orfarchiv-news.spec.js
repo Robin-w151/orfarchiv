@@ -18,7 +18,7 @@ const newsMock = {
       title: 'WIFO-Ökonom Böheim zu Strompreisbremse',
       category: 'Medien',
       url: 'https://orf.at/stories/3284303/',
-      timestamp: '2022-09-07T18:20:50.000Z',
+      timestamp: '2022-09-06T18:20:50.000Z',
       source: 'news',
     },
     {
@@ -26,7 +26,7 @@ const newsMock = {
       title: 'Die Abrechnung des John Malkovich',
       category: 'Kultur',
       url: 'https://orf.at/stories/3284215/',
-      timestamp: '2022-09-07T18:06:00.000Z',
+      timestamp: '2022-09-05T18:06:00.000Z',
       source: 'news',
     },
     {
@@ -34,7 +34,7 @@ const newsMock = {
       title: 'OMV: „Kein einklagbares Fehlverhalten“ bei Ex-Chef Seele',
       category: 'Wirtschaft',
       url: 'https://orf.at/stories/3284302/',
-      timestamp: '2022-09-07T17:57:19.000Z',
+      timestamp: '2022-09-04T17:57:19.000Z',
       source: 'news',
     },
     {
@@ -42,7 +42,7 @@ const newsMock = {
       title: 'Bolsonaro nutzt Unabhängigkeitstag für Wahlkampf',
       category: 'Ausland',
       url: 'https://orf.at/stories/3284301/',
-      timestamp: '2022-09-07T17:37:36.000Z',
+      timestamp: '2022-09-03T17:37:36.000Z',
       source: 'news',
     },
   ],
@@ -53,7 +53,7 @@ const newsMock = {
   },
   nextKey: {
     id: 'news:3284301',
-    timestamp: '2022-09-07T17:37:36.000Z',
+    timestamp: '2022-09-03T17:37:36.000Z',
     type: 'next',
   },
 };
@@ -64,13 +64,13 @@ const newsMockMore = {
       title: 'E-Bike-Lenker fuhr gegen Lkw und starb',
       category: 'Chronik',
       url: 'https://noe.orf.at/stories/3172657/',
-      timestamp: '2022-09-07T16:33:49.000Z',
+      timestamp: '2022-09-03T16:33:49.000Z',
       source: 'noe',
     },
   ],
   nextKey: {
     id: 'noe:3172657',
-    timestamp: '2022-09-07T16:33:49.000Z',
+    timestamp: '2022-09-03T16:33:49.000Z',
     type: 'next',
   },
 };
@@ -363,50 +363,38 @@ test.describe('NewsPage', () => {
 
   test.describe('Sections', () => {
     let newsPage;
-    let newsMockWithAdjustedTimestamps;
-
-    test.beforeAll(() => {
-      newsMockWithAdjustedTimestamps = deepCopy(newsMock);
-      const [s1, s2, s3, s4, s5] = newsMockWithAdjustedTimestamps.stories;
-
-      s1.timestamp = nowMinusHours(0);
-      s2.timestamp = nowMinusHours(2);
-      s3.timestamp = nowMinusHours(24);
-      s4.timestamp = nowMinusHours(48);
-      s5.timestamp = nowMinusHours(168);
-    });
 
     test.beforeEach(async ({ page }) => {
-      newsPage = await setupPage(page, newsMockWithAdjustedTimestamps);
+      newsPage = await setupPage(page, newsMock);
     });
 
-    test('Aktuell', async () => {
+    test('Mittwoch, 07.09.2022', async () => {
       const sectionAktuell = newsPage.getNewsListSection(0);
-      await expect(sectionAktuell.locator('h2')).toHaveText('Aktuell');
+      await expect(sectionAktuell.locator('h2')).toHaveText('Mittwoch, 07.09.2022');
       await expect(sectionAktuell.locator('li')).toHaveCount(1);
     });
 
-    test('Letzte 24h', async () => {
+    test('Dienstag, 06.09.2022', async () => {
       const sectionAktuell = newsPage.getNewsListSection(1);
-      await expect(sectionAktuell.locator('h2')).toHaveText('Letzte 24h');
+      await expect(sectionAktuell.locator('h2')).toHaveText('Dienstag, 06.09.2022');
       await expect(sectionAktuell.locator('li')).toHaveCount(1);
     });
 
-    test('Letzte 48h', async () => {
+    test('Montag, 05.09.2022', async () => {
       const sectionAktuell = newsPage.getNewsListSection(2);
-      await expect(sectionAktuell.locator('h2')).toHaveText('Letzte 48h');
+      await expect(sectionAktuell.locator('h2')).toHaveText('Montag, 05.09.2022');
       await expect(sectionAktuell.locator('li')).toHaveCount(1);
     });
 
-    test('Letzte 7 Tage', async () => {
+    test('Sonntag, 04.09.2022', async () => {
       const sectionAktuell = newsPage.getNewsListSection(3);
-      await expect(sectionAktuell.locator('h2')).toHaveText('Letzte 7 Tage');
+      await expect(sectionAktuell.locator('h2')).toHaveText('Sonntag, 04.09.2022');
       await expect(sectionAktuell.locator('li')).toHaveCount(1);
     });
 
-    test('Archiv', async () => {
+    test('Samstag, 03.09.2022', async () => {
       const sectionAktuell = newsPage.getNewsListSection(4);
-      await expect(sectionAktuell.locator('h2')).toHaveText('Archiv');
+      await expect(sectionAktuell.locator('h2')).toHaveText('Samstag, 03.09.2022');
       await expect(sectionAktuell.locator('li')).toHaveCount(1);
     });
   });
@@ -520,14 +508,6 @@ test.describe('NewsPage', () => {
     });
   });
 });
-
-function deepCopy(object) {
-  return JSON.parse(JSON.stringify(object));
-}
-
-function nowMinusHours(hours) {
-  return moment().subtract(hours, 'hours').toISOString(false);
-}
 
 async function setupPage(page, mock) {
   const newsPage = new NewsPage(page);
