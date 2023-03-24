@@ -12,7 +12,7 @@ export interface News {
 
 export interface NewsBucket {
   name: string;
-  date: string;
+  date?: string;
   stories: Array<Story>;
 }
 

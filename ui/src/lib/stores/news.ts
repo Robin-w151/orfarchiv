@@ -73,8 +73,16 @@ function createStoryBuckets(stories: Array<Story>): Array<NewsBucket> | undefine
     }
   }
 
+  function compareBuckets(b1: NewsBucket, b2: NewsBucket): number {
+    if (!b1.date || !b2.date) {
+      return 0;
+    }
+
+    return b2.date.localeCompare(b1.date);
+  }
+
   stories.forEach((story) => addToBucket(buckets, story));
-  return Array.from(buckets.values()).sort((b1, b2) => b2.date.localeCompare(b1.date));
+  return Array.from(buckets.values()).sort(compareBuckets);
 }
 
 function combineStories(oldStories: Array<Story>, newStories: Array<Story> = [], append = false): Array<Story> {
