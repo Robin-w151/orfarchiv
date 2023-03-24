@@ -1,13 +1,15 @@
 <script lang="ts">
-  import { searchNews } from '$lib/api/news';
+  import { checkNewsUpdates, searchNews } from '$lib/api/news';
   import NewsFilter from '$lib/components/news/filter/NewsFilter.svelte';
   import Content from '$lib/components/ui/content/Content.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
+  import { NEWS_CHECK_UPDATES_INTERVAL_IN_MS, NOTIFICATION_NEWS_UPDATES_AVAILABLE } from '$lib/configs/client';
   import type { News } from '$lib/models/news';
   import type { SearchRequestParameters } from '$lib/models/searchRequest';
   import type { Settings } from '$lib/models/settings';
   import news from '$lib/stores/news';
   import { loadMoreNews, refreshNews, selectStory } from '$lib/stores/newsEvents';
+  import notifications from '$lib/stores/notifications';
   import searchRequestParameters from '$lib/stores/searchRequestParameters';
   import settings from '$lib/stores/settings';
   import { defaultAlertTextBox } from '$lib/utils/styles';
@@ -19,6 +21,8 @@
 
   const subscriptions: Array<Subscription> = [];
 
+  let checkUpdatesInterval: any;
+
   $: showNewsList = hasNews($news as News);
   $: anySourcesEnabled = hasAnySourcesEnabled($settings as Settings);
   $: loadMoreButtonDisabled = $news.nextKey === null;
@@ -27,10 +31,15 @@
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
     subscriptions.push(searchRequestParameters.subscribe(fetchNews));
+
+    if ($settings.checkNewsUpdates) {
+      checkUpdatesInterval = setInterval(fetchNewsUpdates, NEWS_CHECK_UPDATES_INTERVAL_IN_MS);
+    }
   });
 
   onDestroy(() => {
     unsubscribeAll(subscriptions);
+    clearInterval(checkUpdatesInterval);
   });
 
   async function fetchNews(searchRequestParameters: SearchRequestParameters) {
@@ -68,6 +77,22 @@
       const newNews = await searchNews(currSearchRequestParameters, nextKey);
       news.addNews(newNews);
     });
+  }
+
+  async function fetchNewsUpdates() {
+    const currSearchRequestParameters = get(searchRequestParameters);
+    const prevKey = get(news).prevKey;
+    if (!prevKey) {
+      return;
+    }
+
+    const newsUpdates = await checkNewsUpdates(currSearchRequestParameters, prevKey);
+    if (newsUpdates.updateAvailable) {
+      notifications.notify('Neue Nachrichten verfügbar. Jetzt laden?', {
+        uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
+        action: fetchNewNews,
+      });
+    }
   }
 
   async function searchWithLoadingStatus(handler: () => void | Promise<void>) {

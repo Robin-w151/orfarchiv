@@ -8,6 +8,10 @@
   function handleFetchReadMoreContentChange({ detail: checked }: { detail: boolean }) {
     settings.setFetchReadMoreContent(checked);
   }
+
+  function handleCheckNewsUpdatesChange({ detail: checked }: { detail: boolean }) {
+    settings.setCheckNewsUpdates(checked);
+  }
 </script>
 
 <Section title="Allgemein">
@@ -18,6 +22,14 @@
         label="Inhalt von weiterführendem Artikel laden"
         checked={$settings.fetchReadMoreContent}
         on:change={handleFetchReadMoreContentChange}
+      />
+    </Item>
+    <Item>
+      <Checkbox
+        id="check-news-updates"
+        label="Erinnern wenn neue Nachrichten vorhanden sind"
+        checked={$settings.checkNewsUpdates}
+        on:change={handleCheckNewsUpdatesChange}
       />
     </Item>
   </SectionList>

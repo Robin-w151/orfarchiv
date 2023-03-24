@@ -6,18 +6,24 @@ import { SETTINGS_STORE_NAME } from '$lib/configs/client';
 import { browser } from '$app/environment';
 
 export interface SettingsStore extends Readable<Settings>, Partial<Settings> {
-  setFetchReadMoreContent: (_: boolean) => void;
-  setSource: (_source: string, _included: boolean) => void;
+  setFetchReadMoreContent: (fetchReadMoreContent: boolean) => void;
+  setCheckNewsUpdates: (checkNewsUpdates: boolean) => void;
+  setSource: (source: string, included: boolean) => void;
 }
 
 const initialState = {
   fetchReadMoreContent: false,
+  checkNewsUpdates: false,
   sources: sources.map((source) => source.key),
 };
 const { subscribe, update } = persisted<Settings>(SETTINGS_STORE_NAME, initialState);
 
 function setFetchReadMoreContent(fetchReadMoreContent: boolean): void {
   update((settings) => ({ ...settings, fetchReadMoreContent }));
+}
+
+function setCheckNewsUpdates(checkNewsUpdates: boolean): void {
+  update((settings) => ({ ...settings, checkNewsUpdates }));
 }
 
 function setSource(source: string, included: boolean): void {
@@ -38,4 +44,4 @@ if (browser) {
   console.log('settings-store-initialized');
 }
 
-export default { subscribe, setFetchReadMoreContent, setSource } as SettingsStore;
+export default { subscribe, setFetchReadMoreContent, setCheckNewsUpdates, setSource } as SettingsStore;

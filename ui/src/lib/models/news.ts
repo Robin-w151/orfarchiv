@@ -15,3 +15,7 @@ export interface NewsBucket {
   date: string;
   stories: Array<Story>;
 }
+
+export interface NewsUpdates {
+  updateAvailable: boolean;
+}

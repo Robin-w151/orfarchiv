@@ -50,7 +50,7 @@
   }
 
   function handleAcceptClick(): void {
-    notification.action?.();
+    notification.options?.action?.();
     close();
   }
 
@@ -62,7 +62,7 @@
 <div class={notificationClass}>
   <span>{notification.text}</span>
   <div class={actionsClass}>
-    {#if notification.action}
+    {#if notification.options?.action}
       <button class={buttonClass} type="button" on:click|stopPropagation={handleAcceptClick}>
         <CheckIcon />
       </button>

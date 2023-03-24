@@ -1,21 +1,30 @@
-import type { Notification } from '$lib/models/notifications';
-import { writable, type Readable } from 'svelte/store';
+import type { Notification, NotificationOptions } from '$lib/models/notifications';
+import { get, writable, type Readable } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 
 export interface NotificationsStore extends Readable<Array<Notification>> {
-  notify: (text: string, action?: () => void) => void;
+  notify: (text: string, options?: NotificationOptions) => void;
   remove: (id: string) => void;
 }
 
 const notifications = createNotificationsStore();
 
 function createNotificationsStore(): NotificationsStore {
-  const { subscribe, update } = writable<Array<Notification>>([]);
+  const notifications = writable<Array<Notification>>([]);
+  const { subscribe, set, update } = notifications;
 
-  function notify(text: string, action?: () => void): void {
+  function notify(text: string, options?: NotificationOptions): void {
     const id = uuid();
-    const notification = { id, text, action };
-    update((notifcations) => [...notifcations, notification]);
+    const currentNotifications = get(notifications);
+    if (
+      options?.uniqueCategory &&
+      currentNotifications.find((notification) => notification.options?.uniqueCategory === options.uniqueCategory)
+    ) {
+      return;
+    }
+
+    const notification = { id, text, options };
+    set([...currentNotifications, notification]);
   }
 
   function remove(id: string): void {

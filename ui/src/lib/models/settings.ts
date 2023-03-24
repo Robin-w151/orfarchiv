@@ -1,5 +1,6 @@
 export interface Settings {
   fetchReadMoreContent: boolean;
+  checkNewsUpdates: boolean;
   sources: Array<string>;
 }
 

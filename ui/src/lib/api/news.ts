@@ -1,9 +1,9 @@
-import type { News } from '$lib/models/news';
+import type { News, NewsUpdates } from '$lib/models/news';
 import type { PageKey } from '$lib/models/pageKey';
 import type { SearchRequestParameters } from '$lib/models/searchRequest';
 import { toSearchParams } from '$lib/utils/searchRequest';
 import type { StoryContent } from '$lib/models/story';
-import { API_NEWS_CONTENT_URL, API_NEWS_SEARCH_URL } from '$lib/configs/client';
+import { API_NEWS_CONTENT_URL, API_NEWS_SEARCH_UPDATES_URL, API_NEWS_SEARCH_URL } from '$lib/configs/client';
 
 let abortController: AbortController | null = null;
 
@@ -21,6 +21,21 @@ export async function searchNews(searchRequestParameters: SearchRequestParameter
 
   if (!response.ok) {
     throw new Error('Failed to search news!');
+  }
+
+  return await response.json();
+}
+
+export async function checkNewsUpdates(
+  searchRequestParameters: SearchRequestParameters,
+  pageKey: PageKey,
+): Promise<NewsUpdates> {
+  const searchRequest = { searchRequestParameters, pageKey };
+  const searchParams = toSearchParams(searchRequest);
+
+  const response = await fetch(API_NEWS_SEARCH_UPDATES_URL(searchParams));
+  if (!response.ok) {
+    throw new Error('Failed to check if news updates are available!');
   }
 
   return await response.json();

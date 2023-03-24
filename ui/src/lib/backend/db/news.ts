@@ -1,5 +1,5 @@
 import type { Collection, Sort, WithId } from 'mongodb';
-import type { News } from '$lib/models/news';
+import type { News, NewsUpdates } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import type { SearchRequest, SearchRequestParameters } from '$lib/models/searchRequest';
 import type { PageKey } from '$lib/models/pageKey';
@@ -34,6 +34,17 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
     prevKey,
     nextKey,
   };
+}
+
+export async function checkNewsUpdatesAvailable(searchRequest: SearchRequest): Promise<NewsUpdates> {
+  logger.info(`Check if news updates with request ${JSON.stringify(searchRequest)} are available`);
+
+  if (searchRequest.pageKey?.type !== 'prev') {
+    return { updateAvailable: false };
+  }
+
+  const news = await searchNews(searchRequest);
+  return { updateAvailable: news.stories.length > 0 };
 }
 
 export async function searchStory(url: string): Promise<Story | null> {
