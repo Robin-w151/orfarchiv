@@ -41,6 +41,5 @@ function createStorySelectStore() {
   }
 
   (store as SelectStoryStore).select = subject.next.bind(subject);
-
   return store as SelectStoryStore;
 }
