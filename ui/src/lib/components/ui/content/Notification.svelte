@@ -63,11 +63,17 @@
   <span>{notification.text}</span>
   <div class={actionsClass}>
     {#if notification.options?.action}
-      <button class={buttonClass} type="button" on:click|stopPropagation={handleAcceptClick}>
+      <button class={buttonClass} type="button" title="Akzeptieren" on:click|stopPropagation={handleAcceptClick}>
         <CheckIcon />
       </button>
     {/if}
-    <button class={buttonClass} type="button" on:click|stopPropagation={handleCloseClick} bind:this={closeButtonRef}>
+    <button
+      class={buttonClass}
+      type="button"
+      title="Schließen"
+      on:click|stopPropagation={handleCloseClick}
+      bind:this={closeButtonRef}
+    >
       <XIcon />
     </button>
   </div>
