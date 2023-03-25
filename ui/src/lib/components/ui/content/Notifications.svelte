@@ -5,7 +5,7 @@
 
   const notificationsClass = `
     flex flex-col items-center ${defaultGap}
-    fixed left-8 bottom-4 right-8
+    fixed left-8 right-8 bottom-4 lg:bottom-8
   `;
 </script>
 
