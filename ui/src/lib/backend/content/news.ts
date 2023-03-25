@@ -213,5 +213,6 @@ function sanitizeContent(html: string): string {
   return DOMPurify.sanitize(html, {
     USE_PROFILES: { html: true },
     ADD_ATTR: ['target'],
+    FORBID_ATTR: ['tabindex'],
   });
 }
