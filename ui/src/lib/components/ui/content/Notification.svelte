@@ -5,6 +5,7 @@
   import { onMount } from 'svelte';
   import CheckIcon from '../icons/outline/CheckIcon.svelte';
   import XIcon from '../icons/outline/XIcon.svelte';
+  import Fade from '../transitions/Fade.svelte';
 
   export let notification: Notification;
 
@@ -59,7 +60,7 @@
   }
 </script>
 
-<div class={notificationClass}>
+<Fade class={notificationClass}>
   <span>{notification.text}</span>
   <div class={actionsClass}>
     {#if notification.options?.action}
@@ -77,4 +78,4 @@
       <XIcon />
     </button>
   </div>
-</div>
+</Fade>
