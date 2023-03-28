@@ -1,6 +1,6 @@
 <script lang="ts">
   import Header from '$lib/components/ui/content/Header.svelte';
-  import Notifications from '$lib/components/ui/content/Notifications.svelte';
+  import Notifications from '$lib/components/ui/controls/Notifications.svelte';
   import EnableAnalytics from '$lib/components/utils/EnableAnalytics.svelte';
   import EnableDarkMode from '$lib/components/utils/EnableDarkMode.svelte';
   import EnableGlobalKeybindings from '$lib/components/utils/EnableGlobalKeybindings.svelte';
