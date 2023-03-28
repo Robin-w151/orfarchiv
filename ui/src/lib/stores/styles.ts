@@ -1,6 +1,7 @@
 import { persisted } from 'svelte-local-storage-store';
 import type { Readable } from 'svelte/store';
 import { STYLES_STORE_NAME } from '$lib/configs/client';
+import { browser } from '$app/environment';
 
 export type ColorScheme = 'light' | 'dark' | 'system';
 
@@ -17,6 +18,10 @@ const { subscribe, update } = persisted<StylesStoreProps>(STYLES_STORE_NAME, ini
 
 function setColorScheme(colorScheme: ColorScheme) {
   update((styles) => ({ ...styles, colorScheme }));
+}
+
+if (browser) {
+  console.log('styles-store-initialized');
 }
 
 export default { subscribe, setColorScheme } as StylesStore;

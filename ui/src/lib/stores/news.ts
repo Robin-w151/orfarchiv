@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import type { Bookmarks } from '$lib/models/bookmarks';
 import type { News, NewsBucket } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
@@ -122,5 +123,9 @@ function combineNewsAndBookmarks([news, bookmarks]: [News, Bookmarks]): News {
 
 const extendedStore = derived([news, bookmarks], combineNewsAndBookmarks);
 const { subscribe } = extendedStore;
+
+if (browser) {
+  console.log('news-store-initialized');
+}
 
 export default { subscribe, setNews, addNews, setIsLoading } as NewsStore;

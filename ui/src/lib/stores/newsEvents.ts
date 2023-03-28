@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import type { Story } from '$lib/models/story';
 import { filter, map, Observable, Subject } from 'rxjs';
 import { createRxjsStore } from './utils';
@@ -42,4 +43,8 @@ function createStorySelectStore() {
 
   (store as SelectStoryStore).select = subject.next.bind(subject);
   return store as SelectStoryStore;
+}
+
+if (browser) {
+  console.log('newsEvent-stores-initialized');
 }

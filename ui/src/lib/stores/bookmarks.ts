@@ -84,6 +84,10 @@ function filterStory(textFilters: Array<RegExp>, story: Story): boolean {
   });
 }
 
+if (browser) {
+  console.log('bookmarks-store-initialized');
+}
+
 export default {
   subscribe,
   add,

@@ -3,6 +3,7 @@ import searchFilter, { type SearchFilterStoreProps } from './searchFilter';
 import settings from './settings';
 import { derived, type Readable } from 'svelte/store';
 import { distinctUntilChanged } from './utils';
+import { browser } from '$app/environment';
 
 export interface SearchRequestParametersStore
   extends Readable<SearchRequestParameters>,
@@ -18,7 +19,13 @@ function searchFilterStorePropsNotEqual(p1?: SearchFilterStoreProps, p2?: Search
 
 const searchFilterChanged = distinctUntilChanged(searchFilter, searchFilterStorePropsNotEqual);
 
-export default derived([searchFilterChanged, settings], ([$searchFilterStoreProps, $settings]) => ({
+const searchRequestParameters = derived([searchFilterChanged, settings], ([$searchFilterStoreProps, $settings]) => ({
   ...$searchFilterStoreProps,
   sources: $settings.sources,
 })) as SearchRequestParametersStore;
+
+if (browser) {
+  console.log('searchRequestParameters-store-initialized');
+}
+
+export default searchRequestParameters;

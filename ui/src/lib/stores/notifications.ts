@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import type { Notification, NotificationOptions } from '$lib/models/notifications';
 import { get, writable, type Readable } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
@@ -32,6 +33,10 @@ function createNotificationsStore(): NotificationsStore {
   }
 
   return { subscribe, notify, remove };
+}
+
+if (browser) {
+  console.log('notifications-store-initialized');
 }
 
 export default notifications as NotificationsStore;
