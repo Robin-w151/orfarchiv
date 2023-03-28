@@ -16,32 +16,76 @@ const initialState = {
   checkNewsUpdates: false,
   sources: sources.map((source) => source.key),
 };
-const { subscribe, update } = persisted<Settings>(SETTINGS_STORE_NAME, initialState);
 
-function setFetchReadMoreContent(fetchReadMoreContent: boolean): void {
-  update((settings) => ({ ...settings, fetchReadMoreContent }));
-}
+sanitizeLocalStorage();
+const settings = createSettingsStore();
 
-function setCheckNewsUpdates(checkNewsUpdates: boolean): void {
-  update((settings) => ({ ...settings, checkNewsUpdates }));
-}
+function sanitizeLocalStorage(): void {
+  if (!browser) {
+    return;
+  }
 
-function setSource(source: string, included: boolean): void {
-  update((settings) => {
-    let newSources = settings.sources ? [...settings.sources] : [];
-    if (included) {
-      if (!newSources.includes(source)) {
-        newSources.push(source);
-      }
-    } else {
-      newSources = newSources.filter((s) => s !== source);
+  function persist(settings: Settings): void {
+    localStorage.setItem(SETTINGS_STORE_NAME, JSON.stringify(settings));
+  }
+
+  const settingsValue = localStorage.getItem(SETTINGS_STORE_NAME);
+  if (!settingsValue) {
+    persist(initialState);
+    return;
+  }
+
+  try {
+    const settings: Partial<Settings> = JSON.parse(settingsValue);
+
+    if (!('fetchReadMoreContent' in settings)) {
+      settings.fetchReadMoreContent = initialState.fetchReadMoreContent;
     }
-    return { ...settings, sources: newSources };
-  });
+
+    if (!('checkNewsUpdates' in settings)) {
+      settings.checkNewsUpdates = initialState.checkNewsUpdates;
+    }
+
+    if (!('sources' in settings) || !Array.isArray(settings.sources)) {
+      settings.sources = initialState.sources;
+    }
+
+    persist(settings as Settings);
+  } catch (error) {
+    persist(initialState);
+  }
+}
+
+function createSettingsStore(): SettingsStore {
+  const { subscribe, update } = persisted<Settings>(SETTINGS_STORE_NAME, initialState);
+
+  function setFetchReadMoreContent(fetchReadMoreContent: boolean): void {
+    update((settings) => ({ ...settings, fetchReadMoreContent }));
+  }
+
+  function setCheckNewsUpdates(checkNewsUpdates: boolean): void {
+    update((settings) => ({ ...settings, checkNewsUpdates }));
+  }
+
+  function setSource(source: string, included: boolean): void {
+    update((settings) => {
+      let newSources = settings.sources ? [...settings.sources] : [];
+      if (included) {
+        if (!newSources.includes(source)) {
+          newSources.push(source);
+        }
+      } else {
+        newSources = newSources.filter((s) => s !== source);
+      }
+      return { ...settings, sources: newSources };
+    });
+  }
+
+  return { subscribe, setFetchReadMoreContent, setCheckNewsUpdates, setSource };
 }
 
 if (browser) {
   console.log('settings-store-initialized');
 }
 
-export default { subscribe, setFetchReadMoreContent, setCheckNewsUpdates, setSource } as SettingsStore;
+export default settings;
