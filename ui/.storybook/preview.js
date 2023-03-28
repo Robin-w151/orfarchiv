@@ -1,4 +1,5 @@
 import '../src/app.scss';
+import './preview.scss';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -10,5 +11,6 @@ export const parameters = {
   },
   darkMode: {
     stylePreview: true,
+    classTarget: 'html',
   },
 };
