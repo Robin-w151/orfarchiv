@@ -10,7 +10,7 @@ export const defaultAlertTextBox = `
   flex flex-col ${defaultGap}
   ${defaultPadding}
   w-full
-  text-lg
+  sm:text-lg
   ${defaultText}
   ${defaultBackground}
 `;
