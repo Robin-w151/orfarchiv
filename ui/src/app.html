@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="ORF News länger als 24h verfügbar" />
-    <meta name="keywords" content="orf news nachrichten archiv" />
-    <meta name="theme-color" content="#e5e7eb" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="ORF News Archiv" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="msapplication-navbutton-color" content="blue" />
-    <meta name="msapplication-TileColor" content="blue" />
-    <meta name="google-site-verification" content="6NToxA5WDNFIGBREvrYLc6LW6TH7DajeLBBaqoVuUBQ" />
-    <link rel="icon" href="/images/icon.svg" />
-    %sveltekit.head%
-    <script>
-      const { colorScheme } = JSON.parse(localStorage.getItem('styles') ?? '{}');
-      const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
-      if (colorScheme === 'dark' || ((!colorScheme || colorScheme === 'system') && prefersDarkColorScheme)) {
-        document.documentElement.classList.add('dark');
-      }
-    </script>
-  </head>
-  <body class="flex justify-center bg-gray-200 dark:bg-gray-700 outline-none">
-    <div style="display: contents">%sveltekit.body%</div>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ORF News länger als 24h verfügbar" />
+  <meta name="keywords" content="orf news nachrichten archiv" />
+  <meta name="theme-color" content="#000" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="ORF News Archiv" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="msapplication-navbutton-color" content="blue" />
+  <meta name="msapplication-TileColor" content="blue" />
+  <meta name="google-site-verification" content="6NToxA5WDNFIGBREvrYLc6LW6TH7DajeLBBaqoVuUBQ" />
+  <link rel="icon" href="/images/icon.svg" />
+  <link rel="apple-touch-icon" href="/images/icon192.png" />
+  <link rel="manifest" href="/manifest.json" />
+  %sveltekit.head%
+  <script>
+    const { colorScheme } = JSON.parse(localStorage.getItem('styles') ?? '{}');
+    const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
+    if (colorScheme === 'dark' || ((!colorScheme || colorScheme === 'system') && prefersDarkColorScheme)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+</head>
+
+<body class="flex justify-center bg-gray-200 dark:bg-gray-700 outline-none">
+  <div style="display: contents">%sveltekit.body%</div>
+</body>
+
 </html>

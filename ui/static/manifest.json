@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json.schemastore.org/web-manifest-combined.json",
+  "name": "ORF Archiv",
+  "short_name": "ORF Archiv",
+  "description": "ORF News länger als 24h verfügbar",
+  "categories": ["news"],
+  "start_url": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#000",
+  "background_color": "#000",
+  "icons": [
+    {
+      "src": "images/icon64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
