@@ -7,6 +7,7 @@ export const defaultText = 'text-gray-800 dark:text-gray-300';
 export const defaultBackground = 'bg-white dark:bg-gray-900';
 
 export const defaultAlertTextBox = `
+  flex flex-col ${defaultGap}
   ${defaultPadding}
   w-full
   text-lg

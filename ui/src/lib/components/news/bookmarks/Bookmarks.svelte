@@ -25,11 +25,11 @@
     <NewsListSkeleton />
   {:else}
     <div class={defaultAlertTextBox}>
-      <p>Aktuell sind keine Lesezeichen vorhanden.</p>
-      <p>
+      <span>Aktuell sind keine Lesezeichen vorhanden.</span>
+      <span>
         Du kannst über die Optionen bei einem Artikel in der Übersicht ein Lesezeichen setzen oder oben den Suchtext
         anpassen.
-      </p>
+      </span>
     </div>
   {/if}
 </Content>
