@@ -4,10 +4,10 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 import cspConfig from './csp-config.js';
 
 const useAdapterNode = process.env.USE_ADAPTER_NODE === 'true';
-const disableCsp = process.env.DISABLE_CSP === 'true';
+const isCspDisabled = process.env.DISABLE_CSP === 'true';
 
 const adapter = useAdapterNode ? adapterNode() : adapterVercel();
-const csp = disableCsp ? undefined : cspConfig;
+const csp = isCspDisabled ? undefined : cspConfig;
 
 const config = {
   preprocess: [
