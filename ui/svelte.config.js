@@ -1,24 +1,13 @@
 import adapterNode from '@sveltejs/adapter-node';
 import adapterVercel from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/kit/vite';
-import cspScriptHashes from './csp-script-hashes.js';
+import cspConfig from './csp-config.js';
 
 const useAdapterNode = process.env.USE_ADAPTER_NODE === 'true';
 const disableCsp = process.env.DISABLE_CSP === 'true';
 
 const adapter = useAdapterNode ? adapterNode() : adapterVercel();
-const csp = disableCsp
-  ? undefined
-  : {
-      directives: {
-        'default-src': ['none'],
-        'connect-src': ['self', 'https://vitals.vercel-analytics.com'],
-        'font-src': ['self', 'data:'],
-        'img-src': ['*', 'data:'],
-        'script-src': ['self', ...cspScriptHashes],
-        'style-src': ['self', 'unsafe-inline'],
-      },
-    };
+const csp = disableCsp ? undefined : cspConfig;
 
 const config = {
   preprocess: [
