@@ -7,7 +7,7 @@ COPY .yarn/ /app/.yarn/
 
 RUN yarn install --immutable
 
-COPY postcss.config.cjs svelte.config.js tailwind.config.cjs tsconfig.json vite.config.js /app/
+COPY csp-config.js csp-script-hashes.js postcss.config.cjs svelte.config.js tailwind.config.cjs tsconfig.json vite.config.js /app/
 COPY scripts/ /app/scripts/
 COPY src/ /app/src/
 COPY static/ /app/static/
