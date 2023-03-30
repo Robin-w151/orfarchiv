@@ -6,6 +6,7 @@
   "categories": ["news"],
   "id": "/",
   "start_url": "/",
+  "lang": "de-AT",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#000",
