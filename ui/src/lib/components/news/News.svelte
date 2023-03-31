@@ -3,7 +3,11 @@
   import NewsFilter from '$lib/components/news/filter/NewsFilter.svelte';
   import Content from '$lib/components/ui/content/Content.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
-  import { NEWS_CHECK_UPDATES_INTERVAL_IN_MS, NOTIFICATION_NEWS_UPDATES_AVAILABLE } from '$lib/configs/client';
+  import {
+    NEWS_CHECK_UPDATES_INITIAL_INTERVAL_IN_MS,
+    NEWS_CHECK_UPDATES_INTERVAL_IN_MS,
+    NOTIFICATION_NEWS_UPDATES_AVAILABLE,
+  } from '$lib/configs/client';
   import type { News } from '$lib/models/news';
   import type { SearchRequestParameters } from '$lib/models/searchRequest';
   import type { Settings } from '$lib/models/settings';
@@ -32,7 +36,7 @@
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
     subscriptions.push(searchRequestParameters.subscribe(fetchNews));
 
-    setCheckUpdatesTimeout();
+    setCheckUpdatesTimeout(true);
   });
 
   onDestroy(() => {
@@ -90,11 +94,11 @@
         uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
         action: async () => {
           await fetchNewNews();
-          setCheckUpdatesTimeout();
+          setCheckUpdatesTimeout(true);
         },
       });
     } else {
-      setCheckUpdatesTimeout();
+      setCheckUpdatesTimeout(false);
     }
   }
 
@@ -113,9 +117,12 @@
     }
   }
 
-  function setCheckUpdatesTimeout() {
+  function setCheckUpdatesTimeout(initial: boolean) {
     if ($settings.checkNewsUpdates) {
-      checkUpdatesTimeout = setTimeout(fetchNewsUpdates, NEWS_CHECK_UPDATES_INTERVAL_IN_MS);
+      checkUpdatesTimeout = setTimeout(
+        fetchNewsUpdates,
+        initial ? NEWS_CHECK_UPDATES_INITIAL_INTERVAL_IN_MS : NEWS_CHECK_UPDATES_INTERVAL_IN_MS,
+      );
     }
   }
 
