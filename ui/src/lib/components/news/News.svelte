@@ -21,7 +21,7 @@
 
   const subscriptions: Array<Subscription> = [];
 
-  let checkUpdatesInterval: any;
+  let checkUpdatesTimeout: any;
 
   $: showNewsList = hasNews($news as News);
   $: anySourcesEnabled = hasAnySourcesEnabled($settings as Settings);
@@ -32,14 +32,12 @@
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
     subscriptions.push(searchRequestParameters.subscribe(fetchNews));
 
-    if ($settings.checkNewsUpdates) {
-      checkUpdatesInterval = setInterval(fetchNewsUpdates, NEWS_CHECK_UPDATES_INTERVAL_IN_MS);
-    }
+    setCheckUpdatesTimeout();
   });
 
   onDestroy(() => {
     unsubscribeAll(subscriptions);
-    clearInterval(checkUpdatesInterval);
+    clearTimeout(checkUpdatesTimeout);
   });
 
   async function fetchNews(searchRequestParameters: SearchRequestParameters) {
@@ -90,8 +88,13 @@
     if (newsUpdates.updateAvailable) {
       notifications.notify('Neue Nachrichten sind verfügbar. Jetzt laden?', {
         uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
-        action: fetchNewNews,
+        action: async () => {
+          await fetchNewNews();
+          setCheckUpdatesTimeout();
+        },
       });
+    } else {
+      setCheckUpdatesTimeout();
     }
   }
 
@@ -107,6 +110,12 @@
       }
       news.setIsLoading(false);
       console.warn(error);
+    }
+  }
+
+  function setCheckUpdatesTimeout() {
+    if ($settings.checkNewsUpdates) {
+      checkUpdatesTimeout = setTimeout(fetchNewsUpdates, NEWS_CHECK_UPDATES_INTERVAL_IN_MS);
     }
   }
 
