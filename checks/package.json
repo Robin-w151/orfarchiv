@@ -3,7 +3,8 @@
   "version": "2.5.0",
   "scripts": {
     "test": "playwright test",
-    "test:debug": "playwright test --debug"
+    "test:debug": "playwright test --debug",
+    "postinstall": "playwright install && playwright install-deps"
   },
   "dependencies": {
     "@playwright/test": "1.28.0",

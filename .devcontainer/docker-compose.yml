@@ -1,0 +1,34 @@
+version: '3.8'
+services:
+  devcontainer:
+    image: 'node-18-playwright'
+    build: '.'
+    environment:
+      - ORFARCHIV_DB_URL=mongodb://orfarchiv-db
+    ports:
+      - '3001:3001'
+    networks:
+      - orfarchiv-dev-network
+    volumes:
+      - ../..:/workspaces:cached
+    command: sleep infinity
+  orfarchiv-db:
+    image: mongo
+    ports:
+      - '27017:27017'
+    networks:
+      - orfarchiv-dev-network
+    volumes:
+      - orfarchiv-dev:/data/db
+  orfarchiv-db-ui:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=orfarchiv-db
+    ports:
+      - '3002:8081'
+    networks:
+      - orfarchiv-dev-network
+networks:
+  orfarchiv-dev-network:
+volumes:
+  orfarchiv-dev:
