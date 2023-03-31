@@ -51,11 +51,12 @@
   }
 
   function handleAcceptClick(): void {
-    notification.options?.action?.();
+    notification.options?.onAccept?.();
     close();
   }
 
   function handleCloseClick(): void {
+    notification.options?.onClose?.();
     close();
   }
 </script>
@@ -63,7 +64,7 @@
 <Fade class={notificationClass}>
   <span>{notification.text}</span>
   <div class={actionsClass}>
-    {#if notification.options?.action}
+    {#if notification.options?.onAccept}
       <button class={buttonClass} type="button" title="Akzeptieren" on:click|stopPropagation={handleAcceptClick}>
         <CheckIcon />
       </button>

@@ -6,5 +6,6 @@ export interface Notification {
 
 export interface NotificationOptions {
   uniqueCategory?: symbol;
-  action?: () => void;
+  onAccept?: () => void;
+  onClose?: () => void;
 }

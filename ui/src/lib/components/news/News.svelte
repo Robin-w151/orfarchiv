@@ -92,8 +92,11 @@
     if (newsUpdates.updateAvailable) {
       notifications.notify('Neue Nachrichten sind verfügbar. Jetzt laden?', {
         uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
-        action: async () => {
+        onAccept: async () => {
           await fetchNewNews();
+          setCheckUpdatesTimeout(true);
+        },
+        onClose: () => {
           setCheckUpdatesTimeout(true);
         },
       });
