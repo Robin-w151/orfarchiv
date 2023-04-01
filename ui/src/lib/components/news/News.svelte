@@ -67,6 +67,8 @@
       const newNews = await searchNews(currSearchRequestParameters, prevKey);
       news.addNews(newNews, false);
     });
+
+    setCheckUpdatesTimeout(true);
   }
 
   async function fetchMoreNews() {
@@ -92,9 +94,8 @@
     if (newsUpdates.updateAvailable) {
       notifications.notify('Neue Nachrichten sind verfügbar. Jetzt laden?', {
         uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
-        onAccept: async () => {
-          await fetchNewNews();
-          setCheckUpdatesTimeout(true);
+        onAccept: () => {
+          fetchNewNews();
         },
         onClose: () => {
           setCheckUpdatesTimeout(true);
@@ -121,12 +122,16 @@
   }
 
   function setCheckUpdatesTimeout(initial: boolean) {
-    if ($settings.checkNewsUpdates) {
-      checkUpdatesTimeout = setTimeout(
-        fetchNewsUpdates,
-        initial ? NEWS_CHECK_UPDATES_INITIAL_INTERVAL_IN_MS : NEWS_CHECK_UPDATES_INTERVAL_IN_MS,
-      );
+    if (!$settings.checkNewsUpdates) {
+      return;
     }
+
+    clearTimeout(checkUpdatesTimeout);
+
+    checkUpdatesTimeout = setTimeout(
+      fetchNewsUpdates,
+      initial ? NEWS_CHECK_UPDATES_INITIAL_INTERVAL_IN_MS : NEWS_CHECK_UPDATES_INTERVAL_IN_MS,
+    );
   }
 
   function hasNews(news?: News): boolean {
