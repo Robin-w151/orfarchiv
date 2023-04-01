@@ -11,6 +11,7 @@ module.exports = {
       },
     ],
   },
+  ignorePatterns: ['**/*.mongodb'],
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   env: {
     commonjs: true,
