@@ -1,5 +1,7 @@
-import type { Subscription as RxSubscription } from 'rxjs';
-import type { Unsubscriber } from 'svelte/store';
+import type { Observable, Subscription as RxSubscription } from 'rxjs';
+import type { Readable, Unsubscriber } from 'svelte/store';
+
+export type Subscribable<T> = { subscribe: Readable<T>['subscribe'] | Observable<T>['subscribe'] };
 
 export type Subscription = Unsubscriber | RxSubscription;
 

@@ -1,9 +1,17 @@
 import { browser } from '$app/environment';
 import type { Story } from '$lib/models/story';
-import { filter, map, Observable, Subject } from 'rxjs';
+import type { Subscribable } from '$lib/utils/subscriptions';
+import { Observable, Subject, filter, map } from 'rxjs';
 import { createRxjsStore } from './utils';
 
-export type SelectStoryStore = Observable<string | undefined> & { select: (select: SelectStory) => void };
+export interface EventsStore extends Subscribable<void> {
+  onUpdate: Subscribable<void>['subscribe'];
+  notify: () => void;
+}
+
+export interface SelectStoryStore extends Observable<string | undefined> {
+  select: (select: SelectStory) => void;
+}
 
 export interface SelectStory {
   stories: Array<Story>;
@@ -19,12 +27,12 @@ export const startSearch = createEventStore();
 
 export const selectStory = createStorySelectStore();
 
-function createEventStore() {
+function createEventStore(): EventsStore {
   const { subscribe, set } = createRxjsStore<void>();
   return { subscribe, onUpdate: subscribe, notify: set };
 }
 
-function createStorySelectStore() {
+function createStorySelectStore(): SelectStoryStore {
   const subject = new Subject<SelectStory>();
   const store = subject.pipe(
     map(selectStory),
