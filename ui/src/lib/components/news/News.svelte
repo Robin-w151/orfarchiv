@@ -45,7 +45,7 @@
   });
 
   async function fetchNews(searchRequestParameters: SearchRequestParameters) {
-    await searchWithLoadingStatus(async () => {
+    await news.taskWithLoading(async () => {
       const foundNews = await searchNews(searchRequestParameters);
       if (!foundNews?.prevKey) {
         news.setNews(foundNews);
@@ -58,7 +58,7 @@
   }
 
   async function fetchNewNews() {
-    await searchWithLoadingStatus(async () => {
+    await news.taskWithLoading(async () => {
       const currSearchRequestParameters = get(searchRequestParameters);
       const prevKey = get(news).prevKey;
       if (!prevKey) {
@@ -72,7 +72,7 @@
   }
 
   async function fetchMoreNews() {
-    await searchWithLoadingStatus(async () => {
+    await news.taskWithLoading(async () => {
       const currSearchRequestParameters = get(searchRequestParameters);
       const nextKey = get(news).nextKey;
       if (nextKey === null) {
@@ -103,21 +103,6 @@
       });
     } else {
       setCheckUpdatesTimeout(false);
-    }
-  }
-
-  async function searchWithLoadingStatus(handler: () => void | Promise<void>) {
-    try {
-      news.setIsLoading(true);
-      await handler();
-      news.setIsLoading(false);
-    } catch (error) {
-      const { name } = error as Error;
-      if (name === 'AbortError') {
-        return;
-      }
-      news.setIsLoading(false);
-      console.warn(error);
     }
   }
 

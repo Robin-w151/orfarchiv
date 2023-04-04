@@ -10,6 +10,7 @@ export interface NewsStore extends Readable<News>, Partial<News> {
   setNews: (news: News, newNews?: News) => void;
   addNews: (news: News, append?: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;
+  taskWithLoading: (handler: () => void | Promise<void>) => Promise<void>;
 }
 
 const initialState = { stories: [], isLoading: true };
@@ -50,6 +51,21 @@ function addNews(news: News, append = true): void {
 
 function setIsLoading(isLoading: boolean): void {
   update((oldNews) => ({ ...oldNews, isLoading }));
+}
+
+async function taskWithLoading(handler: () => void | Promise<void>): Promise<void> {
+  try {
+    setIsLoading(true);
+    await handler();
+    setIsLoading(false);
+  } catch (error) {
+    const { name } = error as Error;
+    if (name === 'AbortError') {
+      return;
+    }
+    setIsLoading(false);
+    console.warn(error);
+  }
 }
 
 function createStoryBuckets(stories: Array<Story>): Array<NewsBucket> | undefined {
@@ -128,4 +144,4 @@ if (browser) {
   console.log('news-store-initialized');
 }
 
-export default { subscribe, setNews, addNews, setIsLoading } as NewsStore;
+export default { subscribe, setNews, addNews, setIsLoading, taskWithLoading } as NewsStore;
