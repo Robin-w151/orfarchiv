@@ -19,8 +19,9 @@ const routeConfig = generateRouteConfig();
 routeConfig.forEach(({ capture, handler }) => registerRoute(capture, handler));
 
 function generatePrecacheConfig(): Array<string | PrecacheEntry> {
-  const versionedAsset = (url: string) => ({ url, revision: version });
-  return [...build, ...files.map(versionedAsset), ...prerendered.map(versionedAsset)];
+  const withRevision = (url: string) => ({ url, revision: version });
+  const withoutRevision = (url: string) => ({ url, revision: null });
+  return [...build.map(withoutRevision), ...files.map(withRevision), ...prerendered.map(withRevision)];
 }
 
 function generateRouteConfig(): Array<RouteConfig> {
