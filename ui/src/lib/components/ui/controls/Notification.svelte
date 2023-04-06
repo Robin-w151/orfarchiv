@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Notification } from '$lib/models/notifications';
   import notifications from '$lib/stores/notifications';
-  import { defaultGap, defaultPadding } from '$lib/utils/styles';
+  import { defaultGap, defaultPadding, defaultText } from '$lib/utils/styles';
   import { onMount } from 'svelte';
   import CheckIcon from '../icons/outline/CheckIcon.svelte';
   import XIcon from '../icons/outline/XIcon.svelte';
@@ -13,6 +13,7 @@
     flex justify-between items-center ${defaultGap}
     ${defaultPadding}
     w-full max-w-[768px]
+    text-gray-900 dark:text-gray-200
     bg-gray-100 dark:bg-gray-800
     focus:outline-none focus:ring-2 ring-blue-700 dark:ring-blue-500
     rounded-lg shadow-md dark:shadow-2xl
