@@ -4,6 +4,7 @@
   import EnableAnalytics from '$lib/components/utils/EnableAnalytics.svelte';
   import EnableDarkMode from '$lib/components/utils/EnableDarkMode.svelte';
   import EnableGlobalKeybindings from '$lib/components/utils/EnableGlobalKeybindings.svelte';
+  import EnableNetworkNotifications from '$lib/components/utils/EnableNetworkNotifications.svelte';
   import { defaultScreenSize } from '$lib/utils/styles';
   import '../app.scss';
 
@@ -18,6 +19,7 @@
 <EnableDarkMode />
 <EnableAnalytics />
 <EnableGlobalKeybindings />
+<EnableNetworkNotifications />
 
 <div class={wrapperClass}>
   <Notifications />
