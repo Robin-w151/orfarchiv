@@ -18,6 +18,14 @@
       "runtimeArgs": ["build"]
     },
     {
+      "name": "UI Preview",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ui",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["preview"]
+    },
+    {
       "name": "UI Generate CSP Script Hashes",
       "type": "node",
       "request": "launch",

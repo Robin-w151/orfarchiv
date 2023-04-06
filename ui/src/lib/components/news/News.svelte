@@ -90,20 +90,22 @@
       return;
     }
 
-    const newsUpdates = await checkNewsUpdates(currSearchRequestParameters, prevKey);
-    if (newsUpdates.updateAvailable) {
-      notifications.notify('Neue Nachrichten sind verfügbar. Jetzt laden?', {
-        uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
-        onAccept: () => {
-          fetchNewNews();
-        },
-        onClose: () => {
-          setCheckUpdatesTimeout(true);
-        },
-      });
-    } else {
-      setCheckUpdatesTimeout(false);
-    }
+    try {
+      const newsUpdates = await checkNewsUpdates(currSearchRequestParameters, prevKey);
+      if (newsUpdates.updateAvailable) {
+        notifications.notify('Neue Nachrichten sind verfügbar. Jetzt laden?', {
+          uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
+          onAccept: () => {
+            fetchNewNews();
+          },
+          onClose: () => {
+            setCheckUpdatesTimeout(true);
+          },
+        });
+      } else {
+        setCheckUpdatesTimeout(false);
+      }
+    } catch (_) {}
   }
 
   function setCheckUpdatesTimeout(initial: boolean) {

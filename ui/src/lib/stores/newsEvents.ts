@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import type { Story } from '$lib/models/story';
 import type { Subscribable } from '$lib/utils/subscriptions';
-import { Observable, Subject, filter, map } from 'rxjs';
+import { type Observable, Subject, filter, map } from 'rxjs';
 import { createRxjsStore } from './utils';
 
 export interface EventsStore extends Subscribable<void> {
