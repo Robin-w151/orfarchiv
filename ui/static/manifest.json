@@ -46,5 +46,27 @@
       "name": "Einstellungen",
       "url": "/settings"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/mobile_news_list.png",
+      "sizes": "518x1120",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/mobile_news_content_open.png",
+      "sizes": "518x1120",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/mobile_bookmarks_content_open.png",
+      "sizes": "518x1120",
+      "type": "image/png"
+    },
+    {
+      "src": "/screenshots/mobile_settings.png",
+      "sizes": "518x1120",
+      "type": "image/png"
+    }
   ]
 }
