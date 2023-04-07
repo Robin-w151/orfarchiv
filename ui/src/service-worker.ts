@@ -5,12 +5,14 @@ import type { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-co
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, type PrecacheEntry } from 'workbox-precaching';
 import { type Route, registerRoute } from 'workbox-routing';
-import { NetworkFirst } from 'workbox-strategies';
+import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
 
 interface RouteConfig {
   capture: string | RegExp | RouteMatchCallback | Route;
   handler: RouteHandler;
 }
+
+const NETWORK_TIMEOUT_IN_SEC = 5;
 
 const precacheConfig = generatePrecacheConfig();
 precacheAndRoute(precacheConfig);
@@ -27,23 +29,32 @@ function generatePrecacheConfig(): Array<string | PrecacheEntry> {
 function generateRouteConfig(): Array<RouteConfig> {
   return [
     {
-      capture: /\/api\/news\/search[^/]*/,
+      capture: /\/api\/news\/search(\?.*)?$/,
       handler: new NetworkFirst({
         cacheName: 'api-news-search',
         plugins: [new ExpirationPlugin({ maxEntries: 64 }), fallbackResponsePlugin({ stories: [] })],
+        networkTimeoutSeconds: NETWORK_TIMEOUT_IN_SEC,
       }),
     },
     {
-      capture: /\/api\/news\/content/,
+      capture: /\/api\/news\/search\/updates(\?.*)?$/,
+      handler: new NetworkOnly({
+        plugins: [fallbackResponsePlugin({ updateAvailable: false })],
+        networkTimeoutSeconds: NETWORK_TIMEOUT_IN_SEC,
+      }),
+    },
+    {
+      capture: /\/api\/news\/content(\?.*)?$/,
       handler: new NetworkFirst({
         cacheName: 'api-news-content',
         plugins: [new ExpirationPlugin({ maxEntries: 256 })],
+        networkTimeoutSeconds: NETWORK_TIMEOUT_IN_SEC,
       }),
     },
   ];
 }
 
-function fallbackResponsePlugin(data: any): WorkboxPlugin {
+function fallbackResponsePlugin<T>(data: T): WorkboxPlugin {
   return {
     handlerDidError: async () => json(data),
   };
