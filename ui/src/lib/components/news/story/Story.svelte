@@ -15,6 +15,16 @@
   const subscriptions: Array<Subscription> = [];
   const dispatch = createEventDispatcher();
 
+  const headerClass = `
+    flex flex-row items-center gap-3 top-[47px] sm:top-[53px]
+    ${defaultPadding}
+    text-gray-800 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500
+    border-gray-200 dark:border-gray-700
+    cursor-pointer
+    transition
+  `;
+  const contentClass = `${defaultPadding} mt-[2px] cursor-auto`;
+
   let itemRef: Item;
   let headerRef: StoryHeader;
   let showContentInitial = false;
@@ -22,16 +32,9 @@
 
   $: handleContentViewCollapse(showContent);
 
-  $: headerClass = clsx([
-    'flex flex-row items-center gap-3 top-12 sm:top-[54px]',
-    defaultPadding,
-    'text-gray-800 dark:text-gray-300 hover:text-blue-700 dark:hover:text-blue-500',
-    'border-gray-200 dark:border-gray-700',
-    showContent && 'sticky z-10 border-solid border-b-2 bg-white dark:bg-gray-900',
-    'cursor-pointer',
-    'transition',
+  $: headerClassSticky = clsx([
+    showContent && 'sticky z-10 mb-[-2px] border-solid border-b-2 bg-white dark:bg-gray-900',
   ]);
-  $: contentClass = clsx([defaultPadding, 'cursor-auto']);
 
   onMount(() => {
     subscriptions.push(selectStory.subscribe(handleStorySelect));
@@ -99,7 +102,7 @@
 
 <Item bind:this={itemRef} noGap noPadding>
   <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div class="header {headerClass}" on:click={handleHeaderWrapperClick}>
+  <div class="header {headerClass} {headerClassSticky}" on:click={handleHeaderWrapperClick}>
     <StoryHeader {story} on:click={handleHeaderClick} on:keydown={handleHeaderKeydown} bind:this={headerRef} />
   </div>
   {#if showContent}
@@ -108,15 +111,3 @@
     </Fade>
   {/if}
 </Item>
-
-<style lang="scss">
-  .header {
-    &.sticky {
-      margin-bottom: -2px;
-    }
-  }
-
-  .content {
-    margin-top: 2px;
-  }
-</style>
