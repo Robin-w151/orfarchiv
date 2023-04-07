@@ -4,6 +4,7 @@
   import Item from '$lib/components/ui/content/Item.svelte';
   import Checkbox from '$lib/components/ui/controls/Checkbox.svelte';
   import settings from '$lib/stores/settings';
+  import { requestSystemNotificationPermission } from '$lib/stores/notifications';
 
   function handleFetchReadMoreContentChange({ detail: checked }: { detail: boolean }) {
     settings.setFetchReadMoreContent(checked);
@@ -11,6 +12,9 @@
 
   function handleCheckNewsUpdatesChange({ detail: checked }: { detail: boolean }) {
     settings.setCheckNewsUpdates(checked);
+    if (checked) {
+      requestSystemNotificationPermission();
+    }
   }
 </script>
 

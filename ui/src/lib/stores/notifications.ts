@@ -1,17 +1,28 @@
 import { browser } from '$app/environment';
-import type { Notification, NotificationOptions } from '$lib/models/notifications';
+import type { Notification as INotification, NotificationOptions } from '$lib/models/notifications';
 import { get, writable, type Readable } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 
-export interface NotificationsStore extends Readable<Array<Notification>> {
+export interface NotificationsStore extends Readable<Array<INotification>> {
   notify: (text: string, options?: NotificationOptions) => void;
   remove: (id: string) => void;
+}
+
+export async function requestSystemNotificationPermission(): Promise<void> {
+  if (!browser || !('Notification' in window)) {
+    return;
+  }
+
+  if (Notification.permission === 'default') {
+    console.log('request-system-notification-permission');
+    await Notification.requestPermission();
+  }
 }
 
 const notifications = createNotificationsStore();
 
 function createNotificationsStore(): NotificationsStore {
-  const notifications = writable<Array<Notification>>([]);
+  const notifications = writable<Array<INotification>>([]);
   const { subscribe, set, update } = notifications;
 
   function notify(text: string, options?: NotificationOptions): void {
