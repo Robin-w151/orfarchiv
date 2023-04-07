@@ -36,5 +36,15 @@
       "type": "image/png",
       "purpose": "any"
     }
+  ],
+  "shortcuts": [
+    {
+      "name": "Lesezeichen",
+      "url": "/bookmarks"
+    },
+    {
+      "name": "Einstellungen",
+      "url": "/settings"
+    }
   ]
 }
