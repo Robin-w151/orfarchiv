@@ -1,10 +1,12 @@
-export interface Notification {
+export interface OANotification {
   id: string;
+  title: string;
   text: string;
-  options?: NotificationOptions;
+  options?: OANotificationOptions;
+  handle?: Notification;
 }
 
-export interface NotificationOptions {
+export interface OANotificationOptions {
   uniqueCategory?: symbol;
   onAccept?: () => void;
   onClose?: () => void;

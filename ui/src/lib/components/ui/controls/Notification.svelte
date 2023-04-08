@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type { Notification } from '$lib/models/notifications';
+  import type { OANotification } from '$lib/models/notifications';
   import notifications from '$lib/stores/notifications';
-  import { defaultGap, defaultPadding, defaultText } from '$lib/utils/styles';
+  import { defaultGap, defaultPadding } from '$lib/utils/styles';
   import { onMount } from 'svelte';
   import CheckIcon from '../icons/outline/CheckIcon.svelte';
   import XIcon from '../icons/outline/XIcon.svelte';
   import Fade from '../transitions/Fade.svelte';
 
-  export let notification: Notification;
+  export let notification: OANotification;
 
   const notificationClass = `
     flex justify-between items-center ${defaultGap}
@@ -41,29 +41,23 @@
     closeButtonRef?.focus();
   }
 
-  function close(): void {
-    notifications.remove(notification.id);
-  }
-
-  function focusLatestNotification(notifications: Array<Notification>): void {
+  function focusLatestNotification(notifications: Array<OANotification>): void {
     if (notification.id === notifications[notifications.length - 1]?.id) {
       focus();
     }
   }
 
   function handleAcceptClick(): void {
-    notification.options?.onAccept?.();
-    close();
+    notifications.accept(notification.id);
   }
 
   function handleCloseClick(): void {
-    notification.options?.onClose?.();
-    close();
+    notifications.remove(notification.id);
   }
 </script>
 
 <Fade class={notificationClass}>
-  <span>{notification.text}</span>
+  <span>{notification.title}. {notification.text}</span>
   <div class={actionsClass}>
     {#if notification.options?.onAccept}
       <button class={buttonClass} type="button" title="Akzeptieren" on:click|stopPropagation={handleAcceptClick}>

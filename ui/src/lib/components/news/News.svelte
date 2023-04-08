@@ -93,7 +93,7 @@
     try {
       const newsUpdates = await checkNewsUpdates(currSearchRequestParameters, prevKey);
       if (newsUpdates.updateAvailable) {
-        notifications.notify('Neue Nachrichten sind verfügbar. Jetzt laden?', {
+        notifications.notify('Neue Nachrichten verfügbar', 'Wollen Sie jetzt neu laden?', {
           uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
           onAccept: () => {
             fetchNewNews();

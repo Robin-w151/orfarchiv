@@ -4,7 +4,7 @@
   import Item from '$lib/components/ui/content/Item.svelte';
   import Checkbox from '$lib/components/ui/controls/Checkbox.svelte';
   import settings from '$lib/stores/settings';
-  import { requestSystemNotificationPermission } from '$lib/stores/notifications';
+  import { requestSystemNotificationPermission } from '$lib/utils/notifications';
 
   function handleFetchReadMoreContentChange({ detail: checked }: { detail: boolean }) {
     settings.setFetchReadMoreContent(checked);

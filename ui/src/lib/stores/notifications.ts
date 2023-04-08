@@ -1,31 +1,22 @@
 import { browser } from '$app/environment';
-import type { Notification as INotification, NotificationOptions } from '$lib/models/notifications';
+import type { OANotification, OANotificationOptions } from '$lib/models/notifications';
+import { createSystemNotification, removeSystemNotification } from '$lib/utils/notifications';
 import { get, writable, type Readable } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 
-export interface NotificationsStore extends Readable<Array<INotification>> {
-  notify: (text: string, options?: NotificationOptions) => void;
+export interface NotificationsStore extends Readable<Array<OANotification>> {
+  notify: (title: string, text: string, options?: OANotificationOptions) => void;
+  accept: (id: string) => void;
   remove: (id: string) => void;
-}
-
-export async function requestSystemNotificationPermission(): Promise<void> {
-  if (!browser || !('Notification' in window)) {
-    return;
-  }
-
-  if (Notification.permission === 'default') {
-    console.log('request-system-notification-permission');
-    await Notification.requestPermission();
-  }
 }
 
 const notifications = createNotificationsStore();
 
 function createNotificationsStore(): NotificationsStore {
-  const notifications = writable<Array<INotification>>([]);
+  const notifications = writable<Array<OANotification>>([]);
   const { subscribe, set, update } = notifications;
 
-  function notify(text: string, options?: NotificationOptions): void {
+  function notify(title: string, text: string, options?: OANotificationOptions): void {
     const id = uuid();
     const currentNotifications = get(notifications);
     if (
@@ -35,15 +26,40 @@ function createNotificationsStore(): NotificationsStore {
       return;
     }
 
-    const notification = { id, text, options };
+    const handle = createSystemNotification(title, text, accept.bind(null, id), remove.bind(null, id));
+    const notification = { id, title, text, options, handle };
     set([...currentNotifications, notification]);
   }
 
-  function remove(id: string): void {
-    update((notifications) => notifications.filter((notification) => notification.id !== id));
+  function accept(id: string): void {
+    update((notifications) =>
+      notifications.filter((notification) => {
+        if (notification.id === id) {
+          notification.options?.onAccept?.();
+          removeSystemNotification(notification.handle);
+          return false;
+        } else {
+          return true;
+        }
+      }),
+    );
   }
 
-  return { subscribe, notify, remove };
+  function remove(id: string): void {
+    update((notifications) =>
+      notifications.filter((notification) => {
+        if (notification.id === id) {
+          notification.options?.onClose?.();
+          removeSystemNotification(notification.handle);
+          return false;
+        } else {
+          return true;
+        }
+      }),
+    );
+  }
+
+  return { subscribe, notify, accept, remove };
 }
 
 if (browser) {
