@@ -3,6 +3,7 @@ services:
   devcontainer:
     image: 'node-18-custom'
     build: '.'
+    command: sleep infinity
     environment:
       - ORFARCHIV_DB_URL=mongodb://orfarchiv-db
     ports:
@@ -13,7 +14,6 @@ services:
       - orfarchiv-dev-network
     volumes:
       - ../..:/workspaces:cached
-    command: sleep infinity
   orfarchiv-db:
     image: mongo
     ports:
@@ -22,6 +22,7 @@ services:
       - orfarchiv-dev-network
     volumes:
       - orfarchiv-dev:/data/db
+    restart: unless-stopped
   orfarchiv-db-ui:
     image: mongo-express
     environment:
@@ -30,6 +31,7 @@ services:
       - '3002:8081'
     networks:
       - orfarchiv-dev-network
+    restart: unless-stopped
 networks:
   orfarchiv-dev-network:
 volumes:
