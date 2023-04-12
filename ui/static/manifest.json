@@ -28,11 +28,25 @@
   "shortcuts": [
     {
       "name": "Lesezeichen",
-      "url": "/bookmarks"
+      "url": "/bookmarks",
+      "icons": [
+        {
+          "src": "images/shortcuts/bookmarks.svg",
+          "sizes": "any",
+          "type": "image/svg"
+        }
+      ]
     },
     {
       "name": "Einstellungen",
-      "url": "/settings"
+      "url": "/settings",
+      "icons": [
+        {
+          "src": "images/shortcuts/settings.svg",
+          "sizes": "any",
+          "type": "image/svg"
+        }
+      ]
     }
   ],
   "screenshots": [
