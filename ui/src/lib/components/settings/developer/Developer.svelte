@@ -1,9 +1,32 @@
 <script lang="ts">
+  import { browser } from '$app/environment';
   import Item from '$lib/components/ui/content/Item.svelte';
   import Section from '$lib/components/ui/content/Section.svelte';
   import SectionList from '$lib/components/ui/content/SectionList.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
   import { BOOKMARKS_STORE_NAME, SETTINGS_STORE_NAME } from '$lib/configs/client';
+  import { humanReadableMemorySize } from '$lib/utils/formatting';
+  import { onMount } from 'svelte';
+
+  let estimatedStorageUsage = 0;
+  $: estimatedStorageUsageString = humanReadableMemorySize(estimatedStorageUsage);
+
+  onMount(async () => {
+    estimatedStorageUsage = await getEstimatedUsage();
+  });
+
+  function isEstimateSupported(): boolean {
+    return browser && 'storage' in navigator && navigator.storage && 'estimate' in navigator.storage;
+  }
+
+  async function getEstimatedUsage(): Promise<number> {
+    if (!isEstimateSupported()) {
+      return 0;
+    }
+
+    const estimate = await navigator.storage.estimate();
+    return estimate.usage ?? 0;
+  }
 
   function handleResetIndexedDbButtonClick() {
     indexedDB.deleteDatabase(BOOKMARKS_STORE_NAME);
@@ -18,6 +41,10 @@
 
 <Section title="Entwickler">
   <SectionList>
+    <Item noColumn>
+      <span>Speichernutzung</span>
+      <span>{estimatedStorageUsageString}</span>
+    </Item>
     <Item noColumn>
       <span>IndexedDB</span>
       <Button size="small" on:click={handleResetIndexedDbButtonClick}>Zurücksetzen</Button>
