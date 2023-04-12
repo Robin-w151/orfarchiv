@@ -7,10 +7,10 @@ const prefixMappings = [
 
 export function humanReadableMemorySize(memory: number): string {
   let prefix = '';
-  let roundedMemory = memory;
+  let roundedMemory = memory.toString();
   for (const mapping of prefixMappings) {
     if (memory > mapping.base) {
-      roundedMemory = Math.round(memory / mapping.base);
+      roundedMemory = (memory / mapping.base).toFixed(2);
       prefix = mapping.prefix;
       break;
     }
