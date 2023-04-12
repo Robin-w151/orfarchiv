@@ -1,6 +1,6 @@
 import type { StoryContent } from '$lib/models/story';
 import { writable, type Readable } from 'svelte/store';
-import LRUCache from 'lru-cache';
+import { LRUCache } from 'lru-cache';
 import { browser } from '$app/environment';
 
 export interface ContentStoreState {
