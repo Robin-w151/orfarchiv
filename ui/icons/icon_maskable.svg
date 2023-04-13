@@ -6,7 +6,7 @@
    stroke="currentColor"
    version="1.1"
    id="svg4"
-   sodipodi:docname="icon_maskable.svg"
+   sodipodi:docname="icon.svg"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    inkscape:export-filename="/home/robin/Downloads/icon512.png"
    inkscape:export-xdpi="1445.65"
@@ -45,11 +45,11 @@
   </defs>
   <sodipodi:namedview
      id="namedview6"
-     pagecolor="#ffffff"
+     pagecolor="#e5e7eb"
      bordercolor="#666666"
      borderopacity="1.0"
      inkscape:pageshadow="2"
-     inkscape:pageopacity="0"
+     inkscape:pageopacity="1"
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:zoom="26.833333"
@@ -63,12 +63,6 @@
      inkscape:current-layer="svg4"
      width="25px"
      scale-x="1" />
-  <circle
-     style="fill:#e5e7eb;fill-opacity:1;stroke:none;stroke-width:0.0980825;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     id="path847"
-     cx="17"
-     cy="17"
-     r="13.950959" />
   <path
      stroke-linecap="round"
      stroke-linejoin="round"
