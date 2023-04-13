@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   fill="none"
+   viewBox="0 0 28 28"
+   stroke-width="1.5"
+   stroke="currentColor"
+   version="1.1"
+   id="svg6"
+   sodipodi:docname="settings.svg"
+   width="28"
+   height="28"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
+   inkscape:export-filename="/home/robin/Documents/orfarchiv/ui/icons/shortcuts/settings96.png"
+   inkscape:export-xdpi="330.47"
+   inkscape:export-ydpi="330.47"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs10">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1841">
+      <stop
+         style="stop-color:#c026d3;stop-opacity:1"
+         offset="0"
+         id="stop1837" />
+      <stop
+         style="stop-color:#1d4ed8;stop-opacity:1"
+         offset="1"
+         id="stop1839" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1841"
+       id="linearGradient1477"
+       x1="4.2234597"
+       y1="11.312672"
+       x2="23.726631"
+       y2="17.54705"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1841"
+       id="linearGradient1485"
+       x1="10.251"
+       y1="14"
+       x2="17.750999"
+       y2="14"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview8"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     showgrid="false"
+     inkscape:zoom="26.833333"
+     inkscape:cx="11.981366"
+     inkscape:cy="11.981366"
+     inkscape:window-width="3840"
+     inkscape:window-height="2065"
+     inkscape:window-x="0"
+     inkscape:window-y="58"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg6" />
+  <circle
+     style="fill:#e5e7eb;stroke-width:0.112754;stroke:none"
+     id="path849"
+     cx="14"
+     cy="14"
+     r="13.943623" />
+  <path
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     d="M 12.344,5.94 C 12.434,5.398 12.904,5 13.454,5 h 1.093 c 0.55,0 1.02,0.398 1.11,0.94 l 0.149,0.894 c 0.07,0.424 0.384,0.764 0.78,0.93 0.398,0.164 0.855,0.142 1.205,-0.108 l 0.737,-0.527 a 1.125,1.125 0 0 1 1.45,0.12 l 0.773,0.774 c 0.39,0.389 0.44,1.002 0.12,1.45 l -0.527,0.737 c -0.25,0.35 -0.272,0.806 -0.107,1.204 0.165,0.397 0.505,0.71 0.93,0.78 l 0.893,0.15 c 0.543,0.09 0.94,0.56 0.94,1.109 v 1.094 c 0,0.55 -0.397,1.02 -0.94,1.11 l -0.893,0.149 c -0.425,0.07 -0.765,0.383 -0.93,0.78 -0.165,0.398 -0.143,0.854 0.107,1.204 l 0.527,0.738 c 0.32,0.447 0.269,1.06 -0.12,1.45 l -0.774,0.773 a 1.125,1.125 0 0 1 -1.449,0.12 L 17.79,20.344 c -0.35,-0.25 -0.806,-0.272 -1.203,-0.107 -0.397,0.165 -0.71,0.505 -0.781,0.929 l -0.149,0.894 c -0.09,0.542 -0.56,0.94 -1.11,0.94 h -1.094 c -0.55,0 -1.019,-0.398 -1.11,-0.94 l -0.148,-0.894 c -0.071,-0.424 -0.384,-0.764 -0.781,-0.93 -0.398,-0.164 -0.854,-0.142 -1.204,0.108 l -0.738,0.527 c -0.447,0.32 -1.06,0.269 -1.45,-0.12 L 7.249,19.977 a 1.125,1.125 0 0 1 -0.12,-1.45 L 7.656,17.79 c 0.25,-0.35 0.273,-0.806 0.108,-1.204 -0.165,-0.397 -0.505,-0.71 -0.93,-0.78 L 5.94,15.656 C 5.398,15.566 5,15.096 5,14.547 v -1.094 c 0,-0.55 0.398,-1.02 0.94,-1.11 l 0.894,-0.149 c 0.424,-0.07 0.765,-0.383 0.93,-0.78 C 7.929,11.016 7.907,10.56 7.657,10.21 L 7.13,9.472 A 1.125,1.125 0 0 1 7.25,8.022 L 8.023,7.249 a 1.125,1.125 0 0 1 1.45,-0.12 l 0.737,0.527 c 0.35,0.25 0.807,0.272 1.204,0.107 0.397,-0.165 0.71,-0.505 0.78,-0.929 z"
+     id="path2"
+     style="stroke:url(#linearGradient1477);stroke-opacity:1" />
+  <path
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     d="m 17.001,14 a 3,3 0 1 1 -6,0 3,3 0 0 1 6,0 z"
+     id="path4"
+     style="stroke:url(#linearGradient1485)" />
+</svg>

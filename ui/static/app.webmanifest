@@ -43,9 +43,10 @@
       "url": "/bookmarks",
       "icons": [
         {
-          "src": "images/shortcuts/bookmarks.svg",
-          "sizes": "any",
-          "type": "image/svg"
+          "src": "images/shortcuts/bookmarks96.png",
+          "sizes": "96x96",
+          "type": "image/png",
+          "purpose": "any"
         }
       ]
     },
@@ -54,9 +55,10 @@
       "url": "/settings",
       "icons": [
         {
-          "src": "images/shortcuts/settings.svg",
-          "sizes": "any",
-          "type": "image/svg"
+          "src": "images/shortcuts/settings96.png",
+          "sizes": "96x96",
+          "type": "image/png",
+          "purpose": "any"
         }
       ]
     }

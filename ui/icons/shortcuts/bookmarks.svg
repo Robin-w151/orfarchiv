@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
    fill="none"
-   viewBox="0 0 34 34"
+   viewBox="0 0 28 28"
    stroke-width="1.5"
    stroke="currentColor"
    version="1.1"
    id="svg4"
-   sodipodi:docname="icon_maskable.svg"
+   sodipodi:docname="bookmarks.svg"
+   width="28"
+   height="28"
    inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
-   inkscape:export-filename="/home/robin/Downloads/icon512.png"
-   inkscape:export-xdpi="1445.65"
-   inkscape:export-ydpi="1445.65"
-   width="34"
-   height="34"
+   inkscape:export-filename="/home/robin/Documents/orfarchiv/ui/icons/shortcuts/bookmarks96.png"
+   inkscape:export-xdpi="329.14285"
+   inkscape:export-ydpi="329.14285"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -22,26 +22,25 @@
      id="defs8">
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient3412">
+       id="linearGradient951">
       <stop
          style="stop-color:#c026d3;stop-opacity:1"
          offset="0"
-         id="stop3408" />
+         id="stop947" />
       <stop
          style="stop-color:#1d4ed8;stop-opacity:1"
          offset="1"
-         id="stop3410" />
+         id="stop949" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient3412"
-       id="linearGradient3414"
-       x1="2.280134"
-       y1="9.8798199"
-       x2="21.737967"
-       y2="15.521115"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(5,5)" />
+       xlink:href="#linearGradient951"
+       id="linearGradient953"
+       x1="5.1244617"
+       y1="12.107389"
+       x2="23.041639"
+       y2="17.492714"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="namedview6"
@@ -53,26 +52,24 @@
      inkscape:pagecheckerboard="0"
      showgrid="false"
      inkscape:zoom="26.833333"
-     inkscape:cx="16.416149"
-     inkscape:cy="14.962733"
+     inkscape:cx="11.981366"
+     inkscape:cy="11.981366"
      inkscape:window-width="3840"
      inkscape:window-height="2065"
      inkscape:window-x="0"
      inkscape:window-y="58"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg4"
-     width="25px"
-     scale-x="1" />
+     inkscape:current-layer="svg4" />
   <circle
-     style="fill:#e5e7eb;fill-opacity:1;stroke:none;stroke-width:0.0980825;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#e5e7eb;stroke-width:0.129534;stroke:none"
      id="path847"
-     cx="17"
-     cy="17"
-     r="13.950959" />
+     cx="14"
+     cy="14.000001"
+     r="13.935233" />
   <path
      stroke-linecap="round"
      stroke-linejoin="round"
-     d="m 17,12.5 h 1.5 m -1.5,3 h 1.5 m -7.5,3 h 7.5 m -7.5,3 h 7.5 m 3,-9 h 3.375 C 25.496,12.5 26,13.004 26,13.625 V 23 a 2.25,2.25 0 0 1 -2.25,2.25 M 21.5,12.5 V 23 a 2.25,2.25 0 0 0 2.25,2.25 M 21.5,12.5 V 9.875 C 21.5,9.254 20.996,8.75 20.375,8.75 H 9.125 C 8.504,8.75 8,9.254 8,9.875 V 23 a 2.25,2.25 0 0 0 2.25,2.25 h 13.5 M 11,12.5 h 3 v 3 h -3 z"
+     d="M 18.5,5.75 V 18.5 L 14,16.25 9.5,18.5 V 5.75 m 9,0 H 20 A 2.25,2.25 0 0 1 22.25,8 V 20 A 2.25,2.25 0 0 1 20,22.25 H 8 A 2.25,2.25 0 0 1 5.75,20 V 8 A 2.25,2.25 0 0 1 8,5.75 h 1.5 m 9,0 h -9"
      id="path2"
-     style="stroke:url(#linearGradient3414)" />
+     style="stroke:url(#linearGradient953)" />
 </svg>
