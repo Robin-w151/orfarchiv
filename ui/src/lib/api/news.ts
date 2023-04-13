@@ -8,6 +8,11 @@ import { API_NEWS_CONTENT_URL, API_NEWS_SEARCH_UPDATES_URL, API_NEWS_SEARCH_URL 
 let abortController: AbortController | null = null;
 
 export async function searchNews(searchRequestParameters: SearchRequestParameters, pageKey?: PageKey): Promise<News> {
+  console.group('request-search-news');
+  console.log('search-request-parameters', searchRequestParameters);
+  console.log('page-key', pageKey);
+  console.groupEnd();
+
   const searchRequest = { searchRequestParameters, pageKey };
   const searchParams = toSearchParams(searchRequest);
 
@@ -30,6 +35,11 @@ export async function checkNewsUpdates(
   searchRequestParameters: SearchRequestParameters,
   pageKey: PageKey,
 ): Promise<NewsUpdates> {
+  console.group('request-check-news-updates');
+  console.log('search-request-parameters', searchRequestParameters);
+  console.log('page-key', pageKey);
+  console.groupEnd();
+
   const searchRequest = { searchRequestParameters, pageKey };
   const searchParams = toSearchParams(searchRequest);
 
@@ -42,6 +52,11 @@ export async function checkNewsUpdates(
 }
 
 export async function fetchContent(url: string, fetchReadMoreContent = false): Promise<StoryContent> {
+  console.group('request-content');
+  console.log('url', url);
+  console.log('fetch-read-more-content', fetchReadMoreContent);
+  console.groupEnd();
+
   const searchParams = new URLSearchParams();
   searchParams.append('url', url);
   if (fetchReadMoreContent) {
