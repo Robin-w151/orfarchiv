@@ -9,6 +9,7 @@
   import type { Story } from '$lib/models/story';
   import { selectStory } from '$lib/stores/newsEvents';
   import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
+  import notifications from '$lib/stores/notifications';
 
   export let story: Story;
 
@@ -49,6 +50,7 @@
   }
 
   function toggleShowContent(): void {
+    notifications.notify('Open content', `Showing content for story with id '${story.id}'.`);
     showContent = !showContent;
   }
 
