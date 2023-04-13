@@ -7,7 +7,10 @@
 
   function warnIfOffline(online: boolean) {
     if (!online) {
-      notifications.notify('Verbindung mit dem Internet wurde unterbrochen! Überprüfen Sie die Netzwerkeinstellungen.');
+      notifications.notify(
+        'Verbindung unterbrochen',
+        'Bitte überprüfen Sie Ihre Netzwerkeinstellungen und stellen Sie sicher, dass Sie mit dem Internet verbunden sind.',
+      );
     }
   }
 </script>
