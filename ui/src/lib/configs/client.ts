@@ -26,7 +26,3 @@ export const NEWS_CHECK_UPDATES_INTERVAL_IN_MS = 300_000;
 
 // Story
 export const STORY_CONTENT_FETCH_MAX_RETRIES = 5;
-export const STORY_CONTENT_READ_MORE_REGEXPS = [/mehr\s+dazu\s+in/i, /lesen\s+sie\s+mehr/i];
-
-// URLs
-export const URL_ORF_STORY_REGEXP = /^https:\/\/.*orf\.at\/(.+\/)?stories\/\d+/i;

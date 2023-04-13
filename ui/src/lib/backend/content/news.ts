@@ -6,7 +6,7 @@ import { isOrfStoryUrl } from '$lib/backend/utils/urls';
 import type { StoryContent, StorySource } from '$lib/models/story';
 import { searchStory } from '$lib/backend/db/news';
 import { logger } from '$lib/configs/server';
-import { STORY_CONTENT_READ_MORE_REGEXPS } from '$lib/configs/client';
+import { STORY_CONTENT_READ_MORE_REGEXPS } from '$lib/configs/server';
 
 export async function fetchStoryContent(url: string, fetchReadMoreContent = false): Promise<StoryContent> {
   logger.info(`Fetch content with url '${url}' and fetchReadMoreContent '${fetchReadMoreContent}'`);
