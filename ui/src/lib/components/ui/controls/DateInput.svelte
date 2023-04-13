@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte';
 
   export let id: string;
-  export let value = '';
+  export let value: string | null | undefined = '';
 
   const dispatch = createEventDispatcher();
 

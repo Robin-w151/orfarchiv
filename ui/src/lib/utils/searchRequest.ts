@@ -67,8 +67,9 @@ function getFrom(searchParams: URLSearchParams): DateTime | undefined {
 }
 
 function setFrom(searchParams: URLSearchParams, from?: DateTime): void {
-  if (from) {
-    searchParams.append('from', from.toISO());
+  const fromString = from?.toISO();
+  if (fromString) {
+    searchParams.append('from', fromString);
   }
 }
 
@@ -77,8 +78,9 @@ function getTo(searchParams: URLSearchParams): DateTime | undefined {
 }
 
 function setTo(searchParams: URLSearchParams, to?: DateTime): void {
-  if (to) {
-    searchParams.append('to', to.toISO());
+  const toString = to?.toISO();
+  if (toString) {
+    searchParams.append('to', toString);
   }
 }
 

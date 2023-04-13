@@ -76,7 +76,7 @@ function createStoryBuckets(stories: Array<Story>): Array<NewsBucket> | undefine
   const buckets: Map<string, NewsBucket> = new Map();
   function addToBucket(buckets: Map<string, NewsBucket>, story: Story): void {
     const timestamp = DateTime.fromISO(story.timestamp);
-    const date = timestamp.toISODate();
+    const date = timestamp.toISODate() ?? '1970-01-01T00:00:00Z';
     if (buckets.has(date)) {
       buckets.get(date)?.stories.push(story);
     } else {
