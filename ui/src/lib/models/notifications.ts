@@ -3,7 +3,7 @@ export interface OANotification {
   title: string;
   text: string;
   options?: OANotificationOptions;
-  handle?: Notification;
+  system?: boolean;
 }
 
 export interface OANotificationOptions {

@@ -1,5 +1,7 @@
 import { browser } from '$app/environment';
 
+let notificationsWorker: Worker | null = null;
+
 export async function requestSystemNotificationPermission(): Promise<void> {
   if (!isNotificationAvailable()) {
     return;
@@ -11,22 +13,19 @@ export async function requestSystemNotificationPermission(): Promise<void> {
   }
 }
 
-export function createSystemNotification(
-  title: string,
-  text: string,
-  onClick: () => void,
-  onClose: () => void,
-): Notification | undefined {
+export function createSystemNotification(id: string, title: string, text: string): boolean {
   if (isNotificationEnabled()) {
-    const notification = new Notification(title, { body: text, icon: '/images/icon192.png' });
-    notification.onclick = onClick;
-    notification.onclose = onClose;
-    return notification;
+    postMessage({ id, action: 'create', payload: { title, text } });
+    return true;
   }
+
+  return false;
 }
 
-export function removeSystemNotification(notification?: Notification): void {
-  notification?.close();
+export function removeSystemNotification(id?: string): void {
+  if (id) {
+    postMessage({ id, action: 'remove' });
+  }
 }
 
 function isNotificationAvailable(): boolean {
@@ -35,4 +34,13 @@ function isNotificationAvailable(): boolean {
 
 function isNotificationEnabled(): boolean {
   return isNotificationAvailable() && Notification.permission === 'granted';
+}
+
+async function postMessage(data: any): Promise<void> {
+  if (!notificationsWorker) {
+    const Worker = await import('$lib/workers/notifications?worker');
+    notificationsWorker = new Worker.default();
+  }
+
+  notificationsWorker.postMessage(data);
 }

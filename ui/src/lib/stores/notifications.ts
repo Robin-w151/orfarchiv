@@ -5,7 +5,7 @@ import { get, writable, type Readable } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 
 export interface NotificationsStore extends Readable<Array<OANotification>> {
-  notify: (title: string, text: string, options?: OANotificationOptions) => void;
+  notify: (title: string, text: string, options?: OANotificationOptions) => Promise<void>;
   accept: (id: string) => void;
   remove: (id: string) => void;
 }
@@ -16,7 +16,11 @@ function createNotificationsStore(): NotificationsStore {
   const notifications = writable<Array<OANotification>>([]);
   const { subscribe, set, update } = notifications;
 
-  function notify(title: string, text: string, options?: OANotificationOptions): void {
+  if (browser) {
+    document.addEventListener('notificationclick', (event) => console.log(event));
+  }
+
+  async function notify(title: string, text: string, options?: OANotificationOptions): Promise<void> {
     const id = uuid();
     const currentNotifications = get(notifications);
     if (
@@ -26,8 +30,8 @@ function createNotificationsStore(): NotificationsStore {
       return;
     }
 
-    const handle = createSystemNotification(title, text, accept.bind(null, id), remove.bind(null, id));
-    const notification = { id, title, text, options, handle };
+    const system = createSystemNotification(id, title, text);
+    const notification = { id, title, text, options, system };
     set([...currentNotifications, notification]);
   }
 
@@ -36,7 +40,7 @@ function createNotificationsStore(): NotificationsStore {
       notifications.filter((notification) => {
         if (notification.id === id) {
           notification.options?.onAccept?.();
-          removeSystemNotification(notification.handle);
+          removeSystemNotification(notification.id);
           return false;
         } else {
           return true;
@@ -50,7 +54,7 @@ function createNotificationsStore(): NotificationsStore {
       notifications.filter((notification) => {
         if (notification.id === id) {
           notification.options?.onClose?.();
-          removeSystemNotification(notification.handle);
+          removeSystemNotification(notification.id);
           return false;
         } else {
           return true;
