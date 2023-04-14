@@ -8,12 +8,29 @@
   import { humanReadableMemorySize } from '$lib/utils/formatting';
   import { onMount } from 'svelte';
 
+  type NotificationSupport = 'unsupported' | 'available' | 'disabled' | 'enabled';
+
   let estimatedStorageUsage = 0;
   $: estimatedStorageUsageString = humanReadableMemorySize(estimatedStorageUsage);
 
   onMount(async () => {
     estimatedStorageUsage = await getEstimatedUsage();
   });
+
+  function getNotificationSupport(): NotificationSupport {
+    if (!browser || !('Notification' in window)) {
+      return 'unsupported';
+    }
+
+    switch (Notification.permission) {
+      case 'default':
+        return 'available';
+      case 'denied':
+        return 'disabled';
+      case 'granted':
+        return 'enabled';
+    }
+  }
 
   function isEstimateSupported(): boolean {
     return browser && 'storage' in navigator && navigator.storage && 'estimate' in navigator.storage;
@@ -41,6 +58,10 @@
 
 <Section title="Entwickler">
   <SectionList>
+    <Item noColumn>
+      <span>Notifications</span>
+      <span>{getNotificationSupport()}</span>
+    </Item>
     <Item noColumn>
       <span>Speichernutzung</span>
       <span>{estimatedStorageUsageString}</span>
