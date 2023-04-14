@@ -50,8 +50,13 @@
   }
 
   function toggleShowContent(): void {
-    notifications.notify('Open content', `Showing content for story with id '${story.id}'.`);
     showContent = !showContent;
+    if (showContent) {
+      notifications.notify('Open content', `Showing content for story with id '${story.id}'.`, {
+        onAccept: () => console.log('accept'),
+        onClose: () => console.log('close'),
+      });
+    }
   }
 
   function handleStoryContentCollapse(): void {

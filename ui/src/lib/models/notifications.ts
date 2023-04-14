@@ -6,8 +6,11 @@ export interface OANotification {
   system?: boolean;
 }
 
-export interface OANotificationOptions {
-  uniqueCategory?: symbol;
+export interface OANotificationHandlers {
   onAccept?: () => void;
   onClose?: () => void;
+}
+
+export interface OANotificationOptions extends OANotificationHandlers {
+  uniqueCategory?: symbol;
 }

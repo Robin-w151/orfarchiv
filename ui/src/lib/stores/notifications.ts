@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import type { OANotification, OANotificationOptions } from '$lib/models/notifications';
-import { createSystemNotification, removeSystemNotification } from '$lib/utils/notifications';
+import { createSystemNotification } from '$lib/utils/notifications';
 import { get, writable, type Readable } from 'svelte/store';
 import { v4 as uuid } from 'uuid';
 
@@ -16,10 +16,6 @@ function createNotificationsStore(): NotificationsStore {
   const notifications = writable<Array<OANotification>>([]);
   const { subscribe, set, update } = notifications;
 
-  if (browser) {
-    document.addEventListener('notificationclick', (event) => console.log(event));
-  }
-
   async function notify(title: string, text: string, options?: OANotificationOptions): Promise<void> {
     const id = uuid();
     const currentNotifications = get(notifications);
@@ -30,9 +26,12 @@ function createNotificationsStore(): NotificationsStore {
       return;
     }
 
-    const system = createSystemNotification(id, title, text);
+    const system = createSystemNotification(id, title, text, options);
     const notification = { id, title, text, options, system };
-    set([...currentNotifications, notification]);
+
+    if (!system) {
+      set([...currentNotifications, notification]);
+    }
   }
 
   function accept(id: string): void {
@@ -40,7 +39,6 @@ function createNotificationsStore(): NotificationsStore {
       notifications.filter((notification) => {
         if (notification.id === id) {
           notification.options?.onAccept?.();
-          removeSystemNotification(notification.id);
           return false;
         } else {
           return true;
@@ -54,7 +52,6 @@ function createNotificationsStore(): NotificationsStore {
       notifications.filter((notification) => {
         if (notification.id === id) {
           notification.options?.onClose?.();
-          removeSystemNotification(notification.id);
           return false;
         } else {
           return true;
