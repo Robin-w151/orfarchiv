@@ -35,8 +35,6 @@
     subscriptions.push(refreshNews.onUpdate(fetchNewNews));
     subscriptions.push(loadMoreNews.onUpdate(fetchMoreNews));
     subscriptions.push(searchRequestParameters.subscribe(fetchNews));
-
-    setCheckUpdatesTimeout(true);
   });
 
   onDestroy(() => {
@@ -55,6 +53,8 @@
       const newNews = await searchNews(searchRequestParameters, foundNews?.prevKey);
       news.setNews(foundNews, newNews);
     });
+
+    setCheckUpdatesTimeout(true);
   }
 
   async function fetchNewNews() {
