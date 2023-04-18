@@ -1,4 +1,4 @@
-/// <reference types="@sveltejs/kit" lib="webworker" />
+/// <reference lib="webworker" />
 import { build, files, prerendered, version } from '$service-worker';
 import { json } from '@sveltejs/kit';
 import type { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-core';
@@ -12,7 +12,7 @@ interface RouteConfig {
   handler: RouteHandler;
 }
 
-declare const self: any;
+declare const self: ServiceWorkerGlobalScope;
 
 const NETWORK_TIMEOUT_IN_SEC = 5;
 
@@ -22,8 +22,8 @@ precacheAndRoute(precacheConfig);
 const routeConfig = generateRouteConfig();
 routeConfig.forEach(({ capture, handler }) => registerRoute(capture, handler));
 
-self.addEventListener('notificationclick', handleNotificationClick);
-self.addEventListener('notificationclose', handleNotificationClose);
+self.onnotificationclick = handleNotificationClick;
+self.onnotificationclose = handleNotificationClose;
 
 function generatePrecacheConfig(): Array<string | PrecacheEntry> {
   const withRevision = (url: string) => ({ url, revision: version });
@@ -69,13 +69,13 @@ function getClients(): Promise<any> {
   return self.clients.matchAll();
 }
 
-async function handleNotificationClick(event) {
+async function handleNotificationClick(event: NotificationEvent) {
   const id = event.notification.data.id;
   const clients = await getClients();
   clients?.forEach((client) => client.postMessage({ type: 'NOTIFICATION_CLICK', payload: { id } }));
 }
 
-async function handleNotificationClose(event) {
+async function handleNotificationClose(event: NotificationEvent) {
   const id = event.notification.data.id;
   const clients = await getClients();
   clients?.forEach((client) => client.postMessage({ type: 'NOTIFICATION_CLOSE', payload: { id } }));
