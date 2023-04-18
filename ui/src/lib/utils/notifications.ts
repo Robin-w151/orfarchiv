@@ -24,7 +24,12 @@ export async function createSystemNotification(
 ): Promise<boolean> {
   if (isNotificationEnabled()) {
     const serviceWorker = await navigator.serviceWorker.ready;
-    serviceWorker.showNotification(title, { data: { id }, body: text, icon: '/images/icon_any192.png' });
+    serviceWorker.showNotification(title, {
+      data: { id },
+      body: text,
+      icon: '/images/icon_any192.png',
+      requireInteraction: true,
+    });
     notificationsHandlers.set(id, handlers);
     return true;
   }
