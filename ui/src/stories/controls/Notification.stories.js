@@ -2,7 +2,8 @@ import NotificationView from './NotificationView.svelte';
 
 const args = {
   id: 'notification1',
-  text: 'This is a sample notification.',
+  title: 'Guten Tag',
+  text: 'Wussten Sie schon, dass... .',
   options: {
     actions: () => console.log('Clicked notification accept.'),
   },
@@ -21,9 +22,17 @@ export default {
       },
       control: 'text',
     },
+    title: {
+      type: 'string',
+      description: 'Title of the notification.',
+      table: {
+        defaultValue: { summary: args.title },
+      },
+      control: 'text',
+    },
     text: {
       type: 'string',
-      description: 'ID of notification. Used for removing the correct notification.',
+      description: 'Main text of the notification.',
       table: {
         defaultValue: { summary: args.text },
       },
