@@ -2,7 +2,8 @@ import { browser } from '$app/environment';
 import type { OANotificationHandlers } from '$lib/models/notifications';
 
 const notificationsHandlers: Map<string, OANotificationHandlers | undefined> = new Map();
-let notificationsWorker: Worker | null = null;
+const serviceWorker = getServiceWorker();
+serviceWorker?.addEventListener('message', handleServiceWorkerMessage);
 
 export async function requestSystemNotificationPermission(): Promise<void> {
   if (!isNotificationAvailable()) {
@@ -15,25 +16,20 @@ export async function requestSystemNotificationPermission(): Promise<void> {
   }
 }
 
-export function createSystemNotification(
+export async function createSystemNotification(
   id: string,
   title: string,
   text: string,
   handlers?: OANotificationHandlers,
-): boolean {
+): Promise<boolean> {
   if (isNotificationEnabled()) {
+    const serviceWorker = await navigator.serviceWorker.ready;
+    serviceWorker.showNotification(title, { data: { id }, body: text, icon: '/images/icon_any192.png' });
     notificationsHandlers.set(id, handlers);
-    postMessage({ id, action: 'create', payload: { title, text } });
     return true;
   }
 
   return false;
-}
-
-export function removeSystemNotification(id?: string): void {
-  if (id) {
-    postMessage({ id, action: 'remove' });
-  }
 }
 
 function isNotificationAvailable(): boolean {
@@ -44,28 +40,25 @@ function isNotificationEnabled(): boolean {
   return isNotificationAvailable() && Notification.permission === 'granted';
 }
 
-async function postMessage(data: any): Promise<void> {
-  if (!notificationsWorker) {
-    const Worker = await import('$lib/workers/notifications?worker');
-    notificationsWorker = new Worker.default();
-    notificationsWorker.onmessage = ({ data }: MessageEvent) => {
-      const { id, action } = data;
-      const handlers = notificationsHandlers.get(id);
-      if (handlers) {
-        switch (action) {
-          case 'click': {
-            handlers.onAccept?.();
-            break;
-          }
-          case 'close': {
-            handlers.onClose?.();
-            break;
-          }
-        }
-        notificationsHandlers.delete(id);
-      }
-    };
+function getServiceWorker(): ServiceWorkerContainer | undefined {
+  if (browser) {
+    return navigator.serviceWorker;
   }
+}
 
-  notificationsWorker.postMessage(data);
+function handleServiceWorkerMessage({ data }: MessageEvent) {
+  const { type, payload } = data;
+  const { id } = payload;
+  switch (type) {
+    case 'NOTIFICATION_CLICK': {
+      notificationsHandlers.get(id)?.onAccept?.();
+      notificationsHandlers.delete(id);
+      break;
+    }
+    case 'NOTIFICATION_CLOSE': {
+      notificationsHandlers.get(id)?.onClose?.();
+      notificationsHandlers.delete(id);
+      break;
+    }
+  }
 }

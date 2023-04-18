@@ -26,7 +26,7 @@ function createNotificationsStore(): NotificationsStore {
       return;
     }
 
-    const system = createSystemNotification(id, title, text, options);
+    const system = await createSystemNotification(id, title, text, options);
     const notification = { id, title, text, options, system };
 
     if (!system) {

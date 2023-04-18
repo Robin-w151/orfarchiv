@@ -12,6 +12,8 @@ interface RouteConfig {
   handler: RouteHandler;
 }
 
+declare const self: any;
+
 const NETWORK_TIMEOUT_IN_SEC = 5;
 
 const precacheConfig = generatePrecacheConfig();
@@ -19,6 +21,9 @@ precacheAndRoute(precacheConfig);
 
 const routeConfig = generateRouteConfig();
 routeConfig.forEach(({ capture, handler }) => registerRoute(capture, handler));
+
+self.addEventListener('notificationclick', handleNotificationClick);
+self.addEventListener('notificationclose', handleNotificationClose);
 
 function generatePrecacheConfig(): Array<string | PrecacheEntry> {
   const withRevision = (url: string) => ({ url, revision: version });
@@ -58,4 +63,20 @@ function fallbackResponsePlugin<T>(data: T): WorkboxPlugin {
   return {
     handlerDidError: async () => json(data),
   };
+}
+
+function getClients(): Promise<any> {
+  return self.clients.matchAll();
+}
+
+async function handleNotificationClick(event) {
+  const id = event.notification.data.id;
+  const clients = await getClients();
+  clients?.forEach((client) => client.postMessage({ type: 'NOTIFICATION_CLICK', payload: { id } }));
+}
+
+async function handleNotificationClose(event) {
+  const id = event.notification.data.id;
+  const clients = await getClients();
+  clients?.forEach((client) => client.postMessage({ type: 'NOTIFICATION_CLOSE', payload: { id } }));
 }
