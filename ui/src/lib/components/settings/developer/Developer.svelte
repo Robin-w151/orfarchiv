@@ -8,8 +8,6 @@
   import { humanReadableMemorySize } from '$lib/utils/formatting';
   import { onMount } from 'svelte';
 
-  type NotificationSupport = 'unsupported' | 'available' | 'disabled' | 'enabled';
-
   let estimatedStorageUsage = 0;
   $: estimatedStorageUsageString = humanReadableMemorySize(estimatedStorageUsage);
 
@@ -17,18 +15,18 @@
     estimatedStorageUsage = await getEstimatedUsage();
   });
 
-  function getNotificationSupport(): NotificationSupport {
+  function getNotificationSupport(): string {
     if (!browser || !('Notification' in window)) {
-      return 'unsupported';
+      return 'Nicht verfügbar';
     }
 
     switch (Notification.permission) {
       case 'default':
-        return 'available';
+        return 'Verfügbar';
       case 'denied':
-        return 'disabled';
+        return 'Deaktiviert';
       case 'granted':
-        return 'enabled';
+        return 'Aktiviert';
     }
   }
 
