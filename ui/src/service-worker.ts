@@ -6,6 +6,7 @@ import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, type PrecacheEntry } from 'workbox-precaching';
 import { type Route, registerRoute } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
+import { NOTIFICATION_ACCEPT, NOTIFICATION_CLOSE } from './lib/configs/client';
 
 interface RouteConfig {
   capture: string | RegExp | RouteMatchCallback | Route;
@@ -71,12 +72,13 @@ function getClients(): Promise<any> {
 
 async function handleNotificationClick(event: NotificationEvent) {
   const id = event.notification.data.id;
+  const type = event.action || NOTIFICATION_ACCEPT;
   const clients = await getClients();
-  clients?.forEach((client) => client.postMessage({ type: 'NOTIFICATION_CLICK', payload: { id } }));
+  clients?.forEach((client) => client.postMessage({ type, payload: { id } }));
 }
 
 async function handleNotificationClose(event: NotificationEvent) {
   const id = event.notification.data.id;
   const clients = await getClients();
-  clients?.forEach((client) => client.postMessage({ type: 'NOTIFICATION_CLOSE', payload: { id } }));
+  clients?.forEach((client) => client.postMessage({ type: NOTIFICATION_CLOSE, payload: { id } }));
 }

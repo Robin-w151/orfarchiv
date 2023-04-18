@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { NOTIFICATION_ACCEPT, NOTIFICATION_CLOSE } from '$lib/configs/client';
 import type { OANotificationHandlers } from '$lib/models/notifications';
 
 const notificationsHandlers: Map<string, OANotificationHandlers | undefined> = new Map();
@@ -24,12 +25,28 @@ export async function createSystemNotification(
 ): Promise<boolean> {
   if (isNotificationEnabled()) {
     const serviceWorker = await navigator.serviceWorker.ready;
-    serviceWorker.showNotification(title, {
+    const options: NotificationOptions = {
       data: { id },
       body: text,
       icon: '/images/icon_any192.png',
       requireInteraction: true,
-    });
+    };
+
+    options.actions = [];
+    if (handlers?.onAccept) {
+      options.actions.push({
+        action: NOTIFICATION_ACCEPT,
+        title: 'Bestätigen',
+      });
+    }
+    if (handlers?.onClose) {
+      options.actions.push({
+        action: NOTIFICATION_CLOSE,
+        title: 'Schließen',
+      });
+    }
+
+    serviceWorker.showNotification(title, options);
     notificationsHandlers.set(id, handlers);
     return true;
   }
@@ -55,12 +72,12 @@ function handleServiceWorkerMessage({ data }: MessageEvent) {
   const { type, payload } = data;
   const { id } = payload;
   switch (type) {
-    case 'NOTIFICATION_CLICK': {
+    case NOTIFICATION_ACCEPT: {
       notificationsHandlers.get(id)?.onAccept?.();
       notificationsHandlers.delete(id);
       break;
     }
-    case 'NOTIFICATION_CLOSE': {
+    case NOTIFICATION_CLOSE: {
       notificationsHandlers.get(id)?.onClose?.();
       notificationsHandlers.delete(id);
       break;

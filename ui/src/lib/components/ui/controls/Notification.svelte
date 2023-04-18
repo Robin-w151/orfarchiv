@@ -60,7 +60,7 @@
   <span>{notification.title}. {notification.text}</span>
   <div class={actionsClass}>
     {#if notification.options?.onAccept}
-      <button class={buttonClass} type="button" title="Akzeptieren" on:click|stopPropagation={handleAcceptClick}>
+      <button class={buttonClass} type="button" title="Bestätigen" on:click|stopPropagation={handleAcceptClick}>
         <CheckIcon />
       </button>
     {/if}

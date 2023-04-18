@@ -20,6 +20,10 @@ export const DATETIME_FORMAT = 'dd.MM.yyyy, HH:mm';
 // Notifications
 export const NOTIFICATION_NEWS_UPDATES_AVAILABLE = Symbol('news-update-available');
 
+// Notification Actions
+export const NOTIFICATION_ACCEPT = 'NOTIFICATION_ACCEPT';
+export const NOTIFICATION_CLOSE = 'NOTIFICATION_CLOSE';
+
 // News
 export const NEWS_CHECK_UPDATES_INITIAL_INTERVAL_IN_MS = 1800_000;
 export const NEWS_CHECK_UPDATES_INTERVAL_IN_MS = 300_000;
