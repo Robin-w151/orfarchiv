@@ -68,18 +68,23 @@ function getServiceWorker(): ServiceWorkerContainer | undefined {
   }
 }
 
+function getAndRemoveHandlers(id: string): OANotificationHandlers | undefined {
+  const handlers = notificationsHandlers.get(id);
+  notificationsHandlers.delete(id);
+  return handlers;
+}
+
 function handleServiceWorkerMessage({ data }: MessageEvent) {
   const { type, payload } = data;
   const { id } = payload;
+  const handlers = getAndRemoveHandlers(id);
   switch (type) {
     case NOTIFICATION_ACCEPT: {
-      notificationsHandlers.get(id)?.onAccept?.();
-      notificationsHandlers.delete(id);
+      handlers?.onAccept?.();
       break;
     }
     case NOTIFICATION_CLOSE: {
-      notificationsHandlers.get(id)?.onClose?.();
-      notificationsHandlers.delete(id);
+      handlers?.onClose?.();
       break;
     }
   }
