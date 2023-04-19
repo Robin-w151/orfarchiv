@@ -6,7 +6,7 @@ import { json } from '@sveltejs/kit';
 import type { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, type PrecacheEntry } from 'workbox-precaching';
-import { type Route, registerRoute } from 'workbox-routing';
+import { registerRoute, type Route } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
 import { NOTIFICATION_ACCEPT, NOTIFICATION_CLOSE } from './lib/configs/client';
 
@@ -17,17 +17,24 @@ interface RouteConfig {
 
 declare const self: ServiceWorkerGlobalScope;
 
-const NETWORK_TIMEOUT_IN_SEC = 5;
-
-const precacheConfig = generatePrecacheConfig();
-precacheAndRoute(precacheConfig);
-
-const routeConfig = generateRouteConfig();
-routeConfig.forEach(({ capture, handler }) => registerRoute(capture, handler));
-
+const networkTimeoutSeconds = 5;
 const notificationsClicked: Set<string> = new Set();
-self.onnotificationclick = handleNotificationClick;
-self.onnotificationclose = handleNotificationClose;
+
+setupCacheAndRoutes();
+setupNotifications();
+
+function setupCacheAndRoutes() {
+  const precacheConfig = generatePrecacheConfig();
+  precacheAndRoute(precacheConfig);
+
+  const routeConfig = generateRouteConfig();
+  routeConfig.forEach(({ capture, handler }) => registerRoute(capture, handler));
+}
+
+function setupNotifications() {
+  self.onnotificationclick = handleNotificationClick;
+  self.onnotificationclose = handleNotificationClose;
+}
 
 function generatePrecacheConfig(): Array<string | PrecacheEntry> {
   const withRevision = (url: string) => ({ url, revision: version });
@@ -42,14 +49,14 @@ function generateRouteConfig(): Array<RouteConfig> {
       handler: new NetworkFirst({
         cacheName: 'api-news-search',
         plugins: [new ExpirationPlugin({ maxEntries: 64 }), fallbackResponsePlugin({ stories: [] })],
-        networkTimeoutSeconds: NETWORK_TIMEOUT_IN_SEC,
+        networkTimeoutSeconds,
       }),
     },
     {
       capture: /\/api\/news\/search\/updates(\?.*)?$/,
       handler: new NetworkOnly({
         plugins: [fallbackResponsePlugin({ updateAvailable: false })],
-        networkTimeoutSeconds: NETWORK_TIMEOUT_IN_SEC,
+        networkTimeoutSeconds,
       }),
     },
     {
@@ -57,7 +64,7 @@ function generateRouteConfig(): Array<RouteConfig> {
       handler: new NetworkFirst({
         cacheName: 'api-news-content',
         plugins: [new ExpirationPlugin({ maxEntries: 256 })],
-        networkTimeoutSeconds: NETWORK_TIMEOUT_IN_SEC,
+        networkTimeoutSeconds,
       }),
     },
   ];
