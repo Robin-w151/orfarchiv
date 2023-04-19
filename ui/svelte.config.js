@@ -18,6 +18,9 @@ const config = {
   kit: {
     adapter,
     csp,
+    output: {
+      preloadStrategy: 'preload-mjs',
+    },
   },
 };
 
