@@ -1,3 +1,5 @@
+/// <reference no-default-lib="true"/>
+/// <reference lib="esnext" />
 /// <reference lib="webworker" />
 import { build, files, prerendered, version } from '$service-worker';
 import { json } from '@sveltejs/kit';
@@ -23,6 +25,7 @@ precacheAndRoute(precacheConfig);
 const routeConfig = generateRouteConfig();
 routeConfig.forEach(({ capture, handler }) => registerRoute(capture, handler));
 
+const notificationsClicked: Set<string> = new Set();
 self.onnotificationclick = handleNotificationClick;
 self.onnotificationclose = handleNotificationClose;
 
@@ -66,19 +69,48 @@ function fallbackResponsePlugin<T>(data: T): WorkboxPlugin {
   };
 }
 
-function getClients(): Promise<any> {
+function getClients(): Promise<readonly Client[]> {
   return self.clients.matchAll();
+}
+
+async function focusClient(clients: readonly Client[]): Promise<void> {
+  for (const client of clients) {
+    if ('focus' in client && typeof client.focus === 'function') {
+      return client.focus();
+    }
+  }
+
+  if ('openWindow' in clients && typeof clients.openWindow === 'function') {
+    return clients.openWindow('/');
+  }
+}
+
+async function notifyClientsAndFocus(id: string, type: string) {
+  const clients = await getClients();
+
+  if (type !== NOTIFICATION_CLOSE) {
+    await focusClient(clients);
+  }
+
+  clients?.forEach((client) => client.postMessage({ type, payload: { id } }));
 }
 
 async function handleNotificationClick(event: NotificationEvent) {
   const id = event.notification.data.id;
   const type = event.action || NOTIFICATION_ACCEPT;
-  const clients = await getClients();
-  clients?.forEach((client) => client.postMessage({ type, payload: { id } }));
+  notificationsClicked.add(id);
+
+  event.notification.close();
+  event.waitUntil(notifyClientsAndFocus(id, type));
 }
 
 async function handleNotificationClose(event: NotificationEvent) {
   const id = event.notification.data.id;
-  const clients = await getClients();
-  clients?.forEach((client) => client.postMessage({ type: NOTIFICATION_CLOSE, payload: { id } }));
+  const type = NOTIFICATION_CLOSE;
+  if (notificationsClicked.has(id)) {
+    notificationsClicked.delete(id);
+    return;
+  }
+
+  event.waitUntil(notifyClientsAndFocus(id, type));
 }
