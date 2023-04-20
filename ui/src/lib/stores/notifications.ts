@@ -26,10 +26,13 @@ function createNotificationsStore(): NotificationsStore {
       return;
     }
 
-    const system = await createSystemNotification(id, title, text, options);
-    const notification = { id, title, text, options, system };
+    let createdSystemNotification;
+    if (!options?.forceAppNotification) {
+      createdSystemNotification = await createSystemNotification(id, title, text, options);
+    }
 
-    if (!system) {
+    if (!createdSystemNotification) {
+      const notification = { id, title, text, options, system: false };
       set([...currentNotifications, notification]);
     }
   }

@@ -13,4 +13,5 @@ export interface OANotificationHandlers {
 
 export interface OANotificationOptions extends OANotificationHandlers {
   uniqueCategory?: symbol;
+  forceAppNotification?: boolean;
 }
