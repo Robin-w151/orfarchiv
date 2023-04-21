@@ -10,6 +10,9 @@ const adapter = useAdapterNode ? adapterNode() : adapterVercel();
 const csp = isCspDisabled ? undefined : cspConfig;
 
 const config = {
+  compilerOptions: {
+    enableSourcemap: true,
+  },
   preprocess: [
     vitePreprocess({
       postcss: true,
