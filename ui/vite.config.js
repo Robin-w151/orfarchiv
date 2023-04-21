@@ -26,6 +26,9 @@ const config = {
       $lib: resolve(__dirname, 'src/lib'),
     },
   },
+  build: {
+    sourcemap: true,
+  },
 };
 
 export default config;
