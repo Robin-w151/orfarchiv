@@ -18,6 +18,9 @@
     focus:outline-none focus:ring-2 ring-blue-700 dark:ring-blue-500
     rounded-lg shadow-md dark:shadow-2xl
   `;
+  const contentClass = `
+    flex flex-col ${defaultGap}
+  `;
   const actionsClass = `
     flex items-center ${defaultGap}
   `;
@@ -57,7 +60,10 @@
 </script>
 
 <Fade class={notificationClass}>
-  <span>{notification.title}. {notification.text}</span>
+  <div class={contentClass}>
+    <strong>{notification.title}</strong>
+    <span>{notification.text}</span>
+  </div>
   <div class={actionsClass}>
     {#if notification.options?.onAccept}
       <button class={buttonClass} type="button" title="Bestätigen" on:click|stopPropagation={handleAcceptClick}>
