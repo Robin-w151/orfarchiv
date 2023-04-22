@@ -10,6 +10,9 @@
       notifications.notify(
         'Verbindung unterbrochen',
         'Bitte überprüfen Sie Ihre Netzwerkeinstellungen und stellen Sie sicher, dass Sie mit dem Internet verbunden sind.',
+        {
+          forceAppNotification: true,
+        },
       );
     }
   }
