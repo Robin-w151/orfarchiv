@@ -57,7 +57,7 @@
 <Section title="Entwickler">
   <SectionList>
     <Item noColumn>
-      <span>Notifications</span>
+      <span>Benachrichtigungen</span>
       <span>{getNotificationSupport()}</span>
     </Item>
     <Item noColumn>
