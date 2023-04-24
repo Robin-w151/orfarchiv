@@ -22,6 +22,7 @@ const sourceToIndex = new Map<string, number>([
   ['religion', 16],
 ]);
 const indexToSource = new Map<number, string>();
+const numberOfSources = [...sourceToIndex.keys()].length;
 for (const [source, index] of sourceToIndex.entries()) {
   indexToSource.set(index, source);
 }
@@ -87,6 +88,12 @@ function setTo(searchParams: URLSearchParams, to?: DateTime): void {
 function getSources(searchParams: URLSearchParams): Array<string> | undefined {
   try {
     const sourcesBitString = searchParams.get('sources');
+
+    const sourcesRegex = new RegExp(`^(0|1){${numberOfSources}}$`);
+    if (!sourcesBitString || !sourcesRegex.test(sourcesBitString)) {
+      return;
+    }
+
     const sourcesBitArray = sourcesBitString?.split('').map((c) => parseInt(c));
     if (!sourcesBitArray) {
       return;
