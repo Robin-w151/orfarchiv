@@ -1,6 +1,6 @@
 import { browser } from '$app/environment';
 import { NOTIFICATION_ACCEPT, NOTIFICATION_CLOSE } from '$lib/configs/client';
-import type { OANotificationHandlers } from '$lib/models/notifications';
+import type { OANotificationHandlers, OANotificationOptions } from '$lib/models/notifications';
 
 const notificationsHandlers: Map<string, OANotificationHandlers | undefined> = new Map();
 const serviceWorker = getServiceWorker();
@@ -21,33 +21,33 @@ export async function createSystemNotification(
   id: string,
   title: string,
   text: string,
-  handlers?: OANotificationHandlers,
+  options?: OANotificationOptions,
 ): Promise<boolean> {
   if (isNotificationEnabled()) {
     const serviceWorker = await navigator.serviceWorker.ready;
-    const options: NotificationOptions = {
-      data: { id },
+    const systemNotificationOptions: NotificationOptions = {
+      data: { id, path: options?.requiredPathForFocus },
       body: text,
       icon: '/images/icon_any192.png',
       requireInteraction: true,
     };
 
-    options.actions = [];
-    if (handlers?.onAccept) {
-      options.actions.push({
+    systemNotificationOptions.actions = [];
+    if (options?.onAccept) {
+      systemNotificationOptions.actions.push({
         action: NOTIFICATION_ACCEPT,
         title: 'Bestätigen',
       });
     }
-    if (handlers?.onClose) {
-      options.actions.push({
+    if (options?.onClose) {
+      systemNotificationOptions.actions.push({
         action: NOTIFICATION_CLOSE,
         title: 'Schließen',
       });
     }
 
-    serviceWorker.showNotification(title, options);
-    notificationsHandlers.set(id, handlers);
+    serviceWorker.showNotification(title, systemNotificationOptions);
+    notificationsHandlers.set(id, options);
     return true;
   }
 

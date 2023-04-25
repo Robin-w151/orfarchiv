@@ -95,6 +95,7 @@
       if (newsUpdates.updateAvailable) {
         notifications.notify('Neue Nachrichten verfügbar', 'Wollen Sie jetzt neu laden?', {
           uniqueCategory: NOTIFICATION_NEWS_UPDATES_AVAILABLE,
+          requiredPathForFocus: '/',
           onAccept: () => {
             fetchNewNews();
           },

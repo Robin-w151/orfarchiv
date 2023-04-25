@@ -80,9 +80,10 @@ function getClients(): Promise<readonly Client[]> {
   return self.clients.matchAll();
 }
 
-async function focusClient(clients: readonly Client[]): Promise<void> {
+async function focusClient(clients: readonly Client[], path?: string): Promise<void> {
   for (const client of clients) {
-    if ('focus' in client && typeof client.focus === 'function') {
+    const clientPath = new URL(client.url).pathname;
+    if ('focus' in client && typeof client.focus === 'function' && (!path || clientPath === path)) {
       return client.focus();
     }
   }
@@ -92,23 +93,23 @@ async function focusClient(clients: readonly Client[]): Promise<void> {
   }
 }
 
-async function notifyClientsAndFocus(id: string, type: string) {
+async function notifyClientsAndFocus(id: string, type: string, path?: string) {
   const clients = await getClients();
 
   if (type !== NOTIFICATION_CLOSE) {
-    await focusClient(clients);
+    await focusClient(clients, path);
   }
 
   clients?.forEach((client) => client.postMessage({ type, payload: { id } }));
 }
 
 async function handleNotificationClick(event: NotificationEvent) {
-  const id = event.notification.data.id;
+  const { id, path } = event.notification.data;
   const type = event.action || NOTIFICATION_ACCEPT;
   notificationsClicked.add(id);
 
   event.notification.close();
-  event.waitUntil(notifyClientsAndFocus(id, type));
+  event.waitUntil(notifyClientsAndFocus(id, type, path));
 }
 
 async function handleNotificationClose(event: NotificationEvent) {
