@@ -30,6 +30,7 @@ export async function createSystemNotification(
       body: text,
       icon: '/images/icon_any192.png',
       requireInteraction: true,
+      tag: options?.uniqueCategory?.toString(),
     };
 
     systemNotificationOptions.actions = [];
