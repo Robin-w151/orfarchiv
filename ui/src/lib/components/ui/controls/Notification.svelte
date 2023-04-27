@@ -6,6 +6,7 @@
   import CheckIcon from '../icons/outline/CheckIcon.svelte';
   import XIcon from '../icons/outline/XIcon.svelte';
   import Fade from '../transitions/Fade.svelte';
+  import Button from './Button.svelte';
 
   export let notification: OANotification;
 
@@ -24,15 +25,8 @@
   const actionsClass = `
     flex items-center ${defaultGap}
   `;
-  const buttonClass = `
-    p-1
-    text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700
-    focus:outline-none focus:ring-2 ring-blue-700 dark:ring-blue-500
-    rounded-full
-    transition
-  `;
 
-  let closeButtonRef: HTMLButtonElement;
+  let closeButtonRef: Button;
 
   $: focusLatestNotification($notifications);
 
@@ -50,11 +44,13 @@
     }
   }
 
-  function handleAcceptClick(): void {
+  function handleAcceptClick(event: Event): void {
+    event.stopPropagation();
     notifications.accept(notification.id);
   }
 
-  function handleCloseClick(): void {
+  function handleCloseClick(event: Event): void {
+    event.stopPropagation();
     notifications.remove(notification.id);
   }
 </script>
@@ -66,18 +62,20 @@
   </div>
   <div class={actionsClass}>
     {#if notification.options?.onAccept}
-      <button class={buttonClass} type="button" title="Bestätigen" on:click|stopPropagation={handleAcceptClick}>
+      <Button btnType="secondary" size="small" iconOnly round title="Bestätigen" on:click={handleAcceptClick}>
         <CheckIcon />
-      </button>
+      </Button>
     {/if}
-    <button
-      class={buttonClass}
-      type="button"
+    <Button
+      btnType="secondary"
+      size="small"
+      iconOnly
+      round
       title="Schließen"
-      on:click|stopPropagation={handleCloseClick}
+      on:click={handleCloseClick}
       bind:this={closeButtonRef}
     >
       <XIcon />
-    </button>
+    </Button>
   </div>
 </Fade>

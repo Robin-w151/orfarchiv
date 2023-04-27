@@ -2,8 +2,8 @@ import NotificationView from './NotificationView.svelte';
 
 const args = {
   id: 'notification1',
-  title: 'Guten Tag',
-  text: 'Wussten Sie schon, dass... .',
+  title: 'Beispielerinnerung',
+  text: 'Das ist eine Beispielerinnerung. Rechts vom Text befinden sich die möglichen Aktionen.',
   options: {
     actions: () => console.log('Clicked notification accept.'),
   },

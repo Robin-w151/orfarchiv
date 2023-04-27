@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte';
   import XIcon from '$lib/components/ui/icons/outline/XIcon.svelte';
+  import Button from './Button.svelte';
 
   export let id: string;
   export let value = '';
@@ -19,11 +20,6 @@
   `;
   const clearButtonClass = `
     absolute right-2
-    p-1
-    text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700
-    focus:outline-none focus:ring-2 ring-blue-700 dark:ring-blue-500
-    rounded-full
-    transition
   `;
 
   let inputRef: HTMLInputElement;
@@ -61,8 +57,16 @@
     maxlength="256"
   />
   {#if showClearButton}
-    <button class={clearButtonClass} on:click={handleClearButtonClick} on:keydown={handleKeydown}>
+    <Button
+      class={clearButtonClass}
+      btnType="secondary"
+      size="small"
+      iconOnly
+      round
+      on:click={handleClearButtonClick}
+      on:keydown={handleKeydown}
+    >
       <XIcon />
-    </button>
+    </Button>
   {/if}
 </div>

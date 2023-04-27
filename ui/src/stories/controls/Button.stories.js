@@ -5,6 +5,7 @@ const args = {
   btnType: 'primary',
   size: 'normal',
   iconOnly: false,
+  round: false,
   disabled: false,
   title: 'Button',
 };
@@ -48,6 +49,13 @@ export default {
         defaultValue: { summary: args.iconOnly },
       },
       control: 'boolean',
+    },
+    round: {
+      type: 'boolean',
+      description: 'Enables fully rounded button',
+      table: {
+        defaultValue: { summary: args.round },
+      },
     },
     disabled: {
       type: 'boolean',
@@ -96,4 +104,12 @@ export const IconOnly = Template.bind({});
 IconOnly.args = {
   btnType: 'primary',
   iconOnly: true,
+};
+
+export const Round = Template.bind({});
+Round.args = {
+  btnType: 'secondary',
+  size: 'small',
+  iconOnly: true,
+  round: true,
 };
