@@ -4,44 +4,49 @@
   "service": "devcontainer",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "remoteUser": "node",
-  "settings": {
-    "terminal.integrated.shell.linux": "/usr/bin/zsh"
-  },
   "customizations": {
     "vscode": {
       "extensions": [
-		"MS-CEINTL.vscode-language-pack-de",
-		"adpyke.codesnap",
-		"naumovs.color-highlight",
-		"zenghongtu.vscode-css-intellisense",
-		"ms-azuretools.vscode-docker",
-		"dbaeumer.vscode-eslint",
-		"GitHub.vscode-pull-request-github",
-		"eamodio.gitlens",
-		"wix.vscode-import-cost",
-		"VisualStudioExptTeam.vscodeintellicode",
-		"VisualStudioExptTeam.intellicode-api-usage-examples",
-		"yzhang.markdown-all-in-one",
-		"DavidAnson.vscode-markdownlint",
-		"mongodb.mongodb-vscode",
-		"leizongmin.node-module-intellisense",
-		"eg2.vscode-npm-script",
-		"christian-kohler.npm-intellisense",
-		"christian-kohler.path-intellisense",
-		"ms-playwright.playwright",
-		"esbenp.prettier-vscode",
-		"PWABuilder.pwa-studio",
-		"mrmlnc.vscode-scss",
-		"jasonnutter.search-node-modules",
-		"timonwong.shellcheck",
-		"svelte.svelte-vscode",
-		"bradlc.vscode-tailwindcss",
-		"ms-vscode.test-adapter-converter",
-		"hbenl.vscode-test-explorer",
-		"netcorext.uuid-generator",
-		"gamunu.vscode-yarn",
-		"yoavbls.pretty-ts-errors"
-	]
+        "MS-CEINTL.vscode-language-pack-de",
+        "adpyke.codesnap",
+        "naumovs.color-highlight",
+        "zenghongtu.vscode-css-intellisense",
+        "ms-azuretools.vscode-docker",
+        "dbaeumer.vscode-eslint",
+        "GitHub.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "wix.vscode-import-cost",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "VisualStudioExptTeam.intellicode-api-usage-examples",
+        "yzhang.markdown-all-in-one",
+        "DavidAnson.vscode-markdownlint",
+        "mongodb.mongodb-vscode",
+        "leizongmin.node-module-intellisense",
+        "eg2.vscode-npm-script",
+        "christian-kohler.npm-intellisense",
+        "christian-kohler.path-intellisense",
+        "ms-playwright.playwright",
+        "esbenp.prettier-vscode",
+        "PWABuilder.pwa-studio",
+        "mrmlnc.vscode-scss",
+        "jasonnutter.search-node-modules",
+        "timonwong.shellcheck",
+        "svelte.svelte-vscode",
+        "bradlc.vscode-tailwindcss",
+        "ms-vscode.test-adapter-converter",
+        "hbenl.vscode-test-explorer",
+        "netcorext.uuid-generator",
+        "gamunu.vscode-yarn",
+        "yoavbls.pretty-ts-errors"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": {
+          "zsh": {
+            "path": "/usr/bin/zsh"
+          }
+        }
+      }
     }
   }
 }
