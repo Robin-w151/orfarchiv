@@ -59,7 +59,7 @@
   {#if showClearButton}
     <Button
       class={clearButtonClass}
-      btnType="secondary"
+      btnType="monochrome"
       size="small"
       iconOnly
       round

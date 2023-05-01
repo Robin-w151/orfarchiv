@@ -31,7 +31,7 @@ export default {
         defaultValue: { summary: args.btnType },
       },
       control: { type: 'select' },
-      options: ['primary', 'secondary'],
+      options: ['primary', 'secondary', 'monochrome'],
     },
     size: {
       type: 'string',
@@ -108,7 +108,7 @@ IconOnly.args = {
 
 export const Round = Template.bind({});
 Round.args = {
-  btnType: 'secondary',
+  btnType: 'monochrome',
   size: 'small',
   iconOnly: true,
   round: true,
