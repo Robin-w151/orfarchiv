@@ -63,6 +63,7 @@
       size="small"
       iconOnly
       round
+      title="Eingabe löschen"
       on:click={handleClearButtonClick}
       on:keydown={handleKeydown}
     >
