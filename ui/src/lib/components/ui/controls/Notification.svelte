@@ -62,13 +62,12 @@
   </div>
   <div class={actionsClass}>
     {#if notification.options?.onAccept}
-      <Button btnType="secondary" size="small" iconOnly round title="Bestätigen" on:click={handleAcceptClick}>
+      <Button btnType="monochrome" iconOnly round title="Bestätigen" on:click={handleAcceptClick}>
         <CheckIcon />
       </Button>
     {/if}
     <Button
-      btnType="secondary"
-      size="small"
+      btnType="monochrome"
       iconOnly
       round
       title="Schließen"

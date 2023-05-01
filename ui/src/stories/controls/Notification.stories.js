@@ -5,7 +5,8 @@ const args = {
   title: 'Beispielerinnerung',
   text: 'Das ist eine Beispielerinnerung. Rechts vom Text befinden sich die möglichen Aktionen.',
   options: {
-    actions: () => console.log('Clicked notification accept.'),
+    onAccept: () => console.log('Clicked notification accept.'),
+    onClose: () => console.log('Clicked notification close.'),
   },
 };
 
