@@ -8,8 +8,8 @@
   import { humanReadableMemorySize } from '$lib/utils/formatting';
   import { onMount } from 'svelte';
 
-  let estimatedStorageUsage = 0;
-  $: estimatedStorageUsageString = humanReadableMemorySize(estimatedStorageUsage);
+  let estimatedStorageUsage: number | undefined = 0;
+  $: estimatedStorageUsageString = estimatedStorageUsage ? humanReadableMemorySize(estimatedStorageUsage) : 'Unbekannt';
 
   onMount(async () => {
     estimatedStorageUsage = await getEstimatedUsage();
@@ -34,13 +34,13 @@
     return browser && 'storage' in navigator && navigator.storage && 'estimate' in navigator.storage;
   }
 
-  async function getEstimatedUsage(): Promise<number> {
+  async function getEstimatedUsage(): Promise<number | undefined> {
     if (!isEstimateSupported()) {
-      return 0;
+      return;
     }
 
     const estimate = await navigator.storage.estimate();
-    return estimate.usage ?? 0;
+    return estimate.usage;
   }
 
   function handleResetIndexedDbButtonClick() {
