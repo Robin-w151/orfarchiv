@@ -4,7 +4,7 @@
   import Section from '$lib/components/ui/content/Section.svelte';
   import SectionList from '$lib/components/ui/content/SectionList.svelte';
   import Button from '$lib/components/ui/controls/Button.svelte';
-  import { BOOKMARKS_STORE_NAME, SETTINGS_STORE_NAME } from '$lib/configs/client';
+  import { BOOKMARKS_STORE_NAME } from '$lib/configs/client';
   import { humanReadableMemorySize } from '$lib/utils/formatting';
   import { onMount } from 'svelte';
 
@@ -49,7 +49,7 @@
   }
 
   function handleResetLocalStorageButtonClick() {
-    localStorage.removeItem(SETTINGS_STORE_NAME);
+    localStorage.clear();
     location.reload();
   }
 </script>
