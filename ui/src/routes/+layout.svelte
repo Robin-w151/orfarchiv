@@ -10,7 +10,7 @@
 
   const wrapperClass = `
     flex flex-col gap-2 sm:gap-3
-    p-2 sm:p-4
+    p-2 pb-6 sm:p-4 sm:pb-6
     ${defaultScreenSize}
   `;
   const mainClass = 'flex flex-col gap-2 sm:gap-3';
