@@ -2,6 +2,6 @@
   import Item from './Item.svelte';
 </script>
 
-<Item noFlex>
+<Item noColumn>
   <slot />
 </Item>
