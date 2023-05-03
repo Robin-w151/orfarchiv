@@ -14,9 +14,39 @@ export interface StylesStore extends Readable<StylesStoreProps>, Partial<StylesS
 }
 
 const initialState: StylesStoreProps = { colorScheme: 'system' };
+
+sanitizeLocalStorage();
 const { subscribe, update } = persisted<StylesStoreProps>(STYLES_STORE_NAME, initialState);
 
-function setColorScheme(colorScheme: ColorScheme) {
+function sanitizeLocalStorage(): void {
+  if (!browser) {
+    return;
+  }
+
+  function persist(styles: StylesStoreProps): void {
+    localStorage.setItem(STYLES_STORE_NAME, JSON.stringify(styles));
+  }
+
+  const stylesValue = localStorage.getItem(STYLES_STORE_NAME);
+  if (!stylesValue) {
+    persist(initialState);
+    return;
+  }
+
+  try {
+    const styles: Partial<StylesStoreProps> = JSON.parse(stylesValue);
+
+    if (!('colorScheme' in styles)) {
+      styles.colorScheme = initialState.colorScheme;
+    }
+
+    persist(styles as StylesStoreProps);
+  } catch (error) {
+    persist(initialState);
+  }
+}
+
+function setColorScheme(colorScheme: ColorScheme): void {
   update((styles) => ({ ...styles, colorScheme }));
 }
 
