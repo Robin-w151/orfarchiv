@@ -4157,11 +4157,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:1.15.7":
-  version: 1.15.7
-  resolution: "@sveltejs/kit@npm:1.15.7"
+"@sveltejs/kit@npm:^1.15.10":
+  version: 1.15.10
+  resolution: "@sveltejs/kit@npm:1.15.10"
   dependencies:
-    "@sveltejs/vite-plugin-svelte": ^2.0.0
+    "@sveltejs/vite-plugin-svelte": ^2.1.1
     "@types/cookie": ^0.5.1
     cookie: ^0.5.0
     devalue: ^4.3.0
@@ -4170,16 +4170,16 @@ __metadata:
     magic-string: ^0.30.0
     mime: ^3.0.0
     sade: ^1.8.1
-    set-cookie-parser: ^2.5.1
+    set-cookie-parser: ^2.6.0
     sirv: ^2.0.2
     tiny-glob: ^0.2.9
-    undici: 5.20.0
+    undici: ~5.22.0
   peerDependencies:
     svelte: ^3.54.0
     vite: ^4.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: d825c745dec5a1da874ab2833864c5ebe377c6cf6653d9f8b757f6beb146d706aa5ea38497ab120252bb53998b345b2e6499a43e107d13a97d857feb76cf34f7
+  checksum: cb50c1d05c7ce93cb51038de3633ee33954eabeea7359a813360f17469582ab184512479cf94125800f2abb0db319657e490598505e86719de4d1d628a9e5807
   languageName: node
   linkType: hard
 
@@ -4197,6 +4197,23 @@ __metadata:
     svelte: ^3.54.0
     vite: ^4.0.0
   checksum: 6a223da864d74c4e6ea05881ee0cf79db8390953df6d506b79d2c37a365fe291e5a5bb330dcfb5366b61ee3915544fd37db3e134865085981342bab392a6a991
+  languageName: node
+  linkType: hard
+
+"@sveltejs/vite-plugin-svelte@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@sveltejs/vite-plugin-svelte@npm:2.1.1"
+  dependencies:
+    debug: ^4.3.4
+    deepmerge: ^4.3.1
+    kleur: ^4.1.5
+    magic-string: ^0.30.0
+    svelte-hmr: ^0.15.1
+    vitefu: ^0.2.4
+  peerDependencies:
+    svelte: ^3.54.0
+    vite: ^4.0.0
+  checksum: 42187a64bcf22a071b4dcc094a1ef18633e7a2f83b7f800142e6dca33b1dd0397c6773555a5ff48b65eac2365ed407a7c30217461536666e59cbab9d10ec10f7
   languageName: node
   linkType: hard
 
@@ -6142,6 +6159,13 @@ __metadata:
   version: 4.2.2
   resolution: "deepmerge@npm:4.2.2"
   checksum: a8c43a1ed8d6d1ed2b5bf569fa4c8eb9f0924034baf75d5d406e47e157a451075c4db353efea7b6bcc56ec48116a8ce72fccf867b6e078e7c561904b5897530b
+  languageName: node
+  linkType: hard
+
+"deepmerge@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "deepmerge@npm:4.3.1"
+  checksum: 2024c6a980a1b7128084170c4cf56b0fd58a63f2da1660dcfe977415f27b17dbe5888668b59d0b063753f3220719d5e400b7f113609489c90160bb9a5518d052
   languageName: node
   linkType: hard
 
@@ -11322,10 +11346,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"set-cookie-parser@npm:^2.5.1":
-  version: 2.5.1
-  resolution: "set-cookie-parser@npm:2.5.1"
-  checksum: b99c37f976e68ae6eb7c758bf2bbce1e60bb54e3eccedaa25f2da45b77b9cab58d90674cf9edd7aead6fbeac6308f2eb48713320a47ca120d0e838d0194513b6
+"set-cookie-parser@npm:^2.6.0":
+  version: 2.6.0
+  resolution: "set-cookie-parser@npm:2.6.0"
+  checksum: bf11ebc594c53d84588f1b4c04f1b8ce14e0498b1c011b3d76b5c6d5aac481bbc3f7c5260ec4ce99bdc1d9aed19f9fc315e73166a36ca74d0f12349a73f6bdc9
   languageName: node
   linkType: hard
 
@@ -12402,7 +12426,7 @@ __metadata:
     "@storybook/testing-library": ^0.1.0
     "@sveltejs/adapter-node": ^1.2.4
     "@sveltejs/adapter-vercel": ^2.4.3
-    "@sveltejs/kit": 1.15.7
+    "@sveltejs/kit": ^1.15.10
     "@tailwindcss/forms": ^0.5.3
     "@types/dompurify": ^3.0.2
     "@types/jsdom": ^21.1.1
@@ -12450,7 +12474,7 @@ __metadata:
     tslib: ^2.5.0
     typescript: ^5.0.4
     uuid: ^9.0.0
-    vite: ^4.3.3
+    vite: ^4.3.4
     web-vitals: ^3.3.1
     winston: ^3.8.2
     workbox-core: ^6.5.4
@@ -12461,12 +12485,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"undici@npm:5.20.0":
-  version: 5.20.0
-  resolution: "undici@npm:5.20.0"
+"undici@npm:~5.22.0":
+  version: 5.22.0
+  resolution: "undici@npm:5.22.0"
   dependencies:
     busboy: ^1.6.0
-  checksum: 25412a785b2bd0b12f0bb0ec47ef00aa7a611ca0e570cb7af97cffe6a42e0d78e4b15190363a43771e9002defc3c6647c1b2d52201b3f64e2196819db4d150d3
+  checksum: 8dc55240a60ae7680798df344e8f46ad0f872ed0fa434fb94cc4fd2b5b2f8053bdf11994d15902999d3880f9bf7cd875a2e90883d2702bf0f366dacd9cbf3fc6
   languageName: node
   linkType: hard
 
@@ -12722,9 +12746,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^4.3.3":
-  version: 4.3.3
-  resolution: "vite@npm:4.3.3"
+"vite@npm:^4.3.4":
+  version: 4.3.4
+  resolution: "vite@npm:4.3.4"
   dependencies:
     esbuild: ^0.17.5
     fsevents: ~2.3.2
@@ -12755,7 +12779,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 99970cb1fed3330458e60f8341ec73c4260c82d815e51c95295321ab496e4c8cb447bc942daf4d94f78bbc8b2bed36cbc237f43fdc1cede19250fac737e5a0fc
+  checksum: 90ce3923ef3e9a491851fb34effece43858d0ba915db17ea6ad0eb649bd77d81c69a71aafc55a6fbd11e4134b1a79eb7e2e3553f055d390d32ca0ff7c645acf6
   languageName: node
   linkType: hard
 
@@ -12768,6 +12792,18 @@ __metadata:
     vite:
       optional: true
   checksum: d4b3b76cf4a6c8efd28df2a0c4c3a6ff8879397861ff812ec46cbd824b8dbf83b4aa8c0436505c404883df6c13ca67c2497f8140a4070fa8feeeaaf727b8654a
+  languageName: node
+  linkType: hard
+
+"vitefu@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "vitefu@npm:0.2.4"
+  peerDependencies:
+    vite: ^3.0.0 || ^4.0.0
+  peerDependenciesMeta:
+    vite:
+      optional: true
+  checksum: 4add282ffec4f27388aa75df2cd7db9a674d51bf9471907441ca23ff5ac70fc9540344dbf3a53af0aa53685f1d7b8c756da5f9749afe91aac66c82a25ade7821
   languageName: node
   linkType: hard
 
