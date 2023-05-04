@@ -27,7 +27,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{host}}/api/news/search?sources=11111111111111111&textFilter=wien&nextId=help:3218332&nextTimestamp=2023-03-25T07:00:00.000Z",
+					"raw": "{{host}}/api/news/search?sources=10000000000000000&textFilter=wien",
 					"host": [
 						"{{host}}"
 					],
@@ -39,7 +39,7 @@
 					"query": [
 						{
 							"key": "sources",
-							"value": "11111111111111111"
+							"value": "10000000000000000"
 						},
 						{
 							"key": "textFilter",
@@ -47,11 +47,13 @@
 						},
 						{
 							"key": "nextId",
-							"value": "help:3218332"
+							"value": "help:3218332",
+							"disabled": true
 						},
 						{
 							"key": "nextTimestamp",
-							"value": "2023-03-25T07:00:00.000Z"
+							"value": "2023-03-25T07:00:00.000Z",
+							"disabled": true
 						}
 					]
 				}
