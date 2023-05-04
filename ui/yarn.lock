@@ -6940,16 +6940,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-svelte3@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "eslint-plugin-svelte3@npm:4.0.0"
-  peerDependencies:
-    eslint: ">=8.0.0"
-    svelte: ^3.2.0
-  checksum: 5e9ddddedee44ac099290cda6e86f412c6f4f2cbdeee860eb2b617c66d3cca7699638c6191ed55c4a7651b57b8387202f62b5b0e0417219c59cdd084dcab4e07
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-svelte@npm:^2.27.3":
   version: 2.27.3
   resolution: "eslint-plugin-svelte@npm:2.27.3"
@@ -12418,7 +12408,6 @@ __metadata:
     eslint-plugin-prettier: ^4.2.1
     eslint-plugin-storybook: ^0.6.12
     eslint-plugin-svelte: ^2.27.3
-    eslint-plugin-svelte3: ^4.0.0
     jsdom: ^22.0.0
     lodash.debounce: ^4.0.8
     lru-cache: ^9.1.1

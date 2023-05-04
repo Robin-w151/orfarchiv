@@ -7,8 +7,14 @@ module.exports = {
     'no-unused-vars': 'off',
     'svelte/no-at-html-tags': 'off',
   },
-  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'prettier', 'plugin:storybook/recommended'],
-  plugins: ['svelte3', '@typescript-eslint'],
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:svelte/recommended',
+    'plugin:storybook/recommended',
+    'prettier',
+  ],
+  plugins: ['@typescript-eslint'],
   env: {
     browser: true,
     es2022: true,
@@ -24,10 +30,10 @@ module.exports = {
   overrides: [
     {
       files: ['*.svelte'],
-      processor: 'svelte3/svelte3',
+      parser: 'svelte-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser',
+      },
     },
   ],
-  settings: {
-    'svelte3/typescript': () => require('typescript'),
-  },
 };
