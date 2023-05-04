@@ -37,7 +37,8 @@
         "hbenl.vscode-test-explorer",
         "netcorext.uuid-generator",
         "gamunu.vscode-yarn",
-        "yoavbls.pretty-ts-errors"
+        "yoavbls.pretty-ts-errors",
+        "SonarSource.sonarlint-vscode"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
