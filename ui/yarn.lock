@@ -4359,6 +4359,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/dotenv-flow@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "@types/dotenv-flow@npm:3.2.0"
+  checksum: ff11155349578fe76f0b69556f3e22e13115b17a7684cef1dec9f5d7fdaa1bfc1848b1337e3d08093687a3e372cf1b4b0fd0c9900a2db62031a3ee02ffabe3e6
+  languageName: node
+  linkType: hard
+
 "@types/ejs@npm:^3.1.1":
   version: 3.1.1
   resolution: "@types/ejs@npm:3.1.1"
@@ -12388,6 +12395,7 @@ __metadata:
     "@sveltejs/kit": ^1.15.10
     "@tailwindcss/forms": ^0.5.3
     "@types/dompurify": ^3.0.2
+    "@types/dotenv-flow": ^3.2.0
     "@types/jsdom": ^21.1.1
     "@types/lodash.debounce": ^4.0.7
     "@types/luxon": ^3.3.0

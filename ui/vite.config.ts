@@ -2,12 +2,12 @@ import { sveltekit } from '@sveltejs/kit/vite';
 import dotenv from 'dotenv-flow';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import type { UserConfig } from 'vite';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config({ silent: true });
 
-/** @type {import('vite').UserConfig} */
 const config = {
   plugins: [sveltekit()],
   server: {
@@ -29,6 +29,6 @@ const config = {
   build: {
     sourcemap: true,
   },
-};
+} satisfies UserConfig;
 
 export default config;
