@@ -22,7 +22,6 @@
         "DavidAnson.vscode-markdownlint",
         "mongodb.mongodb-vscode",
         "leizongmin.node-module-intellisense",
-        "eg2.vscode-npm-script",
         "christian-kohler.npm-intellisense",
         "christian-kohler.path-intellisense",
         "ms-playwright.playwright",
