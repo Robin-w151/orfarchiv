@@ -4,15 +4,14 @@
   const headerClass = 'flex flex-row items-center gap-3 animate-pulse';
   const buttonClass = 'w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-md';
   const infoClass = 'flex flex-col flex-1 justify-around';
-  const titleClass = 'bg-gray-300 dark:bg-gray-600 rounded-md';
-  const metadataClass = 'bg-gray-300 dark:bg-gray-600 rounded-md';
+  const textClass = 'bg-gray-300 dark:bg-gray-600 rounded-sm';
 </script>
 
 <Item>
   <div class={headerClass}>
     <div class="info {infoClass}">
-      <span class="title {titleClass}" />
-      <span class="metadata {metadataClass}" />
+      <span class="title {textClass}" />
+      <span class="metadata {textClass}" />
     </div>
     <div class={buttonClass} />
   </div>
