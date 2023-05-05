@@ -37,5 +37,5 @@ module.exports = {
       },
     },
   ],
-  ignorePatterns: ['.eslintrc.*'],
+  ignorePatterns: ['.eslintrc.*', 'service-worker.ts'],
 };
