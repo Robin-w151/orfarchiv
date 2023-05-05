@@ -6,6 +6,7 @@
   export let btnType: BtnType = 'primary';
   export let size: Size = 'normal';
   export let iconOnly = false;
+  export let round = false;
   export let title: string | undefined = undefined;
   export let disabled: boolean | undefined = undefined;
   export let placement = 'bottom';
@@ -27,7 +28,7 @@
 
   const dropdownContentClass = 'z-40';
 
-  $: dropdownButtonClass = buttonClassFn({ btnType, size, iconOnly });
+  $: dropdownButtonClass = buttonClassFn({ btnType, size, iconOnly, round });
 </script>
 
 <Popover let:open>

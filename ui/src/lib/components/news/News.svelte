@@ -106,7 +106,9 @@
       } else {
         setCheckUpdatesTimeout(false);
       }
-    } catch (_) {}
+    } catch (_) {
+      console.log('Checking if new news updates are available failed.');
+    }
   }
 
   function setCheckUpdatesTimeout(initial: boolean) {
