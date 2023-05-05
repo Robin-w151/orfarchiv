@@ -3,5 +3,17 @@
   "sonarlint.connectedMode.project": {
     "connectionId": "sonarcloud",
     "projectKey": "Robin-w151_orfarchiv"
-  }
+  },
+  "eslint.packageManager": "yarn",
+  "eslint.probe": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "vue",
+    "markdown",
+    "svelte"
+  ],
+  "eslint.validate": ["javascript", "typescript", "svelte"]
 }
