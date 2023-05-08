@@ -14,7 +14,14 @@
   export { clazz as class };
   export let customStyle = false;
 
-  $: buttonClass = buttonClassFn({ btnType, size, iconOnly, round, clazz, customStyle });
+  $: buttonClass = buttonClassFn({
+    btnType,
+    size,
+    iconOnly,
+    round,
+    clazz,
+    customStyle,
+  });
 
   export function focus(): void {
     buttonRef.focus();

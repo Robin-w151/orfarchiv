@@ -8,12 +8,19 @@
   export let target: string | undefined = undefined;
   export let size: Size = 'normal';
   export let iconOnly = false;
+  export let round = false;
   export let preventDefault = false;
   export let prefetch = false;
 
   const dispatch = createEventDispatcher();
 
-  const buttonClass = buttonClassFn({ btnType: 'secondary', size, iconOnly, clazz: $$props['class'] });
+  const buttonClass = buttonClassFn({
+    btnType: 'secondary',
+    size,
+    iconOnly,
+    round,
+    clazz: $$props['class'],
+  });
 
   function triggerPrefetchRoute(): void {
     if (prefetch) {
