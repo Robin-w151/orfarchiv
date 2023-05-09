@@ -33,7 +33,7 @@
   </h1>
   <nav class={headerActionsClass}>
     {#if isNewsPage}
-      <ButtonLink href="/" title="Nach Updates suchen" iconOnly on:click={handleRefreshButtonClick} preventDefault>
+      <ButtonLink href="/" title="Aktualisieren" iconOnly on:click={handleRefreshButtonClick} preventDefault>
         <RefreshIcon />
       </ButtonLink>
     {:else}
