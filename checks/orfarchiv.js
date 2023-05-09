@@ -19,4 +19,4 @@ const main = async () => {
   await browser.close();
 };
 
-main();
+main().catch(console.log);

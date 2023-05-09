@@ -5,7 +5,7 @@ import { generate } from 'escodegen';
 const UTILS_PATH = 'node_modules/jsdom/lib/jsdom/utils.js';
 const XML_HTTP_REQUEST_IMPL = 'node_modules/jsdom/lib/jsdom/living/xhr/XMLHttpRequest-impl.js';
 
-main();
+main().catch(console.log);
 
 async function main() {
   await fixCanvasImport();

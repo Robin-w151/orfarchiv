@@ -4,7 +4,7 @@ const sources = require('./sources.json');
 const logger = require('./logger');
 require('dotenv-flow').config({ silent: true });
 
-main();
+main().catch(logger.error);
 
 async function main() {
   try {

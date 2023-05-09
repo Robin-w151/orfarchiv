@@ -1,7 +1,7 @@
 const logger = require('./logger');
 const { MongoClient } = require('mongodb');
 
-main();
+main().catch(logger.error);
 
 async function main() {
   logger.info('Connecting to server...');

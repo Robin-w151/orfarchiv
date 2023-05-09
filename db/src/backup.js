@@ -4,7 +4,7 @@ const { join } = require('path');
 const { writeFile, mkdir } = require('fs').promises;
 require('dotenv-flow').config({ silent: true });
 
-main();
+main().catch(logger.error);
 
 async function main() {
   try {

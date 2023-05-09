@@ -49,7 +49,7 @@ function detectFormat(document) {
 }
 
 function filterStoryRdfItem(rdfItem) {
-  return rdfItem && rdfItem.link?.includes('stories');
+  return rdfItem?.link?.includes('stories');
 }
 
 function mapToStory(source, format, item) {
