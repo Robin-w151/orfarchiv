@@ -7,17 +7,18 @@
   import { refreshNews } from '$lib/stores/newsEvents';
   import { defaultPadding } from '$lib/utils/styles';
   import { page } from '$app/stores';
+  import NewspaperIcon from '../icons/outline/NewspaperIcon.svelte';
 
   const headerClass = `
     flex justify-between items-center gap-6
     ${defaultPadding}
-    text-3xl
+    text-2xl sm:text-3xl
     text-blue-700 bg-white dark:bg-gray-900
   `;
   const headerTitleClass = 'focus:bg-blue-100 dark:focus:bg-blue-900 outline-none rounded-md';
   const headerActionsClass = 'flex gap-2';
 
-  $: showReloadButton = $page.url.pathname === '/';
+  $: isNewsPage = $page.url.pathname === '/';
 
   function handleRefreshButtonClick() {
     refreshNews.notify();
@@ -30,10 +31,14 @@
       <TextGradient>ORF Archiv</TextGradient>
     </a>
   </h1>
-  <div class={headerActionsClass}>
-    {#if showReloadButton}
+  <nav class={headerActionsClass}>
+    {#if isNewsPage}
       <ButtonLink href="/" title="Nach Updates suchen" iconOnly on:click={handleRefreshButtonClick} preventDefault>
         <RefreshIcon />
+      </ButtonLink>
+    {:else}
+      <ButtonLink href="/" title="News" iconOnly prefetch>
+        <NewspaperIcon />
       </ButtonLink>
     {/if}
     <ButtonLink href="/bookmarks" title="Lesezeichen" iconOnly prefetch>
@@ -42,5 +47,5 @@
     <ButtonLink href="/settings" title="Einstellungen" iconOnly prefetch>
       <CogIcon />
     </ButtonLink>
-  </div>
+  </nav>
 </header>
