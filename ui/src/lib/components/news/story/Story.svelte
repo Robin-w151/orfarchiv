@@ -4,11 +4,11 @@
   import { defaultPadding } from '$lib/utils/styles';
   import StoryHeader from '$lib/components/news/story/header/StoryHeader.svelte';
   import StoryContent from '$lib/components/news/story/content/StoryContent.svelte';
-  import Fade from '$lib/components/ui/transitions/Fade.svelte';
   import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
   import type { Story } from '$lib/models/story';
   import { selectStory } from '$lib/stores/newsEvents';
   import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
+  import AccessibleTransition from '$lib/components/ui/transitions/AccessibleTransition.svelte';
 
   export let story: Story;
 
@@ -106,8 +106,8 @@
     <StoryHeader {story} on:click={handleHeaderClick} on:keydown={handleHeaderKeydown} bind:this={headerRef} />
   </div>
   {#if showContent}
-    <Fade class="content {contentClass}">
+    <AccessibleTransition class="content {contentClass}" onlyIn>
       <StoryContent {story} on:collapse={handleStoryContentCollapse} />
-    </Fade>
+    </AccessibleTransition>
   {/if}
 </Item>

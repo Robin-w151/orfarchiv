@@ -5,8 +5,8 @@
   import { onMount } from 'svelte';
   import CheckIcon from '../icons/outline/CheckIcon.svelte';
   import XIcon from '../icons/outline/XIcon.svelte';
-  import Fade from '../transitions/Fade.svelte';
   import Button from './Button.svelte';
+  import AccessibleTransition from '../transitions/AccessibleTransition.svelte';
 
   export let notification: OANotification;
 
@@ -55,7 +55,7 @@
   }
 </script>
 
-<Fade class={notificationClass}>
+<AccessibleTransition class={notificationClass} onlyIn>
   <div class={contentClass}>
     <strong>{notification.title}</strong>
     <span>{notification.text}</span>
@@ -77,4 +77,4 @@
       <XIcon />
     </Button>
   </div>
-</Fade>
+</AccessibleTransition>

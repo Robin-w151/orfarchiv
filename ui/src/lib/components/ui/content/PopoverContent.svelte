@@ -1,5 +1,6 @@
 <script lang="ts">
-  import RollFade from '../transitions/RollFade.svelte';
+  import { rollFade } from '$lib/utils/transitions';
+  import AccessibleTransition from '../transitions/AccessibleTransition.svelte';
 
   let contentClass: string;
   $: contentClass = `
@@ -9,6 +10,6 @@
   `;
 </script>
 
-<RollFade class={contentClass}>
+<AccessibleTransition class={contentClass} transition={rollFade}>
   <slot />
-</RollFade>
+</AccessibleTransition>
