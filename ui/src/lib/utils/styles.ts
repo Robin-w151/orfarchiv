@@ -1,3 +1,5 @@
+import { cubicInOut } from 'svelte/easing';
+
 export const defaultScreenSize = 'w-screen max-w-screen-lg';
 
 export const defaultPadding = 'px-3 sm:px-6 py-2 sm:py-3';
@@ -15,6 +17,7 @@ export const defaultAlertTextBox = `
   ${defaultBackground}
 `;
 
+// Popover menu
 export const defaultMenuClass = `
   flex flex-col gap-2
   p-2
@@ -28,3 +31,19 @@ export const defaultMenuItemClass = `
   rounded-lg cursor-pointer
   transition
 `;
+
+// Transitions
+export const transitionDefaults = {
+  duration: 150,
+  easing: cubicInOut,
+};
+
+export const rollFade = (node: Element) => {
+  const opacity = +getComputedStyle(node).opacity;
+
+  return {
+    duration: transitionDefaults.duration,
+    easing: transitionDefaults.easing,
+    css: (t: number, u: number) => `transform: translateY(${0.5 * u}rem); opacity: ${t * opacity}`,
+  };
+};

@@ -6,15 +6,19 @@
   import settings from '$lib/stores/settings';
   import { requestSystemNotificationPermission } from '$lib/utils/notifications';
 
-  function handleFetchReadMoreContentChange({ detail: checked }: { detail: boolean }) {
+  function handleFetchReadMoreContentChange({ detail: checked }: { detail: boolean }): void {
     settings.setFetchReadMoreContent(checked);
   }
 
-  function handleCheckNewsUpdatesChange({ detail: checked }: { detail: boolean }) {
+  function handleCheckNewsUpdatesChange({ detail: checked }: { detail: boolean }): void {
     settings.setCheckNewsUpdates(checked);
     if (checked) {
       requestSystemNotificationPermission();
     }
+  }
+
+  function handleForceReducedMotion({ detail: checked }: { detail: boolean }): void {
+    settings.setForceReducedMotion(checked);
   }
 </script>
 
@@ -34,6 +38,14 @@
         label="Erinnern wenn neue Nachrichten vorhanden sind"
         checked={$settings.checkNewsUpdates}
         on:change={handleCheckNewsUpdatesChange}
+      />
+    </Item>
+    <Item>
+      <Checkbox
+        id="force-reduce-motion"
+        label="Bewegungen reduzieren"
+        checked={$settings.forceReducedMotion}
+        on:change={handleForceReducedMotion}
       />
     </Item>
   </SectionList>

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import RollFade from '../transitions/RollFade.svelte';
+
   let contentClass: string;
   $: contentClass = `
     bg-white dark:bg-gray-900/80 dark:backdrop-blur-sm
@@ -7,6 +9,6 @@
   `;
 </script>
 
-<div class={contentClass}>
+<RollFade class={contentClass}>
   <slot />
-</div>
+</RollFade>

@@ -5,15 +5,17 @@ import type { Readable } from 'svelte/store';
 import { SETTINGS_STORE_NAME } from '$lib/configs/client';
 import { browser } from '$app/environment';
 
-export interface SettingsStore extends Readable<Settings>, Partial<Settings> {
+export interface SettingsStore extends Readable<Settings> {
   setFetchReadMoreContent: (fetchReadMoreContent: boolean) => void;
   setCheckNewsUpdates: (checkNewsUpdates: boolean) => void;
+  setForceReducedMotion: (forceReducedMotion: boolean) => void;
   setSource: (source: string, included: boolean) => void;
 }
 
-const initialState = {
+const initialState: Settings = {
   fetchReadMoreContent: false,
   checkNewsUpdates: false,
+  forceReducedMotion: false,
   sources: sources.map((source) => source.key),
 };
 
@@ -46,6 +48,10 @@ function sanitizeLocalStorage(): void {
       settings.checkNewsUpdates = initialState.checkNewsUpdates;
     }
 
+    if (!('forceReducedMotion' in settings)) {
+      settings.forceReducedMotion = initialState.forceReducedMotion;
+    }
+
     if (!('sources' in settings) || !Array.isArray(settings.sources)) {
       settings.sources = initialState.sources;
     }
@@ -67,6 +73,10 @@ function createSettingsStore(): SettingsStore {
     update((settings) => ({ ...settings, checkNewsUpdates }));
   }
 
+  function setForceReducedMotion(forceReducedMotion: boolean): void {
+    update((settings) => ({ ...settings, forceReducedMotion }));
+  }
+
   function setSource(source: string, included: boolean): void {
     update((settings) => {
       let newSources = settings.sources ? [...settings.sources] : [];
@@ -81,7 +91,13 @@ function createSettingsStore(): SettingsStore {
     });
   }
 
-  return { subscribe, setFetchReadMoreContent, setCheckNewsUpdates, setSource };
+  return {
+    subscribe,
+    setFetchReadMoreContent,
+    setCheckNewsUpdates,
+    setForceReducedMotion,
+    setSource,
+  };
 }
 
 if (browser) {

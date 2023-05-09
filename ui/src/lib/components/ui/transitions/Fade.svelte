@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { transitionDefaults } from '$lib/utils/styles';
   import { fade } from 'svelte/transition';
-  import { cubicInOut } from 'svelte/easing';
 </script>
 
-<div class={$$props['class']} in:fade={{ duration: 150, easing: cubicInOut }}>
+<div class={$$props['class']} in:fade={transitionDefaults}>
   <slot />
 </div>

@@ -1,6 +1,7 @@
 export interface Settings {
   fetchReadMoreContent: boolean;
   checkNewsUpdates: boolean;
+  forceReducedMotion: boolean;
   sources: Array<string>;
 }
 
