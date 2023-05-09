@@ -140,7 +140,7 @@ class NewsPage {
   constructor(page) {
     this.page = page;
     this.titleLink = page.locator('header > h1 > a');
-    this.loadUpdateLink = page.locator("header a[title='Nach Updates suchen']");
+    this.loadUpdateLink = page.locator("header nav a[title='Aktualisieren']");
     this.loadMoreButton = page.locator('main > div > button');
     this.newsFilter = page.locator('#news #news-filter');
     this.newsFilterMenuButton = this.newsFilter.locator('div + div > button');
