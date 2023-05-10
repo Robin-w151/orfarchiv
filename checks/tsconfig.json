@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "outDir": "./.build",
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "allowJs": true,
+    "isolatedModules": true,
+    "esModuleInterop": true
+  },
+  "include": ["./**/*.js", "./**/*.ts"]
+}

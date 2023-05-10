@@ -11,7 +11,8 @@ module.exports = {
       },
     ],
   },
-  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
+  plugins: ['@typescript-eslint'],
   env: {
     commonjs: true,
     es2022: true,
