@@ -12,11 +12,11 @@
 </script>
 
 {#if onlyIn}
-  <div class={$$props['class']} in:transition={transitionProps}>
+  <div class={$$props['class']} in:transition|global={transitionProps}>
     <slot />
   </div>
 {:else}
-  <div class={$$props['class']} transition:transition={transitionProps}>
+  <div class={$$props['class']} transition:transition|global={transitionProps}>
     <slot />
   </div>
 {/if}
