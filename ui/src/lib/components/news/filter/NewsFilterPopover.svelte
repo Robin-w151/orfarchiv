@@ -61,9 +61,9 @@
   }
 </script>
 
-<Popover btnType="secondary" iconOnly title="Weitere Filter-Optionen" placement="bottom-end" let:onClose>
+<Popover btnType="secondary" iconOnly title="Weitere Filter-Optionen" placement="bottom-end">
   <FunnelIcon slot="button-content" />
-  <PopoverContent class={menuClass} slot="content">
+  <PopoverContent class={menuClass} slot="content" let:onClose>
     <section class={menuSectionClass}>
       <span class={menuSectionTitleClass}>
         <CalendarIcon />

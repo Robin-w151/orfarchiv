@@ -16,7 +16,9 @@
       onClose: () => void;
     };
     ['button-content']: unknown;
-    content: unknown;
+    content: {
+      onClose: () => void;
+    };
   }
 
   const [popperRef, popperContent] = createPopperActions();
@@ -38,7 +40,7 @@
   {#if open}
     <Portal>
       <PopoverPanel class={dropdownContentClass} use={[[popperContent, popperOptions]]} let:close>
-        <slot name="content" onClose={close} />
+        <slot name="content" onClose={() => close(null)} />
       </PopoverPanel>
     </Portal>
   {/if}

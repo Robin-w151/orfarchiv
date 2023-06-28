@@ -12,9 +12,9 @@
   export let story: Story;
 </script>
 
-<Popover btnType="secondary" iconOnly title="Weitere Optionen" placement="bottom-end" let:onClose>
+<Popover btnType="secondary" iconOnly title="Weitere Optionen" placement="bottom-end">
   <EllipsisVerticalIcon slot="button-content" />
-  <PopoverContent class={defaultMenuClass} slot="content">
+  <PopoverContent class={defaultMenuClass} slot="content" let:onClose>
     <OpenArticleButton class={defaultMenuItemClass} {story} {onClose} />
     <BookmarkButton class={defaultMenuItemClass} {story} {onClose} />
     <ShareButton class={defaultMenuItemClass} {story} {onClose} />

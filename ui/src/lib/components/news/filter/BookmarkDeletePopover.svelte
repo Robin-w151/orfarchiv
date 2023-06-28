@@ -27,9 +27,9 @@
   }
 </script>
 
-<Popover btnType="secondary" iconOnly title="Lesezeichen löschen" placement="bottom-end" let:onClose>
+<Popover btnType="secondary" iconOnly title="Lesezeichen löschen" placement="bottom-end">
   <TrashIcon slot="button-content" />
-  <PopoverContent class={defaultMenuClass} slot="content">
+  <PopoverContent class={defaultMenuClass} slot="content" let:onClose>
     <Button
       class={menuDeleteItemClass}
       customStyle
