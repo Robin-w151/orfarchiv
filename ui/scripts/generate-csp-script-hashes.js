@@ -14,10 +14,12 @@ async function calculateScriptHashes() {
   const appHtml = decoder.decode(await readFile('src/app.html'));
 
   const appDocument = new JSDOM(appHtml).window.document;
-  const appearanceScript = appDocument.getElementsByTagName('script')[0];
-  const appearanceScriptHash = await calculateScriptHash(appearanceScript.textContent);
+  const scriptHashes = [];
+  for (const script of appDocument.getElementsByTagName('script')) {
+    scriptHashes.push(await calculateScriptHash(script.textContent));
+  }
 
-  return [appearanceScriptHash];
+  return scriptHashes;
 }
 
 async function calculateScriptHash(scriptText) {
