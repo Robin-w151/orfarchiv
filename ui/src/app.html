@@ -1,29 +1,26 @@
 <!DOCTYPE html>
 <html lang="de">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="ORF News länger als 24h verfügbar" />
-  <meta name="keywords" content="orf news nachrichten archiv" />
-  <meta name="theme-color" content="#374151" />
-  <meta name="google-site-verification" content="6NToxA5WDNFIGBREvrYLc6LW6TH7DajeLBBaqoVuUBQ" />
-  <link rel="icon" href="/images/icon.svg" />
-  <link rel="apple-touch-icon" href="/images/icon_maskable192.png" sizes="192x192" />
-  <link rel="apple-touch-icon" href="/images/icon_maskable512.png" sizes="512x512" />
-  <link rel="manifest" href="/app.webmanifest" />
-  %sveltekit.head%
-  <script>
-    const { colorScheme } = JSON.parse(localStorage.getItem('styles') ?? '{}');
-    const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
-    if (colorScheme === 'dark' || ((!colorScheme || colorScheme === 'system') && prefersDarkColorScheme)) {
-      document.documentElement.classList.add('dark');
-    }
-  </script>
-</head>
-
-<body>
-  <div style="display: contents">%sveltekit.body%</div>
-</body>
-
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="ORF News länger als 24h verfügbar" />
+    <meta name="keywords" content="orf news nachrichten archiv" />
+    <meta name="theme-color" content="#374151" />
+    <meta name="google-site-verification" content="6NToxA5WDNFIGBREvrYLc6LW6TH7DajeLBBaqoVuUBQ" />
+    <link rel="icon" href="/images/icon.svg" />
+    <link rel="apple-touch-icon" href="/images/icon_maskable192.png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/images/icon_maskable512.png" sizes="512x512" />
+    <link rel="manifest" href="/app.webmanifest" />
+    %sveltekit.head%
+    <script>
+      const { colorScheme } = JSON.parse(localStorage.getItem('styles') ?? '{}');
+      const prefersDarkColorScheme = window.matchMedia('(prefers-color-scheme: dark)')?.matches;
+      if (colorScheme === 'dark' || ((!colorScheme || colorScheme === 'system') && prefersDarkColorScheme)) {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
+  </head>
+  <body>
+    <div style="display: contents">%sveltekit.body%</div>
+  </body>
 </html>
