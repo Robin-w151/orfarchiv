@@ -6,7 +6,8 @@ main().catch(console.error);
 
 async function main() {
   const scriptHashes = await calculateScriptHashes();
-  await writeFile('csp-script-hashes.js', `export default ${JSON.stringify(scriptHashes)};\n`);
+  const scriptHashesString = scriptHashes.map((s) => `'${s}'`).join(', ');
+  await writeFile('csp-script-hashes.js', `export default [${scriptHashesString}];\n`);
 }
 
 async function calculateScriptHashes() {
