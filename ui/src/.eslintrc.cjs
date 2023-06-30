@@ -2,7 +2,12 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-var-requires': 'off',
-    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        varsIgnorePattern: '$$',
+      },
+    ],
     'no-unused-vars': 'off',
     'svelte/no-at-html-tags': 'warn',
   },
