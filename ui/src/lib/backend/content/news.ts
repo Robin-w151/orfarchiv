@@ -9,7 +9,7 @@ import { logger } from '$lib/configs/server';
 import { STORY_CONTENT_READ_MORE_REGEXPS } from '$lib/configs/server';
 
 export async function fetchStoryContent(url: string, fetchReadMoreContent = false): Promise<StoryContent> {
-  logger.info(`Fetch content with url '${url}' and fetchReadMoreContent '${fetchReadMoreContent}'`);
+  logger.info(`Fetch content with url='${url}' and fetchReadMoreContent='${fetchReadMoreContent}'`);
 
   let currentUrl = url;
   let currentData = await fetchSiteHtmlText(currentUrl);
@@ -21,16 +21,18 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
     const readMoreUrl = findReadMoreUrl(originalDocument);
 
     if (readMoreUrl) {
-      logger.info(`Fetch content with readMore url '${readMoreUrl}'`);
+      try {
+        logger.info(`Fetch content with readMore url='${readMoreUrl}'`);
+        const [story, data] = await Promise.all([searchStory(readMoreUrl), fetchSiteHtmlText(readMoreUrl)]);
 
-      currentUrl = readMoreUrl;
-      const [story, data] = await Promise.all([searchStory(currentUrl), fetchSiteHtmlText(currentUrl)]);
-
-      currentData = data;
-      id = story?.id;
-      source = story?.source ?? findSourceFromUrl(currentUrl);
-
-      originalDocument = createDom(data, currentUrl);
+        currentUrl = readMoreUrl;
+        currentData = data;
+        id = story?.id;
+        source = story?.source ?? findSourceFromUrl(currentUrl);
+        originalDocument = createDom(currentData, currentUrl);
+      } catch (error: unknown) {
+        logger.warn(`${(error as Error).message}`);
+      }
     }
   }
 
@@ -39,8 +41,8 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
 
   const optimizedContent = new Readability(document).parse();
   if (!optimizedContent) {
-    logger.warn(`Error transforming content with url '${currentUrl}'`);
-    throw new OptimizedContentIsEmptyError(`Optimized content from url '${currentUrl}' is empty`);
+    logger.warn(`Error transforming content with url='${currentUrl}'`);
+    throw new OptimizedContentIsEmptyError(`Optimized content from url='${currentUrl}' is empty`);
   }
 
   const optimizedDocument = createDom(optimizedContent.content, currentUrl);
@@ -63,7 +65,7 @@ export async function fetchStoryContent(url: string, fetchReadMoreContent = fals
 async function fetchSiteHtmlText(url: string): Promise<string> {
   const response = await fetch(url);
   if (!response.ok) {
-    throw new ContentNotFoundError(`Content from url '${url}' cannot be loaded`);
+    throw new ContentNotFoundError(`Content from url='${url}' cannot be loaded`);
   }
   return response.text();
 }

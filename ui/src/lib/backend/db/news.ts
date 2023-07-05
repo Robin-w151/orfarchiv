@@ -16,7 +16,7 @@ interface PaginatedQuery {
 }
 
 export async function searchNews(searchRequest: SearchRequest): Promise<News> {
-  logger.info(`Search news with request '${JSON.stringify(searchRequest)}'`);
+  logger.info(`Search news with request='${JSON.stringify(searchRequest)}'`);
 
   const { searchRequestParameters, pageKey } = searchRequest;
 
@@ -37,7 +37,7 @@ export async function searchNews(searchRequest: SearchRequest): Promise<News> {
 }
 
 export async function checkNewsUpdatesAvailable(searchRequest: SearchRequest): Promise<NewsUpdates> {
-  logger.info(`Check if news updates with request ${JSON.stringify(searchRequest)} are available`);
+  logger.info(`Check if news updates with request='${JSON.stringify(searchRequest)}' are available`);
 
   if (searchRequest.pageKey?.type !== 'prev') {
     return { updateAvailable: false };
@@ -48,7 +48,7 @@ export async function checkNewsUpdatesAvailable(searchRequest: SearchRequest): P
 }
 
 export async function searchStory(url: string): Promise<Story | null> {
-  logger.info(`Search story with url '${url}'`);
+  logger.info(`Search story with url='${url}'`);
 
   const query = { url, source: { $ne: 'oesterreich' } };
   const newsCollection = orfArchivDb.newsCollection();
