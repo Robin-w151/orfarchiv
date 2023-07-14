@@ -70,4 +70,4 @@ if (browser) {
   console.log('notifications-store-initialized');
 }
 
-export default notifications as NotificationsStore;
+export default notifications;

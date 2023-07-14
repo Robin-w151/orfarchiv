@@ -56,7 +56,7 @@ function sanitizeLocalStorage(): void {
       settings.sources = initialState.sources;
     }
 
-    persist(settings as Settings);
+    persist(settings as unknown as Settings);
   } catch (error) {
     persist(initialState);
   }

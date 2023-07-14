@@ -5,7 +5,7 @@ WORKDIR /app/
 COPY package.json yarn.lock .npmrc .yarnrc.yml /app/
 COPY .yarn/ /app/.yarn/
 
-RUN yarn install --immutable
+RUN yarn install --immutable --ignore-scripts
 
 COPY csp-config.js csp-script-hashes.js postcss.config.cjs svelte.config.js tailwind.config.cjs tsconfig.json vite.config.js /app/
 COPY scripts/ /app/scripts/
@@ -25,6 +25,8 @@ RUN yarn build
 
 
 FROM node:18-alpine AS deploy
+
+USER node
 
 WORKDIR /app/
 

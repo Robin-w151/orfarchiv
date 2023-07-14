@@ -4,5 +4,5 @@ export function isOrfStoryUrl(url: string | undefined): boolean {
   if (!url) {
     return false;
   }
-  return !!url.match(URL_ORF_STORY_REGEXP);
+  return !!RegExp(URL_ORF_STORY_REGEXP).exec(url);
 }

@@ -5,8 +5,7 @@ import { ContentNotFoundError, OptimizedContentIsEmptyError } from '$lib/errors/
 import { isOrfStoryUrl } from '$lib/backend/utils/urls';
 import type { StoryContent, StorySource } from '$lib/models/story';
 import { searchStory } from '$lib/backend/db/news';
-import { logger } from '$lib/configs/server';
-import { STORY_CONTENT_READ_MORE_REGEXPS } from '$lib/configs/server';
+import { logger, STORY_CONTENT_READ_MORE_REGEXPS } from '$lib/configs/server';
 
 export async function fetchStoryContent(url: string, fetchReadMoreContent = false): Promise<StoryContent> {
   logger.info(`Fetch content with url='${url}' and fetchReadMoreContent='${fetchReadMoreContent}'`);
@@ -109,7 +108,7 @@ function removeSiteNavigation(optimizedDocument: Document): void {
 
 function removeSiteAnchors(optimizedDocument: Document): void {
   optimizedDocument.querySelectorAll('a').forEach((anchor) => {
-    if (anchor.href.match(/orf\.at.*#/i)) {
+    if (RegExp(/orf\.at.*#/i).exec(anchor.href)) {
       anchor.remove();
     }
   });
