@@ -336,7 +336,7 @@ test.describe('NewsPage', () => {
     });
 
     test('enter filter without findings', async () => {
-      await newsPage.mockSearchNewsApi(newsMockNoContent, 'suche ohne ergebnis');
+      await newsPage.mockSearchNewsApi(newsMockNoContent, { filter: 'suche ohne ergebnis' });
       await newsPage.searchNews('suche ohne ergebnis');
 
       await expect(newsPage.newsNoContentInfo).toBeVisible();
