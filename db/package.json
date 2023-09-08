@@ -1,24 +1,24 @@
 {
   "name": "db",
-  "version": "2.1.5",
+  "version": "2.1.6",
   "license": "MIT",
   "scripts": {
     "backup": "node src/backup.js",
     "setup": "node src/setup.js"
   },
   "dependencies": {
-    "dotenv-flow": "^3.2.0",
-    "mongodb": "^5.5.0",
-    "winston": "^3.8.2"
+    "dotenv-flow": "^3.3.0",
+    "mongodb": "^5.8.1",
+    "winston": "^3.10.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.8",
-    "@babel/eslint-parser": "^7.21.8",
-    "eslint": "8.40.0",
-    "eslint-config-prettier": "^8.8.0",
+    "@babel/core": "^7.22.17",
+    "@babel/eslint-parser": "^7.22.15",
+    "eslint": "8.48.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-config-recommended": "^4.1.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.8"
+    "eslint-plugin-prettier": "^5.0.0",
+    "prettier": "^3.0.3"
   },
   "packageManager": "yarn@3.2.3"
 }
