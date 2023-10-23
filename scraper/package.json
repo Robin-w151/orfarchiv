@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src"
   },
-  "packageManager": "yarn@3.2.1",
+  "packageManager": "yarn@4.0.0",
   "devDependencies": {
     "@babel/core": "^7.22.17",
     "@babel/eslint-parser": "^7.22.15",
