@@ -1,6 +1,6 @@
 {
   "name": "checks",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "scripts": {
     "test": "playwright test",
     "test:debug": "playwright test --debug",
@@ -12,12 +12,12 @@
     "playwright": "1.32.1"
   },
   "devDependencies": {
-    "checkly": "^4.1.0",
-    "dotenv-flow": "^3.3.0",
-    "eslint": "^8.48.0",
+    "checkly": "^4.2.0",
+    "dotenv-flow": "^4.0.0",
+    "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-recommended": "^4.1.0",
-    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
