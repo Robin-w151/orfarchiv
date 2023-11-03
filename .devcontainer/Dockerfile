@@ -1,7 +1,7 @@
 FROM node:18
 
 # Install common dependencies
-RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim
+RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim && apt-get clean
 
 # Grant node user admin priviledges
 RUN sed -i 's/(ALL:ALL) ALL/(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers && usermod -aG sudo node
@@ -16,7 +16,7 @@ RUN echo \
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-RUN apt-get update && apt-get -yq install docker-ce docker-ce-cli
+RUN apt-get update && apt-get -yq install docker-ce docker-ce-cli && apt-get clean
 RUN usermod -aG docker node
 
 # Install zsh
