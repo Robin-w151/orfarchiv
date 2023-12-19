@@ -4,8 +4,8 @@
 
   const path = $page.url.pathname;
   if (path === '/favicon.ico') {
-    throw error(404, 'Not found');
+    error(404, 'Not found');
   }
 
-  throw redirect(302, '/');
+  redirect(302, '/');
 </script>
