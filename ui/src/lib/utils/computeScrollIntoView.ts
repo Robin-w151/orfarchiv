@@ -298,8 +298,8 @@ export default (target: Element, options: Options): CustomScrollAction[] => {
     block === 'start' || block === 'nearest'
       ? targetTop
       : block === 'end'
-      ? targetBottom
-      : targetTop + targetHeight / 2; // block === 'center
+        ? targetBottom
+        : targetTop + targetHeight / 2; // block === 'center
   let targetInline: number =
     inline === 'center' ? targetLeft + targetWidth / 2 : inline === 'end' ? targetRight : targetLeft; // inline === 'start || inline === 'nearest
 

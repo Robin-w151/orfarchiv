@@ -42,6 +42,7 @@
   }
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <li class={itemClass} on:click on:keydown bind:this={itemRef}>
   <slot />
 </li>

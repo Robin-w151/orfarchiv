@@ -108,6 +108,7 @@
       {#if sourceLabel}
         <div class={contentInfoClass}>Inhalt geladen von {sourceLabel}</div>
       {/if}
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
       {@html storyContent.content}
       <div class={contentInfoClass}>Quelle: <Link href={sourceUrl}>orf.at</Link></div>
     </article>
