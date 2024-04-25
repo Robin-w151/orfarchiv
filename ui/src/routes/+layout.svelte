@@ -5,6 +5,7 @@
   import EnableDarkMode from '$lib/components/utils/EnableDarkMode.svelte';
   import EnableGlobalKeybindings from '$lib/components/utils/EnableGlobalKeybindings.svelte';
   import EnableNetworkNotifications from '$lib/components/utils/EnableNetworkNotifications.svelte';
+  import EnableUpdateListener from '$lib/components/utils/EnableUpdateListener.svelte';
   import { defaultScreenSize } from '$lib/utils/styles';
   import '../app.scss';
   import { pwaInfo } from 'virtual:pwa-info';
@@ -28,6 +29,7 @@
 <EnableAnalytics />
 <EnableGlobalKeybindings />
 <EnableNetworkNotifications />
+<EnableUpdateListener />
 
 <div class={wrapperClass}>
   <Notifications />

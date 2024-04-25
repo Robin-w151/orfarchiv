@@ -23,6 +23,7 @@ const notificationsClicked: Set<string> = new Set();
 
 setupCacheAndRoutes();
 setupNotifications();
+setupMessageListener();
 
 function setupCacheAndRoutes() {
   if (wbManifest) {
@@ -36,6 +37,14 @@ function setupCacheAndRoutes() {
 function setupNotifications() {
   self.onnotificationclick = handleNotificationClick;
   self.onnotificationclose = handleNotificationClose;
+}
+
+function setupMessageListener() {
+  self.addEventListener('message', (event) => {
+    if (event.data === 'SKIP_WAITING') {
+      self.skipWaiting();
+    }
+  });
 }
 
 function generateRouteConfig(): Array<RouteConfig> {

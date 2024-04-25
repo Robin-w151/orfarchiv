@@ -20,6 +20,7 @@ export const DATETIME_FORMAT = 'dd.MM.yyyy, HH:mm';
 // Notifications
 export const NOTIFICATION_NEWS_UPDATES_AVAILABLE = Symbol('news-update-available');
 export const NOTIFICATION_NETWORK_OFFLINE_WARNING = Symbol('network-offline-warning');
+export const NOTIFICATION_NEW_VERSION_AVAILABLE = Symbol('new-version-available');
 
 // Notification Actions
 export const NOTIFICATION_ACCEPT = 'NOTIFICATION_ACCEPT';
