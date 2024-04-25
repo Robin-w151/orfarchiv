@@ -9,7 +9,7 @@
   import { selectStory } from '$lib/stores/newsEvents';
   import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
   import AccessibleTransition from '$lib/components/ui/transitions/AccessibleTransition.svelte';
-  import { rollDown, rollFade } from '$lib/utils/transitions';
+  import { rollDown } from '$lib/utils/transitions';
 
   export let story: Story;
 
