@@ -10,6 +10,6 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "types": ["vite/client"]
+    "types": ["vite/client", "vite-plugin-pwa/info"]
   }
 }

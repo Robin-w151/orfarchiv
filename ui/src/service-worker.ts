@@ -1,11 +1,10 @@
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
-import { build, files, prerendered, version } from '$service-worker';
 import { json } from '@sveltejs/kit';
 import type { RouteHandler, RouteMatchCallback, WorkboxPlugin } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
-import { precacheAndRoute, type PrecacheEntry } from 'workbox-precaching';
+import { precacheAndRoute } from 'workbox-precaching';
 import { registerRoute, type Route } from 'workbox-routing';
 import { NetworkFirst, NetworkOnly } from 'workbox-strategies';
 import { NOTIFICATION_ACCEPT, NOTIFICATION_CLOSE } from './lib/configs/client';
@@ -17,6 +16,8 @@ interface RouteConfig {
 
 declare const self: ServiceWorkerGlobalScope;
 
+const wbManifest = self.__WB_MANIFEST;
+
 const networkTimeoutSeconds = 5;
 const notificationsClicked: Set<string> = new Set();
 
@@ -24,8 +25,9 @@ setupCacheAndRoutes();
 setupNotifications();
 
 function setupCacheAndRoutes() {
-  const precacheConfig = generatePrecacheConfig();
-  precacheAndRoute(precacheConfig);
+  if (wbManifest) {
+    precacheAndRoute(wbManifest);
+  }
 
   const routeConfig = generateRouteConfig();
   routeConfig.forEach(({ capture, handler }) => registerRoute(capture, handler));
@@ -34,12 +36,6 @@ function setupCacheAndRoutes() {
 function setupNotifications() {
   self.onnotificationclick = handleNotificationClick;
   self.onnotificationclose = handleNotificationClose;
-}
-
-function generatePrecacheConfig(): Array<string | PrecacheEntry> {
-  const withRevision = (url: string) => ({ url, revision: version });
-  const withoutRevision = (url: string) => ({ url, revision: null });
-  return [...build.map(withoutRevision), ...files.map(withRevision), ...prerendered.map(withRevision)];
 }
 
 function generateRouteConfig(): Array<RouteConfig> {

@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "4.4.17",
+  "version": "4.5.0",
   "license": "MIT",
   "scripts": {
     "dev": "vite dev --host",
@@ -41,6 +41,7 @@
     "@typescript-eslint/parser": "^7.7.1",
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
+    "@vite-pwa/sveltekit": "^0.4.0",
     "acorn": "^8.11.3",
     "autoprefixer": "^10.4.19",
     "clsx": "^2.1.1",
@@ -79,6 +80,7 @@
     "typescript": "^5.4.5",
     "uuid": "^9.0.1",
     "vite": "^5.2.10",
+    "vite-plugin-pwa": "^0.19.8",
     "web-vitals": "^3.5.2",
     "winston": "^3.13.0",
     "workbox-core": "^7.1.0",
