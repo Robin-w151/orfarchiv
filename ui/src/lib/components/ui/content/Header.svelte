@@ -8,6 +8,10 @@
   import { defaultPadding } from '$lib/utils/styles';
   import { page } from '$app/stores';
   import NewspaperIcon from '../icons/outline/NewspaperIcon.svelte';
+  import CloudArrowDown from '../icons/outline/CloudArrowDown.svelte';
+  import Button from '../controls/Button.svelte';
+  import news from '$lib/stores/news';
+  import notifications from '$lib/stores/notifications';
 
   const headerClass = `
     flex justify-between items-center gap-6
@@ -23,6 +27,11 @@
   function handleRefreshButtonClick() {
     refreshNews.notify();
   }
+
+  async function handleCacheForOfflineUseClick() {
+    await news.cacheForOfflineUse();
+    notifications.notify('Download abgeschlossen', 'Die neuesten Artikel wurden für später gespeichert.');
+  }
 </script>
 
 <header class={headerClass}>
@@ -36,6 +45,14 @@
       <ButtonLink href="/" title="Aktualisieren" iconOnly on:click={handleRefreshButtonClick} preventDefault>
         <RefreshIcon />
       </ButtonLink>
+      <Button
+        title="Artikel offline verfügbar machen"
+        iconOnly
+        btnType="secondary"
+        on:click={handleCacheForOfflineUseClick}
+      >
+        <CloudArrowDown />
+      </Button>
     {:else}
       <ButtonLink href="/" title="News" iconOnly prefetch>
         <NewspaperIcon />

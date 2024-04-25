@@ -3,14 +3,17 @@ import type { Bookmarks } from '$lib/models/bookmarks';
 import type { News, NewsBucket } from '$lib/models/news';
 import type { Story } from '$lib/models/story';
 import { DateTime } from 'luxon';
-import { derived, writable, type Readable } from 'svelte/store';
+import { derived, get, writable, type Readable } from 'svelte/store';
 import bookmarks from './bookmarks';
+import settings from './settings';
+import { fetchContent } from '$lib/api/news';
 
 export interface NewsStore extends Readable<News>, Partial<News> {
   setNews: (news: News, newNews?: News) => void;
   addNews: (news: News, append?: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;
   taskWithLoading: (handler: () => void | Promise<void>) => Promise<void>;
+  cacheForOfflineUse: () => Promise<void>;
 }
 
 const initialState = { stories: [], isLoading: true };
@@ -66,6 +69,17 @@ async function taskWithLoading(handler: () => void | Promise<void>): Promise<voi
     setIsLoading(false);
     console.warn(error);
   }
+}
+
+async function cacheForOfflineUse(): Promise<void> {
+  const fetchReadMoreContentPreference = get(settings).fetchReadMoreContent;
+  const stories = get(news).stories.slice(0, 100);
+  await Promise.allSettled(
+    stories.map((story) => {
+      const fetchReadMoreContent = fetchReadMoreContentPreference && story.source === 'news';
+      return fetchContent(story.url, fetchReadMoreContent);
+    }),
+  );
 }
 
 function createStoryBuckets(stories: Array<Story>): Array<NewsBucket> | undefined {
@@ -144,4 +158,11 @@ if (browser) {
   console.log('news-store-initialized');
 }
 
-export default { subscribe, setNews, addNews, setIsLoading, taskWithLoading } as NewsStore;
+export default {
+  subscribe,
+  setNews,
+  addNews,
+  setIsLoading,
+  taskWithLoading,
+  cacheForOfflineUse,
+} as NewsStore;
