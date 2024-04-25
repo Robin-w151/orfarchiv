@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { cubicInOut } from 'svelte/easing';
+import { cubicIn, cubicInOut, cubicOut, linear } from 'svelte/easing';
 
 export const transitionDefaults = {
   duration: 150,
@@ -10,9 +10,21 @@ export function rollFade(node: Element) {
   const opacity = +getComputedStyle(node).opacity;
 
   return {
-    duration: transitionDefaults.duration,
-    easing: transitionDefaults.easing,
+    ...transitionDefaults,
     css: (t: number, u: number) => `transform: translateY(${0.5 * u}rem); opacity: ${t * opacity}`,
+  };
+}
+
+export function rollDown(node: Element) {
+  const height = window.screen.availHeight;
+  const opacity = +getComputedStyle(node).opacity;
+
+  return {
+    duration: 250,
+    easing: linear,
+    css: (t: number) => {
+      return `max-height: ${t * height}px; opacity: ${t * opacity}; overflow: hidden`;
+    },
   };
 }
 

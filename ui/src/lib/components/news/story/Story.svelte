@@ -9,6 +9,7 @@
   import { selectStory } from '$lib/stores/newsEvents';
   import { unsubscribeAll, type Subscription } from '$lib/utils/subscriptions';
   import AccessibleTransition from '$lib/components/ui/transitions/AccessibleTransition.svelte';
+  import { rollDown, rollFade } from '$lib/utils/transitions';
 
   export let story: Story;
 
@@ -106,7 +107,7 @@
     <StoryHeader {story} on:click={handleHeaderClick} on:keydown={handleHeaderKeydown} bind:this={headerRef} />
   </div>
   {#if showContent}
-    <AccessibleTransition class="content {contentClass}" onlyIn>
+    <AccessibleTransition class="content {contentClass}" transition={rollDown} onlyIn>
       <StoryContent {story} on:collapse={handleStoryContentCollapse} />
     </AccessibleTransition>
   {/if}
