@@ -12,6 +12,7 @@
   import Button from '../controls/Button.svelte';
   import news from '$lib/stores/news';
   import notifications from '$lib/stores/notifications';
+  import { NOTIFICATION_OFFLINE_CACHE_DOWNLOADED } from '$lib/configs/client';
 
   const headerClass = `
     flex justify-between items-center gap-6
@@ -30,7 +31,10 @@
 
   async function handleCacheForOfflineUseClick() {
     await news.cacheForOfflineUse();
-    notifications.notify('Download abgeschlossen', 'Die neuesten Artikel wurden für später gespeichert.');
+    notifications.notify('Download abgeschlossen', 'Die neuesten Artikel wurden für später gespeichert.', {
+      uniqueCategory: NOTIFICATION_OFFLINE_CACHE_DOWNLOADED,
+      forceAppNotification: true,
+    });
   }
 </script>
 
