@@ -2,7 +2,6 @@
 export const CTX_STORE = Symbol('store');
 
 // Endpoints
-export const WEB_VITALS_URL = '/api/vitals';
 export const API_NEWS_SEARCH_URL = (searchParams: string) => `/api/news/search?${searchParams}`;
 export const API_NEWS_SEARCH_UPDATES_URL = (searchParams: string) => `/api/news/search/updates?${searchParams}`;
 export const API_NEWS_CONTENT_URL = (searchParams: string) => `/api/news/content?${searchParams}`;
