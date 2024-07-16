@@ -19,9 +19,6 @@ const config = {
       $lib: resolve('./src/lib'),
     },
     csp,
-    output: {
-      preloadStrategy: 'preload-mjs',
-    },
   },
 };
 
