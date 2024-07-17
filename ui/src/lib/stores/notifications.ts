@@ -19,10 +19,11 @@ function createNotificationsStore(): NotificationsStore {
   async function notify(title: string, text: string, options?: OANotificationOptions): Promise<void> {
     const id = uuid();
     const currentNotifications = get(notifications);
-    if (
-      options?.uniqueCategory &&
-      currentNotifications.find((notification) => notification.options?.uniqueCategory === options.uniqueCategory)
-    ) {
+    const currentNotificationIndex = currentNotifications.findIndex(
+      (notification) => notification.options?.uniqueCategory === options?.uniqueCategory,
+    );
+
+    if (options?.uniqueCategory && currentNotificationIndex > -1 && !options?.replaceInCategory) {
       return;
     }
 
@@ -33,7 +34,13 @@ function createNotificationsStore(): NotificationsStore {
 
     if (!createdSystemNotification) {
       const notification = { id, title, text, options, system: false };
-      set([...currentNotifications, notification]);
+      if (options?.uniqueCategory && options.replaceInCategory && currentNotificationIndex > -1) {
+        const newNotifications = [...currentNotifications];
+        newNotifications[currentNotificationIndex] = notification;
+        set(newNotifications);
+      } else {
+        set([...currentNotifications, notification]);
+      }
     }
   }
 

@@ -30,9 +30,15 @@
   }
 
   async function handleCacheForOfflineUseClick() {
+    notifications.notify('Download gestartet', 'Die neuesten Artikel werden für später geladen.', {
+      uniqueCategory: NOTIFICATION_OFFLINE_CACHE_DOWNLOADED,
+      replaceInCategory: true,
+      forceAppNotification: true,
+    });
     await news.cacheForOfflineUse();
     notifications.notify('Download abgeschlossen', 'Die neuesten Artikel wurden für später gespeichert.', {
       uniqueCategory: NOTIFICATION_OFFLINE_CACHE_DOWNLOADED,
+      replaceInCategory: true,
       forceAppNotification: true,
     });
   }

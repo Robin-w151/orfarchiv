@@ -2,6 +2,8 @@ import { browser } from '$app/environment';
 import { NOTIFICATION_ACCEPT, NOTIFICATION_CLOSE } from '$lib/configs/client';
 import type { OANotificationHandlers, OANotificationOptions } from '$lib/models/notifications';
 
+type NotificationOptionsWithActions = NotificationOptions & { actions?: Array<{ action: string; title: string }> };
+
 const notificationsHandlers: Map<string, OANotificationHandlers | undefined> = new Map();
 const serviceWorker = getServiceWorker();
 serviceWorker?.addEventListener('message', handleServiceWorkerMessage);
@@ -25,7 +27,7 @@ export async function createSystemNotification(
 ): Promise<boolean> {
   if (isNotificationEnabled()) {
     const serviceWorker = await navigator.serviceWorker.ready;
-    const systemNotificationOptions: NotificationOptions = {
+    const systemNotificationOptions: NotificationOptionsWithActions = {
       data: { id, path: options?.requiredPathForFocus },
       body: text,
       icon: '/images/icon_any192.png',

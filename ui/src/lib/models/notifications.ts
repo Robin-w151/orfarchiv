@@ -13,6 +13,7 @@ export interface OANotificationHandlers {
 
 export interface OANotificationOptions extends OANotificationHandlers {
   uniqueCategory?: symbol;
+  replaceInCategory?: boolean;
   forceAppNotification?: boolean;
   requiredPathForFocus?: string;
 }
