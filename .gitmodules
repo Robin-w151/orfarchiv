@@ -7,3 +7,6 @@
 [submodule "db"]
 	path = db
 	url = git@github.com:Robin-w151/orfarchiv-db
+[submodule "scraper"]
+	path = scraper
+	url = git@github.com:Robin-w151/orfarchiv-scraper
