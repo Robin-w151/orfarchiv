@@ -35,7 +35,6 @@
         "ms-vscode.test-adapter-converter",
         "hbenl.vscode-test-explorer",
         "netcorext.uuid-generator",
-        "gamunu.vscode-yarn",
         "yoavbls.pretty-ts-errors",
         "SonarSource.sonarlint-vscode"
       ],

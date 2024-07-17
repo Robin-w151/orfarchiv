@@ -10,12 +10,12 @@ so no separate backend application is required.
 ### Prerequisites
 
 1. Start and configure a local _MongoDB_ document store (more [info](../db/README.md))
-2. Install _NodeJS_ and _yarn_, e.g. with [Volta](https://volta.sh/)
+2. Install _NodeJS_ and _npm_, e.g. with [Volta](https://volta.sh/)
 
 ### Run DEV server
 
 1. _Optionally_: create _.env.local_ (copy from _.env_ file) and configure **ORFARCHIV_DB_URL** environment variable if
    your _MongoDB_ is not running on **mongodb://localhost:27017**
-2. `yarn install`
-3. `yarn run dev`
+2. `npm install`
+3. `npm run dev`
 4. Visit http://localhost:3001

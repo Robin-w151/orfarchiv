@@ -9,4 +9,4 @@ if [ -n "$dbUrlFile" ]; then
 fi
 
 cd "$scriptDir"
-timeout 60s yarn start
+timeout 60s npm start

@@ -15,4 +15,4 @@ if [ -n "$backupDirFile" ]; then
 fi
 
 cd "$scriptDir"
-timeout 60s yarn backup
+timeout 60s npm run backup

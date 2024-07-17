@@ -1,13 +1,12 @@
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 WORKDIR /app/
 
-COPY package.json yarn.lock .npmrc .yarnrc.yml /app/
-COPY .yarn/ /app/.yarn/
+COPY package.json package-lock.json .npmrc /app/
 
-RUN yarn install --immutable --ignore-scripts
+RUN npm ci
 
-COPY csp-config.js csp-script-hashes.js postcss.config.cjs svelte.config.js tailwind.config.cjs tsconfig.json vite.config.js /app/
+COPY csp-config.js csp-script-hashes.js postcss.config.cjs svelte.config.js tailwind.config.cjs tsconfig.json vite.config.ts /app/
 COPY scripts/ /app/scripts/
 COPY src/ /app/src/
 COPY static/ /app/static/
@@ -20,11 +19,11 @@ ARG ORFARCHIV_DB_URL="mongodb://localhost"
 ENV ORFARCHIV_DB_URL="$ORFARCHIV_DB_URL"
 
 RUN npx svelte-kit sync
-RUN yarn fix:jsdom
-RUN yarn build
+RUN npm run fix:jsdom
+RUN npm run build
 
 
-FROM node:18-alpine AS deploy
+FROM node:20-alpine AS deploy
 
 USER node
 

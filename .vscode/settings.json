@@ -4,7 +4,7 @@
     "connectionId": "sonarcloud",
     "projectKey": "Robin-w151_orfarchiv"
   },
-  "eslint.packageManager": "yarn",
+  "eslint.packageManager": "npm",
   "eslint.probe": [
     "javascript",
     "javascriptreact",

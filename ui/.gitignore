@@ -6,12 +6,4 @@ node_modules
 .env.local
 .env.*.local
 
-.yarn/*
-!.yarn/releases
-!.yarn/patches
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-!.yarn/cache
-
 .vercel/

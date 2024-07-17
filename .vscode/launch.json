@@ -6,56 +6,56 @@
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["dev"]
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"]
     },
     {
       "name": "UI Build",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["build"]
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "build"]
     },
     {
       "name": "UI Preview",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["preview"]
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview"]
     },
     {
       "name": "UI Generate CSP Script Hashes",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["generate:csp-script-hashes"]
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "generate:csp-script-hashes"]
     },
     {
       "name": "UI Fix jsdom",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["fix:jsdom"]
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "fix:jsdom"]
     },
     {
       "name": "Checks",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/checks",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["test:debug"]
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test:debug"]
     },
     {
       "name": "Storybook",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
-      "runtimeExecutable": "yarn",
-      "runtimeArgs": ["storybook"]
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "storybook"]
     }
   ]
 }
