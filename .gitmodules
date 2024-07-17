@@ -4,3 +4,6 @@
 [submodule "checks"]
 	path = checks
 	url = git@github.com:Robin-w151/orfarchiv-checks
+[submodule "db"]
+	path = db
+	url = git@github.com:Robin-w151/orfarchiv-db
