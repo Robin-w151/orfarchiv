@@ -36,7 +36,8 @@
         "hbenl.vscode-test-explorer",
         "netcorext.uuid-generator",
         "yoavbls.pretty-ts-errors",
-        "SonarSource.sonarlint-vscode"
+        "SonarSource.sonarlint-vscode",
+        "github.vscode-github-actions"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
