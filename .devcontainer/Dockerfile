@@ -23,9 +23,6 @@ RUN usermod -aG docker node
 COPY zsh-in-docker.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/zsh-in-docker.sh && /usr/local/bin/zsh-in-docker.sh
 
-# Install pnpm
-RUN corepack enable pnpm
-
 USER 1000
 
 # Install zsh for user
