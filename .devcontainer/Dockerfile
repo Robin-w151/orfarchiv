@@ -1,7 +1,7 @@
 FROM node:20
 
 # Install common dependencies
-RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim && apt-get clean
+RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim default-jdk && apt-get clean
 
 # Grant node user admin priviledges
 RUN sed -i 's/(ALL:ALL) ALL/(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers && usermod -aG sudo node
