@@ -42,15 +42,15 @@
       "runtimeArgs": ["run", "fix:jsdom"]
     },
     {
-      "name": "Checks",
+      "name": "UI Tests",
       "type": "node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/checks",
+      "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "test:debug"]
+      "runtimeArgs": ["run", "test:ui"]
     },
     {
-      "name": "Storybook",
+      "name": "UI Storybook",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
