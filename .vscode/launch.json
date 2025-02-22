@@ -34,14 +34,6 @@
       "runtimeArgs": ["run", "generate:csp-script-hashes"]
     },
     {
-      "name": "UI Fix jsdom",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/ui",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "fix:jsdom"]
-    },
-    {
       "name": "UI Tests",
       "type": "node",
       "request": "launch",
