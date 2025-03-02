@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:22
 
 # Install common dependencies
 RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim default-jdk && apt-get clean

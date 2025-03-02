@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   devcontainer:
-    image: 'node-18-custom'
+    image: 'node-custom'
     build: '.'
     command: sleep infinity
     environment:
