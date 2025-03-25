@@ -1,7 +1,7 @@
 FROM node:22
 
 # Install common dependencies
-RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim default-jdk && apt-get clean
+RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim default-jdk build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev && apt-get clean
 
 # Grant node user admin priviledges
 RUN sed -i 's/(ALL:ALL) ALL/(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers && usermod -aG sudo node
