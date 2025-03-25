@@ -7,3 +7,6 @@
 [submodule "scraper"]
 	path = scraper
 	url = git@github.com:Robin-w151/orfarchiv-scraper
+[submodule "image-proxy"]
+	path = image-proxy
+	url = https://github.com/Robin-w151/orfarchiv-image-proxy.git

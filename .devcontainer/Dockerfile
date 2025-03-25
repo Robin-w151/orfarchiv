@@ -27,3 +27,6 @@ USER 1000
 
 # Install zsh for user
 RUN /usr/local/bin/zsh-in-docker.sh -x
+
+# Install deno
+RUN curl -fsSL https://deno.land/install.sh | bash -s -- --yes
