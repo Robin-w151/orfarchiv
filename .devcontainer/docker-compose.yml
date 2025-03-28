@@ -10,6 +10,7 @@ services:
       - '3001:3001'
       - '3301:3301'
       - '6006:6006'
+      - '8080:8080'
     networks:
       - orfarchiv-dev-network
     volumes:
