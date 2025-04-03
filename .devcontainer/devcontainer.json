@@ -38,7 +38,8 @@
         "yoavbls.pretty-ts-errors",
         "SonarSource.sonarlint-vscode",
         "github.vscode-github-actions",
-        "vitest.explorer"
+        "vitest.explorer",
+        "denoland.vscode-deno"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",
