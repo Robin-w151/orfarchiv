@@ -1,4 +1,5 @@
 {
+  "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "sonarlint.connectedMode.project": {
     "connectionId": "sonarcloud",
