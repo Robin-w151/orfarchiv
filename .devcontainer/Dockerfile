@@ -1,7 +1,26 @@
 FROM node:22
 
 # Install common dependencies
-RUN apt-get update && apt-get -yq install ca-certificates curl fzf git gnupg sudo vim default-jdk build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev zsh wget unzip fontconfig && apt-get clean
+RUN apt-get update && apt-get -yq install \
+  build-essential \
+  ca-certificates \
+  curl \
+  default-jdk \
+  fontconfig \
+  fzf \
+  git \
+  gnupg \
+  libcairo2-dev \
+  libgif-dev \
+  libjpeg-dev \
+  libpango1.0-dev \
+  librsvg2-dev \
+  sudo \
+  unzip \
+  vim \
+  wget \
+  zsh \
+  && apt-get clean
 
 # Install Fira Code Nerd Font
 RUN mkdir -p /usr/share/fonts/truetype/firacode && \
@@ -25,12 +44,9 @@ USER 1000
 SHELL ["/bin/zsh", "-c"]
 WORKDIR /home/node
 
-# Install deno
-RUN curl -fsSL https://deno.land/install.sh | bash -s -- --yes
-
 # Install prezto
 RUN git clone --recursive https://github.com/sorin-ionescu/prezto.git ".zprezto"
-RUN rm .zprezto/runcoms/README.md .zshrc
+RUN rm -f .zprezto/runcoms/README.md .zshrc
 RUN for rcfile in .zprezto/runcoms/*(.); do ln -s "$rcfile" "/home/node/.${rcfile:t}"; done
 
 # Configure starship
