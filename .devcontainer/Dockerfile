@@ -44,6 +44,10 @@ USER 1000
 SHELL ["/bin/zsh", "-c"]
 WORKDIR /home/node
 
+# Install Aikido safe-chain
+RUN sudo npm i -g @aikidosec/safe-chain
+RUN safe-chain setup
+
 # Install prezto
 RUN git clone --recursive https://github.com/sorin-ionescu/prezto.git ".zprezto"
 RUN rm -f .zprezto/runcoms/README.md .zshrc
