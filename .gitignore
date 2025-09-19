@@ -22,3 +22,5 @@
 *.code-workspace
 
 *.mongodb
+
+*.todo
