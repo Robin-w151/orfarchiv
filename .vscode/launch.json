@@ -34,12 +34,20 @@
       "runtimeArgs": ["run", "generate:csp-script-hashes"]
     },
     {
-      "name": "UI Tests",
+      "name": "UI Unit Tests",
       "type": "node",
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "test:ui"]
+      "runtimeArgs": ["run", "test:unit:watch"]
+    },
+    {
+      "name": "UI E2E Tests",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/ui",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test:e2e:ui"]
     },
     {
       "name": "UI Storybook",
