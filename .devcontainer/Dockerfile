@@ -1,4 +1,4 @@
-FROM node:22.20.0
+FROM node:24.12.0
 
 # Install common dependencies
 RUN apt-get update && apt-get -yq install \
