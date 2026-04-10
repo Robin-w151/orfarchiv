@@ -1,4 +1,4 @@
-FROM node:24.12.0
+FROM node:24.14.1-trixie
 
 # Install common dependencies
 RUN apt-get update && apt-get -yq install \
