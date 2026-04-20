@@ -10,6 +10,7 @@ RUN apt-get update && apt-get -yq install \
   fzf \
   git \
   gnupg \
+  less \
   libcairo2-dev \
   libgif-dev \
   libjpeg-dev \
