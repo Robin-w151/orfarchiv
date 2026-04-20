@@ -5,6 +5,7 @@ services:
     command: sleep infinity
     environment:
       - ORFARCHIV_DB_URL=mongodb://orfarchiv-db
+      - NODE_OPTIONS=--experimental-require-module
     ports:
       - '3001:3001'
       - '3080:8080'
