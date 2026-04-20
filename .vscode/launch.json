@@ -7,7 +7,11 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"]
+      "runtimeArgs": ["run", "dev"],
+      "runtimeVersion": "24.15.0",
+      "env": {
+        "NODE_OPTIONS": "--experimental-require-module"
+      }
     },
     {
       "name": "UI Build",
@@ -15,7 +19,11 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "build"]
+      "runtimeArgs": ["run", "build"],
+      "runtimeVersion": "24.15.0",
+      "env": {
+        "NODE_OPTIONS": "--experimental-require-module"
+      }
     },
     {
       "name": "UI Preview",
@@ -23,7 +31,11 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "preview"]
+      "runtimeArgs": ["run", "preview"],
+      "runtimeVersion": "24.15.0",
+      "env": {
+        "NODE_OPTIONS": "--experimental-require-module"
+      }
     },
     {
       "name": "UI Generate CSP Script Hashes",
@@ -31,7 +43,8 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "generate:csp-script-hashes"]
+      "runtimeArgs": ["run", "generate:csp-script-hashes"],
+      "runtimeVersion": "24.15.0"
     },
     {
       "name": "UI Unit Tests",
@@ -39,7 +52,11 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "test:unit:watch"]
+      "runtimeArgs": ["run", "test:unit:watch"],
+      "runtimeVersion": "24.15.0",
+      "env": {
+        "NODE_OPTIONS": "--experimental-require-module"
+      }
     },
     {
       "name": "UI E2E Tests",
@@ -47,7 +64,11 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "test:e2e:ui"]
+      "runtimeArgs": ["run", "test:e2e:ui"],
+      "runtimeVersion": "24.15.0",
+      "env": {
+        "NODE_OPTIONS": "--experimental-require-module"
+      }
     },
     {
       "name": "UI Storybook",
@@ -55,7 +76,11 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/ui",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "storybook"]
+      "runtimeArgs": ["run", "storybook"],
+      "runtimeVersion": "24.15.0",
+      "env": {
+        "NODE_OPTIONS": "--experimental-require-module"
+      }
     }
   ]
 }
