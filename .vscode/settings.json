@@ -13,5 +13,6 @@
     "svelte"
   ],
   "eslint.validate": ["javascript", "typescript", "svelte"],
-  "git.detectSubmodules": true
+  "git.detectSubmodules": true,
+  "vitest.shellType": "terminal"
 }
