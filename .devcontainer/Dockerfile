@@ -51,7 +51,7 @@ RUN rm -f .zprezto/runcoms/README.md .zshrc
 RUN for rcfile in .zprezto/runcoms/*(.); do ln -s "$rcfile" "/home/node/.${rcfile:t}"; done
 
 # Install fnm
-RUN curl -fsSL https://fnm.vercel.app/install | bash && source ~/.zshrc && fnm install 24.15.0
+RUN curl -fsSL https://fnm.vercel.app/install | bash && source ~/.zshrc && fnm install 24.15.0 && fnm default 24.15.0
 
 # Install Aikido safe-chain
 RUN sudo npm i -g @aikidosec/safe-chain
