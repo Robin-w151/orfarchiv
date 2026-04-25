@@ -1,4 +1,5 @@
-FROM node:24.15.0-trixie
+ARG NODE_VERSION=24.15.0
+FROM node:${NODE_VERSION}-trixie
 
 # Install common dependencies
 RUN apt-get update && apt-get -yq install \
@@ -51,7 +52,18 @@ RUN rm -f .zprezto/runcoms/README.md .zshrc
 RUN for rcfile in .zprezto/runcoms/*(.); do ln -s "$rcfile" "/home/node/.${rcfile:t}"; done
 
 # Install fnm
-RUN curl -fsSL https://fnm.vercel.app/install | bash && source ~/.zshrc && fnm install 24.15.0 && fnm default 24.15.0
+RUN curl -fsSL https://fnm.vercel.app/install | bash && source ~/.zshrc && fnm install ${NODE_VERSION} && fnm default ${NODE_VERSION}
+
+# Configure husky init to load fnm in non-interactive shells
+RUN mkdir -p /home/node/.config/husky && cat <<'EOF' > /home/node/.config/husky/init.sh
+#!/usr/bin/env sh
+
+if command -v fnm >/dev/null 2>&1; then
+  eval "$(fnm env --shell=zsh)"
+  fnm use --silent-if-unchanged ${NODE_VERSION} >/dev/null 2>&1 || true
+fi
+EOF
+RUN chmod +x /home/node/.config/husky/init.sh
 
 # Install Aikido safe-chain
 RUN sudo npm i -g @aikidosec/safe-chain
