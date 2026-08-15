@@ -21,8 +21,7 @@ RUN apt-get update && apt-get -yq install \
   unzip \
   vim \
   wget \
-  zsh \
-  && apt-get clean
+  zsh
 
 # Install Fira Code Nerd Font
 RUN mkdir -p /usr/share/fonts/truetype/firacode && \
@@ -32,6 +31,16 @@ RUN mkdir -p /usr/share/fonts/truetype/firacode && \
   rm FiraCode.zip && \
   fc-cache -fv
 
+# Install github cli
+RUN mkdir -p -m 755 /etc/apt/keyrings \
+  && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+  && cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+  && chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+  && mkdir -p -m 755 /etc/apt/sources.list.d \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+  && apt update \
+  && apt install gh -yq
+
 # Install starship
 RUN curl -sS https://starship.rs/install.sh | sh -s -- --yes
 
@@ -40,6 +49,9 @@ RUN sed -i 's/(ALL:ALL) ALL/(ALL:ALL) NOPASSWD: ALL/g' /etc/sudoers && usermod -
 
 # Set zsh as default shell
 RUN chsh -s /usr/bin/zsh node
+
+# Cleanup apt cache
+RUN apt-get clean
 
 # Switch to node user
 USER 1000
