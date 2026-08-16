@@ -12,3 +12,7 @@
 ## Tooling
 
 - Prefer the scripts provided by `package.json` (linting, testing, building, etc.) over invoking tools directly.
+
+## Docs
+
+- Only add docs if explicitly asked for
