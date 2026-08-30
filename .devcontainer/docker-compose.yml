@@ -4,7 +4,7 @@ services:
     build: '.'
     command: sleep infinity
     environment:
-      - ORFARCHIV_DB_URL=mongodb://orfarchiv-db
+      - ORFARCHIV_DB_URL=mongodb://orfarchiv-db/?directConnection=true
       - NODE_OPTIONS=--experimental-require-module
     ports:
       - '3001:3001'
@@ -17,25 +17,46 @@ services:
       - ../..:/workspaces:cached
       - orfarchiv-home:/home/node
   orfarchiv-db:
-    image: mongo
+    image: mongodb/mongodb-atlas-local
     ports:
       - '27017:27017'
     networks:
       - orfarchiv-dev-network
     volumes:
-      - orfarchiv-dev:/data/db
+      - orfarchiv-db:/data/db
+      - orfarchiv-db-mongot:/data/mongot
     restart: unless-stopped
   orfarchiv-db-ui:
     image: mongo-express
     environment:
-      - ME_CONFIG_MONGODB_SERVER=orfarchiv-db
+      - ME_CONFIG_MONGODB_URL=mongodb://orfarchiv-db:27017/?directConnection=true
     ports:
       - '3002:8081'
     networks:
       - orfarchiv-dev-network
+    depends_on:
+      orfarchiv-db:
+        condition: service_healthy
+    restart: unless-stopped
+  orfarchiv-embeddings:
+    image: 'ghcr.io/ggml-org/llama.cpp:server'
+    command:
+      - '-hf'
+      - 'ggml-org/embeddinggemma-300m-qat-q8_0-GGUF'
+      - '--embeddings'
+      - '--host'
+      - '0.0.0.0'
+    ports:
+      - '3003:8080'
+    networks:
+      - orfarchiv-dev-network
+    volumes:
+      - orfarchiv-models:/root/.cache/llama.cpp
     restart: unless-stopped
 networks:
   orfarchiv-dev-network:
 volumes:
-  orfarchiv-dev:
+  orfarchiv-db:
+  orfarchiv-db-mongot:
   orfarchiv-home:
+  orfarchiv-models:
