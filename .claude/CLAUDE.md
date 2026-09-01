@@ -16,3 +16,4 @@
 ## Docs
 
 - Only add docs if explicitly asked for
+- Do not add code comments by default, only if explicitly asks for or if it is absolutely necessary because the code is really really really weird
