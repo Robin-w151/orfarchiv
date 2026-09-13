@@ -24,3 +24,5 @@
 *.mongodb
 
 *.todo
+
+.tasks/
