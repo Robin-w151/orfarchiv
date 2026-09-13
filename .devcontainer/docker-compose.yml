@@ -1,37 +1,41 @@
 services:
   devcontainer:
-    image: 'node-custom'
-    build: '.'
+    image: "node-custom"
+    build: "."
     command: sleep infinity
     environment:
-      - ORFARCHIV_DB_URL=mongodb://orfarchiv-db/?directConnection=true
+      - ORFARCHIV_DB_URL=mongodb://orfarchiv:orfarchiv@orfarchiv-db/?directConnection=true
       - NODE_OPTIONS=--experimental-require-module
     ports:
-      - '3001:3001'
-      - '3080:8080'
-      - '3301:3301'
-      - '6006:6006'
+      - "3001:3001"
+      - "3080:8080"
+      - "3301:3301"
+      - "6006:6006"
     networks:
       - orfarchiv-dev-network
     volumes:
       - ../..:/workspaces:cached
       - orfarchiv-home:/home/node
   orfarchiv-db:
-    image: mongodb/mongodb-atlas-local
+    image: mongodb/mongodb-atlas-local:8.3.3
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=orfarchiv
+      - MONGODB_INITDB_ROOT_PASSWORD=orfarchiv
     ports:
-      - '27017:27017'
+      - "27017:27017"
     networks:
       - orfarchiv-dev-network
     volumes:
       - orfarchiv-db:/data/db
+      - orfarchiv-db-config:/data/configdb
       - orfarchiv-db-mongot:/data/mongot
     restart: unless-stopped
   orfarchiv-db-ui:
     image: mongo-express
     environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://orfarchiv-db:27017/?directConnection=true
+      - ME_CONFIG_MONGODB_URL=mongodb://orfarchiv:orfarchiv@orfarchiv-db/?directConnection=true
     ports:
-      - '3002:8081'
+      - "3002:8081"
     networks:
       - orfarchiv-dev-network
     depends_on:
@@ -39,15 +43,15 @@ services:
         condition: service_healthy
     restart: unless-stopped
   orfarchiv-embeddings:
-    image: 'ghcr.io/ggml-org/llama.cpp:server'
+    image: "ghcr.io/ggml-org/llama.cpp:server"
     command:
-      - '-hf'
-      - 'ggml-org/embeddinggemma-300m-qat-q8_0-GGUF'
-      - '--embeddings'
-      - '--host'
-      - '0.0.0.0'
+      - "-hf"
+      - "ggml-org/embeddinggemma-300m-qat-q8_0-GGUF"
+      - "--embeddings"
+      - "--host"
+      - "0.0.0.0"
     ports:
-      - '3003:8080'
+      - "3003:8080"
     networks:
       - orfarchiv-dev-network
     volumes:
@@ -57,6 +61,7 @@ networks:
   orfarchiv-dev-network:
 volumes:
   orfarchiv-db:
+  orfarchiv-db-config:
   orfarchiv-db-mongot:
   orfarchiv-home:
   orfarchiv-models:

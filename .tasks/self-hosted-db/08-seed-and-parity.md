@@ -49,7 +49,7 @@ the entire reason S4 exists and why it is on the critical path.
 - Run inside `tmux` or `screen` **on the VPS**, not over a laptop SSH session. A full sync of 437k
   documents from M0 across the internet takes a while and this is the first real exercise of the TLS
   path.
-- Use the `app-write` user for `sync`'s target and `app-read` for its source.
+- Use the `orfarchiv_rw` user for `sync`'s target and `orfarchiv_ro` for its source.
 - `sync` is idempotent, so an interrupted run can simply be re-run.
 - Expect `_id` values to differ between the two databases. This is correct and safe — nothing reads
   `_id` (`mapToStory` ignores it, keyset pagination uses `timestamp` + `id`).

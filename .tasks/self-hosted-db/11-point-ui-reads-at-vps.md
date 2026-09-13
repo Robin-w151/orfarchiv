@@ -35,7 +35,7 @@ rollback is trivial.
 In Vercel project settings (all environments that should use it):
 
 ```
-ORFARCHIV_DB_URLS=mongodb://app-read:<pw>@<vps-host>:27017/?tls=true
+ORFARCHIV_DB_URLS=mongodb://orfarchiv_ro:<pw>@<vps-host>:27017/?tls=true
 mongodb+srv://<user>:<pw>@<m0-host>/
 ```
 

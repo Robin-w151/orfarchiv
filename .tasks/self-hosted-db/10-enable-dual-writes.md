@@ -35,7 +35,7 @@ receive every story.
 On the VPS compose stack, both containers swap `ORFARCHIV_DB_URL` for `ORFARCHIV_DB_URLS`:
 
 ```
-ORFARCHIV_DB_URLS=mongodb://app-write:<pw>@<vps-host>:27017/?tls=true
+ORFARCHIV_DB_URLS=mongodb://orfarchiv_rw:<pw>@<vps-host>:27017/?tls=true
 mongodb+srv://<user>:<pw>@<m0-host>/
 ```
 

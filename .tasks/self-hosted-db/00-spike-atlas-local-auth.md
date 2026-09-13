@@ -2,6 +2,7 @@
 
 **Owner:** You   **Repo:** infra (no code)   **Size:** S
 **Depends on:** nothing   **Blocks:** [S7](07-vps-mongodb-stack.md)
+**Status:** ✅ Done (2026-09-13) — `$vectorSearch` works with SCRAM, see [Result](#result-2026-09-13)
 
 ## Goal
 
@@ -73,12 +74,105 @@ enough detail to choose between that and other options (e.g. a keyfile supplied 
 
 ## Acceptance criteria
 
-- [ ] A documented yes/no on whether `$vectorSearch` works with SCRAM enabled.
-- [ ] The image tag **and digest** tested are recorded.
-- [ ] If yes: a working compose snippet, plus the commands that created both users.
-- [ ] If yes: evidence that a `read`-only user can execute `$vectorSearch`.
-- [ ] If no: the failure mode captured (logs from both `mongod` and `mongot`), and a recommendation.
-- [ ] Result written back into this file, and S7 updated if the answer is no.
+- [x] A documented yes/no on whether `$vectorSearch` works with SCRAM enabled.
+- [x] The image tag **and digest** tested are recorded.
+- [x] If yes: a working compose snippet, plus the commands that created both users.
+- [x] If yes: evidence that a `read`-only user can execute `$vectorSearch`.
+- [x] ~~If no: the failure mode captured (logs from both `mongod` and `mongot`), and a recommendation.~~ n/a
+- [x] Result written back into this file, and S7 updated if the answer is no.
+
+## Result (2026-09-13)
+
+**Yes — `$vectorSearch` works with SCRAM enabled**, for root and for both least-privilege users.
+
+- Image: `mongodb/mongodb-atlas-local:8.3.3`
+- Digest: `mongodb/mongodb-atlas-local@sha256:03256817c492ad78873c3727435c1f164c705e541d150322b47700217db5a7f9`
+  (Docker Hub build `8.3.3-20260911T095853Z`)
+- MongoDB server: `8.3.3` (FCV `8.3`), tested with mongosh `2.10.0`
+- Healthcheck still passes with auth on: `orfarchiv-db-ui` (`depends_on: condition: service_healthy`) came
+  up normally.
+- An earlier run on a stale local `latest` (server `8.2.3`, digest `sha256:283bf0dc…`) gave identical
+  results. It was superseded because the 8.2 line is no longer rebuilt on Docker Hub.
+
+### Compose snippet
+
+```yaml
+orfarchiv-db:
+  image: mongodb/mongodb-atlas-local:8.3.3@sha256:03256817c492ad78873c3727435c1f164c705e541d150322b47700217db5a7f9
+  environment:
+    - MONGODB_INITDB_ROOT_USERNAME=orfarchivdb
+    - MONGODB_INITDB_ROOT_PASSWORD=orfarchivdb
+  ports:
+    - '27017:27017'
+  volumes:
+    - orfarchiv-db:/data/db
+    - orfarchiv-db-mongot:/data/mongot
+```
+
+`MONGODB_INITDB_ROOT_*` is only applied when `/data/db` is empty.
+
+### User creation
+
+Run as root. Users live in `admin` so connection strings without a path need no `authSource`.
+
+```js
+use admin
+db.createUser({ user: 'orfarchiv_rw', pwd: passwordPrompt(), roles: [{ role: 'readWrite', db: 'orfarchiv' }] })
+db.createUser({ user: 'orfarchiv_ro', pwd: passwordPrompt(), roles: [{ role: 'read', db: 'orfarchiv' }] })
+```
+
+Connection string: `mongodb://<user>:<pw>@orfarchiv-db/?directConnection=true`
+
+Idempotent version (creates or updates both users): [scripts/create-users.js](scripts/create-users.js).
+
+### Scripts
+
+All run with `npx mongosh '<url>' --file <script>`:
+
+| Script | Run as | Purpose |
+| --- | --- | --- |
+| [create-users.js](scripts/create-users.js) | root, with `ORFARCHIV_RW_PASSWORD` / `ORFARCHIV_RO_PASSWORD` set | Create or update `orfarchiv_rw` / `orfarchiv_ro` |
+| [seed.js](scripts/seed.js) | `orfarchiv_rw` | Replace `spike:*` docs with 30 synthetic int8-vector docs, wait until `news_title_vector` returns hits |
+| [perm-test.js](scripts/perm-test.js) | each app user | 16 allow/deny checks; expectations derived from the user's role; exits non-zero on failure |
+
+`perm-test.js` only touches throwaway `permtest*` collections and a `permtest:1` doc, so it is safe to run
+against a database with real data. It needs at least one document with `titleEmbedding`.
+
+### Permission evidence
+
+Tested on a fresh volume:
+
+1. Users created as root (above).
+2. `npm run setup` in `db` run **as `orfarchiv_rw`**: collection, indexes and `news_title_vector` created
+   without errors.
+3. 30 synthetic docs seeded as `orfarchiv_rw` with int8 `titleEmbedding` vectors
+   (`Binary.fromInt8Array`, as the scraper writes them). The index was `READY` and queryable after ~2s.
+4. Each operation below run as both users. The query vector was the stored `titleEmbedding` of `spike:0`,
+   which came back as the top hit with score `1`.
+
+| Operation                                 | `orfarchiv_ro` (`read`) | `orfarchiv_rw` (`readWrite`) |
+| ----------------------------------------- | ----------------------- | ---------------------------- |
+| find / count                              | ok                      | ok                           |
+| `$vectorSearch` (with and without filter) | ok                      | ok                           |
+| `listSearchIndexes`                       | ok                      | ok                           |
+| insert / delete                           | Unauthorized            | ok                           |
+| `createIndex` / `dropIndex`               | Unauthorized            | ok                           |
+| `createCollection` / `drop`               | Unauthorized            | ok                           |
+| `createSearchIndex` / `dropSearchIndex`   | Unauthorized            | ok                           |
+| read `admin.system.users`                 | Unauthorized            | Unauthorized                 |
+| write to another database                 | Unauthorized            | Unauthorized                 |
+| `usersInfo` / `createUser`                | Unauthorized            | Unauthorized                 |
+
+Consequences for S7:
+
+- `db/src/setup.ts` runs as `orfarchiv_rw`; setup does not need root or a custom role.
+- App users are not created by the image; S7 needs a provisioning step for them.
+- Pin tag **and** digest. Docker Hub rebuilds and re-pushes every tag (including exact patch tags like
+  `8.3.3`) with new digests roughly weekly, so a tag alone does not identify the tested image. Re-run
+  this spike when bumping the digest.
+- mongosh `2.10.0` quirks (not server issues): it aborts with `Telemetry setup is missing userId or
+  anonymousId` if `~/.mongodb/mongosh/config` lacks a telemetry ID (fix: `enableTelemetry: false`), and
+  prints `TypeError: getAiAgent is not a function` on exit.
 
 ## Verification
 

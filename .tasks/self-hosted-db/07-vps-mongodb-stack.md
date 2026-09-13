@@ -39,7 +39,7 @@ properly.
 
 | Service | Notes |
 | --- | --- |
-| `orfarchiv-db` | `mongodb/mongodb-atlas-local`, **pinned by digest** (the one validated in S0). **Remove the `27017:27017` host publish** — internal network only. Volumes `/data/db` and `/data/mongot` on the 80 GB disk. Set `--wiredTigerCacheSizeGB 2.5` to leave headroom for `mongot` |
+| `orfarchiv-db` | `mongodb/mongodb-atlas-local:8.3.3@sha256:03256817c492ad78873c3727435c1f164c705e541d150322b47700217db5a7f9`, **pinned by tag and digest** (validated in S0). **Remove the `27017:27017` host publish** — internal network only. Volumes `/data/db` and `/data/mongot` on the 80 GB disk. Set `--wiredTigerCacheSizeGB 2.5` to leave headroom for `mongot` |
 | `mongo-tls-proxy` *(new)* | nginx with the `stream` module (or HAProxy) terminating TLS on public `27017` → `orfarchiv-db:27017`. Keeps TLS out of the atlas-local image entirely, which is far easier than configuring `mongod` TLS through it, and survives cert rotation with a reload. Add `limit_conn`, and **enable `ssl_session_cache` + session tickets** so Vercel cold starts resume rather than doing a full handshake |
 | `certbot` *(new)* | Let's Encrypt for the DB hostname, with a proxy-reload deploy hook |
 | `orfarchiv-scraper` | Existing image; env swaps to `ORFARCHIV_DB_URLS` at [S10](10-enable-dual-writes.md) |
@@ -59,15 +59,21 @@ users:
 
 | User | Role | Used by |
 | --- | --- | --- |
-| app-write | `readWrite` on `orfarchiv` | scraper, `db sync`, `db setup` |
-| app-read | `read` on `orfarchiv` | ui, `db backup`, `db verify` |
+| `orfarchiv_rw` | `readWrite` on `orfarchiv` | scraper, `db sync`, `db setup` |
+| `orfarchiv_ro` | `read` on `orfarchiv` | ui, `db backup`, `db verify` |
 
-`$vectorSearch` needs only read privileges.
+**Validated in [S0](00-spike-atlas-local-auth.md):** `$vectorSearch` works with SCRAM enabled, for both
+users. The mTLS fallback is not needed. Findings that shape this story:
 
-**Gated on [S0](00-spike-atlas-local-auth.md).** If that spike found that `mongot` does not serve
-`$vectorSearch` with SCRAM enabled, the design changes to mTLS at the nginx stream layer with
-`mongod` unauthenticated behind it — noticeably worse, because the Vercel side must then write a
-client PEM to `/tmp` at cold start. Do not start this story until S0 has answered.
+- The root credentials are only applied when `/data/db` is empty. Changing them later in the env has no
+  effect; rotate with `db.changeUserPassword` instead.
+- The image creates root only. App users need an explicit provisioning step after first start:
+  [scripts/create-users.js](scripts/create-users.js) (idempotent, so it also rotates passwords).
+- Users live in `admin`. Connection strings without a database path need no `authSource`:
+  `mongodb://orfarchiv_ro:<pw>@<host>:27017/?tls=true`.
+- `db setup` runs fine as `orfarchiv_rw` (collection, indexes, search index), so root is only needed for
+  user management.
+- `$vectorSearch` needs only `read`; `orfarchiv_ro` is denied every write and admin action.
 
 ### Firewall
 
@@ -77,11 +83,20 @@ closed. Use a long generated password and rotate it if it ever transits an insec
 ### Depends-on caveat
 
 `depends_on: condition: service_healthy` needs a healthcheck; the atlas-local image supplies its own
-`HEALTHCHECK`. Confirm it still reports healthy with auth enabled (part of S0).
+`HEALTHCHECK`. S0 confirmed it still reports healthy with auth enabled.
+
+### Image updates
+
+Docker Hub rebuilds and re-pushes every atlas-local tag, including exact patch tags, with new digests
+roughly weekly. The tag is only a label; the digest is what gets pulled. When bumping the digest (e.g.
+via Renovate), re-run `seed.js` + `perm-test.js` from S0 against a local stack on the new digest before
+deploying it.
 
 ## Acceptance criteria
 
-- [ ] `mongosh "mongodb://app-read:<pw>@<host>:27017/?tls=true"` connects **from off the VPS**.
+- [ ] `mongosh "mongodb://orfarchiv_ro:<pw>@<host>:27017/?tls=true"` connects **from off the VPS**.
+- [ ] `orfarchiv_rw` and `orfarchiv_ro` provisioned via `create-users.js`; `perm-test.js` passes 16/16 for
+      both over the TLS proxy.
 - [ ] The same connection **fails** without credentials, and fails without TLS.
 - [ ] `mongod` is not reachable directly on any public port — only the proxy's 27017.
 - [ ] `mongo-express` is not reachable from the internet.
@@ -95,17 +110,23 @@ closed. Use a long generated password and rotate it if it ever transits an insec
 ## Verification
 
 ```bash
+# Provision app users (once, as root)
+ORFARCHIV_RW_PASSWORD=... ORFARCHIV_RO_PASSWORD=... \
+  mongosh "mongodb://root:<pw>@<host>:27017/?tls=true" --file scripts/create-users.js
+
 # From a machine that is NOT the VPS:
-mongosh "mongodb://app-read:<pw>@<host>:27017/?tls=true" --eval 'db.runCommand({ ping: 1 })'
+mongosh "mongodb://orfarchiv_ro:<pw>@<host>:27017/?tls=true" --eval 'db.runCommand({ ping: 1 })'
 
 # Negative checks — all three must fail
 mongosh "mongodb://<host>:27017/?tls=true" --eval 'db.runCommand({ ping: 1 })'   # no creds
-mongosh "mongodb://app-read:<pw>@<host>:27017/"                                  # no TLS
+mongosh "mongodb://orfarchiv_ro:<pw>@<host>:27017/"                              # no TLS
 curl -m 5 http://<host>:3002                                                     # mongo-express
 
-# Least privilege: app-read must not be able to write
-mongosh "mongodb://app-read:<pw>@<host>:27017/?tls=true" \
-  --eval 'db.getSiblingDB("orfarchiv").news.insertOne({ x: 1 })'   # expect auth error
+# Least privilege over the proxy (before S8: run db setup + seed.js as orfarchiv_rw first,
+# then remove the synthetic docs with deleteMany({ id: /^spike:/ }))
+mongosh "mongodb://orfarchiv_rw:<pw>@<host>:27017/?tls=true" --file scripts/seed.js
+mongosh "mongodb://orfarchiv_ro:<pw>@<host>:27017/?tls=true" --file scripts/perm-test.js
+mongosh "mongodb://orfarchiv_rw:<pw>@<host>:27017/?tls=true" --file scripts/perm-test.js
 
 # TLS session resumption
 openssl s_client -connect <host>:27017 -reconnect 2>&1 | grep -i 'reused\|session'
@@ -122,5 +143,7 @@ certbot renew --dry-run
 - Certificate renewal restarting the proxy briefly drops connections. The driver reconnects, and the
   UI's failover ([S6](06-ui-database-service.md)) covers the window — but schedule renewal away from
   the 03:00 backup window.
-- `latest` on the atlas-local image is a moving target; pinning the digest is what makes S0's result
-  meaningful over time.
+- Any tag on the atlas-local image is a moving target (see [Image updates](#image-updates)); pinning the
+  digest is what makes S0's result meaningful over time.
+- `8.3.3` is not the newest 8.3 patch (`8.3.8` exists). Fine to deploy as validated, but plan a
+  re-validated bump rather than drifting.

@@ -129,22 +129,22 @@ graph TD
 
 ### Stories at a glance
 
-| ID | Story | Repo | Owner | Size |
-| --- | --- | --- | --- | --- |
-| [S0](00-spike-atlas-local-auth.md) | Spike: atlas-local with auth + `$vectorSearch` | infra | You | S |
-| [S1](01-db-cli-and-build.md) | `db`: Vite build + unified Effect CLI | `db` | Me | L |
-| [S2](02-shared-module.md) | `orfarchiv-shared` module | new + all 3 | Both | M |
-| [S3](03-db-multi-target.md) | `db`: multi-target config, `setup`/`backup`/`restore` | `db` | Me | M |
-| [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M |
-| [S5](05-scraper-multi-target-writes.md) | `scraper`: multi-target writes | `scraper` | Me | M |
-| [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L |
-| [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L |
-| [S8](08-seed-and-parity.md) | Seed VPS + parity check | ops | You | M |
-| [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M |
-| [S10](10-enable-dual-writes.md) | Enable dual writes | ops | You | S |
-| [S11](11-point-ui-reads-at-vps.md) | Point UI reads at VPS | ops | You | S |
-| [S12](12-monitoring-and-scheduled-verify.md) | Monitoring + scheduled verify | ops | You | S |
-| [S13](13-optional-second-target.md) | *(Optional)* Second self-hosted target; retire M0 | infra | You | M |
+| ID | Story | Repo | Owner | Size | Status |
+| --- | --- | --- | --- | --- | --- |
+| [S0](00-spike-atlas-local-auth.md) | Spike: atlas-local with auth + `$vectorSearch` | infra | You | S | ✅ Done |
+| [S1](01-db-cli-and-build.md) | `db`: Vite build + unified Effect CLI | `db` | Me | L | |
+| [S2](02-shared-module.md) | `orfarchiv-shared` module | new + all 3 | Both | M | |
+| [S3](03-db-multi-target.md) | `db`: multi-target config, `setup`/`backup`/`restore` | `db` | Me | M | |
+| [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M | |
+| [S5](05-scraper-multi-target-writes.md) | `scraper`: multi-target writes | `scraper` | Me | M | |
+| [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | |
+| [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L | |
+| [S8](08-seed-and-parity.md) | Seed VPS + parity check | ops | You | M | |
+| [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M | |
+| [S10](10-enable-dual-writes.md) | Enable dual writes | ops | You | S | |
+| [S11](11-point-ui-reads-at-vps.md) | Point UI reads at VPS | ops | You | S | |
+| [S12](12-monitoring-and-scheduled-verify.md) | Monitoring + scheduled verify | ops | You | S | |
+| [S13](13-optional-second-target.md) | *(Optional)* Second self-hosted target; retire M0 | infra | You | M | |
 
 ## Safety properties
 
