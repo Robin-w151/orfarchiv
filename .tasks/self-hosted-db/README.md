@@ -132,7 +132,7 @@ graph TD
 | ID | Story | Repo | Owner | Size | Status |
 | --- | --- | --- | --- | --- | --- |
 | [S0](00-spike-atlas-local-auth.md) | Spike: atlas-local with auth + `$vectorSearch` | infra | You | S | ✅ Done |
-| [S1](01-db-cli-and-build.md) | `db`: Vite build + unified Effect CLI | `db` | Me | L | |
+| [S1](01-db-cli-and-build.md) | `db`: Vite build + unified Effect CLI | `db` | Me | L | ✅ Done |
 | [S2](02-shared-module.md) | `orfarchiv-shared` module | new + all 3 | Both | M | |
 | [S3](03-db-multi-target.md) | `db`: multi-target config, `setup`/`backup`/`restore` | `db` | Me | M | |
 | [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M | |
@@ -165,7 +165,7 @@ Found during research; each is fixed inside the story that touches that code:
 | --- | --- |
 | `ui/src/hooks.server.ts` awaits `orfArchivDb.init()` on every request; if `MongoClient.connect` rejects it throws out of the `handle` hook and **500s every route**, including prerendered pages | [S6](06-ui-database-service.md) |
 | Two concurrent first requests can both enter `init()` and open two `MongoClient`s | [S6](06-ui-database-service.md) |
-| `db/src/setup.ts` never calls `dotenv.config()`, so `npm run setup` silently ignores `.env`/`.env.local` and targets `mongodb://localhost` | [S3](03-db-multi-target.md) |
+| `db/src/setup.ts` never calls `dotenv.config()`, so `npm run setup` silently ignores `.env`/`.env.local` and targets `mongodb://localhost` | [S1](01-db-cli-and-build.md) (planned for S3; fixed early because `dotenv` now runs at the root command) |
 | `db/Dockerfile` copies only `backup.ts`, so `restore` and `setup` are not in the published image at all | [S1](01-db-cli-and-build.md) |
 | `db/docker-compose.yml` publishes `mongo-express` on `0.0.0.0:3002` with no authentication | [S7](07-vps-mongodb-stack.md) |
 | `router.ts` does not catch `SearchError` for `news.search`/`news.checkUpdates`, so a DB outage escapes `runtime.runPromise` as an unhandled rejection | [S6](06-ui-database-service.md) |
@@ -177,7 +177,7 @@ Found during research; each is fixed inside the story that touches that code:
 | Repos | Superproject with three submodules: `db`, `scraper`, `ui` (separate GitHub repos) |
 | Connection var | `ORFARCHIV_DB_URL`, with `_FILE` indirection, implemented three times independently |
 | Database / collection | `orfarchiv` / `news` — hardcoded string literals in all three repos |
-| Indexes | Six regular (`id_asc`, `id_desc`, `timestamp_asc`, `timestamp_desc`, `timestamp_id_desc`, `category_asc`) plus the `news_title_vector` vectorSearch index — all defined in `db/src/setup.ts` |
+| Indexes | Six regular (`id_asc`, `id_desc`, `timestamp_asc`, `timestamp_desc`, `timestamp_id_desc`, `category_asc`) plus the `news_title_vector` vectorSearch index — all defined in `db/src/services/setup.ts` |
 | Document shape | `_id`, `id` (`"<source>:<storyId>"`), `title`, `category?`, `url`, `timestamp` (Date), `source`, `titleEmbedding?` (Binary, 256 dims) |
 | UI deployment | Vercel (`adapter-vercel` by default); a Docker/`adapter-node` path also exists |
 | Scraper + backup | Long-running containers already on the VPS, images on ghcr.io |

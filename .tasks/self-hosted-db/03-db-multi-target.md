@@ -23,7 +23,7 @@ resolution land, which [S4](04-db-sync-and-verify.md) then builds on.
 - `--target` as a `Command.withSharedFlags` flag across all subcommands.
 - Per-target `setup` and `backup`; target selection for `restore`.
 - The streamed backup writer.
-- The missing `dotenv.config()` fix.
+- ~~The missing `dotenv.config()` fix.~~ Already done in [S1](01-db-cli-and-build.md).
 
 **Out of scope**
 
@@ -35,25 +35,25 @@ resolution land, which [S4](04-db-sync-and-verify.md) then builds on.
 
 ### Target resolution
 
-`shared/env.ts` gains `dbConnectionUrls(): Effect<string[]>` alongside the existing
-`dbConnectionUrl()`, reusing `loadEnvVariable` so the `_FILE` indirection carries over. Parsing
-comes from `shared/common/targets.ts` ([S2](02-shared-module.md)).
+The `Environment` service (`src/services/env.ts`) gains `dbConnectionUrls: Effect<string[]>`
+alongside the existing `dbConnectionUrl`, reusing `loadEnvVariable` so the `_FILE` indirection
+carries over. Parsing comes from `shared/common/targets.ts` ([S2](02-shared-module.md)).
 
-A new `shared/db.ts` holds `withDb(target, handler)`, factored out of the three near-identical
-`withOrfArchivDb` copies. After [S1](01-db-cli-and-build.md) those already live in one file, so this
-is a small consolidation rather than a rewrite.
+After [S1](01-db-cli-and-build.md) all MongoDB access already goes through the `Database` service
+(`src/services/database.ts`). Its scoped `connect()` takes a target (`connect(target)`) instead of
+reading `dbConnectionUrl` itself, so this is a small change rather than a consolidation.
 
 Resolve targets **once at the root command** and pass them down, so every subcommand shares one
 resolution path and one `--target` filter.
 
 ### `setup`
 
-Loop `setupDb` over all targets. The existing index list and the `news_title_vector` search index
-definition are unchanged.
+Loop `setupDb` (in the `Setup` service) over all targets. The existing index list and the
+`news_title_vector` search index definition are unchanged.
 
-**Fixes a live bug:** `setup.ts` never calls `dotenv.config()` today (unlike `backup.ts` and
-`restore.ts`), so `npm run setup` silently ignores `.env`/`.env.local` and targets
-`mongodb://localhost`. Providing config once at the root command fixes this structurally.
+~~**Fixes a live bug:** `setup.ts` never calls `dotenv.config()`.~~ Already fixed in
+[S1](01-db-cli-and-build.md): `dotenv.config()` runs once in `src/index.ts`, so `setup` respects
+`.env`/`.env.local`.
 
 Note the existing `createSearchIndexes` only creates *missing* indexes by name — it never updates a
 changed definition, so a dimension change would silently no-op. Out of scope to fix, but worth a
@@ -91,7 +91,7 @@ That embedding omission is intentional and is exactly why [S4](04-db-sync-and-ve
 - [ ] With `ORFARCHIV_DB_URLS` unset, behaviour is **byte-identical** to S1.
 - [ ] `--target <label>` filters every subcommand to one database.
 - [ ] `setup` reconciles indexes on all targets; running it twice is a no-op.
-- [ ] `setup` now respects `.env` / `.env.local`.
+- [x] `setup` now respects `.env` / `.env.local`. *(Done in [S1](01-db-cli-and-build.md).)*
 - [ ] `backup` writes one file per target under its own label directory.
 - [ ] One unreachable target does not prevent the others being backed up; the run fails only if all fail.
 - [ ] Streamed backup output parses back through `restore` unchanged.

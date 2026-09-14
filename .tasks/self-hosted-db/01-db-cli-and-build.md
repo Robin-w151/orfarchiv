@@ -2,6 +2,7 @@
 
 **Owner:** Me   **Repo:** `db`   **Size:** L
 **Depends on:** nothing   **Blocks:** [S2](02-shared-module.md)
+**Status:** ✅ Done (2026-09-14) — one bundled CLI with service layers, see [Result](#result-2026-09-14)
 
 ## Goal
 
@@ -116,17 +117,90 @@ Add the non-root `USER` (currently runs as root) and document the backup volume 
 
 ## Acceptance criteria
 
-- [ ] `npm run build` produces `dist/db.js`.
-- [ ] `db --help` lists `setup`, `backup`, `restore`; each subcommand's `--help` documents its flags.
-- [ ] `db backup` against the devcontainer Mongo produces a file identical in shape to the
+- [x] `npm run build` produces `dist/db.js`.
+- [x] `db --help` lists `setup`, `backup`, `restore`; each subcommand's `--help` documents its flags.
+- [x] `db backup` against the devcontainer Mongo produces a file identical in shape to the
       pre-refactor output, and `db restore` reads that file back.
-- [ ] `db backup --keep-running --cron "..."` still schedules, and still swallows a timeout with a
+- [x] `db backup --keep-running --cron "..."` still schedules, and still swallows a timeout with a
       warning rather than exiting.
-- [ ] The rebuilt image runs `backup --keep-running` by default **and** can be invoked as
+- [x] The rebuilt image runs `backup --keep-running` by default **and** can be invoked as
       `docker run … setup` — which the current image cannot do at all.
-- [ ] `meow` is gone from `package.json`.
-- [ ] `npm run lint` passes.
-- [ ] No behaviour change: `ORFARCHIV_DB_URL` remains the only connection variable.
+- [x] `meow` is gone from `package.json`.
+- [x] `npm run lint` passes.
+- [x] No behaviour change: `ORFARCHIV_DB_URL` remains the only connection variable.
+
+## Result (2026-09-14)
+
+Shipped in the `db` submodule on branch `self-hosted-db`, as two commits: the Vite build plus the
+extensionless-import rewrite, then the unified CLI.
+
+### Structure
+
+```text
+src/index.ts              root command; provides AppLive, NodeServices and the logger once
+src/layers.ts             AppLive = Backup + Restore + Setup layers
+src/commands/*.ts         CLI definitions only (flags/args → one service call)
+src/services/env.ts       Environment: dbConnectionUrl, backupDir (_FILE indirection)
+src/services/database.ts  Database: all MongoDB driver code
+src/services/backup.ts    Backup: createBackup(), scheduleBackups(cron)
+src/services/restore.ts   Restore: restore({ file?, batchSize, dryRun })
+src/services/setup.ts     Setup: setup(); owns the index and search-index definitions
+src/shared/               error.ts, logger.ts, search.ts
+```
+
+Services follow scraper's `Context.Service` + `defineService` + `layer` / `layerWithoutDependencies`
+pattern. `Database.connect()` is a scoped `acquireRelease` that returns typed news operations
+(`findAllNews`, `upsertNews`, `newsCollectionExists`, `createNewsCollection`, `createNewsIndexes`,
+`listNewsSearchIndexNames`, `createNewsSearchIndex`). Callers scope it to one run, so there is still
+one connection per backup run under `--keep-running`. Backup closes the connection before it
+serialises and writes the file.
+
+### Deviations from the plan above
+
+- **Went further than a flat CLI:** command definitions are separate from the logic, which lives in
+  services. The three copies of connect/close code became `Database.connect()` rather than a
+  `withOrfArchivDb` helper.
+- **File access uses Effect `FileSystem`** (in `Environment`, `Backup` and `Restore`) instead of
+  `node:fs/promises`. Error messages are unchanged. The logged `Cause:` is now a `PlatformError`.
+- **`--cron` is parsed at the CLI** with `Flag.mapTryCatch(Cron.parseUnsafe)`, so the service
+  receives a `Cron.Cron`. An invalid expression now shows help and `Invalid value for flag --cron`
+  (still exit 1) instead of a crash with a stack trace. It fails even without `--keep-running`.
+- **`setup` now loads `.env` / `.env.local`**, because `dotenv.config()` runs once at the root. This
+  fixes the latent bug listed in the README ahead of [S3](03-db-multi-target.md).
+- **Boolean flags need `Flag.withDefault(false)`:** without it `effect/unstable/cli` treats them as
+  required (`Missing required flag: --keep-running`).
+- **CLI parse errors** such as an unknown flag or a bad integer exit 1. App failures are still logged
+  and exit 0, as before.
+- **Dockerfile:** the backup dir stays at `/app/backup`, so existing mounts keep working. It is
+  created owned by uid 1000 and declared as a `VOLUME`.
+- **`lint` now also runs `tsc --noEmit`**, as in scraper.
+- `meow` remains in `package-lock.json` only as a transitive dependency of `semantic-release`.
+
+### Verification evidence
+
+- The devcontainer `news` collection was empty. 500 stories from `2026-09-02T030010Z.json` were
+  restored into it with `--batch-size 200`.
+- **Backup parity:** the pre-refactor `backup.ts` (run from a worktree of the previous commit) and
+  `node dist/db.js backup` produced **byte-identical** files (119,324 bytes; keys `_id`, `id`,
+  `category`, `source`, `timestamp`, `title`, `url`; no `titleEmbedding`). This was re-checked after
+  every refactor round.
+- **Restore:** `restore <file> --dry-run`, `restore --dry-run` (newest file in the backup dir) and a
+  real batched write all worked.
+- **Scheduling:** `--keep-running --cron "*/5 * * * * *"` produced 2 backups in 11 s. A scratch copy
+  with a 1 ms timeout logged `Scheduled task ran into a timeout` each tick and kept running.
+- **Failure paths:** an unreachable DB logs `Failed to connect to DB.` and exits 0, same as before.
+  `ORFARCHIV_DB_URL_FILE` loads the URL. A missing `_FILE` logs a warning and falls back.
+- **`npm start`** (bun) and `run.sh` work.
+- **Runner-stage simulation:** in a clean directory with `npm ci --omit=dev` and only `db.js`,
+  running as uid 1000, `--help`, `setup` and `backup` worked. The bundle imports only production
+  dependencies.
+- **Docker image:** built outside the devcontainer. Both `backup` and `setup` run from the image
+  were successful.
+
+### Follow-ups
+
+- The CI still tags the image `orfarchiv-db-backup`, which no longer matches what the image does.
+  Renaming it was out of scope.
 
 ## Verification
 

@@ -52,9 +52,9 @@ SHA is the stronger guarantee here.
 
 **Out of scope**
 
-- Unifying the `_FILE` env-loading logic. It is implemented three different ways (Effect +
-  `fs/promises`, Effect + `FileSystem`, and shell) and unifying those is a separate concern. Only
-  target *parsing* is shared; *loading* stays per-repo.
+- Unifying the `_FILE` env-loading logic. It is implemented in each repo (Effect + `FileSystem` in
+  `db` and `scraper` since [S1](01-db-cli-and-build.md), and shell), and unifying those is a separate
+  concern. Only target *parsing* is shared; *loading* stays per-repo.
 - Any Effect imports in the shared module — it exports plain functions and constants, and each
   consumer wraps them in its own idiom.
 
