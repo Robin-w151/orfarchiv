@@ -37,7 +37,7 @@ resolution land, which [S4](04-db-sync-and-verify.md) then builds on.
 
 The `Environment` service (`src/services/env.ts`) gains `dbConnectionUrls: Effect<string[]>`
 alongside the existing `dbConnectionUrl`, reusing `loadEnvVariable` so the `_FILE` indirection
-carries over. Parsing comes from `shared/common/targets.ts` ([S2](02-shared-module.md)).
+carries over. Parsing comes from `#common/targets` ([S2](02-shared-module.md)).
 
 After [S1](01-db-cli-and-build.md) all MongoDB access already goes through the `Database` service
 (`src/services/database.ts`). Its scoped `connect()` takes a target (`connect(target)`) instead of

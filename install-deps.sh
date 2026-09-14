@@ -1,6 +1,6 @@
 #!/bin/bash
 
-modules=(db scraper ui)
+modules=(db scraper shared ui)
 
 for module in "${modules[@]}"; do
     cd "${module}" || exit 1
