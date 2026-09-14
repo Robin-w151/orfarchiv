@@ -7,3 +7,6 @@
 [submodule "scraper"]
 	path = scraper
 	url = git@github.com:Robin-w151/orfarchiv-scraper
+[submodule "shared"]
+	path = shared
+	url = https://github.com/Robin-w151/orfarchiv-shared.git
