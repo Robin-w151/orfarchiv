@@ -135,7 +135,7 @@ graph TD
 | [S1](01-db-cli-and-build.md) | `db`: Vite build + unified Effect CLI | `db` | Me | L | ✅ Done |
 | [S2](02-shared-module.md) | `orfarchiv-shared` module | new + all 3 | Both | M | ✅ Done |
 | [S3](03-db-multi-target.md) | `db`: multi-target config, `setup`/`backup`/`restore` | `db` | Me | M | ✅ Done |
-| [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M | |
+| [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M | ✅ Done |
 | [S5](05-scraper-multi-target-writes.md) | `scraper`: multi-target writes | `scraper` | Me | M | |
 | [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | |
 | [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L | |
