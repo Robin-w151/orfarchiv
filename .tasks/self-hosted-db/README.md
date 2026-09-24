@@ -134,7 +134,7 @@ graph TD
 | [S0](00-spike-atlas-local-auth.md) | Spike: atlas-local with auth + `$vectorSearch` | infra | You | S | ✅ Done |
 | [S1](01-db-cli-and-build.md) | `db`: Vite build + unified Effect CLI | `db` | Me | L | ✅ Done |
 | [S2](02-shared-module.md) | `orfarchiv-shared` module | new + all 3 | Both | M | ✅ Done |
-| [S3](03-db-multi-target.md) | `db`: multi-target config, `setup`/`backup`/`restore` | `db` | Me | M | |
+| [S3](03-db-multi-target.md) | `db`: multi-target config, `setup`/`backup`/`restore` | `db` | Me | M | ✅ Done |
 | [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M | |
 | [S5](05-scraper-multi-target-writes.md) | `scraper`: multi-target writes | `scraper` | Me | M | |
 | [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | |
@@ -153,6 +153,11 @@ Two properties make this epic safe to execute incrementally:
 1. **Every code story is a production no-op.** S1 through S6 all ship while `ORFARCHIV_DB_URLS`
    stays unset, so everything keeps resolving to the single existing `ORFARCHIV_DB_URL`. The
    refactors are verified in production *before* a second database exists.
+   **Exception, [S3](03-db-multi-target.md):** two visible changes even with a single target.
+   - Backups move from `backup/` into `backup/<label>/`. The file contents are unchanged, but
+     `restore` without a file argument no longer finds the old flat backups; pass their path
+     explicitly.
+   - `db` commands now exit 1 on failure instead of 0.
 2. **S9 is the only irreversible-feeling gate**, and even it is reversible: if the benchmark
    disappoints, the VPS simply stays a write target and the UI keeps reading from M0. Read traffic
    moves in S11, and rolling back is an environment-variable change.

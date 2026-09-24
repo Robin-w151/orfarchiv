@@ -4,7 +4,7 @@ services:
     build: "."
     command: sleep infinity
     environment:
-      - ORFARCHIV_DB_URL=mongodb://orfarchiv:orfarchiv@orfarchiv-db/?directConnection=true
+      - ORFARCHIV_DB_URL=mongodb://orfarchiv:orfarchiv@orfarchiv-db-1/?directConnection=true
       - NODE_OPTIONS=--experimental-require-module
     ports:
       - "3001:3001"
@@ -16,7 +16,7 @@ services:
     volumes:
       - ../..:/workspaces:cached
       - orfarchiv-home:/home/node
-  orfarchiv-db:
+  orfarchiv-db-1:
     image: mongodb/mongodb-atlas-local:8.3.3
     environment:
       - MONGODB_INITDB_ROOT_USERNAME=orfarchiv
@@ -26,20 +26,34 @@ services:
     networks:
       - orfarchiv-dev-network
     volumes:
-      - orfarchiv-db:/data/db
-      - orfarchiv-db-config:/data/configdb
-      - orfarchiv-db-mongot:/data/mongot
+      - orfarchiv-db-1:/data/db
+      - orfarchiv-db-1-config:/data/configdb
+      - orfarchiv-db-1-mongot:/data/mongot
+    restart: unless-stopped
+  orfarchiv-db-2:
+    image: mongodb/mongodb-atlas-local:8.3.3
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=orfarchiv
+      - MONGODB_INITDB_ROOT_PASSWORD=orfarchiv
+    ports:
+      - "27018:27017"
+    networks:
+      - orfarchiv-dev-network
+    volumes:
+      - orfarchiv-db-2:/data/db
+      - orfarchiv-db-2-config:/data/configdb
+      - orfarchiv-db-2-mongot:/data/mongot
     restart: unless-stopped
   orfarchiv-db-ui:
     image: mongo-express
     environment:
-      - ME_CONFIG_MONGODB_URL=mongodb://orfarchiv:orfarchiv@orfarchiv-db/?directConnection=true
+      - ME_CONFIG_MONGODB_URL=mongodb://orfarchiv:orfarchiv@orfarchiv-db-1/?directConnection=true
     ports:
       - "3002:8081"
     networks:
       - orfarchiv-dev-network
     depends_on:
-      orfarchiv-db:
+      orfarchiv-db-1:
         condition: service_healthy
     restart: unless-stopped
   orfarchiv-embeddings:
@@ -60,8 +74,11 @@ services:
 networks:
   orfarchiv-dev-network:
 volumes:
-  orfarchiv-db:
-  orfarchiv-db-config:
-  orfarchiv-db-mongot:
+  orfarchiv-db-1:
+  orfarchiv-db-1-config:
+  orfarchiv-db-1-mongot:
+  orfarchiv-db-2:
+  orfarchiv-db-2-config:
+  orfarchiv-db-2-mongot:
   orfarchiv-home:
   orfarchiv-models:
