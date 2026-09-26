@@ -2,6 +2,7 @@
 
 **Owner:** Me   **Repo:** `scraper`   **Size:** M
 **Depends on:** [S2](02-shared-module.md)   **Blocks:** [S10](10-enable-dual-writes.md)
+**Status:** ✅ Done (2026-09-26) — verified against two live atlas-local instances, see [Result](#result-2026-09-26)
 
 ## Goal
 
@@ -79,18 +80,18 @@ others — [S8](08-seed-and-parity.md) and [S13](13-optional-second-target.md) b
 
 ## Acceptance criteria
 
-- [ ] With `ORFARCHIV_DB_URLS` unset, behaviour is identical to today.
-- [ ] With two targets, one scrape writes the same stories to both.
-- [ ] Embeddings are computed **once** per scrape regardless of target count (assert on the number of
+- [x] With `ORFARCHIV_DB_URLS` unset, behaviour is identical to today.
+- [x] With two targets, one scrape writes the same stories to both.
+- [x] Embeddings are computed **once** per scrape regardless of target count (assert on the number of
       embedding-server calls, not just the result).
-- [ ] Two targets in different states each receive the correct insert/update set.
-- [ ] One unreachable target: the other still receives writes, the run exits successfully, an error is
+- [x] Two targets in different states each receive the correct insert/update set.
+- [x] One unreachable target: the other still receives writes, the run exits successfully, an error is
       logged naming the failed target.
-- [ ] All targets unreachable: the run fails and the cause surfaces through `logCause`.
-- [ ] `--target <label>` restricts writes to one database.
-- [ ] `backfillEmbeddings` embeds a title shared by two targets only once.
-- [ ] Credentials appear in no log line.
-- [ ] `npm run lint` and `npm run test` pass.
+- [x] All targets unreachable: the run fails and the cause surfaces through `logCause`.
+- [x] `--target <label>` restricts writes to one database.
+- [x] `backfillEmbeddings` embeds a title shared by two targets only once.
+- [x] Credentials appear in no log line.
+- [x] `npm run lint` and `npm run test` pass.
 
 ## Verification
 
@@ -129,3 +130,64 @@ Then `db verify` ([S4](04-db-sync-and-verify.md)) should report the expected dri
   so the tick costs roughly the slowest target, not the sum — but a hung target could stall a tick
   until the driver's timeout. Consider an explicit per-target write timeout inside the 5-minute
   overall `Effect.timeout` that already wraps `scrapeNews`.
+
+## Result (2026-09-26)
+
+Implemented in `scraper` on branch `self-hosted-db`. `npm run lint`, `npm run test` (67 tests) and
+`npm run build` pass.
+
+> **Breaking CLI change — relevant for [S10](10-enable-dual-writes.md).** The scraper now uses
+> subcommands: `scraper --poll` became `scraper scrape --poll`, and `scraper --backfill-embeddings`
+> became `scraper backfill-embeddings`. The Dockerfile's default `CMD` is updated to
+> `["scrape", "--poll"]`. Any deployment that overrides the command (e.g. `--poll --cron …`) must
+> prefix it with `scrape`.
+
+### What changed
+
+| Area | Change |
+| --- | --- |
+| Targets | `Environment.dbTargets` (`ORFARCHIV_DB_URLS` via `loadEnvVariable`, falls back to `ORFARCHIV_DB_URL`) and a `Targets` service with `select(label)`, both copied from `db`. Unknown labels fail with `TargetError` listing the available ones |
+| `persistOrfNews` | Connects to all targets in parallel; per target, reads the existing stories and plans inserts/updates; embeds the union of new and retitled stories **once**; writes to all targets in parallel. Failed targets are logged by label and skipped; fails with `DatabaseError` only if every target failed. `storyShouldUpdate` and `buildStoryUpdate` are unchanged |
+| Per-target timeout | `DB_TARGET_TIMEOUT` (1 minute) wraps each target's read and write step, inside the existing 5-minute tick timeout |
+| `backfillEmbeddings` | Targets run sequentially, each with its own connection scope. With more than one target, a run-scoped `Map<title, Binary>` memo embeds shared titles once. `--max-docs` applies per target. Fails only if every target failed |
+| CLI | Moved from `meow` to `effect/unstable/cli`, structured like `db`: `src/commands/{scraper,scrape,backfill,targets,index}.ts`. Shared flags `--target` and `--debug`; new `targets` subcommand lists the labels. `services/command.ts` is removed |
+| Exit code | A failed run exits 1 (it exited 0 before). In `--poll` mode a failed tick is only logged, so it can't turn a later clean shutdown into exit 1 |
+| Logging | `LoggerLive` redacts every line with `redact()` from `#common/targets` |
+| Dev config | `.env` sets `ORFARCHIV_DB_URLS` to `orfarchiv-db-1` and `orfarchiv-db-2`, like `db/.env` |
+| Docs | README sections for running the scraper and backfilling embeddings |
+
+### Deviations
+
+- **`dbTargets`, not `dbConnectionUrls`,** to match `db`. It returns labelled `Target`s rather than
+  raw URLs.
+- **The CLI moved to subcommands** (see the note above). The task only asked for `--target`.
+- **A healthy target waits for an unreachable one.** All targets are read before the single
+  embedding call, so while one target is down the others write after the driver's ~30 s
+  server-selection timeout. That is well inside the 5-minute tick.
+
+### Verified
+
+Against `orfarchiv-db-1` and `orfarchiv-db-2` in the devcontainer. `db setup` first created the
+missing `url_asc` and `source_asc` indexes on both, so `db verify` reflects only data drift.
+
+- **Both up:** both targets received the same 255 inserts and 2 updates, with embeddings;
+  `db verify` reports "All 2 targets agree".
+- **Drift:** the 3 newest `news` stories were deleted from both, then `docker stop orfarchiv-db-2`.
+  `scrape` exited 0, logged an error naming `orfarchiv-db-2`, and re-inserted the 3 stories into
+  `orfarchiv-db-1` only.
+- **All targets down** (`--target orfarchiv-db-2` while stopped): "Failed to persist stories to
+  any database target" is logged through `logCause`, exit 1.
+- **Backfill with db-2 down:** db-1 completed, db-2's failure was logged, run exit 0.
+- **Repair:** after `docker start orfarchiv-db-2`, `db verify` reported 443,124 vs 443,127 stories
+  (exit 1). `db sync --from orfarchiv-db-1 --to orfarchiv-db-2 --since 2026-09-26T00:00:00Z`
+  inserted 3 and left 151 unchanged; `db verify` then agreed, embeddings included.
+- **`--target`:** restricts writes to one target; an unknown label lists the available ones.
+- **`ORFARCHIV_DB_URLS` unset:** falls back to the single `ORFARCHIV_DB_URL`.
+- **Credentials:** none in any log, including driver errors for credentialed URLs.
+- **Exit codes** (built bundle): success 0, one target failed 0, all targets failed 1, unknown
+  target 1, invalid flag 1, `--help` 0, `scrape --poll` interrupted 130.
+- **Specs** cover per-target insert/update sets, one embedding call for 1 and 3 targets,
+  connect/find/write failures of one target, all targets failing, client cleanup, credential
+  redaction, backfill memoization, and target selection including the env fallback. The
+  shared-title backfill case was not exercised live, because the dev databases had nothing to
+  backfill.
