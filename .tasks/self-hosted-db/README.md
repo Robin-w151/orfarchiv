@@ -139,7 +139,7 @@ graph TD
 | [S5](05-scraper-multi-target-writes.md) | `scraper`: multi-target writes | `scraper` | Me | M | |
 | [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | |
 | [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L | ✅ Done |
-| [S8](08-seed-and-parity.md) | Seed VPS + parity check | ops | You | M | |
+| [S8](08-seed-and-parity.md) | Seed VPS + parity check | ops | You | M | ✅ Done |
 | [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M | |
 | [S10](10-enable-dual-writes.md) | Enable dual writes | ops | You | S | |
 | [S11](11-point-ui-reads-at-vps.md) | Point UI reads at VPS | ops | You | S | |
