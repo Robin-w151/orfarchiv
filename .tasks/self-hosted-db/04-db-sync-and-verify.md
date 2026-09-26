@@ -65,7 +65,7 @@ Per target, report:
 | Document count                                       | The blunt drift signal                                         |
 | Max `timestamp`                                      | Detects a target that stopped receiving writes                 |
 | Count of documents missing `titleEmbedding`          | Detects a half-seeded or partially re-embedded target          |
-| Presence of each of the six expected indexes         | A missing index means silently slow queries                    |
+| Presence of each of the eight expected indexes       | A missing index means silently slow queries                    |
 | Presence and queryable status of `news_title_vector` | A missing vector index means semantic search silently degrades |
 
 Exit non-zero on divergence so it can be cron'd and alert.
@@ -134,7 +134,7 @@ Implemented in `db` on branch `self-hosted-db`. `npm run lint` and `npm run buil
 | Area       | Change                                                                                                                                                                                                                                                                                                                  |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sync`     | `db sync --from <label> --to <label> [--since <iso>] [--dry-run] [--batch-size n]`. It streams the source cursor, grouped into `bulkWrite` upserts on `id` (`ordered: false`) that `$set` `STORY_FIELDS` plus `titleEmbedding`, and ends with an `inserted / updated / unchanged / skipped` summary                     |
-| `verify`   | `db verify [--target <label>]` checks all targets concurrently: `estimatedDocumentCount`, latest `timestamp`, count without `titleEmbedding`, the six indexes (name and key), and `news_title_vector` (definition, `READY` and `queryable`). Any problem exits 1 with `VerifyError`, naming each failing target and why |
+| `verify`   | `db verify [--target <label>]` checks all targets concurrently: `estimatedDocumentCount`, latest `timestamp`, count without `titleEmbedding`, the eight indexes (name and key), and `news_title_vector` (definition, `READY` and `queryable`). Any problem exits 1 with `VerifyError`, naming each failing target and why |
 | Model      | `indexes`, `searchIndexes` and `searchIndexDefinitionMatches` moved from `services/setup.ts` to `shared/model.ts`, so `setup` and `verify` share one definition. The new `indexMatches` compares name and key with `Equal.equals` on the key entries, so field order counts for compound indexes                        |
 | `targets`  | `db targets [--target <label>]` lists the configured target labels, never the URLs, numbered by their position in `ORFARCHIV_DB_URLS`. The number stays the real position when filtered with `--target`                                                                                                                 |
 | Errors     | `formatError(error, { withStack })` gets an optional stack; the top-level handler in `src/index.ts` sets it only for errors that aren't the app's own (`isAppError`)                                                                                                                                                    |

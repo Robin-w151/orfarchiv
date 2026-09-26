@@ -31,7 +31,7 @@ copy of the data, it cannot be benchmarked ([S9](09-benchmark-and-gate.md)) or s
 
 ### Order of operations
 
-1. **`db setup --target <vps>`** — creates the `orfarchiv` database, the `news` collection, the six
+1. **`db setup --target <vps>`** — creates the `orfarchiv` database, the `news` collection, the eight
    regular indexes, and the `news_title_vector` vectorSearch index.
 2. **`db sync --from <m0> --to <vps>`** — the bulk copy.
 3. **Wait for the vector index.** Search index builds are asynchronous. `listSearchIndexes()` reports
@@ -80,7 +80,9 @@ regardless.
   stories without an `id`, or duplicate `id`s.
 - **Embeddings:** 132 stories without `titleEmbedding` on both M0 and the VPS.
 - **Indexes:** all six regular indexes plus `news_title_vector` (READY, queryable); `vector-check.js`
-  4/4 passed.
+  4/4 passed. **Incomplete:** M0 also had `url_1` and `source_1`, which the model lacked and `verify`
+  never compared. [S9](09-benchmark-and-gate.md) found them, added them to the model as `url_asc` /
+  `source_asc` (eight regular indexes) and created them on the VPS.
 - **`db verify` false divergence:** the first run reported one more story on the VPS. The cause was
   M0's `estimatedDocumentCount` (443,328), which lags its exact count (443,329); Atlas's collection
   metadata had drifted. `verify` now compares exact `countDocuments` counts instead

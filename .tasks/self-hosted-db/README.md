@@ -19,7 +19,7 @@ After this epic:
 | Fact | Consequence |
 | --- | --- |
 | The `news` collection holds **436,710 documents** | ~104 MB of JSON *excluding* embeddings |
-| Plus 256-dim quantized `titleEmbedding` values and six indexes | Real footprint is **300–500 MB** |
+| Plus 256-dim quantized `titleEmbedding` values and eight indexes | Real footprint is **300–500 MB** |
 | Atlas M0's storage ceiling is **512 MB** | The current database is close to a hard wall |
 | M0 is a shared, throttled tenant | Query latency is capped by noisy-neighbour effects, not by the data |
 
@@ -140,7 +140,7 @@ graph TD
 | [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | |
 | [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L | ✅ Done |
 | [S8](08-seed-and-parity.md) | Seed VPS + parity check | ops | You | M | ✅ Done |
-| [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M | |
+| [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M | ✅ Done |
 | [S10](10-enable-dual-writes.md) | Enable dual writes | ops | You | S | |
 | [S11](11-point-ui-reads-at-vps.md) | Point UI reads at VPS | ops | You | S | |
 | [S12](12-monitoring-and-scheduled-verify.md) | Monitoring + scheduled verify | ops | You | S | |
