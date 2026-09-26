@@ -138,7 +138,7 @@ graph TD
 | [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M | ✅ Done |
 | [S5](05-scraper-multi-target-writes.md) | `scraper`: multi-target writes | `scraper` | Me | M | |
 | [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | |
-| [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L | |
+| [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L | ✅ Done |
 | [S8](08-seed-and-parity.md) | Seed VPS + parity check | ops | You | M | |
 | [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M | |
 | [S10](10-enable-dual-writes.md) | Enable dual writes | ops | You | S | |
@@ -172,7 +172,7 @@ Found during research; each is fixed inside the story that touches that code:
 | Two concurrent first requests can both enter `init()` and open two `MongoClient`s | [S6](06-ui-database-service.md) |
 | `db/src/setup.ts` never calls `dotenv.config()`, so `npm run setup` silently ignores `.env`/`.env.local` and targets `mongodb://localhost` | [S1](01-db-cli-and-build.md) (planned for S3; fixed early because `dotenv` now runs at the root command) |
 | `db/Dockerfile` copies only `backup.ts`, so `restore` and `setup` are not in the published image at all | [S1](01-db-cli-and-build.md) |
-| `db/docker-compose.yml` publishes `mongo-express` on `0.0.0.0:3002` with no authentication | [S7](07-vps-mongodb-stack.md) |
+| `db/docker-compose.yml` publishes `mongo-express` on `0.0.0.0:3002` with no authentication | Won't fix: dev-only; not deployed on the VPS ([S7](07-vps-mongodb-stack.md)) |
 | `router.ts` does not catch `SearchError` for `news.search`/`news.checkUpdates`, so a DB outage escapes `runtime.runPromise` as an unhandled rejection | [S6](06-ui-database-service.md) |
 
 ## Reference: current state
