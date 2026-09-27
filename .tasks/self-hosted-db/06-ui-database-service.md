@@ -2,6 +2,7 @@
 
 **Owner:** Me   **Repo:** `ui`   **Size:** L
 **Depends on:** [S2](02-shared-module.md)   **Blocks:** [S11](11-point-ui-reads-at-vps.md)
+**Status:** ✅ Done (2026-09-27) — verified against two live atlas-local instances, see [Result](#result-2026-09-27)
 
 ## Goal
 
@@ -148,17 +149,17 @@ rather than impossible. `db verify` ([S4](04-db-sync-and-verify.md)) keeps drift
 
 ## Acceptance criteria
 
-- [ ] With `ORFARCHIV_DB_URLS` unset, behaviour is identical to today.
-- [ ] Primary query fails → secondary serves the request; the user sees no error.
-- [ ] All targets fail → `SearchError` naming every attempted label → tRPC 503 (not an unhandled rejection).
-- [ ] A hanging target trips the per-attempt timeout, not the request budget.
-- [ ] A down target is skipped while `downUntil` holds and re-probed afterwards.
-- [ ] The scoped layer closes every opened client on release.
-- [ ] The layer builds successfully when **no** target is reachable, and fails only when none is **configured**.
-- [ ] `hooks.server.ts` no longer calls `init()`; an unreachable database does not 500 prerendered routes.
-- [ ] `DatabaseService.layer` is provided exactly once; only one pool per target.
-- [ ] Credentials appear in no log line.
-- [ ] `npm run check`, `npm run test:unit`, `npm run lint` pass.
+- [x] With `ORFARCHIV_DB_URLS` unset, behaviour is identical to today.
+- [x] Primary query fails → secondary serves the request; the user sees no error.
+- [x] All targets fail → `SearchError` naming every attempted label → tRPC 503 (not an unhandled rejection).
+- [x] A hanging target trips the per-attempt timeout, not the request budget.
+- [x] A down target is skipped while `downUntil` holds and re-probed afterwards.
+- [x] The scoped layer closes every opened client on release.
+- [x] The layer builds successfully when **no** target is reachable, and fails only when none is **configured**.
+- [x] `hooks.server.ts` no longer calls `init()`; an unreachable database does not 500 prerendered routes.
+- [x] `DatabaseService.layer` is provided exactly once; only one pool per target.
+- [x] Credentials appear in no log line.
+- [x] `npm run check`, `npm run test:unit`, `npm run lint` pass.
 
 ## Verification
 
@@ -190,3 +191,58 @@ docker start <A-instance>
 - Vercel's function lifecycle means the scoped layer's finalizer may not run on container freeze.
   That is acceptable — the driver's own socket handling covers it — but do not rely on the finalizer
   for correctness.
+
+## Result (2026-09-27)
+
+Implemented in `ui` on branch `self-hosted-db`. `npm run check`, `npm run test:unit` (184 tests),
+`npm run lint` and `npm run build` pass.
+
+### What changed
+
+| Area | Change |
+| --- | --- |
+| `DatabaseService` | New `src/lib/backend/db/database.ts`. Targets come from `ORFARCHIV_DB_URLS`, falling back to `ORFARCHIV_DB_URL` (same precedence as `scraper`); the layer fails with `DatabaseConfigError` only when neither is set. Per-target state (client, `established`, `downUntil`) lives in a `Ref`; a finalizer closes every client. Exposes `useNewsCollection` and `health` |
+| Clients | Created lazily on first use with `new MongoClient` (no I/O; the driver auto-connects), installed through `Ref.modify` so there is exactly one per target. Options: `serverSelectionTimeoutMS`/`connectTimeoutMS` 3000, `retryReads`, `appName: 'orfarchiv-ui'`, `maxPoolSize: 2` |
+| Failover | `Effect.firstSuccessOf` over the candidates in priority order. Each attempt has a 5 s `DB_QUERY_TIMEOUT`; a failure sets a 30 s `DB_TARGET_COOLDOWN` and logs a redacted warning. If every target fails, `SearchError` carries the last cause and all attempted labels in a new `targets` field |
+| Call sites | `keyword.ts`, `semantic.ts` (`fetchVocabulary(database)`) and `news.ts` (`findStoryByUrl`) take the service in `make`. `useNewsCollection` removed from `shared.ts`. `DatabaseService.layer` is provided once, at `NewsSearchService.layer` |
+| Removed | `db/init.ts` and `hooks.server.ts` |
+| `router.ts` | `news.search` and `news.checkUpdates` map `SearchError` to `SERVICE_UNAVAILABLE` (503) |
+| `env.ts` | `ORFARCHIV_DB_URL` optional, `ORFARCHIV_DB_URLS` added (optional string) |
+| Dev config | `.env` sets both URLs to `orfarchiv-db-1`/`orfarchiv-db-2`, like `db` and `scraper` |
+| Tests | `database.spec.ts` (16 tests, fake `mongodb` driver + `TestClock`) and `keyword.spec.ts`, the first search spec against a stubbed `DatabaseService` |
+
+### Deviations
+
+- **`Layer.effect`, not `Layer.scoped`.** effect `4.0.0-rc.112` has no `Layer.scoped`;
+  `Layer.effect` runs `make` in the layer's scope, so the finalizer works as intended.
+- **All targets in cooldown → all are tried anyway.** Otherwise a single blip on a single-target
+  setup would fail every request for the whole cooldown, breaking "identical to today".
+- **A client that never connected is torn down on failure.** The task says a failed query only
+  flips the health flag. That holds for a client that has served a query before — the driver
+  reconnects it by itself. But when a client's *first* operation fails, the driver closes its
+  topology permanently (`MongoTopologyClosedError: Topology is closed` on every later call), so a
+  target that was down on first use would never recover without a restart. Such a client is now
+  closed and replaced on the next attempt. Found during live verification.
+
+### Verified
+
+Against `orfarchiv-db-1` and `orfarchiv-db-2` in the devcontainer, with `npm run dev`:
+
+- **Both up:** search, `checkUpdates` and the prerendered pages `/`, `/settings`, `/bookmarks`
+  return 200; only db-1 holds `orfarchiv-ui` connections.
+- **db-1 stopped:** the first search returns 200 after 3.2 s (server-selection timeout, then db-2);
+  one warning names `orfarchiv-db-1`. Within the cooldown, requests take ~0.1 s and skip db-1
+  without further warnings. Prerendered pages stay at 200.
+- **db-1 started again:** after the cooldown, 5 of 5 searches are served by db-1 (measured through
+  per-instance `opcounters`).
+- **Both stopped:** search and `checkUpdates` return 503 `SERVICE_UNAVAILABLE` in ~6 s (3 s per
+  target), with no unhandled rejection; prerendered pages stay at 200.
+- **Both started again, same server process** (clients first created while both were down):
+  search recovers immediately with 200, served by db-1.
+- **Credentials:** none in any log line.
+
+### Notes for [S11](11-point-ui-reads-at-vps.md)
+
+- With every target unreachable, a request takes about 3 s per target before the 503, so two
+  targets cost ~6 s of the function budget.
+- `ORFARCHIV_DB_URL` is now optional; S11 only needs to set `ORFARCHIV_DB_URLS`.

@@ -137,7 +137,7 @@ graph TD
 | [S3](03-db-multi-target.md) | `db`: multi-target config, `setup`/`backup`/`restore` | `db` | Me | M | ✅ Done |
 | [S4](04-db-sync-and-verify.md) | `db`: `sync` + `verify` subcommands | `db` | Me | M | ✅ Done |
 | [S5](05-scraper-multi-target-writes.md) | `scraper`: multi-target writes | `scraper` | Me | M | ✅ Done |
-| [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | |
+| [S6](06-ui-database-service.md) | `ui`: Effect `DatabaseService` + failover | `ui` | Me | L | ✅ Done |
 | [S7](07-vps-mongodb-stack.md) | VPS production MongoDB stack | infra | Both | L | ✅ Done |
 | [S8](08-seed-and-parity.md) | Seed VPS + parity check | ops | You | M | ✅ Done |
 | [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M | ✅ Done |
