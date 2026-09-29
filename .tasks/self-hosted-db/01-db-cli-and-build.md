@@ -199,8 +199,9 @@ serialises and writes the file.
 
 ### Follow-ups
 
-- The CI still tags the image `orfarchiv-db-backup`, which no longer matches what the image does.
-  Renaming it was out of scope.
+- ~~The CI still tags the image `orfarchiv-db-backup`, which no longer matches what the image does.
+  Renaming it was out of scope.~~ Done ahead of [S10](10-enable-dual-writes.md): the image is now
+  `ghcr.io/robin-w151/orfarchiv-db`, with no default `CMD` and no `VOLUME`.
 
 ## Verification
 
