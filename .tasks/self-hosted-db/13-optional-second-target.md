@@ -2,6 +2,7 @@
 
 **Owner:** You   **Repo:** infra   **Size:** M
 **Depends on:** [S12](12-monitoring-and-scheduled-verify.md)   **Blocks:** nothing
+**Status:** ⏸️ Not planned (2026-10-03) — one self-hosted target plus M0 as fallback is sufficient for now
 
 ## Goal
 
