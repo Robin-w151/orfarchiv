@@ -143,7 +143,7 @@ graph TD
 | [S9](09-benchmark-and-gate.md) | Benchmark + go/no-go | ops | Both | M | ✅ Done |
 | [S10](10-enable-dual-writes.md) | Enable dual writes | ops | You | S | ✅ Done |
 | [S11](11-point-ui-reads-at-vps.md) | Point UI reads at VPS | ops | You | S | ✅ Done |
-| [S12](12-monitoring-and-scheduled-verify.md) | Monitoring + scheduled verify | ops | You | S | |
+| [S12](12-monitoring-and-scheduled-verify.md) | Monitoring + scheduled verify | ops | You | S | ✅ Done |
 | [S13](13-optional-second-target.md) | *(Optional)* Second self-hosted target; retire M0 | infra | You | M | |
 
 ## Safety properties
