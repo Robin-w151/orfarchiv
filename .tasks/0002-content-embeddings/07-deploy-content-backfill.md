@@ -110,7 +110,7 @@ This must be done manually because it changes production systems (VPS compose st
    docker compose up -d embeddings-content
    docker compose logs --since 2m embeddings-content
    ```
-   **Expected:** the log ends with the server listening on port 8080, and `docker stats --no-stream embeddings-content` shows CPU at or below the cap and memory roughly as noted in story 00 step 3.
+   **Expected:** the log ends with the server listening on port 8080, and `docker stats --no-stream embeddings-content` shows CPU at or below the cap and memory of about 400 MiB idle. For reference, on 2026-10-11 the dev instance with the 2048 flags used ≈ 405 MiB (story 00), and the existing VPS instance `orfarchiv-embedding-1` with the default batch size used ≈ 157 MiB of 7.6 GiB.
 
 11. **Add the content job container.** Add a service to `docker-compose.yml` by copying `scraper`'s `image`, `environment`, secrets and `user`, and change:
    ```yaml

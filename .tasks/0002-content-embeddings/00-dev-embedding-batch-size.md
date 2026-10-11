@@ -2,7 +2,7 @@
 
 **Epic:** [0002 Article content embeddings](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** Done
 **Depends on:** –
 **Estimate:** S
 
@@ -62,13 +62,14 @@ Remove the four lines from `.devcontainer/docker-compose.yml` and repeat step 2.
 - **The rebuild fails** → VS Code offers `Open devcontainer.json Locally` / `Edit devcontainer.json`. Revert the compose change there and rebuild, then report the error to Claude.
 
 ## Acceptance criteria
-- [ ] Given the recreated container, when a 1,500-token input is posted to `/v1/embeddings`, then an embedding is returned instead of HTTP 500.
-- [ ] `.devcontainer/docker-compose.yml` contains the `--batch-size 2048` / `--ubatch-size 2048` flags, so a devcontainer rebuild keeps them.
+- [x] Given the recreated container, when a 1,500-token input is posted to `/v1/embeddings`, then an embedding is returned instead of HTTP 500.
+- [x] `.devcontainer/docker-compose.yml` contains the `--batch-size 2048` / `--ubatch-size 2048` flags, so a devcontainer rebuild keeps them.
 
 ## Technical notes
 - Service: `orfarchiv-embeddings` in `.devcontainer/docker-compose.yml` (image `ghcr.io/ggml-org/llama.cpp:server`, model `ggml-org/embeddinggemma-300m-qat-q8_0-GGUF`, host port 3003).
 - llama.cpp server options: https://github.com/ggml-org/llama.cpp/tree/master/tools/server
 - Production gets the same flags in story 07, step 10.
+- Measured on 2026-10-11 after the rebuild: the `orfarchiv-embeddings` container uses ≈ 405 MiB idle with `--batch-size 2048 --ubatch-size 2048`. The 1,503-token verify input returned an embedding (`prompt_tokens: 1503`).
 
 ## Out of scope
 - Production embedding servers (story 07).

@@ -64,6 +64,10 @@ services:
       - "--embeddings"
       - "--host"
       - "0.0.0.0"
+      - "--batch-size"
+      - "2048"
+      - "--ubatch-size"
+      - "2048"
     ports:
       - "3003:8080"
     networks:

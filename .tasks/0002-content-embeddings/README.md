@@ -1,6 +1,6 @@
 # Epic 0002: Article content embeddings
 
-**Status:** Planned
+**Status:** In progress
 **Created:** 2026-10-03
 
 ## Summary
@@ -53,7 +53,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 ## Stories
 | # | Story | Owner | Depends on | Estimate | Status |
 |---|-------|-------|------------|----------|--------|
-| 00 | [Dev embedding server batch size](00-dev-embedding-batch-size.md) | Human | – | S | Todo |
+| 00 | [Dev embedding server batch size](00-dev-embedding-batch-size.md) | Human | – | S | Done |
 | 01 | [Spike: content extraction and fusion](01-spike-content-extraction.md) | Claude | 00 | M | Todo |
 | 02 | [Shared ORF article extraction](02-shared-article-extraction.md) | Claude | 01 | L | Todo |
 | 03 | [Content dimension evaluation](03-content-dimension-eval.md) | Claude | 02 | M | Todo |
