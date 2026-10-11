@@ -14,9 +14,9 @@ Move the presentation-independent part of the UI content pipeline into the `orfa
 
 **What moves to `shared/src/storyContent.ts`:**
 - `createStoryDocument(html, url)`: wraps `new JSDOM(html, { url }).window.document`, so relative links resolve against the page URL exactly as in the UI today. Fails with `StoryContentError` and `reason: 'parse'`. The UI's `DomService.createDom` (`ui/src/lib/backend/content/dom.ts`) delegates to it.
-- `removeArticleNoise(document)`: the selectors from `ui/src/lib/backend/content/transform/cleanup.ts` (`.print-warning`, `p.caption.stripe-credits`, `section.stripe`, `#more-to-read`), plus the extra selectors recommended in story 01.
+- `removeArticleNoise(document)`: the selectors from `ui/src/lib/backend/content/transform/cleanup.ts` (`.print-warning`, `p.caption.stripe-credits`, `section.stripe`, `#more-to-read`). Nothing else, so the UI's rendered output stays the same.
 - `extractArticle(document, url)`: runs Readability with the existing `ALLOWED_CLASSES` and returns the optimized `Document`, built from Readability's `content` via `createStoryDocument`. Fails with `reason: 'empty'` if Readability finds nothing. The UI uses this result.
-- `extractArticleText(html, url)`: parses its own DOM via `createStoryDocument`, removes noise (`removeArticleNoise`), chart embeds (`div.embed.migsys`) and `nav`, runs Readability and returns its `textContent`, normalized (whitespace collapsed, paragraphs separated by blank lines). Because it owns its DOM, it has no side effects for the caller. The scraper uses this result.
+- `extractArticleText(html, url)`: parses its own DOM via `createStoryDocument`, removes noise (`removeArticleNoise`), the text-only noise selectors from story 01 (`TEXT_NOISE_SELECTORS`: `.story-meta-dates`, `.sr-only`, `p.credit`, `.storyMeta`, `p.toplink`, `p.backlink`, `div.remote`; dates, credits and screen-reader labels that the UI still shows), chart embeds (`div.embed.migsys`) and `nav`, runs Readability and returns its `textContent`, normalized (whitespace collapsed, paragraphs separated by blank lines). Because it owns its DOM, it has no side effects for the caller. The scraper uses this result.
 - A tagged error `StoryContentError` with `reason: 'empty' | 'parse'` and `url`.
 
 **Contract:** `removeArticleNoise(document)` and `extractArticle(document, url)` mutate the `Document` they get, because Readability rewrites its input. The UI keeps passing them a dedicated DOM as today (`document`), separate from `originalDocument`, which it uses for read-more detection, images and the footer.
@@ -40,7 +40,7 @@ Move the presentation-independent part of the UI content pipeline into the `orfa
 - [ ] `extractArticleText(html, url)` returns identical text when called twice with the same input.
 - [ ] Given a page where Readability finds nothing, then `extractArticleText` fails with `StoryContentError` and `reason: 'empty'`.
 - [ ] Given a page with relative links, when `createStoryDocument(html, url)` and `extractArticle` run, then anchors in the result resolve against `url` (`a.href` is absolute).
-- [ ] `shared`: `npm run lint` and `npm test` are green with at least one fixture per markup era found in story 01.
+- [ ] `shared`: `npm run lint` and `npm test` are green with at least one fixture per markup family found in story 01 (`story-lead`/`story-story`, e.g. a regional story, and `storyText`, e.g. an fm4 story), plus a teaser.
 - [ ] `ui`: `npm run lint`, `npm run check` and `npm run test:unit` are green, and `news.spec.ts` is not modified.
 - [ ] `scraper` runs on `effect` and `@effect/platform-node` `4.0.0-rc.118`, and `npm run lint` and `npm test` are green.
 - [ ] `db`: `npm run lint` is green after the `shared` bump.

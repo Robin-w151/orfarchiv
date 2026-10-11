@@ -15,7 +15,7 @@ Unblocks 04, which fixes `CONTENT_EMBEDDING_DIMENSIONS`.
 Build an offline evaluation script `.tasks/0002-content-embeddings/scripts/eval-content-dimensions.ts`, run with `npx tsx` from that directory (it uses the `package.json` set up in story 01). It is not part of any module's CLI or build. It imports `extractArticleText` from `shared/src/storyContent.ts` (root `shared` submodule); bare imports inside `shared` resolve against `shared/node_modules`, which has the devDependencies from story 02.
 
 1. **Sample.** Take ~2,000 stories from the local DB, stratified by year and source, with a fixed random seed. Fetch at most 10 pages/s, the same rate as the production job (≈ 3–4 minutes for 2,000 pages). Cache the HTML on disk under the scratchpad so reruns don't refetch. Extract the body with the shared `extractArticleText` from story 02.
-2. **Embed.** Embed each body in two formats, truncated to the limit from story 01, at the full 768 dims:
+2. **Embed.** Embed each body in two formats, truncated to the 1,024-token limit from story 01, at the full 768 dims:
    - **(A) production** `title: <title> | text: <body>` (the format story 04 adds to `shared` as `toContentDocumentInput`; inline it here, since 04 comes later), used for the paraphrase queries and for the decision;
    - **(B) body-only** `title: none | text: <body>`, used only for the title-as-query test, where (A) would be trivially easy.
 

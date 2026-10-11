@@ -54,7 +54,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 | # | Story | Owner | Depends on | Estimate | Status |
 |---|-------|-------|------------|----------|--------|
 | 00 | [Dev embedding server batch size](00-dev-embedding-batch-size.md) | Human | – | S | Done |
-| 01 | [Spike: content extraction and fusion](01-spike-content-extraction.md) | Claude | 00 | M | Todo |
+| 01 | [Spike: content extraction and fusion](01-spike-content-extraction.md) | Claude | 00 | M | Done |
 | 02 | [Shared ORF article extraction](02-shared-article-extraction.md) | Claude | 01 | L | Todo |
 | 03 | [Content dimension evaluation](03-content-dimension-eval.md) | Claude | 02 | M | Todo |
 | 04 | [Content embedding schema and index](04-content-embedding-schema.md) | Claude | 03 | M | Todo |
@@ -102,17 +102,18 @@ Stories 06–07 (content job) and 08 (UI) can be worked on in parallel once 05 i
 
 ## Risks & open questions
 - **orf.at fetch rate and terms.** The rate is confirmed: 10 pages/s (up to ≈ 864k pages/day, so fetching alone would cover the archive in ≈ 12 hours). In practice the CPU-capped embedding server is the bottleneck: at the ≥ 25 docs/min calibration minimum the backfill takes up to ≈ 12 days, and less if the server is faster. If orf.at answers with 429 or 403, lower the rate (story 07 troubleshooting). The User-Agent string is decided by the user during story 06. `orf.at/robots.txt` does not exist, so there are no published crawl rules to follow.
-- **Minimum text length for teasers.** Open, decided by the user after story 01: should a page whose extracted text is shorter than a minimum length count as `failed` instead of being embedded? Story 01 reports teaser share and text lengths and recommends a value (or none). If a minimum is chosen, story 06 applies it before embedding.
-- **Old page markup.** Pages from earlier years may use different HTML, and Readability may return nav or teaser junk. Story 01 measures this per year.
+- **Old page markup.** Resolved by story 01: 0 empty extractions in 297 pages from 2022–2026, and markup differs by site (two families), not by year. Seven extra text-only selectors remove the remaining dates, credits and labels.
 - **Embedding throughput.** Long inputs on a CPU-only llama.cpp server are much slower than titles. Story 01 measures tokens/s. If embedding, not fetching, is the bottleneck, the backfill rate is set by the embedding server, and the title embeddings of live scrapes and search queries must not be starved. The separate CPU-capped embedding instance for the content job (story 07) handles this.
 - **CPU contention on the VPS.** The production embedding server runs on the VPS, so its 4 vCPU are shared by mongod, mongot, the embedding server and both scraper containers. The UI on Vercel calls the same embedding server for every semantic query, so a busy backfill directly slows search. Mitigation: run a **second, CPU-capped llama.cpp instance** just for the content job (for example `cpus: 1.5`, `--threads 1`) and point only `scraper-content` at it. This needs no code change, because each container has its own `ORFARCHIV_EMBEDDING_URL`. Story 07 sets it up and calibrates the cap on the VPS.
-- **Search index rebuild means downtime.** Adding a path to `news_title_vector` needs a drop and recreate, because atlas-local rejects `updateSearchIndex` for vector indexes (epic 0001 story 03, re-tested 2026-10-06, see story 04). Semantic search on the VPS is down until 437k vectors are re-indexed. Story 01 measures the duration, story 04 adds `setup --wait-until-queryable`, and story 07 schedules the outage. If the rebuild takes longer than ~15 minutes: build the new definition under a second index name, switch the UI over, then drop the old one (needs a coordinated UI release and briefly doubles mongot memory for the title vectors).
+- **Search index rebuild means downtime.** Adding a path to `news_title_vector` needs a drop and recreate, because atlas-local rejects `updateSearchIndex` for vector indexes (epic 0001 story 03, re-tested 2026-10-06, see story 04). Semantic search on the VPS is down until 437k vectors are re-indexed. Story 01 measures the duration, story 04 adds `setup --wait-until-queryable`, and story 07 schedules the outage. Story 01 measured 18 s locally for the full collection with title vectors (36 s with a content vector on every story); on the 4 vCPU VPS expect minutes, well below the threshold. If the rebuild takes longer than ~15 minutes: build the new definition under a second index name, switch the UI over, then drop the old one (needs a coordinated UI release and briefly doubles mongot memory for the title vectors).
 - **mongot RAM.** At 768 dims, the content vectors alone are ≈ 335 MB plus the HNSW graph. That fits the 8 GB VPS, but story 03 reports it so the choice is explicit.
 - **Partial coverage.** While the backfill runs, fused ranking favours stories that already have content. Story 09 checks whether fusion should be enabled only after the backfill is complete.
 
 ## Assumptions
 - Story URLs across the whole archive still resolve on orf.at (stated by the user; story 01 verifies on a sample).
-- The text that matters for retrieval fits into the first ~1024 tokens of an article, because news front-loads the important information. The exact cut-off comes from story 01.
+- The text that matters for retrieval fits into the first ~1024 tokens of an article, because news front-loads the important information. Story 01 confirmed it: 85% of articles fit completely.
+- Content inputs are truncated to `CONTENT_MAX_TOKENS = 1024` tokens (decided by the user on 2026-10-11 after story 01).
+- There is no minimum text length: any non-empty extracted text is embedded, including short teasers (decided by the user on 2026-10-11 after story 01). Only unavailable pages and empty extractions get `failed`.
 - A one-time full re-fetch of orf.at is acceptable if the model or dimension ever changes, since no text is stored.
 - The orf.at fetch rate is 10 pages/s (confirmed by the user on 2026-10-10; it replaces 1 page every 2 s from 2026-10-03).
 - The content dimension is chosen on retrieval quality only; cost is reported but not a criterion (confirmed by the user on 2026-10-09).

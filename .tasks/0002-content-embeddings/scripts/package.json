@@ -1,0 +1,11 @@
+{
+  "name": "orfarchiv-content-embeddings-spike",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@mozilla/readability": "0.5.0",
+    "jsdom": "30.1.1",
+    "mongodb": "7.7.0",
+    "tsx": "4.20.6"
+  }
+}

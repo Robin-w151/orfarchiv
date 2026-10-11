@@ -19,7 +19,7 @@ This must be done manually because it changes production systems (VPS compose st
 - [ ] SSH to the VPS (`<vps>` = your SSH host alias) and the compose directory (`<compose-dir>`) from epic 0001.
 - [ ] The M0 label `<cluster>.mongodb.net` and the VPS label `db1.orfarchiv.news:27017` at hand.
 - [ ] The existing embedding server on the VPS: its compose service name (`<EMBEDDINGS_SERVICE>`), its model volume, and the URL `scraper` uses (`ORFARCHIV_EMBEDDING_URL`).
-- [ ] The truncation limit recommended by story 01.
+- [ ] The truncation limit: `1024` tokens (`CONTENT_MAX_TOKENS`, decided after story 01).
 - [ ] Starting values for the CPU cap and threads (for example `1.5` / `1`). Step 12 calibrates them.
 - [ ] The fetch rate: `10` per `1 second` (confirmed).
 - [ ] The User-Agent string chosen in story 06, for `ORFARCHIV_CONTENT_USER_AGENT`.
