@@ -31,7 +31,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 - **UI search:** `ui/src/lib/backend/search/semantic.ts` runs one `$vectorSearch`, applies `SEMANTIC_SEARCH_MIN_SCORE = 0.79` and a recency boost (`ui/src/lib/configs/server.ts`). `normalizeQuery` was tuned against title vectors.
 - **UI content pipeline:** `ui/src/lib/backend/content/news.ts` fetches an orf.at page and runs jsdom, cleanup (`transform/cleanup.ts`), read-more detection (`transform/anchor.ts`), chart handling (`transform/chart.ts`), Readability (`transform/readability.ts`) and then several presentation-only transforms. It is covered by `news.spec.ts`.
 - **`shared` module:** the `orfarchiv-shared` repo is a nested submodule in each consumer (`ui/src/lib/shared/common`, `scraper/src/shared/common`, `db/src/shared/common`), imported as source via `$common/*` / `#common/*`. Bare imports resolve against the consumer's `node_modules`, which is how `mongodb` is used today.
-- **Effect versions:** ui and db are on `4.0.0-rc.118`, scraper on `rc.117`. HTTP and CLI moved from `effect/unstable/*` to `effect/*` between the two.
+- **Effect versions:** ui, db, scraper and shared use the stable `effect@4.0.2` since story 02 (before: ui and db on `4.0.0-rc.118`, scraper on `rc.117`). HTTP, CLI and persistence live under `effect/*`, no longer `effect/unstable/*`.
 - **`$rankFusion`:** available on `mongodb-atlas-local:8.3.3` (tested 2026-10-11 on a scratch DB). Sub-pipelines only allow stages that retrieve, limit or order documents, so score floors are applied after fusion on the per-list raw scores from `scoreDetails` (story 08). M0 only ever runs title-only search.
 - **Backups:** `db backup` streams documents via `streamAllNews()` (`db/src/services/database.ts`), which excludes embeddings and `contentStatus: 'embedded'` (story 04). After a restore, `backfill-embeddings` and `embed-content` rebuild them.
 - **Infrastructure (epic 0001):** about 437k stories. The primary target is a VPS (`db1.orfarchiv.news:27017`, `mongodb-atlas-local:8.3.3`, 4 vCPU / 8 GB / 80 GB). The fallback is Atlas M0 with a 512 MB ceiling and is already close to full. Targets come from `ORFARCHIV_DB_URLS` (`shared/src/targets.ts`) and are labelled by URL authority. `db setup`, `sync` and `verify` treat all targets as identical.
@@ -55,7 +55,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 |---|-------|-------|------------|----------|--------|
 | 00 | [Dev embedding server batch size](00-dev-embedding-batch-size.md) | Human | – | S | Done |
 | 01 | [Spike: content extraction and fusion](01-spike-content-extraction.md) | Claude | 00 | M | Done |
-| 02 | [Shared ORF article extraction](02-shared-article-extraction.md) | Claude | 01 | L | Todo |
+| 02 | [Shared ORF article extraction](02-shared-article-extraction.md) | Claude | 01 | L | Done |
 | 03 | [Content dimension evaluation](03-content-dimension-eval.md) | Claude | 02 | M | Todo |
 | 04 | [Content embedding schema and index](04-content-embedding-schema.md) | Claude | 03 | M | Todo |
 | 05 | [Per-target content opt-out](05-per-target-content-opt-out.md) | Claude | 04 | M | Todo |
