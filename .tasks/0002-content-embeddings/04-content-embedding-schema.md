@@ -2,7 +2,7 @@
 
 **Epic:** [0002 Article content embeddings](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 03
 **Estimate:** M
 
@@ -10,7 +10,7 @@
 As a developer, I want the content embedding field, its dimension, its input format and its index path defined once in `shared` and applied by `db setup`, so that the scraper, db and UI agree on the schema.
 
 ## Description
-**In `shared/src/search.ts`, add:**
+**In `shared/src/search/` (constants in `search.constants.ts`, `toContentDocumentInput` in `search.ts`), add:**
 - `CONTENT_EMBEDDING_FIELD = 'contentEmbedding'`.
 - `CONTENT_EMBEDDING_DIMENSIONS = <value from story 03>`.
 - `CONTENT_STATUS_FIELD = 'contentStatus'` and its values as a const object:
@@ -37,25 +37,32 @@ As a developer, I want the content embedding field, its dimension, its input for
 - Add `CONTENT_EMBEDDING_FIELD` and `CONTENT_STATUS_FIELD` to `SYNC_FIELDS`, so `db sync` copies them. Story 05 restricts this per target.
 - `streamAllNews` (used by `db backup`) also projects out `CONTENT_EMBEDDING_FIELD`. The backup then drops `contentStatus: 'embedded'` from each document (in the stream mapping, since a find projection can't mix exclusions with a conditional field) and keeps `contentStatus: 'failed'`. After a restore, `embed-content` re-embeds those stories but doesn't re-fetch pages known to be dead.
 
-**In `db/src/services/verify.ts`:** report `missingContentEmbeddings` (stories without `contentStatus`) for information only, **not** as a divergence. Targets legitimately differ while the backfill runs, and story 05 adds per-target expectations.
+**In `db/src/services/verify.ts`:** report `missingContent` (stories without `contentStatus`) for information only, **not** as a divergence. Targets legitimately differ while the backfill runs, and story 05 adds per-target expectations.
 
 Bump the nested `shared` submodule in `db`, `scraper` and `ui`.
 
 ## Acceptance criteria
-- [ ] Given a fresh local DB, when `npm start -- setup` runs in `db`, then `news_title_vector` has both vector paths and the three filters.
-- [ ] Given an existing local DB with the old definition, when `setup` runs without flags, then it exits 1 with the existing "definition changed" `SetupError` and the index is untouched.
-- [ ] Given the same DB, when `setup --recreate-search-indexes --wait-until-queryable` runs, then it exits 0 only after `news_title_vector` is `READY` and queryable with both vector paths, and logs the time it took.
-- [ ] Given `--wait-timeout 1s` on the full local collection, then `setup` exits 1 with a timeout `SetupError` naming the index, and the index keeps building.
-- [ ] `db sync` copies `contentEmbedding` and `contentStatus` between two local targets.
-- [ ] On the local full copy (443k stories), `explain()` of `find({ contentStatus: null }).sort({ timestamp: -1 }).limit(20)` shows an `IXSCAN` on `content_status_timestamp` and `totalDocsExamined` ≤ 20, also after setting `contentStatus: 'embedded'` on the newest 100k stories.
-- [ ] Given a target with embedded and failed stories, when `db backup` runs, then the backup has no `contentEmbedding`, no `contentStatus: 'embedded'`, and keeps `contentStatus: 'failed'`.
-- [ ] `db verify` prints the missing-content count per target and doesn't fail on differing counts.
-- [ ] `shared` and `db`: lint and tests are green, and `searchIndexDefinitionMatches` specs cover the two-path definition.
+- [x] Given a fresh local DB, when `npm start -- setup` runs in `db`, then `news_title_vector` has both vector paths and the three filters. (No flag for a scratch DB name: covered by the `setup.spec` create case, and the create call with the same definition left both local targets with `titleEmbedding:256`, `contentEmbedding:512` and the three filters.)
+- [x] Given an existing local DB with the old definition, when `setup` runs without flags, then it exits 1 with the existing "definition changed" `SetupError` and the index is untouched.
+- [x] Given the same DB, when `setup --recreate-search-indexes --wait-until-queryable` runs, then it exits 0 only after `news_title_vector` is `READY` and queryable with both vector paths, and logs the time it took.
+- [x] Given `--wait-timeout "1 second"` on the full local collection (Effect's duration parser rejects `1s`), then `setup` exits 1 with a timeout `SetupError` naming the index, and the index keeps building.
+- [x] `db sync` copies `contentEmbedding` and `contentStatus` between two local targets.
+- [x] On the local full copy (443k stories), `explain()` of `find({ contentStatus: null }).sort({ timestamp: -1 }).limit(20)` shows an `IXSCAN` on `content_status_timestamp` and `totalDocsExamined` ≤ 20, also after setting `contentStatus: 'embedded'` on the newest 100k stories.
+- [x] Given a target with embedded and failed stories, when `db backup` runs, then the backup has no `contentEmbedding`, no `contentStatus: 'embedded'`, and keeps `contentStatus: 'failed'`.
+- [x] `db verify` prints the missing-content count per target and doesn't fail on differing counts.
+- [x] `shared` and `db`: lint and tests are green, and `searchIndexDefinitionMatches` specs cover the two-path definition.
 
 ## Technical notes
-- Files: `shared/src/search.ts`, `db/src/shared/model.ts`, `db/src/services/{setup,database,verify}.ts`, plus their specs.
+- Files: `shared/src/search/{search,search.constants}.ts`, `db/src/shared/model.ts`, `db/src/services/{setup,database,verify}.ts`, plus their specs.
 - Polling: `connection.listNewsSearchIndexes()` already returns `status`, `queryable` and `latestDefinition`. Reuse it.
 - Story 01 measures how long the rebuild takes on the full collection. Story 07 plans the outage window from that.
+- **As implemented (2026-10-12):**
+  - `shared` was restructured into feature folders at the user's request: `src/{embedding,search,storyContent,targets}/`, with constants in `<feature>.constants.ts`. The schema constants live in `search/search.constants.ts`, and consumers import `#common/search/search.constants` (`$common/…` in `ui`). The fixtures moved to `src/storyContent/fixtures/` (the consumers' `.prettierignore` and `db/tsconfig.json` were updated to match).
+  - Waiting: the first check runs right after the create, and then the delays 1 s, 2 s, 4 s … are capped at 30 s (`Effect.repeat` with `Schedule.min([exponential('1 second'), spaced('30 seconds')])`). An index counts as ready only when its `latestDefinition` also matches. This is needed because right after drop + create, the old READY entry can still be listed.
+  - `--wait-until-queryable` also waits for an index that is up to date but still building, so a rerun after a timeout waits instead of returning at once.
+  - A failed `listSearchIndexes` call during the wait is logged as a warning and polled again. Locally, mongot briefly refused connections (`Error connecting to Search Index Management service`) during a full-collection build. The timeout still bounds the wait.
+  - `streamAllNews` maps documents through `toBackupStory`, which drops `contentStatus: 'embedded'`. `countNewsWithoutContentStatus` counts with `{ contentStatus: null }`.
+  - Measured locally (443k stories): the recreate with both paths took 15 s until queryable, and creating `content_status_timestamp` took < 1 s.
 
 ## Testing
 - New spec `db/src/shared/model.spec.ts`: two-path definition, `content_status_timestamp` index, `searchIndexDefinitionMatches`.

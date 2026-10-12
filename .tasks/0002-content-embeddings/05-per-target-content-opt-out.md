@@ -12,7 +12,7 @@ As the operator, I want to mark database targets that must not hold content embe
 ## Description
 **One env variable across all modules:** `ORFARCHIV_CONTENT_EMBEDDING_EXCLUDED_TARGETS`, a `;`-separated list of target labels (the same labels `labelOf` produces, for example `<cluster>.mongodb.net`). It defaults to empty, meaning every target gets content.
 
-- **`shared/src/targets.ts`:** extend `Target` with `content: boolean`. Add `parseTargets(raw, excludedContentLabels?)` or a separate `withContentCapability(targets, rawExcluded)`, whichever reads better. Warn (return the unknown labels) when an excluded label matches no target, so typos show up.
+- **`shared/src/targets/targets.ts`:** extend `Target` with `content: boolean`. Add `parseTargets(raw, excludedContentLabels?)` or a separate `withContentCapability(targets, rawExcluded)`, whichever reads better. Warn (return the unknown labels) when an excluded label matches no target, so typos show up.
 - **scraper:**
   - Read the variable in `scraper/src/services/env.ts`.
   - Content writes (story 06) go only to targets with `content: true`.
@@ -44,7 +44,7 @@ Update the README env sections in `scraper`, `db` and `ui`.
 - [ ] Lint and tests are green in `shared`, `scraper`, `db` and `ui`.
 
 ## Technical notes
-- Label parsing: `shared/src/targets.ts` (`parseTargets`, `labelOf`). Env loading: `scraper/src/services/env.ts`, `db/src/services/env.ts`, `ui/src/env.ts`.
+- Label parsing: `shared/src/targets/targets.ts` (`parseTargets`, `labelOf`). Env loading: `scraper/src/services/env.ts`, `db/src/services/env.ts`, `ui/src/env.ts`.
 - db: `db/src/shared/model.ts` (`searchIndexes` and `indexes` become functions of `{ content }`), `db/src/services/{setup,sync,verify,targets}.ts`.
 - UI failover: `ui/src/lib/backend/db/database.ts` and `database.spec.ts`.
 - Local labels: `orfarchiv-db-1` and `orfarchiv-db-2` (the hosts in `db/.env`'s `ORFARCHIV_DB_URLS`).

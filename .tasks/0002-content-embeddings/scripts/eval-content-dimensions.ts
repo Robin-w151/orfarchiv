@@ -1,8 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Effect } from '../../../shared/node_modules/effect/dist/index.js';
-import { quantize } from '../../../shared/src/embedding.ts';
-import { StoryContentService } from '../../../shared/src/storyContent.ts';
+import { quantize } from '../../../shared/src/embedding/embedding.ts';
+import { StoryContentService } from '../../../shared/src/storyContent/storyContent.ts';
 import { EMBEDDING_ROOT, sleep, tokenize, truncateToTokens, withDb } from './spike-lib.ts';
 
 const OUT = process.env.EVAL_OUT ?? '/tmp/orfarchiv-eval';
