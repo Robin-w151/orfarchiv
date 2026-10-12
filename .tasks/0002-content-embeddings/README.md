@@ -56,7 +56,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 | 00 | [Dev embedding server batch size](00-dev-embedding-batch-size.md) | Human | – | S | Done |
 | 01 | [Spike: content extraction and fusion](01-spike-content-extraction.md) | Claude | 00 | M | Done |
 | 02 | [Shared ORF article extraction](02-shared-article-extraction.md) | Claude | 01 | L | Done |
-| 03 | [Content dimension evaluation](03-content-dimension-eval.md) | Claude | 02 | M | Todo |
+| 03 | [Content dimension evaluation](03-content-dimension-eval.md) | Claude | 02 | M | Done |
 | 04 | [Content embedding schema and index](04-content-embedding-schema.md) | Claude | 03 | M | Todo |
 | 05 | [Per-target content opt-out](05-per-target-content-opt-out.md) | Claude | 04 | M | Todo |
 | 06 | [embed-content scraper command](06-embed-content-command.md) | Claude | 02, 04, 05 | L | Todo |
@@ -112,6 +112,7 @@ Stories 06–07 (content job) and 08 (UI) can be worked on in parallel once 05 i
 ## Assumptions
 - Story URLs across the whole archive still resolve on orf.at (stated by the user; story 01 verifies on a sample).
 - The text that matters for retrieval fits into the first ~1024 tokens of an article, because news front-loads the important information. Story 01 confirmed it: 85% of articles fit completely.
+- The content vector dimension is `CONTENT_EMBEDDING_DIMENSIONS = 512` (decided by the user on 2026-10-11 after story 03: paraphrase recall@10 90.3 % vs 91.9 % at 768 and 82.7 % at 256, ≈ 280 MB of mongot RAM for 437k stories).
 - Content inputs are truncated to `CONTENT_MAX_TOKENS = 1024` tokens (decided by the user on 2026-10-11 after story 01).
 - There is no minimum text length: any non-empty extracted text is embedded, including short teasers (decided by the user on 2026-10-11 after story 01). Only unavailable pages and empty extractions get `failed`.
 - A one-time full re-fetch of orf.at is acceptable if the model or dimension ever changes, since no text is stored.
