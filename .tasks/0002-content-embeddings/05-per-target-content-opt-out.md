@@ -2,7 +2,7 @@
 
 **Epic:** [0002 Article content embeddings](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 04
 **Estimate:** M
 
@@ -34,20 +34,26 @@ As the operator, I want to mark database targets that must not hold content embe
 Update the README env sections in `scraper`, `db` and `ui`.
 
 ## Acceptance criteria
-- [ ] Given `ORFARCHIV_CONTENT_EMBEDDING_EXCLUDED_TARGETS=orfarchiv-db-2` locally, when `db setup` runs, then `orfarchiv-db-2` has a title-only index and `orfarchiv-db-1` has both paths.
-- [ ] `db sync --from <db-1> --to <db-2>` leaves no `contentEmbedding` on db-2, and `db verify` is green.
-- [ ] Inserting a `contentEmbedding` on db-2 by hand makes `db verify` exit 1 with a problem naming the label.
-- [ ] Setting `contentStatus: 'failed'` on a db-2 story by hand makes `db verify` exit 1.
-- [ ] `orfarchiv-db-2` has no `content_status_timestamp` index after `setup`, and `verify` doesn't report it as missing.
-- [ ] An excluded label that matches no target logs a warning in every module.
-- [ ] Given db-1 is down and db-2 is excluded, when `useNewsCollection` fails over, then the callback is called again with `target.content === false` (spec in `database.spec.ts`).
-- [ ] Lint and tests are green in `shared`, `scraper`, `db` and `ui`.
+- [x] Given `ORFARCHIV_CONTENT_EMBEDDING_EXCLUDED_TARGETS=orfarchiv-db-2` locally, when `db setup` runs, then `orfarchiv-db-2` has a title-only index and `orfarchiv-db-1` has both paths.
+- [x] `db sync --from <db-1> --to <db-2>` leaves no `contentEmbedding` on db-2, and `db verify` is green.
+- [x] Inserting a `contentEmbedding` on db-2 by hand makes `db verify` exit 1 with a problem naming the label.
+- [x] Setting `contentStatus: 'failed'` on a db-2 story by hand makes `db verify` exit 1.
+- [x] `orfarchiv-db-2` has no `content_status_timestamp` index after `setup`, and `verify` doesn't report it as missing.
+- [x] An excluded label that matches no target logs a warning in every module.
+- [x] Given db-1 is down and db-2 is excluded, when `useNewsCollection` fails over, then the callback is called again with `target.content === false` (spec in `database.spec.ts`).
+- [x] Lint and tests are green in `shared`, `scraper`, `db` and `ui`.
 
 ## Technical notes
 - Label parsing: `shared/src/targets/targets.ts` (`parseTargets`, `labelOf`). Env loading: `scraper/src/services/env.ts`, `db/src/services/env.ts`, `ui/src/env.ts`.
 - db: `db/src/shared/model.ts` (`searchIndexes` and `indexes` become functions of `{ content }`), `db/src/services/{setup,sync,verify,targets}.ts`.
 - UI failover: `ui/src/lib/backend/db/database.ts` and `database.spec.ts`.
 - Local labels: `orfarchiv-db-1` and `orfarchiv-db-2` (the hosts in `db/.env`'s `ORFARCHIV_DB_URLS`).
+- **As implemented (2026-10-12):**
+  - `shared`: `Target.content`, and `withContentExclusions(targets, rawExcluded)` returns `{ targets, unknownLabels }`. `parseTargets` sets `content: true`. Each module logs the warning itself. In `db` and `scraper`, `Environment.dbTargets` is `Effect.cached`, so the warning shows once per run.
+  - `db/src/shared/model.ts`: `indexesFor({ content })` and `searchIndexesFor({ content })`. On an excluded target, `setup` also **drops** an existing `content_status_timestamp` index, since `reconcileIndexes` otherwise never removes indexes and story 04 had already created it on every target.
+  - `db/src/services/database.ts`: `syncFieldsFor(target)` replaces the exported `SYNC_FIELDS`, and `countNewsWithContent()` counts `contentEmbedding` **or** `contentStatus` (a collection scan on excluded targets, run by `verify` only). On excluded targets, `verify` prints `content excluded` instead of the missing-content count.
+  - The nested `shared` copies in `db`, `scraper` and `ui` carry the same uncommitted change as `shared`. The submodule pointers are bumped once `shared` is committed.
+  - Verified locally: after `setup --recreate-search-indexes --wait-until-queryable`, db-2 was title-only after 15 s. Sync with content on 3 db-1 stories left db-2 at 0, and `verify` exited 1 for a hand-set `contentEmbedding` and for `contentStatus: 'failed'` on db-2. All test data was removed afterwards.
 
 ## Testing
 - Unit: target parsing with and without exclusions and with an unknown label; per-target index definitions; sync projection; verify problems; UI capability on failover.

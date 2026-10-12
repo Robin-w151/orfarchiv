@@ -58,7 +58,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 | 02 | [Shared ORF article extraction](02-shared-article-extraction.md) | Claude | 01 | L | Done |
 | 03 | [Content dimension evaluation](03-content-dimension-eval.md) | Claude | 02 | M | Done |
 | 04 | [Content embedding schema and index](04-content-embedding-schema.md) | Claude | 03 | M | Done |
-| 05 | [Per-target content opt-out](05-per-target-content-opt-out.md) | Claude | 04 | M | Todo |
+| 05 | [Per-target content opt-out](05-per-target-content-opt-out.md) | Claude | 04 | M | Done |
 | 06 | [embed-content scraper command](06-embed-content-command.md) | Claude | 02, 04, 05 | L | Todo |
 | 07 | [Deploy and run content backfill](07-deploy-content-backfill.md) | Human | 06 | M | Todo |
 | 08 | [Fused semantic search in UI](08-fused-semantic-search.md) | Claude | 04, 05 | L | Todo |
