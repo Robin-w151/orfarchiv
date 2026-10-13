@@ -2,7 +2,7 @@
 
 **Epic:** [0002 Article content embeddings](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 02, 04, 05
 **Estimate:** L
 
@@ -33,18 +33,18 @@ Add a new subcommand `embed-content` next to `scrape` and `backfill-embeddings`.
 **Docs.** Add a README section in `scraper` ("Content embeddings") with the command, flags and env variables. Update the Dockerfile only if a new default is needed. The production container will override `command:`.
 
 ## Acceptance criteria
-- [ ] Given 50 local stories without content, when `npm start -- embed-content --max-docs 50` runs, then each has either `contentStatus: 'embedded'` with a `contentEmbedding` of `CONTENT_EMBEDDING_DIMENSIONS` int8 values, or `contentStatus: 'failed'`, on content-enabled targets only.
-- [ ] Given a 404 page (stubbed), then the story gets `contentStatus: 'failed'`, the log names the reason `unavailable`, and it isn't selected again.
-- [ ] Given a teaser page with a read-more link, then exactly one page is fetched and the teaser's own text is embedded.
-- [ ] Given the embedding server is unreachable, then no `contentStatus` is written, the batch ends early, and the next batch after `--idle-interval` retries the same stories.
-- [ ] Given a body longer than `CONTENT_MAX_TOKENS` (stubbed `/tokenize`), the embedded input has at most `CONTENT_MAX_TOKENS` minus the margin in tokens, starts with the full `title: <title> | text: ` prefix, and ends at a token boundary.
-- [ ] Given a body shorter than the limit, the input is sent unchanged.
-- [ ] orf.at requests never exceed the configured rate (asserted with `TestClock` in specs).
-- [ ] `embed-content` reads `ORFARCHIV_CONTENT_EMBEDDING_RATE_LIMIT` / `_WINDOW` and ignores `ORFARCHIV_EMBEDDING_RATE_LIMIT` (spec on the environment wiring).
-- [ ] With `--target <EXCLUDED_LABEL>`, the command exits 1 with an error naming the label and fetches nothing.
-- [ ] With `--poll` and a backlog, batches run back to back without an idle wait; with an empty backlog, the next query happens after `--idle-interval` (both with `TestClock`). A failing batch is logged and doesn't stop the loop.
-- [ ] `scrape` retitles don't remove `contentEmbedding`.
-- [ ] Lint and tests are green, and the README is updated.
+- [x] Given 50 local stories without content, when `npm start -- embed-content --max-docs 50` runs, then each has either `contentStatus: 'embedded'` with a `contentEmbedding` of `CONTENT_EMBEDDING_DIMENSIONS` int8 values, or `contentStatus: 'failed'`, on content-enabled targets only.
+- [x] Given a 404 page (stubbed), then the story gets `contentStatus: 'failed'`, the log names the reason `unavailable`, and it isn't selected again.
+- [x] Given a teaser page with a read-more link, then exactly one page is fetched and the teaser's own text is embedded.
+- [x] Given the embedding server is unreachable, then no `contentStatus` is written, the batch ends early, and the next batch after `--idle-interval` retries the same stories.
+- [x] Given a body longer than `CONTENT_MAX_TOKENS` (stubbed `/tokenize`), the embedded input has at most `CONTENT_MAX_TOKENS` minus the margin in tokens, starts with the full `title: <title> | text: ` prefix, and ends at a token boundary.
+- [x] Given a body shorter than the limit, the input is sent unchanged.
+- [x] orf.at requests never exceed the configured rate (asserted with `TestClock` in specs).
+- [x] `embed-content` reads `ORFARCHIV_CONTENT_EMBEDDING_RATE_LIMIT` / `_WINDOW` and ignores `ORFARCHIV_EMBEDDING_RATE_LIMIT` (spec on the environment wiring).
+- [x] With `--target <EXCLUDED_LABEL>`, the command exits 1 with an error naming the label and fetches nothing.
+- [x] With `--poll` and a backlog, batches run back to back without an idle wait; with an empty backlog, the next query happens after `--idle-interval` (both with `TestClock`). A failing batch is logged and doesn't stop the loop.
+- [x] `scrape` retitles don't remove `contentEmbedding`.
+- [x] Lint and tests are green, and the README is updated.
 
 ## Technical notes
 - New: `scraper/src/commands/embed-content.ts`, `scraper/src/services/fetcher.ts` (`StoryPageFetcher`, + spec), `scraper/src/services/content.ts` (orchestration + spec).
@@ -52,9 +52,25 @@ Add a new subcommand `embed-content` next to `scrape` and `backfill-embeddings`.
 - Follow the existing patterns: `Context.Service` with `make` / `layer`, tagged errors in `scraper/src/shared/errors.ts`, and `RateLimiter.makeWithRateLimiter` with `onExceeded: 'delay'` as in `embedding.ts`.
 - Tokenize URL: `/tokenize` lives at the llama.cpp server root, while `ORFARCHIV_EMBEDDING_URL` points at `…/v1` (`/v1/tokenize` returns 404). Derive the root by removing a trailing `/v1` segment from `ORFARCHIV_EMBEDDING_URL`; send the bearer token there too.
 - Index for selection: `content_status_timestamp` from story 04. Confirm with `explain()` on the local full copy that a batch query examines no more than `--batch-size` documents.
+- **As implemented (2026-10-13):**
+  - User-Agent default (decided by the user): `orfarchiv-scraper/<package version> (+https://orfarchiv.news)`, overridable with `ORFARCHIV_CONTENT_USER_AGENT`.
+  - `Embedding` keeps `embed(titles)` and gains `embedContent(inputs)` (identity formatter, `CONTENT_EMBEDDING_DIMENSIONS`, one input per request, limiter key `content-embeddings` with `ORFARCHIV_CONTENT_EMBEDDING_RATE_LIMIT` / `_WINDOW`, default 100 per `1 minute`; the title key is now `title-embeddings`), `truncateToTokens(input, maxTokens)` and `health()` (`GET /health` at the server root). Both embedding functions share an internal `embedWith`; vectors go through `truncateAndQuantize(values, dimensions)` (formerly `toBinary`).
+  - Truncation joins the UTF-8 bytes of the first `CONTENT_MAX_TOKENS - CONTENT_TOKEN_MARGIN` (1024 − 8) pieces and drops an incomplete trailing UTF-8 sequence (private `joinPieces` / `completeUtf8Length`), so byte-array pieces inside the text decode correctly and a broken last character is dropped. The `/tokenize` and `/health` root is the embedding URL without a trailing `/` and `/v1`.
+  - Error types the job relies on (specified in `embedding.spec.ts`): connection error → `Unreachable`; no answer within `BATCH_TIMEOUT` → `Timeout`; non-2xx (e.g. 500 "too large", 503 while loading) → `Rejected`; a body that isn't the OpenAI format (e.g. a URL without `/v1`) → `Malformed`.
+  - Timeouts in `Embedding` and `StoryPageFetcher` use the shared helper `withTimeout(duration, onTimeout)` in `scraper/src/shared/timeout.ts` (`Effect.timeoutOrElse`), so each service maps a timeout to its own error.
+  - `StoryPageFetcher` (`services/fetcher.ts`, one `fetchPage` function) uses a **fixed-window** limiter (key `orf-pages`): a token bucket allows a burst of `limit` on top of the refill rate, i.e. up to 19 requests in a sliding second at 10/s. Per attempt, the 30 s timeout covers the whole request including the body and sits **inside** the limiter, so waiting for a slot doesn't count against it; `Effect.retry` wraps both, so every retry waits for a slot again. 404/410 → `unavailable`; network errors, timeouts and 5xx are retried 3 times with jittered backoff (1 s, 2 s, 4 s), then transient; other 4xx, **including 429**, are transient without retry. Without the body timeout, a stalled body was only cut by the runtime after ≈ 300 s (Node/undici) or ≈ 360 s (Bun), per attempt.
+  - `ContentEmbedding` (`services/content.ts`) exposes only `run`. Per batch it selects from the first content target, checks `health()` before fetching (an unhealthy server ends the batch with no fetches), fetches and extracts with concurrency 10, then truncates and embeds one story at a time. `Unreachable` ends the batch without a cooldown, so the same stories are retried; `Timeout` ends the batch and puts that story on the cooldown, so one slow story can't block the job; `Rejected` / `Malformed` (for example a 500 "too large") is logged with the story id and treated as transient for that story. Embedded and failed results are written in one `bulkWrite` per content target. Failure reasons and outcome tags are const objects (`ContentFailureReason`, `PageOutcomeType`).
+  - **Addition: transient cooldown.** Stories that fail transiently on their own are excluded from selection (`id: { $nin }`) for `CONTENT_TRANSIENT_COOLDOWN` (1 hour, in memory). Without it, a page that keeps returning 5xx would be refetched in every batch at the top of the newest-first selection, and a run without `--poll` could never drain. Stories skipped because the embedding server is unreachable are not put on cooldown.
+  - **Addition: backoff when nothing makes progress.** With `--poll`, the next batch waits `--idle-interval` when the backlog is empty, a batch failed, the embedding server is unreachable, an embedding timed out, or every story in the batch failed transiently (for example orf.at answering 403/429 to everything; logged as `Every story in the batch failed transiently (n). Waiting before the next batch.`). Otherwise batches run back to back. Without `--poll`, the run stops when the backlog is drained or `--max-docs` is reached, and exits 1 in the other cases (an all-transient batch fails with the new `ContentError`).
+  - `--max-docs` counts stories that were attempted (embedded, failed or transient), not stories left untouched by an aborted batch.
+  - **Validation.** `--idle-interval` must be a positive duration and `--batch-size` / `--max-docs` positive integers (`Flag.filter`), so `--idle-interval "0 seconds"` can't cause a busy loop. Every `*_RATE_LIMIT` / `*_RATE_WINDOW` pair (titles, content embeddings, orf.at fetches) is parsed in `env.ts` and must be a positive integer and a positive duration; an invalid value fails with the new `ConfigError` at startup. Before, `parseInt` returned `NaN` for a typo and the limiter then never delayed anything. Because `AppLive` builds every service for every command, this also stops `scrape` on an invalid content variable; an empty value means the default.
+  - **M0 opt-out enforced at the write.** `selectContentTargets` drops excluded targets in the command (`--target` with an excluded label fails with `Target '<label>' is excluded from content embeddings (ORFARCHIV_CONTENT_EMBEDDING_EXCLUDED_TARGETS).` before anything touches orf.at), and `writeContentResults` additionally skips any excluded target it is given (warning) and fails if no content target remains. Errors from the selection and the backlog count name the target (`Database target '<label>' failed: …`).
+  - ESLint: `tsconfigRootDir: import.meta.dirname` in `scraper/eslint.config.js` (and `db/eslint.config.js`), because the nested `shared` submodule's `tsconfig.json` otherwise makes the editor's ESLint fail with a parsing error once a submodule file is opened. `ui/eslint.config.js` has the same gap and is unchanged.
+  - Verified locally (443k stories, db-2 excluded): `--max-docs 50` then `--max-docs 200` gave 249 `embedded` (int8, 512 dims) and 1 `failed` (a real 404 on ooe.orf.at) on db-1, and no content fields on db-2. Batches of 20 took 5–19 s (≈ 80–100 docs/min on the devcontainer's embedding server). `explain()` of the selection query: `IXSCAN` on `content_status_timestamp`, 20 keys / 20 docs examined. `$vectorSearch` on `contentEmbedding` returns a related story at 0.949 for a probe vector. The 250 embedded stories were left on db-1 as valid data.
+  - The "retitles keep `contentEmbedding`" criterion is covered by the existing `buildStoryUpdate` specs from story 05 (`never touches the content fields`).
 
 ## Testing
-- Unit: fetcher status handling and retry; one fetch per story, also for teaser pages; truncation via stubbed `/tokenize` (short input, long input, non-UTF-8 last piece); terminal vs transient classification; per-target writes respecting `content: false`; rate limiting with `TestClock`.
+- Unit: fetcher status handling and retry, including retries counted against the rate, a stalled body and waiting for the limiter not counting as a timeout; one fetch per story, also for teaser pages; truncation via stubbed `/tokenize` (short input, long input, UTF-8 edge cases) and that the job embeds the truncated input; embedding error types and URL derivation; terminal vs transient classification; poll pacing and backoff; the exact selection query (filter, sort, projection, limit); per-target writes respecting `content: false`; rate variable validation through `Environment`; rate limiting with `TestClock`.
 - Manual: run against the devcontainer DBs and the local llama.cpp server with `--max-docs 200`, then spot-check vectors with `$vectorSearch` on `contentEmbedding`.
 
 ## Out of scope

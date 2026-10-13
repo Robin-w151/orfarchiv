@@ -22,7 +22,7 @@ This must be done manually because it changes production systems (VPS compose st
 - [ ] The truncation limit: `1024` tokens (`CONTENT_MAX_TOKENS`, decided after story 01).
 - [ ] Starting values for the CPU cap and threads (for example `1.5` / `1`). Step 12 calibrates them.
 - [ ] The fetch rate: `10` per `1 second` (confirmed).
-- [ ] The User-Agent string chosen in story 06, for `ORFARCHIV_CONTENT_USER_AGENT`.
+- [ ] The User-Agent: story 06 made `orfarchiv-scraper/<version> (+https://orfarchiv.news)` the default, so `ORFARCHIV_CONTENT_USER_AGENT` only needs to be set to override it.
 - [ ] `ORFARCHIV_DB_RW_URL` for the count query in Verify and the full revert in Rollback, as defined in epic 0001 story 08 (read the password with `read -rs`).
 - [ ] A `tmux` session on the VPS.
 
@@ -58,7 +58,7 @@ This must be done manually because it changes production systems (VPS compose st
    docker compose run --rm db-backup targets
    docker compose run --rm scraper targets
    ```
-   **Expected:** both list the VPS with `content: yes` and M0 with `content: no`, and there's no warning about an unknown excluded label.
+   **Expected:** both list the VPS as `1. db1.orfarchiv.news:27017 (content)` and M0 as `2. <M0_LABEL> (no content)`, and there's no warning about an unknown excluded label.
 
 5. **Pause verification.** The running `db-verify` still has the old image and model. During and after the rebuild it would report the VPS index as changed or not queryable and alert on every run.
    ```bash
@@ -119,19 +119,58 @@ This must be done manually because it changes production systems (VPS compose st
      command: ['embed-content', '--poll']
      environment:
        # everything scraper has, plus:
-       ORFARCHIV_EMBEDDING_URL: "http://embeddings-content:8080"
+       ORFARCHIV_EMBEDDING_URL: "http://embeddings-content:8080/v1"
        ORFARCHIV_CONTENT_EMBEDDING_EXCLUDED_TARGETS: "<M0_LABEL>"
        ORFARCHIV_CONTENT_FETCH_RATE_LIMIT: "10"
        ORFARCHIV_CONTENT_FETCH_RATE_WINDOW: "1 second"
-       ORFARCHIV_CONTENT_USER_AGENT: "<USER_AGENT>"
        ORFARCHIV_CONTENT_EMBEDDING_RATE_LIMIT: "<CONTENT_EMBED_LIMIT>"
        ORFARCHIV_CONTENT_EMBEDDING_RATE_WINDOW: "1 minute"
      restart: unless-stopped
    ```
-   - `<USER_AGENT>`: the User-Agent string chosen in story 06.
    - `<CONTENT_EMBED_LIMIT>`: start high (for example `120`), so the CPU cap is what limits throughput. Lower it in step 12 if needed.
-   - `ORFARCHIV_EMBEDDING_URL` points at the capped instance from step 10 and overrides the value copied from `scraper`.
+   - `ORFARCHIV_EMBEDDING_URL` points at the capped instance from step 10 and overrides the value copied from `scraper`. It **must end in `/v1`**: embeddings go to `<url>/embeddings`, and without `/v1` llama.cpp answers in its own format instead of the OpenAI one, so every story fails as `Embedding response was malformed`. The scraper calls `/tokenize` and `/health` at the server root (the URL without `/v1`), so `scraper-content` must reach the instance directly, not through a proxy that only forwards `/v1/*`.
+   - Rate limits and windows are validated at startup: a value that isn't a positive integer or a duration (for example `ten` or `1 sec`) stops the container with `…_RATE_LIMIT must be a positive integer …`. An empty value means the default.
    **Expected:** `docker compose config -q` is silent.
+
+   **Check the endpoints the content job uses.** This runs inside `scraper-content` (same network, environment and secrets), derives the URLs exactly as the scraper does, and calls all three endpoints. The embedding request uses an input of about 1000 tokens, the most the scraper sends:
+   ```bash
+   docker compose run --rm --no-deps --entrypoint node scraper-content --input-type=module -e '
+   import fs from "node:fs";
+   const env = (name) => (process.env[`${name}_FILE`] ? fs.readFileSync(process.env[`${name}_FILE`], "utf8").trim() : (process.env[name] ?? ""));
+   const api = env("ORFARCHIV_EMBEDDING_URL").replace(/\/$/, "");
+   const root = api.replace(/\/v1$/, "");
+   const token = env("ORFARCHIV_EMBEDDING_TOKEN");
+   const headers = { "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}) };
+   const long = `title: Test | text: ${"Österreich ".repeat(1000)}`;
+   const checks = [
+     ["GET", `${root}/health`, undefined, (json) => json.status === "ok"],
+     ["POST", `${root}/tokenize`, { content: "title: Test | text: Österreich", with_pieces: true }, (json) => json.tokens?.[0]?.piece !== undefined],
+     ["POST", `${api}/embeddings`, { input: [long] }, (json) => json.data?.[0]?.embedding?.length >= 512],
+   ];
+   let failed = 0;
+   for (const [method, url, body, valid] of checks) {
+     try {
+       const response = await fetch(url, { method, headers, body: body && JSON.stringify(body), signal: AbortSignal.timeout(60_000) });
+       const text = await response.text();
+       const ok = response.ok && valid(JSON.parse(text));
+       failed += ok ? 0 : 1;
+       console.log(`${ok ? "OK  " : "FAIL"} ${method} ${url} -> ${response.status}${ok ? "" : ` ${text.slice(0, 150)}`}`);
+     } catch (error) {
+       failed++;
+       console.log(`FAIL ${method} ${url} -> ${error.cause?.code ?? error.message}`);
+     }
+   }
+   process.exit(failed > 0 ? 1 : 0);
+   '; echo "exit=$?"
+   ```
+   **Expected:**
+   ```text
+   OK   GET http://embeddings-content:8080/health -> 200
+   OK   POST http://embeddings-content:8080/tokenize -> 200
+   OK   POST http://embeddings-content:8080/v1/embeddings -> 200
+   exit=0
+   ```
+   Any `FAIL` line: see "Endpoint check fails" under Troubleshooting. Don't continue to step 12 until all three are `OK`.
 
 12. **Dry run and calibrate the cap.** Start a limited run, and meanwhile measure query latency on the main embedding server, as the UI experiences it:
     ```bash
@@ -140,7 +179,7 @@ This must be done manually because it changes production systems (VPS compose st
     for i in $(seq 20); do curl -s -o /dev/null -w '%{time_total}\n' -X POST <MAIN_EMBEDDING_URL>/embeddings -H 'content-type: application/json' -d '{"input":["task: search result | query: Teuerung"]}'; done | sort -n
     ```
     - `<MAIN_EMBEDDING_URL>`: the `ORFARCHIV_EMBEDDING_URL` of `scraper` (the uncapped instance).
-    **Expected:** about 100 processed, mostly `embedded`, a few `failed` at most, no `failed` target. The 19th of the 20 latencies (p95) is below 1 s, and the run processes ≥ 25 docs/min (from the log's duration; the fetch rate allows up to 600, so the capped embedding instance is the limit). Otherwise, lower `cpus:` and `--threads` if latency is too high, or raise them if throughput is too low, run `docker compose up -d embeddings-content`, and repeat. If throughput is below target while the embedding instance's CPU is not at its cap, raise `--batch-size` (for example to 50) and repeat. Note the final values for the handoff.
+    **Expected:** about 100 processed, mostly `embedded`, a few `failed` at most, no `failed` target, and no `Embedding server is unavailable, ending batch early` or `Failed to embed content of story` lines (if there are, repeat the endpoint check from step 11). The 19th of the 20 latencies (p95) is below 1 s, and the run processes ≥ 25 docs/min (from the log's duration; the fetch rate allows up to 600, so the capped embedding instance is the limit). Otherwise, lower `cpus:` and `--threads` if latency is too high, or raise them if throughput is too low, run `docker compose up -d embeddings-content`, and repeat. If throughput is below target while the embedding instance's CPU is not at its cap, raise `--batch-size` (for example to 50) and repeat. Note the final values for the handoff.
 
 13. **Start the job.**
     ```bash
@@ -185,7 +224,16 @@ npx mongosh "$ORFARCHIV_DB_RW_URL" --quiet --eval '
 - No secrets are needed.
 
 #### Troubleshooting
-- **orf.at returns 429 or 403** → stop the container, halve `ORFARCHIV_CONTENT_FETCH_RATE_LIMIT` (or double the window), and restart.
+- **Endpoint check fails (step 11)**:
+  - `FAIL GET …/health -> ENOTFOUND` or `ECONNREFUSED` → `embeddings-content` isn't running or isn't on the same network as `scraper-content`. Check `docker compose ps embeddings-content` and the `networks:` of both services.
+  - `FAIL GET …/health -> 503` → the model is still loading. Wait a minute and repeat.
+  - `/health` and `/tokenize` are `OK`, but `FAIL POST …/embeddings -> 200 [{"index":0,"embedding":[[…` → `ORFARCHIV_EMBEDDING_URL` doesn't end in `/v1`.
+  - `FAIL POST …/v1/embeddings -> 500 … input (… tokens) is too large` → `--batch-size` / `--ubatch-size` of `embeddings-content` are below 1024. Set both to `2048` (step 10).
+  - `FAIL GET …/health -> 404` or `FAIL POST …/tokenize -> 404` while `/v1/embeddings` is `OK` → `ORFARCHIV_EMBEDDING_URL` goes through a proxy that only forwards `/v1/*`. Point it at the container directly (`http://embeddings-content:8080/v1`).
+  - `-> 401` → the instance was started with `--api-key`. Set the matching `ORFARCHIV_EMBEDDING_TOKEN` on `scraper-content`, or remove the key from the internal instance.
+- **A container exits right after starting with `…_RATE_LIMIT must be a positive integer and …_RATE_WINDOW a positive duration`** → fix the named variable in the compose file. All scraper commands validate all rate variables, so a typo in a content variable also stops `scraper`.
+- **Many `Embedding server is unavailable, ending batch early` lines in the `scraper-content` log** → `embeddings-content` is down or restarting (`docker compose ps`, `docker compose logs embeddings-content`). The job waits `--idle-interval` and retries the same stories, so nothing is lost. Repeat the endpoint check from step 11.
+- **orf.at returns 429 or 403** (log: `will be retried later: … status 429`, and `Every story in the batch failed transiently (…). Waiting before the next batch.` when orf.at refuses everything; the job then waits `--idle-interval` between batches by itself) → stop the container, halve `ORFARCHIV_CONTENT_FETCH_RATE_LIMIT` (or double the window), and restart.
 - **Many `failed` results with reason `empty` in the log for one source or era** → the markup isn't covered by the shared extraction. Stop the job, report the URLs to Claude for a fix in `shared`, then reset those markers so they're retried: `updateMany({ contentStatus: "failed", source: "<SOURCE>" }, { $unset: { contentStatus: "" } })`. This also retries that source's 404s once, which is harmless.
 - **Semantic search or `scrape` ticks get slow** → the VPS CPU is saturated (check `docker stats`). Lower `cpus:` on `embeddings-content`, or lower `ORFARCHIV_CONTENT_EMBEDDING_RATE_LIMIT`, and confirm `scraper-content` really uses the capped instance (`docker compose exec scraper-content env | grep EMBEDDING_URL`).
 - **Index stuck in `BUILDING` for longer than story 01's duration plus 50 %** → semantic search is down meanwhile. Check `docker compose logs db` for mongot errors (memory). If it doesn't recover, roll back with "Index rebuild causes trouble" (title-only definition, another rebuild). Keep `db-verify` stopped until the index is queryable.
