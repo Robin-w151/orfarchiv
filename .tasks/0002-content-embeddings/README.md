@@ -61,7 +61,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 | 05 | [Per-target content opt-out](05-per-target-content-opt-out.md) | Claude | 04 | M | Done |
 | 06 | [embed-content scraper command](06-embed-content-command.md) | Claude | 02, 04, 05 | L | Done |
 | 07 | [Deploy and run content backfill](07-deploy-content-backfill.md) | Human | 06 | M | Todo |
-| 08 | [Fused semantic search in UI](08-fused-semantic-search.md) | Claude | 04, 05 | L | Todo |
+| 08 | [Fused semantic search in UI](08-fused-semantic-search.md) | Claude | 04, 05 | L | Done |
 | 09 | [Relevance review and tuning](09-relevance-review-tuning.md) | Human | 07, 08 | M | Todo |
 
 Estimates: S ≈ half a day or less, M ≈ 1 day, L ≈ 2 days. Total ≈ 12–13 days of hands-on work. The backfill in story 07 additionally runs in the background for days.
