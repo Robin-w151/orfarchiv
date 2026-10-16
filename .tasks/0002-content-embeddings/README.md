@@ -4,9 +4,11 @@
 **Created:** 2026-10-03
 
 ## Summary
+
 Semantic search currently embeds only the RSS title of each story. Titles are short, so stories whose topic shows up only in the article body are hard to find. This epic adds a second vector per story, computed from the **article content** fetched from orf.at, backfilled slowly in the background and kept current for new stories. At query time, title and content results are merged with rank fusion. The existing title search and its tuned thresholds stay exactly as they are and remain the fallback.
 
 ## Goals
+
 - Every story whose orf.at page still resolves gets a `contentEmbedding`, newest first, at a slow and configurable fetch rate.
 - New stories get a content embedding (or a terminal `contentStatus`) within 10 minutes of being scraped, as long as the content job is running.
 - `contentEmbedding` lives in the existing vector search index `news_title_vector` next to `titleEmbedding`.
@@ -16,6 +18,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 - ORF article text extraction (noise removal, Readability) has a single implementation in `shared`, used by both the UI and the scraper.
 
 ## Non-goals
+
 - Storing the raw article text in the database.
 - Keyword or full-text search on the article body.
 - Chunking or multiple vectors per article.
@@ -25,6 +28,7 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 - Following read-more links. Teaser pages are embedded as they are, because in the UI the reader decides whether the linked article is loaded.
 
 ## Background & context
+
 - **Scraper:** reads RSS feeds only (`scraper/src/services/scraper.ts`, feeds in `scraper/src/sources.ts`). A story is `id, title, category, url, timestamp, source` (`scraper/src/shared/model.ts`). Titles are embedded on insert and on retitle in `scraper/src/services/database.ts` (`persistOrfNews`, `buildStoryUpdate`). The `backfill-embeddings` command (`scraper/src/commands/backfill.ts`) fills gaps newest first.
 - **Embedding server:** llama.cpp serving `ggml-org/embeddinggemma-300m-qat-q8_0-GGUF` (`.devcontainer/docker-compose.yml`, port 3003 locally). Its native output is 768 dims and its context is 2048 tokens, but with the default `--ubatch-size 512` llama.cpp rejects inputs over 512 tokens (HTTP 500). Story 00 sets `--batch-size` / `--ubatch-size` to 2048 in the devcontainer, and story 07 does the same in production. Document prompt `title: none | text: <title>` (`scraper/src/shared/search.ts`), query prompt `task: search result | query: <q>` (`ui/src/lib/backend/search/embedding.ts`).
 - **Vectors:** Matryoshka-truncated to `TITLE_EMBEDDING_DIMENSIONS = 256`, then int8-quantized by `quantize()` (`shared/src/embedding/embedding.ts`). Index `news_title_vector` has one `vector` path plus `timestamp`, `source` and `category` filters (`db/src/shared/model.ts`). Only the truncated int8 vectors are stored, so titles cannot be moved to higher dimensions without re-embedding them.
@@ -37,8 +41,9 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 - **Infrastructure (epic 0001):** about 437k stories. The primary target is a VPS (`db1.orfarchiv.news:27017`, `mongodb-atlas-local:8.3.3`, 4 vCPU / 8 GB / 80 GB). The fallback is Atlas M0 with a 512 MB ceiling and is already close to full. Targets come from `ORFARCHIV_DB_URLS` (`shared/src/targets/targets.ts`) and are labelled by URL authority. `db setup`, `sync` and `verify` treat all targets as identical.
 
 ## Proposed approach
+
 1. **Separate field, same index.** Add `contentEmbedding` as a second `vector` path in `news_title_vector`, with its own `numDimensions` (`CONTENT_EMBEDDING_DIMENSIONS`). `titleEmbedding` is untouched. The index name `news_title_vector` is historical: it covers both paths, and renaming it would force another drop and recreate.
-   - *Alternative considered:* one combined `title: <title> | text: <body>` vector replacing `titleEmbedding`. Rejected because it invalidates `MIN_SCORE` and the query-casing findings, and because during a multi-day backfill it would mix title-only and title+content vectors in one field with scores that can't be compared.
+   - _Alternative considered:_ one combined `title: <title> | text: <body>` vector replacing `titleEmbedding`. Rejected because it invalidates `MIN_SCORE` and the query-casing findings, and because during a multi-day backfill it would mix title-only and title+content vectors in one field with scores that can't be compared.
 2. **Shared, Effect-based extraction.** The presentation-independent part of the UI pipeline moves to `shared/src/storyContent/storyContent.ts` as an Effect service (`StoryContentService`), including DOM creation with jsdom (a peer dependency), so the UI and the scraper parse pages identically. HTTP fetching stays per consumer. The UI delegates to it, so the embedded text is the article body readers see, without UI additions such as chart labels, slideshows and the footer.
 3. **Slow content job.** A new scraper command, `embed-content`, picks stories without a `contentStatus`, newest first, via the `content_status_timestamp` index. For each one it fetches the page at a slow rate, extracts the text, embeds `title: <title> | text: <body>` truncated to fit the context window, and writes the vector to all non-excluded targets. Processed stories get `contentStatus: 'embedded'`, and unfetchable or empty pages get `'failed'`, so they aren't retried forever. It runs as its own long-lived container with `--poll`, processing batches back to back (paced by the fetch rate limiter and the embedding server) and waiting only when the backlog is empty, decoupled from `scrape`.
 4. **Embedding only.** No article text is stored. A later model or dimension change means fetching the pages again, which is accepted.
@@ -51,22 +56,24 @@ Semantic search currently embeds only the RSS title of each story. Titles are sh
 7. **Evaluation in two steps.** An automated known-item evaluation picks the content dimension (story 03). A manual side-by-side review tunes the fused ranking before it is enabled (story 09).
 
 ## Stories
-| # | Story | Owner | Depends on | Estimate | Status |
-|---|-------|-------|------------|----------|--------|
-| 00 | [Dev embedding server batch size](00-dev-embedding-batch-size.md) | Human | – | S | Done |
-| 01 | [Spike: content extraction and fusion](01-spike-content-extraction.md) | Claude | 00 | M | Done |
-| 02 | [Shared ORF article extraction](02-shared-article-extraction.md) | Claude | 01 | L | Done |
-| 03 | [Content dimension evaluation](03-content-dimension-eval.md) | Claude | 02 | M | Done |
-| 04 | [Content embedding schema and index](04-content-embedding-schema.md) | Claude | 03 | M | Done |
-| 05 | [Per-target content opt-out](05-per-target-content-opt-out.md) | Claude | 04 | M | Done |
-| 06 | [embed-content scraper command](06-embed-content-command.md) | Claude | 02, 04, 05 | L | Done |
-| 07 | [Deploy and run content backfill](07-deploy-content-backfill.md) | Human | 06 | M | Todo |
-| 08 | [Fused semantic search in UI](08-fused-semantic-search.md) | Claude | 04, 05 | L | Done |
-| 09 | [Relevance review and tuning](09-relevance-review-tuning.md) | Human | 07, 08 | M | Todo |
+
+| #   | Story                                                                  | Owner  | Depends on | Estimate | Status      |
+| --- | ---------------------------------------------------------------------- | ------ | ---------- | -------- | ----------- |
+| 00  | [Dev embedding server batch size](00-dev-embedding-batch-size.md)      | Human  | –          | S        | Done        |
+| 01  | [Spike: content extraction and fusion](01-spike-content-extraction.md) | Claude | 00         | M        | Done        |
+| 02  | [Shared ORF article extraction](02-shared-article-extraction.md)       | Claude | 01         | L        | Done        |
+| 03  | [Content dimension evaluation](03-content-dimension-eval.md)           | Claude | 02         | M        | Done        |
+| 04  | [Content embedding schema and index](04-content-embedding-schema.md)   | Claude | 03         | M        | Done        |
+| 05  | [Per-target content opt-out](05-per-target-content-opt-out.md)         | Claude | 04         | M        | Done        |
+| 06  | [embed-content scraper command](06-embed-content-command.md)           | Claude | 02, 04, 05 | L        | Done        |
+| 07  | [Deploy and run content backfill](07-deploy-content-backfill.md)       | Human  | 06         | M        | Done        |
+| 08  | [Fused semantic search in UI](08-fused-semantic-search.md)             | Claude | 04, 05     | L        | Done        |
+| 09  | [Relevance review and tuning](09-relevance-review-tuning.md)           | Human  | 07, 08     | M        | In Progress |
 
 Estimates: S ≈ half a day or less, M ≈ 1 day, L ≈ 2 days. Total ≈ 12–13 days of hands-on work. The backfill in story 07 additionally runs in the background for days.
 
 ## Story order
+
 ```mermaid
 flowchart TD
   S00["00 Dev embedding server batch size"] --> S01["01 Spike content extraction and fusion"]
@@ -101,6 +108,7 @@ flowchart TD
 Stories 06–07 (content job) and 08 (UI) can be worked on in parallel once 05 is done.
 
 ## Risks & open questions
+
 - **orf.at fetch rate and terms.** The rate is confirmed: 10 pages/s (up to ≈ 864k pages/day, so fetching alone would cover the archive in ≈ 12 hours). In practice the content job's embedding server is the bottleneck: on its 2 pinned cores it embeds ≈ 21 docs/min (measured 2026-10-14, story 07), so the backfill takes ≈ 14 days. If orf.at answers with 429 or 403, lower the rate (story 07 troubleshooting). The User-Agent string is decided by the user during story 06. `orf.at/robots.txt` does not exist, so there are no published crawl rules to follow.
 - **Old page markup.** Resolved by story 01: 0 empty extractions in 297 pages from 2022–2026, and markup differs by site (two families), not by year. Seven extra text-only selectors remove the remaining dates, credits and labels.
 - **Embedding throughput.** Long inputs on a CPU-only llama.cpp server are much slower than titles. Story 01 measures tokens/s. If embedding, not fetching, is the bottleneck, the backfill rate is set by the embedding server, and the title embeddings of live scrapes and search queries must not be starved. The separate embedding instance on its own cores for the content job (story 07) handles this.
@@ -110,6 +118,7 @@ Stories 06–07 (content job) and 08 (UI) can be worked on in parallel once 05 i
 - **Partial coverage.** While the backfill runs, fused ranking favours stories that already have content. Story 09 checks whether fusion should be enabled only after the backfill is complete.
 
 ## Assumptions
+
 - Story URLs across the whole archive still resolve on orf.at (stated by the user; story 01 verifies on a sample).
 - The text that matters for retrieval fits into the first ~1024 tokens of an article, because news front-loads the important information. Story 01 confirmed it: 85% of articles fit completely.
 - The content vector dimension is `CONTENT_EMBEDDING_DIMENSIONS = 512` (decided by the user on 2026-10-11 after story 03: paraphrase recall@10 90.3 % vs 91.9 % at 768 and 82.7 % at 256, ≈ 280 MB of mongot RAM for 437k stories).
@@ -122,6 +131,7 @@ Stories 06–07 (content job) and 08 (UI) can be worked on in parallel once 05 i
 - The M0 target label is `<cluster>.mongodb.net`, as in epic 0001.
 
 ## Definition of done
+
 - All stories are Done. Lint and tests are green in `shared`, `scraper`, `db` and `ui`.
 - On the VPS, `embedded + failed ≥ 99%` of all stories (story 07 verify query) and `failed < 10%`, unless story 01 documented a different expectation. On M0, `countDocuments({ contentEmbedding: { $exists: true } }) = 0`, and `db verify` exits 0.
 - The `embed-content` container runs in poll mode on the VPS. Its newest-first backlog is empty because every story has a `contentStatus`.

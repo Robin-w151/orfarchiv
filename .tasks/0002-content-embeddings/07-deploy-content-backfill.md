@@ -2,7 +2,7 @@
 
 **Epic:** [0002 Article content embeddings](README.md)
 **Owner:** Human
-**Status:** In Progress
+**Status:** Done
 **Depends on:** 06
 **Estimate:** M (hands-on), plus several days of unattended backfill
 
@@ -317,11 +317,15 @@ npx mongosh "$ORFARCHIV_DB_RW_URL" --quiet --eval '
 - **Index stuck in `BUILDING` for longer than story 01's duration plus 50 %** → semantic search is down meanwhile. Check `docker compose logs db` for mongot errors (memory). If it doesn't recover, roll back with "Index rebuild causes trouble" (title-only definition, another rebuild). Keep `db-verify` stopped until the index is queryable.
 - **`verify` flags content on M0** → a service is missing the excluded-targets variable. Fix the compose file, unset the fields on M0 with the `updateMany` from Rollback against the M0 URL, and run `verify` again.
 
+#### Result (2026-10-16)
+
+`verify` exits 0 and both targets agree: 448,767 stories, M0 `content excluded`. On the VPS, `embedded` 445,554 + `failed` 3,208 = 99.999 % of all stories, with `failed` at 0.71 %. The 5 stories without a `contentStatus` failed transiently, so the job retries them.
+
 ## Acceptance criteria
 
-- [ ] Given the verify step, when it runs, then `exit=0` and content exists only on the VPS.
-- [ ] `scraper-content` runs in poll mode, and the backlog decreases daily.
-- [ ] The semantic search outage during the index rebuild was no longer than the duration story 01 measured, plus 50 %.
+- [x] Given the verify step, when it runs, then `exit=0` and content exists only on the VPS.
+- [x] `scraper-content` runs in poll mode, and the backlog decreases daily.
+- [x] The semantic search outage during the index rebuild was no longer than the duration story 01 measured, plus 50 %.
 
 ## Technical notes
 
