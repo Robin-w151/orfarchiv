@@ -74,7 +74,7 @@ Sources: [SvelteKit 3 is here](https://svelte.dev/blog/sveltekit-3-is-here), [Mi
 | # | Story | Owner | Size | Depends on | Status |
 |---|-------|-------|------|------------|--------|
 | 01 | [Spike: Kit 3 compatibility](01-spike-kit3-compatibility.md) | Claude | L | – | Done |
-| 02 | [Subpath imports on Kit 2](02-subpath-imports.md) | Claude | M | 01 | Todo |
+| 02 | [Subpath imports on Kit 2](02-subpath-imports.md) | Claude | M | 01 | Done |
 | 03 | [Upgrade to SvelteKit 3](03-upgrade-sveltekit-3.md) | Claude | L | 01, 02 | Todo |
 | 04 | [PWA service worker on Kit 3](04-pwa-service-worker.md) | Claude | S | 01, 03 | Todo |
 | 05 | [Docker image on adapter-node 6](05-docker-adapter-node.md) | Claude | M | 03 | Todo |
@@ -123,7 +123,7 @@ flowchart TD
 
 ## Assumptions
 
-- All stories are done on a single branch `feat/sveltekit-3` in the `ui` submodule, branched from `develop`, matching the `feat/<epic>` convention of epic 0002. There are no per-story branches or PRs. The only PR is `feat/sveltekit-3` → `develop` in story 07, so `develop` never sees a half-migrated state. No other submodule changes. The user creates the branch.
+- All stories are done on a single branch `feat/sveltekit-3` in the `ui` submodule, branched from `develop`, matching the `feat/<epic>` convention of epic 0002. There are no per-story branches or PRs. The only PR is `feat/sveltekit-3` → `develop` in story 07, so `develop` never sees a half-migrated state. No other submodule changes. The branch exists (created in story 02).
 - The target is `@sveltejs/kit@3.1.x` (current `latest`), not the `next` tag.
 - Vercel creates a preview deployment for `feat/sveltekit-3`. `develop` is deployed to https://develop.orfarchiv.news, where story 07 smoke-tests it. Production (`main`) isn't touched. The Docker image isn't deployed anywhere; it's kept as a fallback and must keep building and running.
 - PWA behaviour (offline fallbacks, update prompt, notifications) must stay as it is. The caching strategy itself isn't redesigned.
