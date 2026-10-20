@@ -2,7 +2,7 @@
 
 **Epic:** [0003 SvelteKit 3 migration](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** 01, 02
 **Size:** L — cross-cutting dependency upgrade. Story 01 mapped the codemod output, but error-page behaviour under Kit 3 is still unverified
 
@@ -19,7 +19,7 @@ Steps:
 1. Run `npx sv migrate sveltekit-3 --tasks all --confirm --no-install` and review every change it makes. It also runs `npm run format`.
    - It bumps `package.json` with caret ranges. Re-pin to `@sveltejs/kit` `3.1.0`, `@sveltejs/adapter-vercel` `7.0.1` and `@sveltejs/adapter-node` `6.0.0`. Keep exact versions, as the file does today.
    - It adds `"#lib": "./src/lib/index.js"` to `imports`. That file doesn't exist, so remove the entry and keep story 02's `#lib/*` / `#common/*` mapping.
-   - Keep its `resolve('/settings')` → `resolve('settings')` rewrites (Kit 3 route-id form; e2e passed with them in the spike) and the shallow-routing change in `AppLayout.svelte`.
+   - Keep its `resolve('/settings')` → `resolve('settings')` rewrites and the shallow-routing change in `AppLayout.svelte`. In Kit 3, a `resolve()` argument with a leading `/` is a route ID, and one without is a pathname. The rewrites use the pathname form. Use it for every call, including the root: `resolve('/')` → `resolve('')` (decided in review). During SSR and prerendering, Kit renders these as relative hrefs (`./`, `./settings`), the default `paths.relative`.
    - Revert anything else that conflicts with story 02's conventions.
 2. **Peer overrides.** Add these entries to `overrides` in `ui/package.json`, next to the existing ones. Without them `npm ci` fails with `ERESOLVE`:
    ```json
@@ -51,22 +51,22 @@ Steps:
 
 ## Acceptance criteria
 
-- [ ] Given `ui/package.json`, then `@sveltejs/kit` is `3.1.x`, `@sveltejs/adapter-vercel` is `7.x` and `@sveltejs/adapter-node` is `6.x`.
-- [ ] Given a clean `node_modules`, when running `npm ci`, then it passes without `ERESOLVE`.
-- [ ] Given the branch, when running `npm run lint`, `npm run check`, `npm run test:unit` and `npm run build`, then all pass with no SvelteKit deprecation warnings and no `tsconfig_invalid` warning in the output.
-- [ ] Given `npm run dev` running on port 3001, when running `npm run test:e2e` in a second terminal, then all specs pass.
-- [ ] Given a type error added to the service worker, when running `npm run check`, then it fails.
-- [ ] Given `npm run storybook:build`, then it passes.
-- [ ] Given `storybook-static` served statically (e.g. `python3 -m http.server -d storybook-static`) and `npm run storybook`, when opening each of the 21 stories (17 files under `src/stories/**`), then each renders without errors and with no console errors about unresolved `$app/*` or `#lib/*` modules or `__SVELTEKIT_PAYLOAD__`. Known noise also present on `develop`: an external image `ERR_NAME_NOT_RESOLVED` in `StoryContent` when offline, and Storybook's implicit-action deprecation in `controls-input--input`.
-- [ ] Given `npm run dev`, when visiting `/does-not-exist`, then the browser ends up on `/` (302). When requesting `/favicon.ico` with no static file, then the response is 404.
-- [ ] Given `/` with a search term entered and the list scrolled down, when clicking the header title (`Header.svelte`, `href={resolve('/')}`), then the search term, the scroll position and the tRPC requests in DevTools → Network match the same steps on `develop` (checked side by side), and no request repeats more than once.
-- [ ] Given `ButtonLink` with an `href` whose preload fails, when hovering it, then no unhandled promise rejection is logged.
-- [ ] Given `ui/tsconfig.json`, then it extends `$app/tsconfig`, and the service worker is type-checked by its own tsconfig.
-- [ ] Given `npm run build` with the Vercel adapter, then `.vercel/output` is produced and every `.vercel/output/functions/**/.vc-config.json` has `"runtime": "nodejs…"` (none `edge`), including the one for the tRPC route `src/routes/api/trpc/[...procedure]/+server.ts`.
+- [x] Given `ui/package.json`, then `@sveltejs/kit` is `3.1.x`, `@sveltejs/adapter-vercel` is `7.x` and `@sveltejs/adapter-node` is `6.x`.
+- [x] Given a clean `node_modules`, when running `npm ci`, then it passes without `ERESOLVE`.
+- [x] Given the branch, when running `npm run lint`, `npm run check`, `npm run test:unit` and `npm run build`, then all pass with no SvelteKit deprecation warnings and no `tsconfig_invalid` warning in the output.
+- [x] Given `npm run dev` running on port 3001, when running `npm run test:e2e` in a second terminal, then all specs pass.
+- [x] Given a type error added to the service worker, when running `npm run check`, then it fails.
+- [x] Given `npm run storybook:build`, then it passes.
+- [x] Given `storybook-static` served statically (e.g. `python3 -m http.server -d storybook-static`) and `npm run storybook`, when opening each of the 21 stories (17 files under `src/stories/**`), then each renders without errors and with no console errors about unresolved `$app/*` or `#lib/*` modules or `__SVELTEKIT_PAYLOAD__`. Known noise also present on `develop`: an external image `ERR_NAME_NOT_RESOLVED` in `StoryContent` when offline, and Storybook's implicit-action deprecation in `controls-input--input`.
+- [x] Given `npm run dev`, when visiting `/does-not-exist`, then the browser ends up on `/` (302). When requesting `/favicon.ico` with no static file, then the response is 404.
+- [x] Given `/` with a search term entered and the list scrolled down, when clicking the header title (`Header.svelte`, `href={resolve('')}`), then the search term, the scroll position and the tRPC requests in DevTools → Network match the same steps on `develop` (checked side by side), and no request repeats more than once.
+- [x] Given `ButtonLink` with an `href` whose preload fails, when hovering it, then no unhandled promise rejection is logged.
+- [x] Given `ui/tsconfig.json`, then it extends `$app/tsconfig`, and the service worker is type-checked by its own tsconfig.
+- [x] Given `npm run build` with the Vercel adapter, then `.vercel/output` is produced and every `.vercel/output/functions/**/.vc-config.json` has `"runtime": "nodejs…"` (none `edge`), including the one for the tRPC route `src/routes/api/trpc/[...procedure]/+server.ts`.
 
 ## Technical notes
 
-- Files: `ui/package.json`, `ui/package-lock.json`, `ui/vite.config.ts`, `ui/vite.storybook.config.ts`, `ui/tsconfig.json`, new `ui/tsconfig.sw.json`, `ui/src/routes/+error.svelte`, possibly a new `ui/src/hooks.server.ts`, `ui/src/lib/components/shared/controls/ButtonLink.svelte`, plus whatever the codemod touches (`AppLayout.svelte`, the 5 `resolve()` call sites).
+- Files: `ui/package.json`, `ui/package-lock.json`, `ui/vite.config.ts`, `ui/vite.storybook.config.ts`, `ui/tsconfig.json`, new `ui/tsconfig.sw.json`, `ui/src/routes/+error.svelte`, possibly a new `ui/src/hooks.server.ts`, `ui/src/lib/components/shared/controls/ButtonLink.svelte`, plus whatever the codemod touches (`AppLayout.svelte`, the 8 `resolve()` call sites, all in pathname form).
 - Expected build warning: `transform_index_html_unsupported: vite-plugin-pwa:pwa-assets`. It's Kit flagging a plugin hook, not a deprecation, so it doesn't fail the warnings criterion. Story 04 checks whether it remains with the fork.
 - Already compliant, no work expected (check that the codemod leaves them alone): `$app/env*`, `$app/state`, `resolve` from `$app/paths`, `defineEnvVars` from `@sveltejs/kit/env` (`src/env.ts`), `RequestHandler`/`RequestEvent` types from `@sveltejs/kit`.
 - Server-only rule: `src/lib/configs/server.ts` is only imported from `src/lib/backend/**`. The client imports `AppRouter` via `import type` (`src/lib/api/*.ts`), which is erased. If the build complains anyway, it's a real leak and must be fixed, not suppressed.
@@ -84,3 +84,19 @@ Steps:
 
 - Switching to the Kit 3 PWA plugin fork and restoring the precache (story 04).
 - Dockerfile and adapter-node runtime (story 05).
+- A CI check that renders the Storybook stories, so the `__SVELTEKIT_PAYLOAD__` fix can't silently regress (story 08).
+
+## Verification notes
+
+Run on 2026-10-20 in the devcontainer, Node 24, on `feat/sveltekit-3` (uncommitted).
+
+- `rm -rf node_modules && npm ci`: passes, no `ERESOLVE`. `npm ls`: kit 3.1.0, adapter-node 6.0.0, adapter-vercel 7.0.1.
+- `lint` ✅, `check` ✅ (0 errors, 1326 files, plus `tsc -p tsconfig.sw.json`), `test:unit` ✅ (216), `build` ✅, `storybook:build` ✅. No deprecation and no `tsconfig_invalid` warnings. The only Kit warning is the expected `transform_index_html_unsupported`. The build also prints Rolldown's `SOURCEMAP_BROKEN` for Kit's own `vite-plugin-sveltekit-service-worker-env`, which isn't a deprecation.
+- A type error appended to `src/service-worker.ts` makes `check` fail (`TS2322`).
+- Vercel output: a single function `.vercel/output/functions/![-]/catchall.func` (`"runtime": "nodejs24.x"`), which also serves `api/trpc/[...procedure]`. No `edge` runtime.
+- Error page: `+error.svelte` still works on Kit 3. `/does-not-exist` → 302 to `/` (curl and browser), `/favicon.ico` → 404. No hook needed, so no new spec.
+- `ButtonLink`: `preloadData(href).catch(() => undefined)`. Kit 3 returns `{ type: 'error' }` for load failures, but throws `preload_url_outside_app` for hrefs outside the app. Hovering the settings link with its route chunk blocked logs no `pageerror` (unhandled rejection). Kit's default client `handleError` still logs the failed dynamic import to the console, identically on Kit 2.
+- Header title on `/` (search `wien`, scrolled 2500 px, click title), Kit 3 vs Kit 2 (story 02 `HEAD` in a detached worktree), headless: identical. Both end on `/` with the search term kept, `scrollY` 0, no tRPC requests after the click and no new console errors.
+- Storybook: all 21 stories render in `storybook-static` and in `npm run storybook`, with only the known noise (2× `ERR_NAME_NOT_RESOLVED` in `StoryContent`, the implicit-action deprecation in `controls-input--input`).
+- E2E: 77/77 with `--workers=4` on a warm dev server, on Kit 3 and on the Kit 2 baseline alike. With the default 7 workers both versions time out in `waitForTestReady` (Kit 2: 77 failed, Kit 3: 7–56 failed) because the host was saturated (load average 45–60 on 14 cores). Single failing specs pass in isolation, so this is environment load, not a Kit 3 regression.
+

@@ -75,13 +75,14 @@ Sources: [SvelteKit 3 is here](https://svelte.dev/blog/sveltekit-3-is-here), [Mi
 |---|-------|-------|------|------------|--------|
 | 01 | [Spike: Kit 3 compatibility](01-spike-kit3-compatibility.md) | Claude | L | – | Done |
 | 02 | [Subpath imports on Kit 2](02-subpath-imports.md) | Claude | M | 01 | Done |
-| 03 | [Upgrade to SvelteKit 3](03-upgrade-sveltekit-3.md) | Claude | L | 01, 02 | Todo |
+| 03 | [Upgrade to SvelteKit 3](03-upgrade-sveltekit-3.md) | Claude | L | 01, 02 | Done |
 | 04 | [PWA service worker on Kit 3](04-pwa-service-worker.md) | Claude | S | 01, 03 | Todo |
 | 05 | [Docker image on adapter-node 6](05-docker-adapter-node.md) | Claude | M | 03 | Todo |
 | 06 | [Preview QA](06-preview-qa.md) | Human | M | 04, 05 | Todo |
 | 07 | [Release to develop](07-release-to-develop.md) | Human | S | 06 | Todo |
+| 08 | [Storybook smoke test in CI](08-storybook-smoke-test.md) | Claude | S | 03 | Todo |
 
-**Size overview:** 2×S, 3×M, 2×L. Claude: L, M, L, S, M. Human: M, S. Largest remaining risk: **03** (cross-cutting upgrade; story 01 mapped the codemod output and fixes, but error-page behaviour under Kit 3 is unverified). Story 04 shrank from L to S because story 01 found a drop-in Kit 3 build of the PWA plugin.
+**Size overview:** 3×S, 3×M, 2×L. Claude: L, M, L, S, M, S. Human: M, S. Largest remaining risk: **04** (the PWA fork is unofficial; story 03 is done). Story 04 shrank from L to S because story 01 found a drop-in Kit 3 build of the PWA plugin.
 
 ## Story order
 
@@ -96,9 +97,10 @@ flowchart TD
   S04 --> S06["06 Preview QA - M"]
   S05 --> S06
   S06 --> S07["07 Release to develop - S"]
+  S03 --> S08["08 Storybook smoke test in CI - S"]
   classDef claude fill:#e8f0fe,stroke:#4a6fd1
   classDef human fill:#fff4e5,stroke:#d18a00
-  class S01,S02,S03,S04,S05 claude
+  class S01,S02,S03,S04,S05,S08 claude
   class S06,S07 human
   click S01 "./01-spike-kit3-compatibility.md"
   click S02 "./02-subpath-imports.md"
@@ -107,6 +109,7 @@ flowchart TD
   click S05 "./05-docker-adapter-node.md"
   click S06 "./06-preview-qa.md"
   click S07 "./07-release-to-develop.md"
+  click S08 "./08-storybook-smoke-test.md"
 ```
 
 ## Risks & open questions
@@ -118,7 +121,7 @@ flowchart TD
 - **`.ts` extensions in `#lib` imports (answered in story 01).** `#lib/models/story.ts` / `#common/targets/targets.ts` with `"#lib/*": "./src/lib/*"` works in `check`, `build`, `dev`, Vitest, Playwright and Storybook, on Kit 2.70.3 and on Kit 3.1.0. The codemod emits `.js` and skips `$common`, so story 02 uses a script instead.
 - **`experimental.explicitEnvironmentVariables` (answered in story 01).** Removed in Kit 3. Explicit env is the only mode, and the type rejects the key, so `check` fails until story 03 deletes it.
 - **`alias` option and `svelte-kit sync` CLI (answered in story 01).** `alias` still works but is deprecated (build warning). `svelte-kit sync` still exists unchanged, so scripts, the Dockerfile and CI keep using it.
-- **`+error.svelte` throwing `redirect`/`error` during render.** It may behave differently under Kit 3 error boundaries. Mitigation: explicit acceptance criteria in story 03. If needed, the logic moves to a `src/hooks.server.ts` `handle` → story 03, step 5.
+- **`+error.svelte` throwing `redirect`/`error` during render (answered in story 03).** Still works on Kit 3: unknown routes → 302 to `/`, `/favicon.ico` → 404. No hook needed.
 - **Docker image (answered).** It isn't deployed anywhere and is kept as a fallback to Vercel. It looks unbuildable today (missing `svelte.config.js`/`postcss.config.cjs`); story 05 fixes it and moves server runtime packages to `dependencies`.
 
 ## Assumptions

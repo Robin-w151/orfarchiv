@@ -46,11 +46,12 @@ Changes:
 
 ## Technical notes
 
-- Files: `ui/package.json`, `ui/package-lock.json`, `ui/vite.config.ts`, `ui/vite.storybook.config.ts`.
+- Files: `ui/package.json`, `ui/package-lock.json`, `ui/vite.config.ts`, `ui/vite.storybook.config.ts`, `ui/src/service-worker.ts` (triple-slash references).
 - Kit 3 builds `src/service-worker.ts` itself in a `serviceWorker` Vite environment and registers it. The fork injects the manifest from that environment's `closeBundle` (upstream PR [vite-pwa/sveltekit#111](https://github.com/vite-pwa/sveltekit/pull/111)). Kit's registration and the plugin's `registerSW.js` target the same URL, so there's only one registration.
 - The fork is 283 lines (`dist/index.mjs`) with no install scripts. Read through it once when adding it.
 - Workbox packages stay (`workbox-core`, `-expiration`, `-precaching`, `-routing`, `-strategies` 7.4.1). `vite-plugin-pwa` 2.0.0 uses `workbox-build` 7.4.1, so revisions remain per-file MD5.
 - Fallback if the fork breaks on a later Kit release: option B. Story 01's findings describe the prototype.
+- Remove the triple-slash references at the top of `ui/src/service-worker.ts` (`no-default-lib`, `lib="esnext"`, `lib="webworker"`). `ui/tsconfig.sw.json` (story 03) extends `$app/tsconfig/service-worker`, which already sets `lib: ["ESNext", "WebWorker"]`. `npm run check` must still pass afterwards. If the service worker moves into `src/service-worker/`, move `tsconfig.sw.json` with it (as `src/service-worker/tsconfig.json`, keeping `"strict": true`) and update the `check`/`check:watch` scripts and the `exclude` in `ui/tsconfig.json`.
 - Docs: [vite-pwa/sveltekit](https://github.com/vite-pwa/sveltekit), [Workbox precaching](https://developer.chrome.com/docs/workbox/modules/workbox-precaching).
 
 ## Testing
