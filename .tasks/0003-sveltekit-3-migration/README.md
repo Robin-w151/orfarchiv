@@ -76,7 +76,7 @@ Sources: [SvelteKit 3 is here](https://svelte.dev/blog/sveltekit-3-is-here), [Mi
 | 01 | [Spike: Kit 3 compatibility](01-spike-kit3-compatibility.md) | Claude | L | – | Done |
 | 02 | [Subpath imports on Kit 2](02-subpath-imports.md) | Claude | M | 01 | Done |
 | 03 | [Upgrade to SvelteKit 3](03-upgrade-sveltekit-3.md) | Claude | L | 01, 02 | Done |
-| 04 | [PWA service worker on Kit 3](04-pwa-service-worker.md) | Claude | S | 01, 03 | Todo |
+| 04 | [PWA service worker on Kit 3](04-pwa-service-worker.md) | Claude | S | 01, 03 | In progress |
 | 05 | [Docker image on adapter-node 6](05-docker-adapter-node.md) | Claude | M | 03 | Todo |
 | 06 | [Preview QA](06-preview-qa.md) | Human | M | 04, 05 | Todo |
 | 07 | [Release to develop](07-release-to-develop.md) | Human | S | 06 | Todo |
@@ -115,7 +115,8 @@ flowchart TD
 ## Risks & open questions
 
 - **`@vite-pwa/sveltekit` and Kit 3 (answered in story 01).** 1.1.0 builds on Kit 3 (with a peer override) but never injects the precache manifest, so the app doesn't work offline. Its Kit 3 PR ([vite-pwa/sveltekit#111](https://github.com/vite-pwa/sveltekit/pull/111)) was closed unmerged, and an official v2 has no date. Decision: use the PR author's fork `@katama-labs/vite-pwa-sveltekit@2.0.0` (story 04).
-- **Fork maintenance (new).** The fork has one publisher and one release. If a later Kit 3.x breaks it, fall back to Kit's native service worker (option B, prototyped in story 01). Switch back to the official `@vite-pwa/sveltekit` once v2 supports Kit 3 (follow-up outside this epic).
+- **Double update prompt for Kit 2 installs (answered in story 04).** Kit 3 registers the SW as a module and Kit 2 registered it as a classic script. Existing installs therefore see the update prompt twice, once. Accepted as a one-time effect; story 07 expects it.
+- **Fork maintenance (new).** The fork has one publisher and one release. If a later Kit 3.x breaks it, fall back to Kit's native service worker (option B, prototyped in story 01). Switch back to the official `@vite-pwa/sveltekit` once v2 supports Kit 3 (follow-up outside this epic). The fork is in the Dependabot `ignore` list (`ui/.github/dependabot.yml`), so any version bump is manual and needs a fresh read of its `dist/`. Remove the entry when switching back.
 - **Vercel packages' peer ranges (new, story 03).** `@vercel/analytics@2.0.1` and `@vercel/speed-insights@2.0.0` declare `@sveltejs/kit ^1 || ^2`. Without npm `overrides`, `npm ci` fails with `ERESOLVE`. Remove the overrides once they declare Kit 3 support.
 - **Storybook must keep working (answered in story 01).** Dev mode renders all stories on Kit 3 as is. The static build (GitHub Pages) breaks every story with `__SVELTEKIT_PAYLOAD__ is not defined`. Fixed by `define: { __SVELTEKIT_PAYLOAD__: 'undefined' }` in `vite.storybook.config.ts`, which story 03 applies. No package change needed.
 - **`.ts` extensions in `#lib` imports (answered in story 01).** `#lib/models/story.ts` / `#common/targets/targets.ts` with `"#lib/*": "./src/lib/*"` works in `check`, `build`, `dev`, Vitest, Playwright and Storybook, on Kit 2.70.3 and on Kit 3.1.0. The codemod emits `.js` and skips `$common`, so story 02 uses a script instead.

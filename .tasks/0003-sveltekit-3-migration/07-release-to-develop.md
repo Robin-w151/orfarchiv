@@ -40,7 +40,7 @@ Merging is the user's decision, and it triggers semantic-release. This story end
 3. **Smoke-test the `develop` deployment.** Once the deployment for the merge commit is live, open https://develop.orfarchiv.news. Repeat story 06 steps 3–5 quickly (search, semantic search, story content, bookmarks, settings, console/CSP, one service worker).
    **Expected:** same results as in story 06, and Settings → Info shows `5.0.0-next.N`.
 4. **Existing installs update.** After the `develop` deployment is live, focus the desktop tab left open from the prerequisites and reopen the app on the phone.
-   **Expected:** the update prompt appears; after accepting it, Settings → Info shows `5.0.0-next.N`, DevTools → Application → Service workers lists exactly one SW (desktop), and the app works offline as before (DevTools → Network → Offline, reload `/`).
+   **Expected:** the update prompt appears. After accepting it, the app reloads and the prompt appears **once more**. That's expected for installs coming from Kit 2 (story 04 `## Verification`), so accept it again. After that, Settings → Info shows `5.0.0-next.N`, DevTools → Application → Service workers lists exactly one SW (desktop), and the app works offline as before (DevTools → Network → Offline, reload `/`).
 5. **Check the Storybook deployment.** GitHub → `Robin-w151/orfarchiv-ui` → Actions → _Storybook_ workflow run for the merge commit, then open the GitHub Pages URL from the run's _Deploy Storybook to GitHub Pages_ step. Click through a few stories (e.g. Controls → Button, Content → Story content, Loading → Story skeleton).
    **Expected:** the workflow is green, and the stories render without errors.
 6. **Delete the feature branch.**
@@ -78,6 +78,7 @@ Production (`main`) isn't touched, so nothing live needs rolling back. If `devel
 
 - **semantic-release fails on `develop`** → check the CI log. The release config is `ui/.releaserc.json`.
 - **Storybook workflow fails on `develop`** → run `npm run storybook:build` locally on `develop` and hand the error to Claude. The Pages deployment keeps serving the previous Storybook until it's fixed.
+- **Second update prompt right after the first one (step 4)** → expected once for Kit 2 installs. Accept it. Between the two accepts, DevTools shows one registration with an active and a waiting worker; that's not two SWs. Only a third prompt or a lasting waiting worker is a problem.
 - **Update prompt never appears, or two SWs are listed (step 4)** → revert (see Rollback). The old SW is served again, and clients go back to it through the normal update flow. Hand the details to Claude for story 04.
 - **develop.orfarchiv.news still shows the old version** → the PWA serves the old build until the update prompt is accepted. Accept it or hard-reload, then check Settings → Info again.
 - **`develop` deployment fails but the feature preview passed** → compare env vars for the `develop` branch with Preview (Vercel → Settings → Environment Variables), especially `PUBLIC_APP_MODE` and `PUBLIC_ENABLE_ANALYTICS`, which are validated by `src/env.ts`.
