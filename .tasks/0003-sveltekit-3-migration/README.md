@@ -31,19 +31,19 @@ Sources: [SvelteKit 3 is here](https://svelte.dev/blog/sveltekit-3-is-here), [Mi
 
 **Already SvelteKit-3-ready** (adopted on 2.x previews):
 
-| Requirement | Required | `ui` today |
-|---|---|---|
-| Node | ≥ 22.17 | `engines.node: 24.x`, `node:24-alpine` |
-| TypeScript | ≥ 6 | `6.0.3` |
-| Svelte | ≥ 5.57.1 | `5.57.2` |
-| Vite | ≥ 8.0.12 | `8.3.4` |
-| `@sveltejs/vite-plugin-svelte` | ≥ 7 | `7.3.1` |
-| Config in `vite.config.ts` | required | done, no `svelte.config.js` (`ui/vite.config.ts`) |
-| `$app/env`, `$app/env/private`, `$app/env/public` | `$env/*` deprecated | done, no `$env/*` imports |
-| `defineEnvVars` from `@sveltejs/kit/env` | moved | done (`ui/src/env.ts`) |
-| `$app/state` instead of `$app/stores` | required | done |
-| `resolve` from `$app/paths` (no `base`/`resolveRoute`) | required | done |
-| `compilerOptions.experimental.async` | needed for async `handleError` | already on |
+| Requirement                                            | Required                       | `ui` today                                        |
+| ------------------------------------------------------ | ------------------------------ | ------------------------------------------------- |
+| Node                                                   | ≥ 22.17                        | `engines.node: 24.x`, `node:24-alpine`            |
+| TypeScript                                             | ≥ 6                            | `6.0.3`                                           |
+| Svelte                                                 | ≥ 5.57.1                       | `5.57.2`                                          |
+| Vite                                                   | ≥ 8.0.12                       | `8.3.4`                                           |
+| `@sveltejs/vite-plugin-svelte`                         | ≥ 7                            | `7.3.1`                                           |
+| Config in `vite.config.ts`                             | required                       | done, no `svelte.config.js` (`ui/vite.config.ts`) |
+| `$app/env`, `$app/env/private`, `$app/env/public`      | `$env/*` deprecated            | done, no `$env/*` imports                         |
+| `defineEnvVars` from `@sveltejs/kit/env`               | moved                          | done (`ui/src/env.ts`)                            |
+| `$app/state` instead of `$app/stores`                  | required                       | done                                              |
+| `resolve` from `$app/paths` (no `base`/`resolveRoute`) | required                       | done                                              |
+| `compilerOptions.experimental.async`                   | needed for async `handleError` | already on                                        |
 
 **Affected by breaking changes** (from a grep of `ui/src`, `ui/tests`, `ui/.storybook`):
 
@@ -71,16 +71,16 @@ Sources: [SvelteKit 3 is here](https://svelte.dev/blog/sveltekit-3-is-here), [Mi
 
 ## Stories
 
-| # | Story | Owner | Size | Depends on | Status |
-|---|-------|-------|------|------------|--------|
-| 01 | [Spike: Kit 3 compatibility](01-spike-kit3-compatibility.md) | Claude | L | – | Done |
-| 02 | [Subpath imports on Kit 2](02-subpath-imports.md) | Claude | M | 01 | Done |
-| 03 | [Upgrade to SvelteKit 3](03-upgrade-sveltekit-3.md) | Claude | L | 01, 02 | Done |
-| 04 | [PWA service worker on Kit 3](04-pwa-service-worker.md) | Claude | S | 01, 03 | In progress |
-| 05 | [Docker image on adapter-node 6](05-docker-adapter-node.md) | Claude | M | 03 | Todo |
-| 06 | [Preview QA](06-preview-qa.md) | Human | M | 04, 05 | Todo |
-| 07 | [Release to develop](07-release-to-develop.md) | Human | S | 06 | Todo |
-| 08 | [Storybook smoke test in CI](08-storybook-smoke-test.md) | Claude | S | 03 | Todo |
+| #   | Story                                                        | Owner  | Size | Depends on | Status      |
+| --- | ------------------------------------------------------------ | ------ | ---- | ---------- | ----------- |
+| 01  | [Spike: Kit 3 compatibility](01-spike-kit3-compatibility.md) | Claude | L    | –          | Done        |
+| 02  | [Subpath imports on Kit 2](02-subpath-imports.md)            | Claude | M    | 01         | Done        |
+| 03  | [Upgrade to SvelteKit 3](03-upgrade-sveltekit-3.md)          | Claude | L    | 01, 02     | Done        |
+| 04  | [PWA service worker on Kit 3](04-pwa-service-worker.md)      | Claude | S    | 01, 03     | Done        |
+| 05  | [Docker image on adapter-node 6](05-docker-adapter-node.md)  | Claude | M    | 03         | Done        |
+| 06  | [Preview QA](06-preview-qa.md)                               | Human  | M    | 04, 05     | Todo        |
+| 07  | [Release to develop](07-release-to-develop.md)               | Human  | S    | 06         | Todo        |
+| 08  | [Storybook smoke test in CI](08-storybook-smoke-test.md)     | Claude | S    | 03         | Todo        |
 
 **Size overview:** 3×S, 3×M, 2×L. Claude: L, M, L, S, M, S. Human: M, S. Largest remaining risk: **04** (the PWA fork is unofficial; story 03 is done). Story 04 shrank from L to S because story 01 found a drop-in Kit 3 build of the PWA plugin.
 

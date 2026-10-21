@@ -107,6 +107,23 @@ Vercel serverless functions, the CSP headers in production mode, PWA installatio
     - `<EMBEDDING_URL>`: the embedding server's base URL, as set for `ORFARCHIV_EMBEDDING_URL` on Vercel (`/embeddings` is appended by the app).
 
     **Expected:** a semantic search on `http://localhost:8080` returns results, and the container log shows no 401/403 from the embedding server and never the token itself.
+    Then stop the container and check error responses, shutdown and secret-file edge cases:
+
+    ```sh
+    docker run --rm -d --name orfarchiv-qa -p 8080:8080 -e ORFARCHIV_DB_URL="$ORFARCHIV_DB_URL" orfarchiv
+    curl -s 'http://localhost:8080/api/trpc/news.search?input=%7B%7D'; echo
+    time docker stop orfarchiv-qa
+    ```
+
+    **Expected:** `curl` returns a 400 `BAD_REQUEST` JSON without a `"stack"` field (the image sets `NODE_ENV=production`), and `docker stop` finishes in about a second, not after the 10 s timeout (`entrypoint.sh` starts node with `exec`).
+
+    ```sh
+    printf '%s\r\n' "$ORFARCHIV_DB_URL" > /tmp/db_url_crlf
+    docker run --rm -p 8080:8080 -v /tmp/db_url_crlf:/run/secrets/db_url -e ORFARCHIV_DB_URL_FILE=/run/secrets/db_url -e ORFARCHIV_DB_URLS_FILE=/run/secrets/missing orfarchiv
+    rm /tmp/db_url_crlf
+    ```
+
+    **Expected:** the container log starts with `Warning: ORFARCHIV_DB_URLS_FILE is set but '/run/secrets/missing' is not readable, ignoring it`, and `http://localhost:8080` still loads news (the CRLF line ending is trimmed by BusyBox `sed`, so the URL passes validation).
 
 #### Verify
 
@@ -132,7 +149,7 @@ Nothing live changes in this story. Preview deployments don't affect production.
 
 - [ ] Given the Vercel preview of `feat/sveltekit-3`, when running steps 1–10, then all pass or every failure is fixed and re-checked.
 - [ ] Given the phone, then the app installs, the offline search fallback works, and `/`, `/bookmarks` and `/settings` load offline.
-- [ ] Given a machine with Docker, when running step 11, then the `orfarchiv` image builds, serves news on port 8080 with `ORFARCHIV_DB_URL`, `ORFARCHIV_DB_URL_FILE` and `ORFARCHIV_DB_URLS_FILE` (two targets), semantic search works with `ORFARCHIV_EMBEDDING_TOKEN_FILE`, and its size is recorded.
+- [ ] Given a machine with Docker, when running step 11, then the `orfarchiv` image builds, serves news on port 8080 with `ORFARCHIV_DB_URL`, `ORFARCHIV_DB_URL_FILE` and `ORFARCHIV_DB_URLS_FILE` (two targets), semantic search works with `ORFARCHIV_EMBEDDING_TOKEN_FILE`, error responses carry no `stack`, `docker stop` returns without the 10 s timeout, a CRLF secret file works, a missing `_FILE` path logs a warning, and its size is recorded.
 
 ## Technical notes
 
