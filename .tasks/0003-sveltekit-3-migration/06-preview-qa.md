@@ -2,7 +2,7 @@
 
 **Epic:** [0003 SvelteKit 3 migration](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** Done
 **Depends on:** 04, 05
 **Size:** M — a long manual checklist across desktop and a real phone, including PWA install/update flows
 
@@ -18,10 +18,10 @@ Vercel serverless functions, the CSP headers in production mode, PWA installatio
 
 #### Prerequisites
 
-- [ ] Stories 01–05 are done and committed on `feat/sveltekit-3` in `ui`, the branch is pushed, and CI is green on its latest commit.
-- [ ] Access to the Vercel project for `orfarchiv-ui` (Dashboard → project → Deployments).
-- [ ] Desktop Chromium (Chrome/Edge) and one real phone (Android Chrome preferred for install + notifications; iOS Safari optional).
-- [ ] <https://develop.orfarchiv.news> open in a second tab as the Kit 2 baseline for side-by-side comparison. It runs the same code minus the migration, while production (`https://orfarchiv.news`, `main`) may lag behind.
+- [x] Stories 01–05 are done and committed on `feat/sveltekit-3` in `ui`, the branch is pushed, and CI is green on its latest commit.
+- [x] Access to the Vercel project for `orfarchiv-ui` (Dashboard → project → Deployments).
+- [x] Desktop Chromium (Chrome/Edge) and one real phone (Android Chrome preferred for install + notifications; iOS Safari optional).
+- [x] <https://develop.orfarchiv.news> open in a second tab as the Kit 2 baseline for side-by-side comparison. It runs the same code minus the migration, while production (`https://orfarchiv.news`, `main`) may lag behind.
 
 #### Steps
 
@@ -29,8 +29,8 @@ Vercel serverless functions, the CSP headers in production mode, PWA installatio
    Vercel Dashboard → project → Deployments → the latest deployment for branch `feat/sveltekit-3` → Visit. Note the URL as `<PREVIEW_URL>`.
    **Expected:** the news list loads.
    If no preview exists, push the branch: `git -C ui push -u origin feat/sveltekit-3`.
-   Then check GitHub → `Robin-w151/orfarchiv-ui` → Actions → *Test* workflow (`test.yaml`): it runs the Playwright e2e suite against this preview on Vercel's `deployment_status` event.
-   **Expected:** the *Test* run for this deployment is green.
+   Then check GitHub → `Robin-w151/orfarchiv-ui` → Actions → _Test_ workflow (`test.yaml`): it runs the Playwright e2e suite against this preview on Vercel's `deployment_status` event.
+   **Expected:** the _Test_ run for this deployment is green.
 2. **Check build logs.**
    Deployment → Build Logs. Search for `deprecat` and `warn`.
    **Expected:** no SvelteKit deprecation warnings, and the build uses `@sveltejs/kit 3.x`.
@@ -43,18 +43,18 @@ Vercel serverless functions, the CSP headers in production mode, PWA installatio
    - `/settings` → change a setting, reload, setting persists.
    - Click the header title while on `/` with a search entered and the list scrolled → search term and scroll position stay as on develop.orfarchiv.news.
    - Open `<PREVIEW_URL>/does-not-exist` → redirected to `/`.
-   **Expected:** everything behaves like on develop.orfarchiv.news.
+     **Expected:** everything behaves like on develop.orfarchiv.news.
 4. **Console and CSP.** DevTools → Console, reload `/`, `/bookmarks`, `/settings`.
    **Expected:** no errors, no `Refused to …` CSP violations.
 5. **Service worker (desktop).** DevTools → Application → Service workers.
-   **Expected:** exactly one SW for `<PREVIEW_URL>`, status *activated and running*. Application → Cache storage contains a Workbox precache plus `api-news-search-v…` after a search.
+   **Expected:** exactly one SW for `<PREVIEW_URL>`, status _activated and running_. Application → Cache storage contains a Workbox precache plus `api-news-search-v…` after a search.
 6. **Offline.** DevTools → Network → Offline. Reload `/`, `/bookmarks` and `/settings`, then run the same search again and open a previously opened story.
    **Expected:** all three pages render, cached search and content are shown, no browser error page.
 7. **Update flow.** Push any no-op commit to the branch (or Redeploy in Vercel). Wait for the new preview, then focus the already open tab.
    **Expected:** the app's update prompt appears, and accepting it reloads into the new version (Settings → Info shows the new commit hash).
-8. **Install (phone).** Open `<PREVIEW_URL>` on the phone → browser menu → *Install app* / *Add to Home Screen*.
+8. **Install (phone).** Open `<PREVIEW_URL>` on the phone → browser menu → _Install app_ / _Add to Home Screen_.
    **Expected:** installs with the ORF Archiv icon and name, and opens standalone.
-9. **Notifications (phone, Android).** On `<PREVIEW_URL>` (installed app): Settings → *Allgemein* → enable the news-updates checkbox and allow notifications when asked. Go back to `/`, then put the app in the background and wait until new stories are scraped (usually a few minutes).
+9. **Notifications (phone, Android).** On `<PREVIEW_URL>` (installed app): Settings → _Allgemein_ → enable the news-updates checkbox and allow notifications when asked. Go back to `/`, then put the app in the background and wait until new stories are scraped (usually a few minutes).
    **Expected:** a system notification "Neue Nachrichten verfügbar" appears; tapping it brings the app to the foreground on `/` and loads the new stories.
 10. **Vercel functions.** Vercel → Deployment → Functions.
     **Expected:** the tRPC function runs on the Node runtime in the same region as production (`fra1`).
@@ -141,15 +141,15 @@ Nothing live changes in this story. Preview deployments don't affect production.
 #### Troubleshooting
 
 - **Two service workers listed** → Kit and the PWA plugin both register one. Back to story 04.
-- **Old SW keeps serving the old app** → DevTools → Application → Service workers → *Unregister*, then hard-reload. If real users would be stuck, that's a blocker for story 07.
+- **Old SW keeps serving the old app** → DevTools → Application → Service workers → _Unregister_, then hard-reload. If real users would be stuck, that's a blocker for story 07.
 - **CSP violation for an inline script** → `csp-script-hashes.js` is stale. Run `npm run generate:csp-script-hashes` in `ui`.
 - **tRPC 403 on POST** → Kit 3's always-on CSRF check rejected the request. Check the request has `content-type` and is same-origin.
 
 ## Acceptance criteria
 
-- [ ] Given the Vercel preview of `feat/sveltekit-3`, when running steps 1–10, then all pass or every failure is fixed and re-checked.
-- [ ] Given the phone, then the app installs, the offline search fallback works, and `/`, `/bookmarks` and `/settings` load offline.
-- [ ] Given a machine with Docker, when running step 11, then the `orfarchiv` image builds, serves news on port 8080 with `ORFARCHIV_DB_URL`, `ORFARCHIV_DB_URL_FILE` and `ORFARCHIV_DB_URLS_FILE` (two targets), semantic search works with `ORFARCHIV_EMBEDDING_TOKEN_FILE`, error responses carry no `stack`, `docker stop` returns without the 10 s timeout, a CRLF secret file works, a missing `_FILE` path logs a warning, and its size is recorded.
+- [x] Given the Vercel preview of `feat/sveltekit-3`, when running steps 1–10, then all pass or every failure is fixed and re-checked.
+- [x] Given the phone, then the app installs, the offline search fallback works, and `/`, `/bookmarks` and `/settings` load offline.
+- [x] Given a machine with Docker, when running step 11, then the `orfarchiv` image builds, serves news on port 8080 with `ORFARCHIV_DB_URL`, `ORFARCHIV_DB_URL_FILE` and `ORFARCHIV_DB_URLS_FILE` (two targets), semantic search works with `ORFARCHIV_EMBEDDING_TOKEN_FILE`, error responses carry no `stack`, `docker stop` returns without the 10 s timeout, a CRLF secret file works, a missing `_FILE` path logs a warning, and its size is recorded.
 
 ## Technical notes
 
@@ -160,3 +160,18 @@ Nothing live changes in this story. Preview deployments don't affect production.
 ## Out of scope
 
 - Merging into `develop` (story 07).
+
+## QA Results
+
+1. preview exists, news list loads, tests green
+2. No sveltekit deprecation warnings found. However, I found one potential problematic log: [plugin vite-plugin-sveltekit-service-worker-env] [SOURCEMAP_BROKEN] Sourcemap is likely to be incorrect: a plugin (vite-plugin-sveltekit-service-worker-env) was used to transform files, but didn't generate a sourcemap for the transformation. Consult the plugin documentation for help: https://rolldown.rs/guide/troubleshooting#warning-sourcemap-is-likely-to-be-incorrect
+   - Not a blocker: the plugin is SvelteKit's own (`@sveltejs/kit/src/exports/vite/plugins/env-vars.js`). It prepends an `import` of the generated service-worker env module to the service worker without returning a map, so only the SW sourcemap is off by one line. Upstream issue, no fix on our side.
+3. keyword search works, semantic search works, filters work, loading content works, bookmarks work, settings are persisted, same site navigation does not flicker, redirects work
+4. no errors, no csp violations
+5. one service worker installed, activated and running, cache exists
+6. offline works
+7. update flow works
+8. install works (tested on iOS)
+9. notifications were enabled; tested in Edge on desktop, the "Neue Nachrichten verfügbar" notification was triggered (not tested on a phone)
+10. tRPC function runs in fra1
+11. image build successful (disk usage 418MB), every check was successful
