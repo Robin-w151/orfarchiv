@@ -21,7 +21,7 @@ Merging is the user's decision, and it triggers semantic-release. This story end
 - [ ] Story 06 is Done with no open QA failures.
 - [ ] Merge rights on `Robin-w151/orfarchiv-ui`. GitHub changes in this runbook are done in the web UI.
 - [ ] Before merging, open <https://develop.orfarchiv.news> on desktop Chromium and in the installed app on the phone, so the Kit 2 service worker is active there. Leave the desktop tab open.
-- [ ] The PR `feat/sveltekit-3` → `develop` exists and CI is green on it. If not, create it on GitHub: `Robin-w151/orfarchiv-ui` → _Pull requests_ → _New pull request_ → base `develop`, compare `feat/sveltekit-3` → _Create pull request_, title `feat: migrate to sveltekit 3`.
+- [ ] The PR `feat/sveltekit-3` → `develop` exists and CI is green on it, including the `CI / storybook` job from story 08. Open that job → _Smoke test Storybook_ step. **Expected:** one `✓` line per story and `21/21 stories passed` (or the current story count). If the PR doesn't exist yet, create it on GitHub: `Robin-w151/orfarchiv-ui` → _Pull requests_ → _New pull request_ → base `develop`, compare `feat/sveltekit-3` → _Create pull request_, title `feat: migrate to sveltekit 3`.
 
 #### Steps
 
@@ -42,12 +42,12 @@ Merging is the user's decision, and it triggers semantic-release. This story end
 4. **Existing installs update.** After the `develop` deployment is live, focus the desktop tab left open from the prerequisites and reopen the app on the phone.
    **Expected:** the update prompt appears. After accepting it, the app reloads and the prompt appears **once more**. That's expected for installs coming from Kit 2 (story 04 `## Verification`), so accept it again. After that, Settings → Info shows `5.0.0-next.N`, DevTools → Application → Service workers lists exactly one SW (desktop), and the app works offline as before (DevTools → Network → Offline, reload `/`).
 5. **Check the Storybook deployment.** GitHub → `Robin-w151/orfarchiv-ui` → Actions → _Storybook_ workflow run for the merge commit, then open the GitHub Pages URL from the run's _Deploy Storybook to GitHub Pages_ step. Click through a few stories (e.g. Controls → Button, Content → Story content, Loading → Story skeleton).
-   **Expected:** the workflow is green, and the stories render without errors.
+   **Expected:** the workflow is green, its _Smoke test Storybook_ step ran before _Upload Storybook artifacts_ and ends with `N/N stories passed`, and the stories render without errors.
 6. **Delete the feature branch.**
    On the merged PR page → _Delete branch_ (the repo doesn't delete merged branches automatically).
    **Expected:** the PR shows that `feat/sveltekit-3` was deleted, and it no longer appears under _Branches_.
 7. **Bump the submodule in the root repo.**
-   First set the epic and story statuses in `.tasks/0003-sveltekit-3-migration/README.md` (and this story's header) to _Done_, then:
+   First, in `.tasks/0003-sveltekit-3-migration/08-storybook-smoke-test.md`, tick the two CI acceptance criteria, confirmed by the prerequisite and step 5, and set its header to _Done_. Then set the statuses of story 08, this story and the epic in `.tasks/0003-sveltekit-3-migration/README.md` (and this story's header) to _Done_, then:
 
    ```sh
    cd /workspaces/orfarchiv
@@ -55,7 +55,7 @@ Merging is the user's decision, and it triggers semantic-release. This story end
    git add ui .tasks/0003-sveltekit-3-migration && git commit -m "chore: bump submodules"
    ```
 
-   **Expected:** one root commit with the `ui` pointer at the prerelease commit and the epic marked _Done_.
+   **Expected:** one root commit with the `ui` pointer at the prerelease commit, and stories 07 and 08 and the epic marked _Done_.
 
 #### Verify
 
@@ -77,6 +77,7 @@ Production (`main`) isn't touched, so nothing live needs rolling back. If `devel
 #### Troubleshooting
 
 - **semantic-release fails on `develop`** → check the CI log. The release config is `ui/.releaserc.json`.
+- **`CI / storybook` fails on the PR, or _Smoke test Storybook_ fails on `develop`** → the step log names each failing story with its `pageerror` or `empty #storybook-root`. Hand the failing lines to Claude for story 08. The deploy is skipped, so Pages keeps serving the previous Storybook.
 - **Storybook workflow fails on `develop`** → run `npm run storybook:build` locally on `develop` and hand the error to Claude. The Pages deployment keeps serving the previous Storybook until it's fixed.
 - **Second update prompt right after the first one (step 4)** → expected once for Kit 2 installs. Accept it. Between the two accepts, DevTools shows one registration with an active and a waiting worker; that's not two SWs. Only a third prompt or a lasting waiting worker is a problem.
 - **Update prompt never appears, or two SWs are listed (step 4)** → revert (see Rollback). The old SW is served again, and clients go back to it through the normal update flow. Hand the details to Claude for story 04.

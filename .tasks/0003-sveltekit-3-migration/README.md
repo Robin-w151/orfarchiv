@@ -80,7 +80,7 @@ Sources: [SvelteKit 3 is here](https://svelte.dev/blog/sveltekit-3-is-here), [Mi
 | 05  | [Docker image on adapter-node 6](05-docker-adapter-node.md)  | Claude | M    | 03         | Done        |
 | 06  | [Preview QA](06-preview-qa.md)                               | Human  | M    | 04, 05     | Todo        |
 | 07  | [Release to develop](07-release-to-develop.md)               | Human  | S    | 06         | Todo        |
-| 08  | [Storybook smoke test in CI](08-storybook-smoke-test.md)     | Claude | S    | 03         | Todo        |
+| 08  | [Storybook smoke test in CI](08-storybook-smoke-test.md)     | Claude | S    | 03         | In progress |
 
 **Size overview:** 3×S, 3×M, 2×L. Claude: L, M, L, S, M, S. Human: M, S. Largest remaining risk: **04** (the PWA fork is unofficial; story 03 is done). Story 04 shrank from L to S because story 01 found a drop-in Kit 3 build of the PWA plugin.
 
