@@ -2,7 +2,7 @@
 
 **Epic:** [0003 SvelteKit 3 migration](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** Done
 **Depends on:** 06
 **Size:** S — one merge and a prerelease through the existing pipeline, plus a smoke test
 
@@ -18,18 +18,17 @@ Merging is the user's decision, and it triggers semantic-release. This story end
 
 #### Prerequisites
 
-- [ ] Story 06 is Done with no open QA failures.
-- [ ] Merge rights on `Robin-w151/orfarchiv-ui`. GitHub changes in this runbook are done in the web UI.
-- [ ] Before merging, open <https://develop.orfarchiv.news> on desktop Chromium and in the installed app on the phone, so the Kit 2 service worker is active there. Leave the desktop tab open.
-- [ ] The PR `feat/sveltekit-3` → `develop` exists and CI is green on it, including the `CI / storybook` job from story 08. Open that job → _Smoke test Storybook_ step. **Expected:** one `✓` line per story and `21/21 stories passed` (or the current story count). If the PR doesn't exist yet, create it on GitHub: `Robin-w151/orfarchiv-ui` → _Pull requests_ → _New pull request_ → base `develop`, compare `feat/sveltekit-3` → _Create pull request_, title `feat: migrate to sveltekit 3`.
+- [x] Story 06 is Done with no open QA failures.
+- [x] Merge rights on `Robin-w151/orfarchiv-ui`. GitHub changes in this runbook are done in the web UI.
+- [x] Before merging, open <https://develop.orfarchiv.news> on desktop Chromium and in the installed app on the phone, so the Kit 2 service worker is active there. Leave the desktop tab open.
+- [x] The PR `feat/sveltekit-3` → `develop` exists and CI is green on it, including the `CI / storybook` job from story 08. Open that job → _Smoke test Storybook_ step. **Expected:** one `✓` line per story and `21/21 stories passed` (or the current story count). If the PR doesn't exist yet, create it on GitHub: `Robin-w151/orfarchiv-ui` → _Pull requests_ → _New pull request_ → base `develop`, compare `feat/sveltekit-3` → _Create pull request_, title `feat: migrate to sveltekit 3`.
 
 #### Steps
 
 1. **Merge the feature PR into `develop`.**
-   GitHub → `Robin-w151/orfarchiv-ui` → _Pull requests_ → the `feat/sveltekit-3` → `develop` PR → merge button dropdown → _Squash and merge_. Before confirming:
-   - Commit message: `feat: migrate to sveltekit 3 (#<PR_NUMBER>)`. `feat` triggers the `5.0.0-next.N` prerelease.
+   GitHub → `Robin-w151/orfarchiv-ui` → _Pull requests_ → PR [#276](https://github.com/Robin-w151/orfarchiv-ui/pull/276) (`feat/sveltekit-3` → `develop`) → merge button dropdown → _Squash and merge_. Before confirming:
+   - Commit message: `feat: migrate to sveltekit 3 (#276)`. `feat` triggers the prerelease, expected `5.0.0-next.21` (`develop` is at `5.0.0-next.20`). GitHub prefills the PR title `Upgrade to sveltekit 3`, so replace it.
    - Extended description: clear it. The default lists every branch commit, and a `BREAKING CHANGE` line in there would change what semantic-release releases.
-   - `<PR_NUMBER>`: the number of this PR.
 
    Then _Confirm squash and merge_.
    **Expected:** the PR shows _Merged_, and a _CI_ workflow run starts on `develop` (Actions tab).
@@ -86,11 +85,11 @@ Production (`main`) isn't touched, so nothing live needs rolling back. If `devel
 
 ## Acceptance criteria
 
-- [ ] Given `develop` in `ui`, then it contains the SvelteKit 3 migration and a `5.0.0-next.N` prerelease.
-- [ ] Given https://develop.orfarchiv.news serves the merge commit, then the smoke test passes.
-- [ ] Given desktop and phone had the Kit 2 app open on develop.orfarchiv.news before the merge, when the new deployment is live, then both show the update prompt and end up on `5.0.0-next.N` with exactly one service worker.
-- [ ] Given the Storybook workflow on `develop`, then it's green and the GitHub Pages Storybook renders its stories.
-- [ ] Given the root repo, then the `ui` submodule pointer is bumped and the epic is marked Done.
+- [x] Given `develop` in `ui`, then it contains the SvelteKit 3 migration and a `5.0.0-next.N` prerelease.
+- [x] Given https://develop.orfarchiv.news serves the merge commit, then the smoke test passes.
+- [x] Given desktop and phone had the Kit 2 app open on develop.orfarchiv.news before the merge, when the new deployment is live, then both show the update prompt and end up on `5.0.0-next.N` with exactly one service worker.
+- [x] Given the Storybook workflow on `develop`, then it's green and the GitHub Pages Storybook renders its stories.
+- [x] Given the root repo, then the `ui` submodule pointer is bumped and the epic is marked Done.
 
 ## Technical notes
 

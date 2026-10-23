@@ -2,7 +2,7 @@
 
 **Epic:** [0003 SvelteKit 3 migration](README.md)
 **Owner:** Claude
-**Status:** In progress
+**Status:** Done
 **Depends on:** 03
 **Size:** S — one Node script and two workflow steps, plus one story fix so the check starts green
 
@@ -27,8 +27,8 @@ Steps:
 - [x] Given `npm run storybook:build` and `storybook-static` served locally, when running `npm run storybook:smoke -- http://localhost:6006`, then it checks all stories (21 at the time of writing), prints one line per story and exits 0.
 - [x] Given the `define` block is temporarily removed from `ui/vite.storybook.config.ts` and Storybook is rebuilt, when running the smoke test, then it exits 1 and names the failing stories (`__SVELTEKIT_PAYLOAD__ is not defined`). The `define` is restored afterwards.
 - [x] Given `controls-input--input`, then it renders without the implicit-action `pageerror`.
-- [ ] Given a PR into `develop`, then the `ci.yaml` `storybook` job runs the build and the smoke test, and is green.
-- [ ] Given a push to `develop`, then `storybook.yaml` runs the smoke test before *Upload Storybook artifacts* and only deploys if it passes.
+- [x] Given a PR into `develop`, then the `ci.yaml` `storybook` job runs the build and the smoke test, and is green.
+- [x] Given a push to `develop`, then `storybook.yaml` runs the smoke test before *Upload Storybook artifacts* and only deploys if it passes.
 - [x] `npm run lint` passes (the new script is covered by ESLint/Prettier).
 
 Verified locally: 21/21 pass. Without `define`, 0/21 pass with `pageerror: __SVELTEKIT_PAYLOAD__ is not defined; empty #storybook-root` and exit 1. The two CI criteria can only be checked once `feat/sveltekit-3` is pushed and the PR into `develop` (story 07) runs.
