@@ -3,7 +3,7 @@
 **Epic:** [0004 Bookmark device sync](README.md)
 **Owner:** Claude
 **Status:** Todo
-**Depends on:** 09
+**Depends on:** 04, 09
 **Size:** M — a new settings section with several states, a pairing confirmation flow and e2e tests; follows existing components
 
 ## User story
@@ -56,6 +56,7 @@ New section `Synchronisierung` in the settings grid ([ui/src/lib/components/sett
 - [ ] Given a pull is running, then all pull buttons are disabled until it finishes.
 - [ ] Given "Synchronisierung beenden" is confirmed, then the secret is cleared, the socket closes, and bookmarks are untouched.
 - [ ] The section is keyboard-operable, buttons have accessible names that include the device name (e.g. `aria-label="Lesezeichen von Pixel · Chrome abrufen"`), and dialogs trap focus like the existing `Modal`.
+- [ ] Given the PR's Vercel preview deployment, when the `Test` workflow runs with `TEST_SYNC_REQUIRED: 'true'`, then the sync specs run (not skip) against the production relay and pass.
 - [ ] Storybook has stories for the section in its states (off, on/empty, on/with devices, pull running), and `npm run storybook:smoke` passes.
 
 ## Technical notes
@@ -63,12 +64,14 @@ New section `Synchronisierung` in the settings grid ([ui/src/lib/components/sett
 - New: `ui/src/lib/components/settings/sync/Sync.svelte` (+ subcomponents, e.g. `SyncDevices.svelte`, `SyncPairing.svelte`). Reuse `Section`, `SectionList`, `Item`, `Button`, `Input`, `Modal`, `AlertBox` from `ui/src/lib/components/shared/`.
 - Fragment handling: in `Sync.svelte` on mount, or in [ui/src/routes/settings/+page.ts](../../ui/src/routes/settings/+page.ts) on the browser side. The fragment must never be read on the server (it isn't sent anyway).
 - Existing share/copy code: see [ShareButton.svelte](../../ui/src/lib/components/news/story/header/options/ShareButton.svelte) for `navigator.share` / clipboard usage.
-- E2E page object: extend [ui/tests/pages/settings.page.ts](../../ui/tests/pages/settings.page.ts), and add `ui/tests/specs/sync.spec.ts` (two contexts + local relay from story 07's setup). Move the dev-only test hooks from stories 07–09 to real UI here and remove them.
+- E2E page object: extend [ui/tests/pages/settings.page.ts](../../ui/tests/pages/settings.page.ts), and add `ui/tests/specs/sync.spec.ts`. It runs against `TEST_BASE_URL` (the Vercel deployment in CI, see [ui/.github/workflows/test.yaml](../../ui/.github/workflows/test.yaml)) and the production relay, using two browser contexts. Each test generates its own secret, because tests run in parallel and share the relay with real users. When the section isn't rendered (relay URL unset), the spec calls `test.skip()`, unless `TEST_SYNC_REQUIRED=true`, in which case it fails.
+- Set `TEST_SYNC_REQUIRED: 'true'` in the `Run Playwright tests` step env of [ui/.github/workflows/test.yaml](../../ui/.github/workflows/test.yaml). This is safe because story 04 is done before this story starts: the production relay is live and `PUBLIC_SYNC_RELAY_URL` is set on Vercel, so preview deployments render the section.
 - Add stories under `ui/src/stories/` following the existing ones (`*.stories.js`).
 
 ## Testing
 
-- E2E: create secret → share link → second context opens link → confirm → both listed → pull → bookmarks visible. Also cover cancel, invalid link and end sync.
+- E2E: create secret → share link → second context opens link → confirm → both listed → pull → bookmarks visible. Also cover cancel, invalid link and end sync. Locally, run against the local relay on port 3004 (epic assumptions).
+- E2E skip logic: with the section hidden, the spec is skipped; with `TEST_SYNC_REQUIRED=true` and the section hidden, it fails.
 - Unit: fragment parsing helper (`it.each` over `#sync=…`, `#other`, empty, invalid).
 - Storybook smoke.
 

@@ -12,7 +12,7 @@ As the maintainer, I want an empty `orfarchiv-relay` repository registered as a 
 
 ## Description
 
-Creating a GitHub repository and setting its package permissions has to happen in the GitHub web UI under the maintainer's account. Claude fills the repo with code in story 03.
+Creating a GitHub repository, its secrets and its ruleset has to happen in the GitHub web UI under the maintainer's account. The ghcr package is created by the first image push in story 03, and story 04 makes it public. Claude fills the repo with code in story 03.
 
 ### Runbook
 
@@ -20,7 +20,7 @@ Creating a GitHub repository and setting its package permissions has to happen i
 
 - [ ] Signed in to GitHub as `Robin-w151`
 - [ ] Local clone of the superproject at `/workspaces/orfarchiv` on `main`, clean working tree
-- [ ] SSH access to GitHub (the other submodules use `git@github.com:` URLs)
+- [ ] SSH access to GitHub (`ui`, `db` and `scraper` use `git@github.com:` URLs)
 
 #### Steps
 
@@ -35,7 +35,19 @@ Creating a GitHub repository and setting its package permissions has to happen i
 
    **Expected:** the repository page `https://github.com/Robin-w151/orfarchiv-relay` shows `README.md` and `LICENSE` on `main`.
 
-2. **Create the release secrets**
+2. **Require signed commits on `main`**
+   `orfarchiv-relay` → `Settings → Rules → Rulesets → New ruleset → New branch ruleset`.
+   - Ruleset name: `Signed Commits`
+   - Enforcement status: **Active**
+   - Bypass list: leave empty
+   - Target branches: `Add target → Include default branch`
+   - Branch rules: check only **Require signed commits**
+
+   `Create`.
+   **Expected:** `Settings → Rules → Rulesets` lists `Signed Commits` as Active, the same as in `orfarchiv-scraper`.
+   Docs: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/creating-rulesets-for-a-repository
+
+3. **Create the release secrets**
    The scraper's release job ([scraper/.github/workflows/ci.yaml](../../scraper/.github/workflows/ci.yaml)) signs its release commits with an SSH key and sets the git author from secrets. The relay workflow (story 03) uses the same four secrets. GitHub never shows a secret's value again after it is saved, so take the values from where you keep them (password manager, or `~/.ssh` for the signing key), not from the scraper repo.
    `orfarchiv-relay` → `Settings → Secrets and variables → Actions → New repository secret`, once for each:
    - `SSH_SIGNING_KEY`: the private key that signs release commits (the full content of the key file, including the `-----BEGIN …-----` lines).
@@ -47,21 +59,20 @@ Creating a GitHub repository and setting its package permissions has to happen i
    **Expected:** `Settings → Secrets and variables → Actions` lists exactly those four secrets.
    Docs: https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions
 
-3. **Make the signing key known to GitHub**
-   Check `https://github.com/settings/keys` → "Signing keys". The public key from step 2 should already be there, because scraper releases use it. If it isn't, add it there with `New SSH key` → Key type **Signing Key**.
+4. **Make the signing key known to GitHub**
+   Check `https://github.com/settings/keys` → "Signing keys". The public key from step 3 should already be there, because scraper releases use it. If it isn't, add it there with `New SSH key` → Key type **Signing Key**.
    **Expected:** the key is listed under "Signing keys". Release commits then show as "Verified".
 
-4. **Add the submodule to the superproject**
+5. **Add the submodule to the superproject**
 
    ```sh
    cd /workspaces/orfarchiv
    git submodule add git@github.com:Robin-w151/orfarchiv-relay relay
-   git submodule update --init relay
    ```
 
    **Expected:** `.gitmodules` has a new `[submodule "relay"]` entry, and `relay/README.md` exists.
 
-5. **Commit the submodule registration**
+6. **Commit the submodule registration**
    ```sh
    git add .gitmodules relay
    git commit -m "chore: add relay submodule"
@@ -93,17 +104,19 @@ Then delete the repository: `Settings → General → Danger Zone → Delete thi
 #### Hand back to Claude
 
 - Confirmation that `relay/` exists and is on `main`.
-- Confirmation that the four secrets from step 2 exist. Never the values.
+- Confirmation that the four secrets from step 3 and the `Signed Commits` ruleset from step 2 exist. Never the secret values.
 
 #### Troubleshooting
 
-- **`fatal: You are on a branch yet to be born`** when adding the submodule → the repo was created without a README. Add any file in the web UI and retry step 4.
+- **`fatal: You are on a branch yet to be born`** when adding the submodule → the repo was created without a README. Add any file in the web UI and retry step 5.
 - **`Permission denied (publickey)`** → your SSH key isn't loaded in the devcontainer. Run `ssh -T git@github.com` to check.
+- **`push declined due to repository rule violations`** → the commit isn't signed. Check `git config commit.gpgsign` in the devcontainer.
 
 ## Acceptance criteria
 
 - [ ] Given the superproject, when running `git submodule status`, then `relay` is listed next to `db`, `scraper`, `shared` and `ui`.
 - [ ] Given the `orfarchiv-relay` repo, when viewing `Settings → Secrets and variables → Actions`, then `SSH_SIGNING_KEY`, `SSH_SIGNING_KEY_PUBLIC`, `GIT_NAME` and `GIT_EMAIL` are listed.
+- [ ] Given the `orfarchiv-relay` repo, when viewing `Settings → Rules → Rulesets`, then a `Signed Commits` ruleset is active on the default branch with `Require signed commits`.
 
 ## Technical notes
 

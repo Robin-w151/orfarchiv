@@ -23,6 +23,8 @@ As a user, I want to pull the bookmarks I don't have yet from another device, an
    - anything else → no change. Viewed status never goes back to not viewed, and local title, URL and timestamp are never overwritten.
 5. Returns `{ added, markedViewed, skippedInvalid }`.
 
+`requestId` is 16 random bytes (base64url). The requester keeps only the `requestId` of the pull in progress. A `sync-response` with any other `requestId`, or arriving after the pull finished or timed out, is dropped.
+
 The merge decision is a pure function, `planBookmarkMerge(local: Story[], remote: Story[]) → { toAdd, toMarkViewed }`, kept separate from Dexie so it can be unit tested.
 
 **Source (responder):**
@@ -47,6 +49,7 @@ The merge decision is a pure function, `planBookmarkMerge(local: Story[], remote
 - [ ] Given 2,000 remote bookmarks, then the pull finishes and the merge runs as a single Dexie transaction. A test with a failing write leaves the local table unchanged.
 - [ ] Given the source device receives a request, then it shows the "hat deine Lesezeichen abgerufen" notification with the requester's device name.
 - [ ] Given the source leaves mid-transfer, then the requester gets `PeerLeft` and the local table is unchanged.
+- [ ] Given a `sync-response` with an unknown or already-completed `requestId`, then it is ignored and nothing is merged.
 
 ## Technical notes
 
@@ -60,7 +63,7 @@ The merge decision is a pure function, `planBookmarkMerge(local: Story[], remote
 
 - `bookmarkSync.spec.ts`: an `it.each` table over `planBookmarkMerge` cases (the acceptance criteria above).
 - A merge integration test against Dexie with `fake-indexeddb` (new dev dependency in `ui`, approved; pin the exact version, at least 48 h old).
-- E2E (two contexts + local relay): seed bookmarks in context B via IndexedDB, trigger the pull in A through a dev hook (until story 10 adds the button), and assert A's bookmarks page lists them.
+- Manual: two tabs against a local relay (`PORT=3004`, see the epic assumptions). Seed bookmarks in tab B, call `pullBookmarks` from tab A's devtools console, and check A's bookmarks page. No e2e test in this story; story 10 covers the pull end to end through the button.
 
 ## Out of scope
 

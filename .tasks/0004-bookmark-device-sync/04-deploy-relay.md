@@ -129,7 +129,7 @@ The VPS, DNS and Vercel can only be reached by the maintainer. This story deploy
    Vercel → project `orfarchiv` → `Settings → Environment Variables → Add`:
    - Key `PUBLIC_SYNC_RELAY_URL`, value `wss://relay.orfarchiv.news/ws`, environments **Production, Preview, Development**.
      Docs: https://vercel.com/docs/projects/environment-variables
-     **Expected:** the variable is listed. It takes effect on the next deployment, which happens in story 12.
+     **Expected:** the variable is listed. It takes effect on the next deployment. Story 10's preview deployments are the first to use it, and its e2e tests require it.
 
 #### Verify
 

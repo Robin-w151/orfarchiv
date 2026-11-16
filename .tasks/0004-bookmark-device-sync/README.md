@@ -16,6 +16,7 @@ Users can copy bookmarks between their devices with no account. Every installati
 - Devices connect directly over a WebRTC data channel where possible. If that fails within a timeout, they fall back to the relay with no user action needed.
 - Relay (`wss://relay.orfarchiv.news/ws`) and STUN (`stun:relay.orfarchiv.news:3478`) both run on the existing VPS, with no database, no disk writes and no logging of IDs or IP addresses.
 - Production, `develop` and Vercel preview deployments can all use the relay.
+- The Docker/`adapter-node` image can enable sync with the build args `PUBLIC_SYNC_RELAY_URL` and `PUBLIC_SYNC_STUN_URL`. Without them, the section is hidden.
 
 ## Non-goals
 
@@ -31,7 +32,7 @@ Users can copy bookmarks between their devices with no account. Every installati
 
 - **Bookmarks** are stored only on the device, in IndexedDB through Dexie. The database is `BOOKMARKS_STORE_NAME = 'bookmarks'` ([ui/src/lib/configs/client.ts](../../ui/src/lib/configs/client.ts)) and the table is `stories` (`id, timestamp, isBookmarked, isViewed`) ([ui/src/lib/stores/persistence/bookmarksDb.ts](../../ui/src/lib/stores/persistence/bookmarksDb.ts)). Rows are full `Story` objects ([ui/src/lib/models/story.ts](../../ui/src/lib/models/story.ts)) whose flags are numbers (`0`/`1`). The store ([ui/src/lib/stores/bookmarks.ts](../../ui/src/lib/stores/bookmarks.ts)) reads through `liveQuery`, so rows written to Dexie show up in the UI right away. Deletes remove rows, and no record of the deletion is kept.
 - **Settings** are a `svelte-persisted-store` in localStorage ([ui/src/lib/stores/settings.ts](../../ui/src/lib/stores/settings.ts)). The settings page ([ui/src/lib/components/settings/Settings.svelte](../../ui/src/lib/components/settings/Settings.svelte)) is a two-column grid of `Section` / `SectionList` / `Item` components. The UI text is German.
-- **Hosting:** the UI runs on Vercel (`adapter-vercel`), which can't keep WebSocket connections open. A Docker/`adapter-node` build also exists. The VPS (epic [0001](../0001-self-hosted-db/README.md), story 07) already runs Docker Compose, host nginx, certbot and an iptables firewall, and hosts other containers whose images come from ghcr.io.
+- **Hosting:** the UI runs on Vercel (`adapter-vercel`), which can't keep WebSocket connections open. A Docker/`adapter-node` build also exists ([ui/Dockerfile](../../ui/Dockerfile)). It bakes public env variables in with `ENV` at build time, uses the same `kit.csp` from `csp-config.js`, and sends no `Permissions-Policy` header, because that header only comes from `vercel.json`. The VPS (epic [0001](../0001-self-hosted-db/README.md), story 07) already runs Docker Compose, host nginx, certbot and an iptables firewall, and hosts other containers whose images come from ghcr.io.
 - **Security headers:** the CSP is in [ui/csp-config.js](../../ui/csp-config.js) (`connect-src 'self' https://generativelanguage.googleapis.com`). `Permissions-Policy` in [ui/vercel.json](../../ui/vercel.json) sets `camera=()`, which blocks QR scanning, and allows `web-share=(self)` and `clipboard-write=(self)`.
 - **Shared code** lives in `orfarchiv-shared` and is mounted in `ui` at `src/lib/shared/common` (`#common/*`). It uses one folder per feature (`shared/src/<feature>/<feature>.ts` plus `<feature>.constants.ts`).
 
@@ -47,7 +48,7 @@ secret (UUIDv4, stays on device, shared only via link/QR)
 
 - All crypto uses the browser's WebCrypto API (`crypto.subtle`), with no extra library.
 - `peerId` is a random ID per connection, not tied to the device. The device name is user-editable and defaults to a value derived from the user agent (e.g. "Android · Chrome"). It is only ever sent encrypted.
-- A message counts as authentic if it decrypts under the group key. Messages that fail to decrypt are dropped silently.
+- A message counts as authentic if it decrypts under the group key **with the additional data `orfarchiv-sync/v1|<roomId>|<fromPeerId>|<toPeerId>`**. The sender knows both peer IDs, and the receiver takes `from` from the relay envelope and uses its own `peerId`. If the relay redirects or relabels a message, decryption fails. Because `peerId`s are new for each connection, a replay only works within the same connection pair, and random, single-use `requestId`s (story 09) reject stale responses. Messages that fail to decrypt are dropped silently.
 
 ### Pairing
 
@@ -113,11 +114,11 @@ coturn in `--stun-only` mode on the VPS (`network_mode: host`, UDP 3478, logging
 | 07  | [Relay client and presence](07-relay-client-presence.md)    | Claude | M    | 02, 03, 06     | Todo   |
 | 08  | [WebRTC transport with fallback](08-webrtc-transport.md)    | Claude | L    | 07             | Todo   |
 | 09  | [Bookmark pull protocol](09-bookmark-pull-protocol.md)      | Claude | M    | 07             | Todo   |
-| 10  | [Sync settings UI and link pairing](10-sync-settings-ui.md) | Claude | M    | 09             | Todo   |
+| 10  | [Sync settings UI and link pairing](10-sync-settings-ui.md) | Claude | M    | 04, 09         | Todo   |
 | 11  | [QR code pairing](11-qr-code-pairing.md)                    | Claude | M    | 10             | Todo   |
 | 12  | [Device QA and release](12-device-qa-release.md)            | Human  | M    | 04, 05, 08, 11 | Todo   |
 
-**Size overview:** 4×S, 7×M, 1×L. Claude: 2×S, 4×M, 1×L. Human: 2×S, 2×M (4 stories). The largest risk is story 08 (L): WebRTC behaviour differs between browsers and NAT setups, the timing of the fallback is tricky, and it's hard to test without real devices. It stays one story because offer/answer, ICE and fallback only make sense together, and story 09 doesn't depend on it, so the feature works over the relay alone.
+**Size overview:** 4×S, 7×M, 1×L. Claude: 2×S, 5×M, 1×L (8 stories). Human: 2×S, 2×M (4 stories). The largest risk is story 08 (L): WebRTC behaviour differs between browsers and NAT setups, the timing of the fallback is tricky, and it's hard to test without real devices. It stays one story because offer/answer, ICE and fallback only make sense together, and story 09 doesn't depend on it, so the feature works over the relay alone.
 
 ## Story order
 
@@ -133,6 +134,7 @@ flowchart TD
   S07 --> S08["08 WebRTC transport with fallback - L"]
   S07 --> S09["09 Bookmark pull protocol - M"]
   S09 --> S10["10 Sync settings UI and link pairing - M"]
+  S04 --> S10
   S10 --> S11["11 QR code pairing - M"]
   S04 --> S12["12 Device QA and release - M"]
   S05 --> S12
@@ -156,7 +158,7 @@ flowchart TD
   click S12 "./12-device-qa-release.md"
 ```
 
-Stories 01, 02 and 06 can start right away and in parallel. Stories 08 and 09 can run in parallel after 07. The VPS work (04, 05) can happen at any point before 12.
+Stories 01, 02 and 06 can start right away and in parallel. Stories 08 and 09 can run in parallel after 07. The relay deployment (04) must be done before 10, so its e2e tests run against a live relay. The STUN deployment (05) can happen at any point before 12.
 
 ## Risks & open questions
 
@@ -167,13 +169,19 @@ Stories 01, 02 and 06 can start right away and in parallel. Stories 08 and 09 ca
 - **Relay abuse.** It's a public WebSocket endpoint. Mitigations: an origin allow-list, size, rate and connection limits (story 03) plus `limit_conn` in nginx (story 04). Rooms are not authenticated, so anyone who guesses a room ID only sees ciphertext and peer counts. Room IDs are 256-bit, so guessing one isn't realistic. The `Origin` header can be faked by non-browser clients, so the allow-list only stops other websites, not scripts.
 - **The preview origin pattern depends on the Vercel team slug** (`robins-projects-bb10f956`). If the slug changes, previews get 403 until `RELAY_ALLOWED_ORIGINS` is updated.
 - **`jsqr` is unmaintained** but stable. If scanning is unreliable on real devices (story 12), switch to the `barcode-detector` polyfill (WASM, needs CSP and self-hosting work).
+- **Your VPS work is on the UI's critical path.** Story 10 can't merge until story 04 (relay deployment) is done.
+- **UI e2e runs depend on the VPS.** Sync specs use the production relay, so a relay outage makes them fail on every UI deployment, even for changes unrelated to sync. The 2 CI retries absorb short outages.
 - **Metadata.** The relay and STUN server see IP addresses and timing. The sync section states this in one sentence. Neither service logs them.
 
 ## Assumptions
 
 - Pairing links use `location.origin`, so preview and develop deployments produce working links for their own origin.
-- `PUBLIC_SYNC_RELAY_URL` (`wss://relay.orfarchiv.news/ws`) and `PUBLIC_SYNC_STUN_URL` (`stun:relay.orfarchiv.news:3478`) are public env variables. If the relay URL is unset, the sync section is hidden.
+- `PUBLIC_SYNC_RELAY_URL` (`wss://relay.orfarchiv.news/ws`) and `PUBLIC_SYNC_STUN_URL` (`stun:relay.orfarchiv.news:3478`) are declared in [ui/src/env.ts](../../ui/src/env.ts) as `static: true, public: true`, optional, so the CSP built at build time and the client always agree. If the relay URL is unset, the sync section is hidden.
 - The relay lives in the new GitHub repo `Robin-w151/orfarchiv-relay`, added as a submodule `relay` of the superproject, with `orfarchiv-shared` mounted at `src/shared/common` like in `scraper`. The image is `ghcr.io/robin-w151/orfarchiv-relay`.
+- E2E tests run in CI against the Vercel deployment ([ui/.github/workflows/test.yaml](../../ui/.github/workflows/test.yaml)), so sync specs use the production relay through the preview origin. Each test generates its own secret, because tests run in parallel and share the relay with real users. Specs skip themselves while the sync section is hidden (relay URL unset). Story 10 sets `TEST_SYNC_REQUIRED: 'true'` in `test.yaml`, which makes them fail instead of skip. Story 10 depends on story 04, so the relay is live by then.
+- Locally, the relay runs on port **3004**, the next free port after the UI (3001), mongo-express (3002) and the embedding server (3003): `docker run -p 3004:8080 -e RELAY_ALLOWED_ORIGINS=http://localhost:3001 ghcr.io/robin-w151/orfarchiv-relay` or `PORT=3004 npm start` in `relay/`, with `PUBLIC_SYNC_RELAY_URL=ws://localhost:3004/ws` in the UI's `.env.local`. Sync specs are run locally with `npm run test:e2e` against that setup.
+- E2E coverage for sync lives in stories 10 and 11. Stories 07–09 have no UI that a deployed build could test, so they use unit tests plus a local manual check with two tabs and the local relay.
+- The Docker image doesn't run anywhere yet, so no origin is added to `RELAY_ALLOWED_ORIGINS` now. Whoever deploys it later adds the origin to the relay's compose entry (story 04), or runs their own relay.
 - Bookmark counts stay in the low thousands (≈ 300 B per story), so sending the full list per pull is fine.
 - UI text is German, like the rest of the app.
 - New dependencies: `ws` (relay); `uqr`, `jsqr` and the dev dependency `fake-indexeddb` (ui). All pinned to exact versions that are at least 48 h old.
@@ -183,5 +191,6 @@ Stories 01, 02 and 06 can start right away and in parallel. Stories 08 and 09 ca
 
 - All stories are Done. `lint`, `check`, `test:unit` and `test:e2e` pass in `ui`, and lint/test pass in `shared` and `relay`. CI is green in all three repos.
 - The relay and STUN server run in production on the VPS. `PUBLIC_SYNC_RELAY_URL` and `PUBLIC_SYNC_STUN_URL` are set on Vercel.
+- `TEST_SYNC_REQUIRED: 'true'` is set in `ui/.github/workflows/test.yaml`, and the sync specs run (not skip) against the production deployment.
 - Manual QA in story 12 passes for phone↔phone and phone↔desktop, over both direct and relay transport.
 - The feature is released to `develop` and then to production.

@@ -44,7 +44,7 @@ As a user, I want my devices to talk to each other directly when they can, so th
 ## Testing
 
 - Unit: transport router state machine with fake transports (`relay` → `direct` → fallback → timeout) using `it.each` on event sequences, and Vitest fake timers.
-- E2E: two contexts, assert a `direct` transport indicator (dev-only test ID until story 10), and a forced-failure variant.
+- Manual: two tabs against a local relay (`PORT=3004`, see the epic assumptions). Check that the transport switches to `direct`, and that it stays on `relay` with `media.peerconnection.enabled = false` in Firefox. No e2e test in this story.
 - Real NAT behaviour is verified manually in story 12.
 
 ## Out of scope
