@@ -1,12 +1,12 @@
 [submodule "ui"]
 	path = ui
-	url = git@github.com:Robin-w151/orfarchiv-ui
+	url = https://github.com/Robin-w151/orfarchiv-ui.git
 [submodule "db"]
 	path = db
-	url = git@github.com:Robin-w151/orfarchiv-db
+	url = https://github.com/Robin-w151/orfarchiv-db.git
 [submodule "scraper"]
 	path = scraper
-	url = git@github.com:Robin-w151/orfarchiv-scraper
+	url = https://github.com/Robin-w151/orfarchiv-scraper.git
 [submodule "shared"]
 	path = shared
 	url = https://github.com/Robin-w151/orfarchiv-shared.git
