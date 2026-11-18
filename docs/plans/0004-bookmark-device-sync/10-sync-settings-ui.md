@@ -12,7 +12,7 @@ As a user, I want a "Synchronisierung" section in the settings where I can set u
 
 ## Description
 
-New section `Synchronisierung` in the settings grid ([ui/src/lib/components/settings/Settings.svelte](../../ui/src/lib/components/settings/Settings.svelte)), placed after `General`. Hidden entirely if `PUBLIC_SYNC_RELAY_URL` is unset.
+New section `Synchronisierung` in the settings grid ([ui/src/lib/components/settings/Settings.svelte](../../../ui/src/lib/components/settings/Settings.svelte)), placed after `General`. Hidden entirely if `PUBLIC_SYNC_RELAY_URL` is unset.
 
 **State: sync off** (no secret):
 
@@ -62,10 +62,10 @@ New section `Synchronisierung` in the settings grid ([ui/src/lib/components/sett
 ## Technical notes
 
 - New: `ui/src/lib/components/settings/sync/Sync.svelte` (+ subcomponents, e.g. `SyncDevices.svelte`, `SyncPairing.svelte`). Reuse `Section`, `SectionList`, `Item`, `Button`, `Input`, `Modal`, `AlertBox` from `ui/src/lib/components/shared/`.
-- Fragment handling: in `Sync.svelte` on mount, or in [ui/src/routes/settings/+page.ts](../../ui/src/routes/settings/+page.ts) on the browser side. The fragment must never be read on the server (it isn't sent anyway).
-- Existing share/copy code: see [ShareButton.svelte](../../ui/src/lib/components/news/story/header/options/ShareButton.svelte) for `navigator.share` / clipboard usage.
-- E2E page object: extend [ui/tests/pages/settings.page.ts](../../ui/tests/pages/settings.page.ts), and add `ui/tests/specs/sync.spec.ts`. It runs against `TEST_BASE_URL` (the Vercel deployment in CI, see [ui/.github/workflows/test.yaml](../../ui/.github/workflows/test.yaml)) and the production relay, using two browser contexts. Each test generates its own secret, because tests run in parallel and share the relay with real users. When the section isn't rendered (relay URL unset), the spec calls `test.skip()`, unless `TEST_SYNC_REQUIRED=true`, in which case it fails.
-- Set `TEST_SYNC_REQUIRED: 'true'` in the `Run Playwright tests` step env of [ui/.github/workflows/test.yaml](../../ui/.github/workflows/test.yaml). This is safe because story 04 is done before this story starts: the production relay is live and `PUBLIC_SYNC_RELAY_URL` is set on Vercel, so preview deployments render the section.
+- Fragment handling: in `Sync.svelte` on mount, or in [ui/src/routes/settings/+page.ts](../../../ui/src/routes/settings/+page.ts) on the browser side. The fragment must never be read on the server (it isn't sent anyway).
+- Existing share/copy code: see [ShareButton.svelte](../../../ui/src/lib/components/news/story/header/options/ShareButton.svelte) for `navigator.share` / clipboard usage.
+- E2E page object: extend [ui/tests/pages/settings.page.ts](../../../ui/tests/pages/settings.page.ts), and add `ui/tests/specs/sync.spec.ts`. It runs against `TEST_BASE_URL` (the Vercel deployment in CI, see [ui/.github/workflows/test.yaml](../../../ui/.github/workflows/test.yaml)) and the production relay, using two browser contexts. Each test generates its own secret, because tests run in parallel and share the relay with real users. When the section isn't rendered (relay URL unset), the spec calls `test.skip()`, unless `TEST_SYNC_REQUIRED=true`, in which case it fails.
+- Set `TEST_SYNC_REQUIRED: 'true'` in the `Run Playwright tests` step env of [ui/.github/workflows/test.yaml](../../../ui/.github/workflows/test.yaml). This is safe because story 04 is done before this story starts: the production relay is live and `PUBLIC_SYNC_RELAY_URL` is set on Vercel, so preview deployments render the section.
 - Add stories under `ui/src/stories/` following the existing ones (`*.stories.js`).
 
 ## Testing

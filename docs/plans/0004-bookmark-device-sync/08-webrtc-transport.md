@@ -36,9 +36,9 @@ As a user, I want my devices to talk to each other directly when they can, so th
 ## Technical notes
 
 - New: `ui/src/lib/services/sync/webRtcTransport.ts`, and a transport router in `syncClient.ts` that picks `direct` or `relay` per peer.
-- Constants in [ui/src/lib/configs/client.ts](../../ui/src/lib/configs/client.ts): `SYNC_WEBRTC_CONNECT_TIMEOUT_MS`, `SYNC_WEBRTC_DISCONNECT_GRACE_MS`, `SYNC_DATACHANNEL_BUFFER_HIGH_BYTES`.
+- Constants in [ui/src/lib/configs/client.ts](../../../ui/src/lib/configs/client.ts): `SYNC_WEBRTC_CONNECT_TIMEOUT_MS`, `SYNC_WEBRTC_DISCONNECT_GRACE_MS`, `SYNC_DATACHANNEL_BUFFER_HIGH_BYTES`.
 - Follow the "perfect negotiation" pattern only as far as needed. With deterministic offerer selection, the polite/impolite roles are fixed.
-- Check [ui/playwright.config.ts](../../ui/playwright.config.ts) for the configured browser projects. WebKit on Linux may not do WebRTC host candidates without flags; document this rather than fight it.
+- Check [ui/playwright.config.ts](../../../ui/playwright.config.ts) for the configured browser projects. WebKit on Linux may not do WebRTC host candidates without flags; document this rather than fight it.
 - This story touches no relay code.
 
 ## Testing

@@ -101,7 +101,7 @@ again in any new pane). Passwords are read interactively so none end up in the s
 
 ```bash
 # From the laptop: the vector check script
-scp .tasks/self-hosted-db/scripts/vector-check.js <vps>:~/vector-check.js
+scp docs/plans/0001-self-hosted-db/scripts/vector-check.js <vps>:~/vector-check.js
 
 # On the VPS
 tmux new -s s8

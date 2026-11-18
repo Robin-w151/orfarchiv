@@ -46,7 +46,7 @@ Close codes, as `RelayCloseCode = { JoinTimeout: 4000, RoomFull: 4001, Unsupport
 ## Technical notes
 
 - New folder `shared/src/relay/` containing `relay.ts` (Effect `Schema` structs/unions for `RelayClientMessage` and `RelayServerMessage`, plus `decode`/`encode` helpers using `Schema.fromJsonString`) and `relay.constants.ts`.
-- Follow the shared folder layout of [shared/src/search/](../../shared/src/search/) (`<feature>.ts` + `<feature>.constants.ts`). For the Effect 4 Schema style (`Schema.Struct`, `.check(...)`, `Schema.Literals`, `decodeUnknownResult`), follow [ui/src/lib/models/story.ts](../../ui/src/lib/models/story.ts) and [ui/src/lib/api/info.ts](../../ui/src/lib/api/info.ts).
+- Follow the shared folder layout of [shared/src/search/](../../../shared/src/search/) (`<feature>.ts` + `<feature>.constants.ts`). For the Effect 4 Schema style (`Schema.Struct`, `.check(...)`, `Schema.Literals`, `decodeUnknownResult`), follow [ui/src/lib/models/story.ts](../../../ui/src/lib/models/story.ts) and [ui/src/lib/api/info.ts](../../../ui/src/lib/api/info.ts).
 - Unknown fields are ignored and dropped (Effect 4's default `onExcessProperty: 'ignore'`), so either side can add optional fields without breaking older versions.
 - Versioning rule: the format of `type`, `version` and the existing `join` fields never changes. A new protocol version may only add optional fields. This way an older relay can always decode a newer `join` and answer with `UnsupportedVersion`.
 - Use only `effect` (already a peer dependency), with no Node or DOM APIs, so the module runs in the browser and in Node.

@@ -46,12 +46,12 @@ Merging is the user's decision, and it triggers semantic-release. This story end
    On the merged PR page → _Delete branch_ (the repo doesn't delete merged branches automatically).
    **Expected:** the PR shows that `feat/sveltekit-3` was deleted, and it no longer appears under _Branches_.
 7. **Bump the submodule in the root repo.**
-   First, in `.tasks/0003-sveltekit-3-migration/08-storybook-smoke-test.md`, tick the two CI acceptance criteria, confirmed by the prerequisite and step 5, and set its header to _Done_. Then set the statuses of story 08, this story and the epic in `.tasks/0003-sveltekit-3-migration/README.md` (and this story's header) to _Done_, then:
+   First, in `docs/plans/0003-sveltekit-3-migration/08-storybook-smoke-test.md`, tick the two CI acceptance criteria, confirmed by the prerequisite and step 5, and set its header to _Done_. Then set the statuses of story 08, this story and the epic in `docs/plans/0003-sveltekit-3-migration/README.md` (and this story's header) to _Done_, then:
 
    ```sh
    cd /workspaces/orfarchiv
    git -C ui checkout develop && git -C ui pull
-   git add ui .tasks/0003-sveltekit-3-migration && git commit -m "chore: bump submodules"
+   git add ui docs/plans/0003-sveltekit-3-migration && git commit -m "chore: bump submodules"
    ```
 
    **Expected:** one root commit with the `ui` pointer at the prerelease commit, and stories 07 and 08 and the epic marked _Done_.

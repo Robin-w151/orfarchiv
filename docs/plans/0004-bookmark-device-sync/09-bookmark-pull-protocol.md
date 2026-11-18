@@ -16,7 +16,7 @@ As a user, I want to pull the bookmarks I don't have yet from another device, an
 
 1. Sends `sync-request { requestId }` to the peer.
 2. Waits for `sync-response { requestId, stories: Story[] }`. Chunking is handled by the frame layer. Timeout: 20 s after the last received chunk. A peer that leaves mid-transfer → error `PeerLeft`.
-3. Decodes each item with the `Story` schema ([ui/src/lib/models/story.ts](../../ui/src/lib/models/story.ts)). Invalid items are skipped and counted.
+3. Decodes each item with the `Story` schema ([ui/src/lib/models/story.ts](../../../ui/src/lib/models/story.ts)). Invalid items are skipped and counted.
 4. Merges with the local Dexie `stories` table in **one** `rw` transaction:
    - `id` not stored locally → insert `{ ...story, isBookmarked: 1, isViewed: story.isViewed === 1 ? 1 : 0 }`.
    - `id` stored locally, remote `isViewed === 1`, local `isViewed !== 1` → `modify({ isViewed: 1 })`.
@@ -30,12 +30,12 @@ The merge decision is a pure function, `planBookmarkMerge(local: Story[], remote
 **Source (responder):**
 
 - Is only reachable while its Synchronisierung section is open (story 07 lifecycle). It answers every `sync-request` from a peer whose `hello` it has received, with its full `stories` table (`db.stories.toArray()`), and sends no other fields.
-- Shows an info notification: "‹deviceName› hat deine Lesezeichen abgerufen", using the existing notifications store ([ui/src/lib/stores/notifications.ts](../../ui/src/lib/stores/notifications.ts)). At most one notification per peer per 10 s.
+- Shows an info notification: "‹deviceName› hat deine Lesezeichen abgerufen", using the existing notifications store ([ui/src/lib/stores/notifications.ts](../../../ui/src/lib/stores/notifications.ts)). At most one notification per peer per 10 s.
 - Runs at most one response per peer at a time. A repeated request while one is in progress is ignored.
 
 **Requester feedback** (consumed by story 10): the `pullBookmarks` result or a tagged error (`Timeout`, `PeerLeft`, `TransferFailed`).
 
-**Store API:** add `mergeFromRemote(stories)` to [ui/src/lib/stores/bookmarks.ts](../../ui/src/lib/stores/bookmarks.ts), or a sibling in the sync service that uses the same `BookmarksDb`. Prefer exporting a function that uses the existing `db` instance over opening a second Dexie instance. `liveQuery` updates the UI automatically.
+**Store API:** add `mergeFromRemote(stories)` to [ui/src/lib/stores/bookmarks.ts](../../../ui/src/lib/stores/bookmarks.ts), or a sibling in the sync service that uses the same `BookmarksDb`. Prefer exporting a function that uses the existing `db` instance over opening a second Dexie instance. `liveQuery` updates the UI automatically.
 
 ## Acceptance criteria
 

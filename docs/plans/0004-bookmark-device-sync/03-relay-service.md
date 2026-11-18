@@ -42,10 +42,10 @@ Behaviour:
 ## Technical notes
 
 - Repo layout, tooling and versions copied from `scraper`: `package.json` (`type: module`, `engines.node: 24.x`, `#common/*` → `./src/shared/common/src/*.ts`), `eslint.config.js`, `commitlint.config.js`, husky, `vite.config.ts` (build to `dist/`), `vitest.config.ts`, `Dockerfile` (`node:24-alpine`, multi-stage, non-root user, `EXPOSE 8080`, `HEALTHCHECK` on `/health`).
-- Add `orfarchiv-shared` as a nested submodule at `src/shared/common` (same URL as [scraper/.gitmodules](../../scraper/.gitmodules)), and import `#common/relay/relay` from story 02.
+- Add `orfarchiv-shared` as a nested submodule at `src/shared/common` (same URL as [scraper/.gitmodules](../../../scraper/.gitmodules)), and import `#common/relay/relay` from story 02.
 - Dependencies: `ws` (+ `@types/ws`) and `effect`. Plain Node `http` for `/health` and the upgrade. Effect is used for config and the program lifecycle, following the scraper's patterns; keep it simple.
 - Suggested files: `src/index.ts` (bootstrap, graceful SIGTERM), `src/config.ts`, `src/rooms.ts` (pure room registry, easy to unit test), `src/server.ts` (http + ws wiring), `src/rateLimit.ts`.
-- CI: copy [scraper/.github/workflows/ci.yaml](../../scraper/.github/workflows/ci.yaml) (jobs `check`, `test`, `release` with SSH commit signing and semantic-release, `image` building `linux/amd64,linux/arm64` and pushing to ghcr), drop the MongoDB steps, and rename the image to `orfarchiv-relay`. It uses the secrets `SSH_SIGNING_KEY`, `SSH_SIGNING_KEY_PUBLIC`, `GIT_NAME` and `GIT_EMAIL` from story 01. Also copy the semantic-release config from the scraper's `package.json`.
+- CI: copy [scraper/.github/workflows/ci.yaml](../../../scraper/.github/workflows/ci.yaml) (jobs `check`, `test`, `release` with SSH commit signing and semantic-release, `image` building `linux/amd64,linux/arm64` and pushing to ghcr), drop the MongoDB steps, and rename the image to `orfarchiv-relay`. It uses the secrets `SSH_SIGNING_KEY`, `SSH_SIGNING_KEY_PUBLIC`, `GIT_NAME` and `GIT_EMAIL` from story 01. Also copy the semantic-release config from the scraper's `package.json`.
 - The README documents the env variables and the security model in a few lines. This is an explicitly requested doc for a new repo; keep it short.
 - Use the branch decided in the epic's assumptions inside `relay`.
 
