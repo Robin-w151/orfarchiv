@@ -42,8 +42,8 @@ Store methods: `generateSecret()` (`crypto.randomUUID()`), `setSecret(value)` (v
 
 ## Technical notes
 
-- New files: `ui/src/lib/models/sync.ts` (Effect `Schema` for `SyncSettings` and error classes), `ui/src/lib/services/sync/syncCrypto.ts`, `ui/src/lib/stores/syncSettings.ts` (pattern from [ui/src/lib/stores/settings.ts](../../ui/src/lib/stores/settings.ts): `svelte-persisted-store`, schema validation of stored data, browser guard).
-- Constants in [ui/src/lib/configs/client.ts](../../ui/src/lib/configs/client.ts): `SYNC_STORE_NAME = 'sync'`, the HKDF info strings, `SYNC_DEVICE_NAME_MAX_LENGTH = 40`.
+- New files: `ui/src/lib/models/sync.ts` (Effect `Schema` for `SyncSettings` and error classes), `ui/src/lib/services/sync/syncCrypto.ts`, `ui/src/lib/stores/syncSettings.ts` (pattern from [ui/src/lib/stores/settings.ts](../../../ui/src/lib/stores/settings.ts): `svelte-persisted-store`, schema validation of stored data, browser guard).
+- Constants in [ui/src/lib/configs/client.ts](../../../ui/src/lib/configs/client.ts): `SYNC_STORE_NAME = 'sync'`, the HKDF info strings, `SYNC_DEVICE_NAME_MAX_LENGTH = 40`.
 - base64url helper: use `Uint8Array.prototype.toBase64({ alphabet: 'base64url', omitPadding: true })` / `Uint8Array.fromBase64` if the target browsers support it, otherwise a small helper. `TODO: confirm` browser support in story 07 testing.
 - No explicit return types, and fixed string sets as `as const` objects (project conventions).
 

@@ -48,7 +48,7 @@ Creating a GitHub repository, its secrets and its ruleset has to happen in the G
    Docs: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/creating-rulesets-for-a-repository
 
 3. **Create the release secrets**
-   The scraper's release job ([scraper/.github/workflows/ci.yaml](../../scraper/.github/workflows/ci.yaml)) signs its release commits with an SSH key and sets the git author from secrets. The relay workflow (story 03) uses the same four secrets. GitHub never shows a secret's value again after it is saved, so take the values from where you keep them (password manager, or `~/.ssh` for the signing key), not from the scraper repo.
+   The scraper's release job ([scraper/.github/workflows/ci.yaml](../../../scraper/.github/workflows/ci.yaml)) signs its release commits with an SSH key and sets the git author from secrets. The relay workflow (story 03) uses the same four secrets. GitHub never shows a secret's value again after it is saved, so take the values from where you keep them (password manager, or `~/.ssh` for the signing key), not from the scraper repo.
    `orfarchiv-relay` → `Settings → Secrets and variables → Actions → New repository secret`, once for each:
    - `SSH_SIGNING_KEY`: the private key that signs release commits (the full content of the key file, including the `-----BEGIN …-----` lines).
    - `SSH_SIGNING_KEY_PUBLIC`: the matching public key (one line, `ssh-ed25519 …`).
@@ -120,7 +120,7 @@ Then delete the repository: `Settings → General → Danger Zone → Delete thi
 
 ## Technical notes
 
-- Mirrors the existing submodule setup in [.gitmodules](../../.gitmodules).
+- Mirrors the existing submodule setup in [.gitmodules](../../../.gitmodules).
 - Story 03 adds `orfarchiv-shared` as a nested submodule at `relay/src/shared/common`, as in `scraper/.gitmodules`.
 
 ## Out of scope

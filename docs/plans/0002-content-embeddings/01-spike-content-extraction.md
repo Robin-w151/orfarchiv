@@ -12,7 +12,7 @@ As the developer of this epic, I want measured facts about orf.at article pages,
 Unblocks 02 (extraction design), 03 (input length), 04 (index shape) and 08 (fusion strategy).
 
 ## Description
-This is an investigation with no production code. Scripts are stored in `.tasks/0002-content-embeddings/scripts/` (prefix `spike-`, as in epic 0001's `scripts/`), so the measurements can be repeated. Cached HTML and other bulky outputs go to the scratchpad, not the repo. The deliverable is a **findings section appended to this file**.
+This is an investigation with no production code. Scripts are stored in `docs/plans/0002-content-embeddings/scripts/` (prefix `spike-`, as in epic 0001's `scripts/`), so the measurements can be repeated. Cached HTML and other bulky outputs go to the scratchpad, not the repo. The deliverable is a **findings section appended to this file**.
 
 Answer the following:
 
@@ -31,12 +31,12 @@ Answer the following:
 - [x] Findings are recorded in this file under a `## Findings` heading, with numbers for items 1–5 and yes/no plus a working pipeline snippet for item 6.
 - [x] A recommendation is given for: the truncation limit, the extra noise selectors, a minimum text length below which a teaser counts as `failed` (or none).
 - [x] Any finding that contradicts the epic's assumptions (for example a hit rate below 90% for old years) is listed as an open question in the epic README.
-- [x] No production system is touched, and no code in `shared`, `scraper`, `db` or `ui` changes. The spike scripts are in `.tasks/0002-content-embeddings/scripts/`.
+- [x] No production system is touched, and no code in `shared`, `scraper`, `db` or `ui` changes. The spike scripts are in `docs/plans/0002-content-embeddings/scripts/`.
 
 ## Technical notes
 - Current pipeline: `ui/src/lib/backend/content/news.ts`, `transform/cleanup.ts`, `transform/anchor.ts` (`findReadMoreUrl`), `transform/chart.ts`, `transform/readability.ts`.
 - Local services: `.devcontainer/docker-compose.yml` (`orfarchiv-db-1`, `orfarchiv-embeddings` on port 3003).
-- Scripts need `jsdom`, `@mozilla/readability`, `mongodb` and `tsx`. Give `.tasks/0002-content-embeddings/scripts/` its own `package.json` with these, because bare imports from `.tasks/` don't resolve against any submodule's `node_modules`. Install with plain `npm install` in that directory.
+- Scripts need `jsdom`, `@mozilla/readability`, `mongodb` and `tsx`. Give `docs/plans/0002-content-embeddings/scripts/` its own `package.json` with these, because bare imports from `docs/plans/` don't resolve against any submodule's `node_modules`. Install with plain `npm install` in that directory.
 - Tokenize: `POST <server root>/tokenize` with `{ "content": "<text>" }`, i.e. `ORFARCHIV_EMBEDDING_URL` without `/v1` (`/v1/tokenize` returns 404). Story 06 truncates with the same endpoint and `with_pieces: true`.
 - MongoDB docs: `$rankFusion` (https://www.mongodb.com/docs/manual/reference/operator/aggregation/rankfusion/) and vector index definitions (https://www.mongodb.com/docs/atlas/atlas-vector-search/vector-search-type/).
 

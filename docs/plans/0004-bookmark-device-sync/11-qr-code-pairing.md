@@ -28,7 +28,7 @@ As a user, I want to show a QR code on one device and scan it with another, so t
 
 **Headers:**
 
-- [ui/vercel.json](../../ui/vercel.json) `Permissions-Policy`: change `camera=()` to `camera=(self)`. The Docker/node deployment sends no `Permissions-Policy` header (see the epic background), so the camera is allowed there by default; no change needed.
+- [ui/vercel.json](../../../ui/vercel.json) `Permissions-Policy`: change `camera=()` to `camera=(self)`. The Docker/node deployment sends no `Permissions-Policy` header (see the epic background), so the camera is allowed there by default; no change needed.
 - CSP: `img-src` already allows `data:`, so the QR as inline SVG needs no change. If the decoder library uses a Web Worker or WASM, check `script-src` / `worker-src` and prefer a pure-JS build that needs no CSP change.
 
 ## Acceptance criteria

@@ -32,9 +32,9 @@ As a user, I want to see which of my other devices are online right now, so that
 - `syncStatus` store: `Disabled | Connecting | Connected | Offline | Error(code)`, as an `as const` object.
 - Answer an incoming `hello` from an unknown peer with your own `hello`, so both sides see each other even if the `peers` broadcasts arrive out of order.
 
-**Security headers:** add the origin of `PUBLIC_SYNC_RELAY_URL` (e.g. `wss://relay.orfarchiv.news`) to `connect-src` in [ui/csp-config.js](../../ui/csp-config.js), read from env at build time. Without it, the CSP blocks the WebSocket.
+**Security headers:** add the origin of `PUBLIC_SYNC_RELAY_URL` (e.g. `wss://relay.orfarchiv.news`) to `connect-src` in [ui/csp-config.js](../../../ui/csp-config.js), read from env at build time. Without it, the CSP blocks the WebSocket.
 
-**Docker image:** the build stage of [ui/Dockerfile](../../ui/Dockerfile) gets `ARG PUBLIC_SYNC_RELAY_URL=` / `ARG PUBLIC_SYNC_STUN_URL=` and `ENV PUBLIC_SYNC_RELAY_URL=$PUBLIC_SYNC_RELAY_URL` / `ENV PUBLIC_SYNC_STUN_URL=$PUBLIC_SYNC_STUN_URL` before `npm run build`. The `env.ts` schemas treat an empty string as unset (e.g. `Schema.optional` of a `Schema.String` that maps `""` → `undefined` before the URL check), so a build without the args hides the section instead of failing.
+**Docker image:** the build stage of [ui/Dockerfile](../../../ui/Dockerfile) gets `ARG PUBLIC_SYNC_RELAY_URL=` / `ARG PUBLIC_SYNC_STUN_URL=` and `ENV PUBLIC_SYNC_RELAY_URL=$PUBLIC_SYNC_RELAY_URL` / `ENV PUBLIC_SYNC_STUN_URL=$PUBLIC_SYNC_STUN_URL` before `npm run build`. The `env.ts` schemas treat an empty string as unset (e.g. `Schema.optional` of a `Schema.String` that maps `""` → `undefined` before the URL check), so a build without the args hides the section instead of failing.
 
 ## Acceptance criteria
 
@@ -56,9 +56,9 @@ As a user, I want to see which of my other devices are online right now, so that
 
 - New files under `ui/src/lib/services/sync/`: `syncClient.ts`, `relayTransport.ts`, `syncFrames.ts` (frame schema, chunk/reassemble, encrypt/decrypt via story 06), `syncTransport.ts` (interface). Stores in `ui/src/lib/stores/syncPeers.ts` / `syncStatus.ts`.
 - Relay envelope: `#common/relay/relay.ts` from story 02. Bump the `src/lib/shared/common` submodule in `ui`.
-- The client is a browser-only singleton (`if (browser)` guard as in [bookmarks.ts](../../ui/src/lib/stores/bookmarks.ts)). It is **not** started from the root layout. Story 10's `Sync.svelte` calls `acquire()` on mount and the returned release on destroy. Until story 10 exists, tests call `acquire()` directly.
-- CSP: [ui/csp-config.js](../../ui/csp-config.js) is imported by [ui/vite.config.ts](../../ui/vite.config.ts) after `dotenv.config()`. Turn it into a function of env, or append the origin in `vite.config.ts`.
-- Declare `PUBLIC_SYNC_RELAY_URL` and `PUBLIC_SYNC_STUN_URL` in [ui/src/env.ts](../../ui/src/env.ts) as `static: true, public: true`, optional (epic assumptions). Document `PUBLIC_SYNC_RELAY_URL=ws://localhost:3004/ws` for `.env.local` in the README env section. [ui/playwright.config.ts](../../ui/playwright.config.ts) stays unchanged.
+- The client is a browser-only singleton (`if (browser)` guard as in [bookmarks.ts](../../../ui/src/lib/stores/bookmarks.ts)). It is **not** started from the root layout. Story 10's `Sync.svelte` calls `acquire()` on mount and the returned release on destroy. Until story 10 exists, tests call `acquire()` directly.
+- CSP: [ui/csp-config.js](../../../ui/csp-config.js) is imported by [ui/vite.config.ts](../../../ui/vite.config.ts) after `dotenv.config()`. Turn it into a function of env, or append the origin in `vite.config.ts`.
+- Declare `PUBLIC_SYNC_RELAY_URL` and `PUBLIC_SYNC_STUN_URL` in [ui/src/env.ts](../../../ui/src/env.ts) as `static: true, public: true`, optional (epic assumptions). Document `PUBLIC_SYNC_RELAY_URL=ws://localhost:3004/ws` for `.env.local` in the README env section. [ui/playwright.config.ts](../../../ui/playwright.config.ts) stays unchanged.
 - Use RxJS (already a dependency) or Effect streams, consistent with the surrounding store code. Decide during implementation and keep to one.
 
 ## Testing

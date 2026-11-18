@@ -174,7 +174,7 @@ Note: run `npx` directly, not through `timeout`/`env`, so the safe-chain wrapper
 
 ## Technical notes
 
-- The image and env variables are defined in story 03 ([relay/README.md](../../relay/README.md) once written).
+- The image and env variables are defined in story 03 ([relay/README.md](../../../relay/README.md) once written).
 - nginx/certbot conventions follow [epic 0001 story 07](../0001-self-hosted-db/07-vps-mongodb-stack.md).
 - The UI reads `PUBLIC_SYNC_RELAY_URL` via `$app/env/public` (story 07), and the CSP `connect-src` is built from it.
 

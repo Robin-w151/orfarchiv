@@ -213,7 +213,7 @@ They are only comparable with runs of `lat` from the same machine against the sa
 Laptop, from the repo root:
 
 ```bash
-scp .tasks/self-hosted-db/scripts/vector-check.js <vps>:~/vector-check.js
+scp docs/plans/0001-self-hosted-db/scripts/vector-check.js <vps>:~/vector-check.js
 ```
 
 VPS:

@@ -244,7 +244,7 @@ export ORFARCHIV_RO_PASSWORD="$(openssl rand -base64 36 | tr -d '/+=\n')"
 
 ROOT_PW="$(ssh <vps> cat <compose-dir>/secrets/orfarchiv_db_root_password)"
 npx mongosh "mongodb://orfarchiv_root:${ROOT_PW}@127.0.0.1:27018/?directConnection=true" \
-  --file .tasks/self-hosted-db/scripts/create-users.js
+  --file docs/plans/0001-self-hosted-db/scripts/create-users.js
 ```
 
 Expect `created orfarchiv_rw (readWrite@orfarchiv)` and `created orfarchiv_ro (read@orfarchiv)`.
@@ -373,9 +373,9 @@ curl -m 5 http://$H:3002                                                        
 
 # Least privilege over TLS (before S8: setup + synthetic docs as orfarchiv_rw)
 (cd db && ORFARCHIV_DB_URLS="$RW_URL" npm start -- setup)   # URLS, not URL: db/.env* sets URLS, which wins
-npx mongosh "$RW_URL" --file .tasks/self-hosted-db/scripts/seed.js
-npx mongosh "$RO_URL" --file .tasks/self-hosted-db/scripts/perm-test.js                  # 16/16
-npx mongosh "$RW_URL" --file .tasks/self-hosted-db/scripts/perm-test.js                  # 16/16
+npx mongosh "$RW_URL" --file docs/plans/0001-self-hosted-db/scripts/seed.js
+npx mongosh "$RO_URL" --file docs/plans/0001-self-hosted-db/scripts/perm-test.js                  # 16/16
+npx mongosh "$RW_URL" --file docs/plans/0001-self-hosted-db/scripts/perm-test.js                  # 16/16
 
 # Persistence (on the VPS), while the synthetic docs still exist
 docker compose down && docker compose up -d && docker compose ps orfarchiv-db            # healthy
