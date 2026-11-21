@@ -2,7 +2,7 @@
 
 **Epic:** [0004 Bookmark device sync](README.md)
 **Owner:** Human
-**Status:** Todo
+**Status:** Done
 **Depends on:** –
 **Size:** S — a handful of GitHub web UI steps and one submodule command; low risk
 
@@ -19,8 +19,8 @@ Creating a GitHub repository, its secrets and its ruleset has to happen in the G
 #### Prerequisites
 
 - [ ] Signed in to GitHub as `Robin-w151`
-- [ ] Local clone of the superproject at `/workspaces/orfarchiv` on `main`, clean working tree
-- [ ] SSH access to GitHub (`ui`, `db` and `scraper` use `git@github.com:` URLs)
+- [ ] Local clone of the superproject (e.g. `~/Dev/orfarchiv`) on `main`, clean working tree
+- [ ] Git credentials for HTTPS pushes to GitHub (all submodules use `https://github.com/…` URLs since `1f07a6d5`)
 
 #### Steps
 
@@ -66,8 +66,8 @@ Creating a GitHub repository, its secrets and its ruleset has to happen in the G
 5. **Add the submodule to the superproject**
 
    ```sh
-   cd /workspaces/orfarchiv
-   git submodule add git@github.com:Robin-w151/orfarchiv-relay relay
+   cd ~/Dev/orfarchiv
+   git submodule add https://github.com/Robin-w151/orfarchiv-relay.git relay
    ```
 
    **Expected:** `.gitmodules` has a new `[submodule "relay"]` entry, and `relay/README.md` exists.
@@ -83,12 +83,12 @@ Creating a GitHub repository, its secrets and its ruleset has to happen in the G
 #### Verify
 
 ```sh
-cd /workspaces/orfarchiv
+cd ~/Dev/orfarchiv
 git submodule status relay
 git -C relay remote -v
 ```
 
-**Expected:** a commit SHA for `relay`, and `origin git@github.com:Robin-w151/orfarchiv-relay (fetch/push)`.
+**Expected:** a commit SHA for `relay`, and `origin https://github.com/Robin-w151/orfarchiv-relay.git (fetch/push)`.
 
 #### Rollback
 
@@ -109,14 +109,14 @@ Then delete the repository: `Settings → General → Danger Zone → Delete thi
 #### Troubleshooting
 
 - **`fatal: You are on a branch yet to be born`** when adding the submodule → the repo was created without a README. Add any file in the web UI and retry step 5.
-- **`Permission denied (publickey)`** → your SSH key isn't loaded in the devcontainer. Run `ssh -T git@github.com` to check.
-- **`push declined due to repository rule violations`** → the commit isn't signed. Check `git config commit.gpgsign` in the devcontainer.
+- **`Authentication failed` / `could not read Username`** on push → your HTTPS credentials for GitHub aren't set up. Run `gh auth status` and `gh auth setup-git`.
+- **`push declined due to repository rule violations`** → the commit isn't signed. Check `git config commit.gpgsign`.
 
 ## Acceptance criteria
 
-- [ ] Given the superproject, when running `git submodule status`, then `relay` is listed next to `db`, `scraper`, `shared` and `ui`.
-- [ ] Given the `orfarchiv-relay` repo, when viewing `Settings → Secrets and variables → Actions`, then `SSH_SIGNING_KEY`, `SSH_SIGNING_KEY_PUBLIC`, `GIT_NAME` and `GIT_EMAIL` are listed.
-- [ ] Given the `orfarchiv-relay` repo, when viewing `Settings → Rules → Rulesets`, then a `Signed Commits` ruleset is active on the default branch with `Require signed commits`.
+- [x] Given the superproject, when running `git submodule status`, then `relay` is listed next to `db`, `scraper`, `shared` and `ui`.
+- [x] Given the `orfarchiv-relay` repo, when viewing `Settings → Secrets and variables → Actions`, then `SSH_SIGNING_KEY`, `SSH_SIGNING_KEY_PUBLIC`, `GIT_NAME` and `GIT_EMAIL` are listed.
+- [x] Given the `orfarchiv-relay` repo, when viewing `Settings → Rules → Rulesets`, then a `Signed Commits` ruleset is active on the default branch with `Require signed commits`.
 
 ## Technical notes
 
