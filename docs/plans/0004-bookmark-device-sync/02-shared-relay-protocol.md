@@ -2,7 +2,7 @@
 
 **Epic:** [0004 Bookmark device sync](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** Done
 **Depends on:** –
 **Size:** S — a schema module and constants in the existing shared-feature pattern, with straightforward tests
 
@@ -35,13 +35,13 @@ Close codes, as `RelayCloseCode = { JoinTimeout: 4000, RoomFull: 4001, Unsupport
 
 ## Acceptance criteria
 
-- [ ] Given a valid `join`/`send` JSON string, when decoded with the client-message schema, then it yields a typed value.
-- [ ] Given a room ID that isn't 64 lowercase hex chars, a peer ID with forbidden characters, or an unknown `type`, when decoded, then decoding fails.
-- [ ] Given a valid message with extra unknown fields, when decoded, then decoding succeeds and the extra fields are not in the decoded value.
-- [ ] Given a `join` with `version: 2` and an extra field, when decoded, then decoding succeeds with `version: 2`, so the relay can answer `UnsupportedVersion`.
-- [ ] Given each relay message type, when encoded and decoded again, then the result is unchanged.
-- [ ] `RelayErrorCode`, `RelayCloseCode` and the message types are PascalCase `as const` objects with matching type aliases.
-- [ ] `npm run lint` and `npm run test` pass in `shared`.
+- [x] Given a valid `join`/`send` JSON string, when decoded with the client-message schema, then it yields a typed value.
+- [x] Given a room ID that isn't 64 lowercase hex chars, a peer ID with forbidden characters, or an unknown `type`, when decoded, then decoding fails.
+- [x] Given a valid message with extra unknown fields, when decoded, then decoding succeeds and the extra fields are not in the decoded value.
+- [x] Given a `join` with `version: 2` and an extra field, when decoded, then decoding succeeds with `version: 2`, so the relay can answer `UnsupportedVersion`.
+- [x] Given each relay message type, when encoded and decoded again, then the result is unchanged.
+- [x] `RelayErrorCode`, `RelayCloseCode` and the message types are PascalCase `as const` objects with matching type aliases.
+- [x] `npm run lint` and `npm run test` pass in `shared`.
 
 ## Technical notes
 

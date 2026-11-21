@@ -106,7 +106,7 @@ coturn in `--stun-only` mode on the VPS (`network_mode: host`, UDP 3478, logging
 | #   | Story                                                       | Owner  | Size | Depends on     | Status |
 | --- | ----------------------------------------------------------- | ------ | ---- | -------------- | ------ |
 | 01  | [Create relay repository](01-create-relay-repo.md)          | Human  | S    | –              | Done   |
-| 02  | [Shared relay protocol](02-shared-relay-protocol.md)        | Claude | S    | –              | Todo   |
+| 02  | [Shared relay protocol](02-shared-relay-protocol.md)        | Claude | S    | –              | Done   |
 | 03  | [Relay service](03-relay-service.md)                        | Claude | M    | 01, 02         | Todo   |
 | 04  | [Deploy relay on VPS](04-deploy-relay.md)                   | Human  | M    | 03             | Todo   |
 | 05  | [Deploy STUN server](05-deploy-stun-server.md)              | Human  | S    | 04             | Todo   |
