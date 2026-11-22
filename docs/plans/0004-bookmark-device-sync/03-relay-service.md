@@ -2,7 +2,7 @@
 
 **Epic:** [0004 Bookmark device sync](README.md)
 **Owner:** Claude
-**Status:** Todo
+**Status:** In progress
 **Depends on:** 01, 02
 **Size:** M — a new small service plus repo scaffolding (lint, tests, Dockerfile, CI); the logic is simple, the main work is the setup
 
@@ -26,17 +26,21 @@ Behaviour:
 - Config through env: `PORT` (default 8080), `RELAY_MAX_CONNECTIONS`, `RELAY_ALLOWED_ORIGINS` (comma-separated). Upgrades with an `Origin` header not on the list are refused with 403. An entry may contain `*` in the host part, matching one or more of `[a-z0-9-]` (never `.`), so Vercel previews can be allowed without allowing every `*.vercel.app` site. Default: `https://orfarchiv.news,https://develop.orfarchiv.news,https://orfarchiv-*-robins-projects-bb10f956.vercel.app`.
 - Nothing is persisted. A restart drops all rooms, and clients reconnect (story 07).
 
+## Remaining
+
+`npm run lint`, `npm run test`, `docker build .` and the `docker run` / `curl /health` smoke test pass (also: 404 on other paths, 403 for a disallowed `Origin`, non-root user, HEALTHCHECK `healthy`, clean shutdown). Open: verify that CI publishes `ghcr.io/robin-w151/orfarchiv-relay:<version>` and `:latest` once `relay` is merged to `main`, then tick the last criterion and mark this story Done.
+
 ## Acceptance criteria
 
-- [ ] Given two clients joined to room R and one to room S, when a client in R sends to the peer in S, then it gets `UnknownPeer` and the S client receives nothing.
-- [ ] Given two clients in the same room, when A sends `{to: B, payload}`, then B receives `{type: 'message', from: A, payload}` with the same payload bytes.
-- [ ] Given a room with 16 peers, when a 17th joins, then it gets `RoomFull` and is closed.
-- [ ] Given a peer leaves, then the remaining peers get an updated `peers` list, and the room is deleted from memory when empty (checked through `/health`).
-- [ ] Given a 70 KiB frame, then the socket is closed with 1009 and the relay keeps running.
-- [ ] Given a socket that sends no `join` within 10 s, then it is closed with 4000.
-- [ ] Given a disallowed `Origin`, then the upgrade is refused.
-- [ ] Given the default allow-list, then `https://orfarchiv-git-feat-x-robins-projects-bb10f956.vercel.app` is accepted, and `https://evil.vercel.app` and `https://orfarchiv-a.b-robins-projects-bb10f956.vercel.app` are refused (`it.each` table).
-- [ ] Test logs and code contain no logging of room or peer IDs.
+- [x] Given two clients joined to room R and one to room S, when a client in R sends to the peer in S, then it gets `UnknownPeer` and the S client receives nothing.
+- [x] Given two clients in the same room, when A sends `{to: B, payload}`, then B receives `{type: 'message', from: A, payload}` with the same payload bytes.
+- [x] Given a room with 16 peers, when a 17th joins, then it gets `RoomFull` and is closed.
+- [x] Given a peer leaves, then the remaining peers get an updated `peers` list, and the room is deleted from memory when empty (checked through `/health`).
+- [x] Given a 70 KiB frame, then the socket is closed with 1009 and the relay keeps running.
+- [x] Given a socket that sends no `join` within 10 s, then it is closed with 4000.
+- [x] Given a disallowed `Origin`, then the upgrade is refused.
+- [x] Given the default allow-list, then `https://orfarchiv-git-feat-x-robins-projects-bb10f956.vercel.app` is accepted, and `https://evil.vercel.app` and `https://orfarchiv-a.b-robins-projects-bb10f956.vercel.app` are refused (`it.each` table).
+- [x] Test logs and code contain no logging of room or peer IDs.
 - [ ] `npm run lint`, `npm run test` and `docker build .` succeed. CI publishes `ghcr.io/robin-w151/orfarchiv-relay:<version>` and `:latest` on push to `main`.
 
 ## Technical notes
@@ -48,6 +52,8 @@ Behaviour:
 - CI: copy [scraper/.github/workflows/ci.yaml](../../../scraper/.github/workflows/ci.yaml) (jobs `check`, `test`, `release` with SSH commit signing and semantic-release, `image` building `linux/amd64,linux/arm64` and pushing to ghcr), drop the MongoDB steps, and rename the image to `orfarchiv-relay`. It uses the secrets `SSH_SIGNING_KEY`, `SSH_SIGNING_KEY_PUBLIC`, `GIT_NAME` and `GIT_EMAIL` from story 01. Also copy the semantic-release config from the scraper's `package.json`.
 - The README documents the env variables and the security model in a few lines. This is an explicitly requested doc for a new repo; keep it short.
 - Use the branch decided in the epic's assumptions inside `relay`.
+- As built: the scraper keeps its semantic-release config in `.releaserc.json` (not `package.json`), so the relay copies that file. `npm start` runs `vite build && node dist/relay.js` instead of the scraper's `bun run`, so dev and the image run the same Node `ws`; the shared module's extensionless imports need the bundler. `@effect/platform-node` isn't added: `src/index.ts` uses `Runtime.makeRunMain` with SIGTERM/SIGINT interrupting the main fiber, and the server is an `Effect.acquireRelease` resource. Origin matching lives in `src/origins.ts`.
+- As built: upgrades without an `Origin` header are accepted (only a present, unlisted `Origin` gets 403). The token bucket holds `RELAY_RATE_LIMIT_MESSAGES_PER_SECOND` tokens and refills at that rate; rejected messages still cost a token, so the bucket goes into debt. A message that finds the bucket empty gets `RateLimited`. Once the debt goes past 2× the limit (a burst of more than 3× the limit), the relay sends `RateLimited` and closes with 1008. A replaced socket is closed with 1000, shutdown closes sockets with 1001. These codes aren't in `RelayCloseCode`.
 
 ## Testing
 
