@@ -110,7 +110,7 @@ coturn in `--stun-only` mode on the VPS (`network_mode: host`, UDP 3478, logging
 | 03  | [Relay service](03-relay-service.md)                        | Claude | M    | 01, 02         | In progress |
 | 04  | [Deploy relay on VPS](04-deploy-relay.md)                   | Human  | M    | 03             | Todo   |
 | 05  | [Deploy STUN server](05-deploy-stun-server.md)              | Human  | S    | 04             | Todo   |
-| 06  | [Sync identity and crypto](06-sync-identity-crypto.md)      | Claude | S    | –              | Todo   |
+| 06  | [Sync identity and crypto](06-sync-identity-crypto.md)      | Claude | S    | –              | Done   |
 | 07  | [Relay client and presence](07-relay-client-presence.md)    | Claude | M    | 02, 03, 06     | Todo   |
 | 08  | [WebRTC transport with fallback](08-webrtc-transport.md)    | Claude | L    | 07             | Todo   |
 | 09  | [Bookmark pull protocol](09-bookmark-pull-protocol.md)      | Claude | M    | 07             | Todo   |
